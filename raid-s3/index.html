@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>기계 잔해 레이드 노트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 레이아웃: 상단 고정 보스 탭 + 한 줄 본문 칼럼. 보스마다 '딜러 체크 → 도해 → 기믹 카드 → 순서 → 영상' */
+:root {
+  --bg: #ECEEF2;
+  --surface: #FFFFFF;
+  --ink: #1C2130;
+  --muted: #586074;
+  --line: #CBD1DC;
+  --tile: #5C6688;
+  --tile-fg: #EEF0F8;
+  --accent: #B8306F;
+  --cyan: #17839B;
+  --warn: #B85F0E;
+  --danger: #B02236;
+  --safe: #24804F;
+  --chip: #E1E5ED;
+  --f-display: "Do Hyeon", "IBM Plex Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131722; --surface: #1B2030; --ink: #E5E8F0; --muted: #9AA2B6; --line: #2D3446;
+    --tile: #3D4768; --tile-fg: #DCE1F0; --accent: #EC5C9F; --cyan: #4BC0D6; --warn: #EE9D43;
+    --danger: #F0606F; --safe: #58C287; --chip: #252B3D; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131722; --surface: #1B2030; --ink: #E5E8F0; --muted: #9AA2B6; --line: #2D3446;
+  --tile: #3D4768; --tile-fg: #DCE1F0; --accent: #EC5C9F; --cyan: #4BC0D6; --warn: #EE9D43;
+  --danger: #F0606F; --safe: #58C287; --chip: #252B3D; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.65; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+a { color: var(--cyan); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { padding-block: 28px 18px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(30px, 6vw, 44px); line-height: 1.15; margin: 6px 0 10px; text-wrap: balance; }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; line-height: 1.2; margin: 0; text-wrap: balance; }
+h3 { font-size: 17px; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 62ch; }
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+nav.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; padding-block: 8px; scrollbar-width: none; }
+nav.tabs a { flex: 0 0 auto; text-decoration: none; color: var(--ink); font-weight: 500; font-size: 14px; padding: 6px 12px; border-radius: 6px; }
+nav.tabs a:hover { background: var(--chip); }
+nav.tabs a.on { background: var(--ink); color: var(--surface); }
+main .wrap { display: grid; gap: 56px; padding-block: 28px 64px; }
+section.boss { display: grid; gap: 22px; scroll-margin-top: calc(60px + env(safe-area-inset-top, 0px)); }
+.boss-head { display: grid; gap: 6px; border-top: 3px solid var(--ink); padding-top: 14px; }
+.boss-head .num { font-family: var(--f-mono); font-size: 13px; color: var(--accent); }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); }
+.meta b { color: var(--ink); font-family: var(--f-mono); font-weight: 500; }
+.check { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 10px; }
+.check h3 { font-size: 15px; display: flex; gap: 8px; align-items: center; }
+.check ol { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.check li::marker { font-family: var(--f-mono); color: var(--accent); }
+figure { margin: 0; display: grid; gap: 8px; }
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; overflow-x: auto; }
+.fig svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.fig.wide svg { min-width: 560px; }
+figcaption { font-size: 13px; color: var(--muted); max-width: 70ch; }
+.figrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.figrow > * { min-width: 0; }
+.mechs { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.mech { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 6px 20px; padding-block: 14px; border-bottom: 1px solid var(--line); }
+.mech > * { min-width: 0; }
+.mech .name { display: grid; gap: 6px; align-content: start; }
+.mech .name h3 { font-size: 16px; }
+.mech .body { display: grid; gap: 6px; }
+.mech .me { border-left: 3px solid var(--cyan); padding-left: 10px; }
+.mech .me b { color: var(--cyan); }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 4px; background: var(--chip); color: var(--muted); letter-spacing: .02em; }
+.tag.h { background: var(--warn); color: var(--surface); }
+.tag.n { background: var(--accent); color: var(--surface); }
+.tag.all { background: var(--chip); color: var(--ink); }
+.nm { color: var(--accent); font-weight: 500; }
+details.tl { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; }
+details.tl summary { cursor: pointer; font-weight: 700; }
+.tlgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 12px; }
+.tlgrid > * { min-width: 0; }
+.tlgrid h4 { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+ol.seq { margin: 0; padding: 0; list-style: none; display: grid; gap: 3px; font-size: 14px; }
+ol.seq li { display: grid; grid-template-columns: 52px 1fr; gap: 8px; }
+ol.seq .t { font-family: var(--f-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 2px; }
+ol.seq .k { color: var(--accent); }
+.vids { display: grid; gap: 8px; }
+.vid { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; align-items: baseline; padding-block: 6px; border-bottom: 1px dashed var(--line); }
+.vid .kind { font-size: 12px; font-weight: 700; color: var(--muted); }
+.vid .chap { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: 2px; }
+.vid .chap a { font-family: var(--f-mono); font-size: 12px; }
+.note { font-size: 13px; color: var(--muted); }
+.callout { background: var(--chip); border-radius: 8px; padding: 12px 14px; font-size: 14px; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; color: var(--muted); font-weight: 700; }
+.shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 6px; }
+.shots > * { min-width: 0; }
+.shot { gap: 4px; }
+.shot img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--line); background: var(--chip); }
+.shot figcaption { font-size: 12.5px; line-height: 1.5; }
+.shot .src { color: var(--muted); font-size: 11px; }
+footer { font-size: 12px; color: var(--muted); padding-block: 24px 40px; border-top: 1px solid var(--line); }
+footer ul { margin: 6px 0 0; padding-left: 1.2em; display: grid; gap: 2px; }
+/* SVG */
+.s-tile { fill: var(--tile); stroke: var(--bg); stroke-width: 2; }
+.s-crack { fill: var(--tile); stroke: var(--warn); stroke-width: 3; }
+.s-gone { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.s-hit { fill: var(--danger); opacity: .78; }
+.s-safe { fill: var(--safe); }
+.s-arena { fill: var(--tile); }
+.s-bar { stroke: var(--cyan); stroke-width: 3; stroke-dasharray: 8 5; fill: none; }
+.s-txt { fill: var(--tile-fg); font-family: var(--f-mono); font-size: 13px; }
+.s-lbl { fill: var(--ink); font-family: var(--f-body); font-size: 13px; }
+.s-sub { fill: var(--muted); font-family: var(--f-body); font-size: 12px; }
+.s-boss { fill: var(--ink); }
+.s-bossT { fill: var(--surface); font-family: var(--f-body); font-size: 11px; font-weight: 700; }
+.s-me { fill: var(--cyan); }
+.s-meT { fill: var(--surface); font-family: var(--f-body); font-size: 11px; font-weight: 700; }
+.s-core { fill: var(--danger); stroke: var(--surface); stroke-width: 2; }
+.s-teth { stroke: var(--accent); stroke-width: 3; fill: none; }
+.s-arrow { stroke: var(--ink); stroke-width: 2; fill: none; }
+.s-arrowA { stroke: var(--accent); stroke-width: 2.5; fill: none; }
+.s-orb { fill: var(--accent); }
+.s-mk { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+.s-mkT { fill: var(--ink); font-family: var(--f-mono); font-size: 12px; }
+.s-hatch { fill: url(#hatch); }
+@media (max-width: 560px) {
+  .mech { grid-template-columns: 1fr; }
+  h2 { font-size: 26px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="var(--danger)" opacity=".25"></rect>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="var(--danger)" stroke-width="3"></line>
+    </pattern>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--ink)"></path>
+    </marker>
+    <marker id="ahA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"></path>
+    </marker>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow"><a href="../">BPSR 노트</a> · S3 레이드 · 잊혀진 환상꿈의 들판</div>
+    <h1>모순과 재앙의 기계 잔해<br>하드 · 악몽 노트</h1>
+    <p class="lede">기원, 계속, 종결 세 보스의 기믹을 딜러(매활) 시점으로 정리했습니다. 보스마다 맨 위 체크리스트만 외워도 대부분의 리트는 피합니다. 징 번호와 파티 이동 순서는 공대마다 다르니 그날 공대장 지시를 우선하세요.</p>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="보스 이동">
+  <div class="wrap">
+    <a href="#common">공통</a>
+    <a href="#p1">1넴 기원</a>
+    <a href="#p2">2넴 계속</a>
+    <a href="#p3">3넴 종결</a>
+    <a href="#videos">영상 모음</a>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<!-- 공통 -->
+<section class="boss" id="common">
+  <div class="boss-head">
+    <span class="num">공통</span>
+    <h2>세 보스 모두에 해당</h2>
+    <div class="meta"><span>파망 강도 하드 <b>2,910</b></span><span>악몽 <b>3,220</b></span><span>보상은 주 1회</span></div>
+  </div>
+  <div class="mechs">
+    <div class="mech">
+      <div class="name"><h3>장판 색 읽기</h3><div class="tags"><span class="tag all">전 난이도</span></div></div>
+      <div class="body">
+        <p><b>노란 화살표 산개</b>는 약 4초 뒤 즉시 터지니 바로 대시해서 흩어집니다. <b>분홍 화살표 산개</b>는 지연형으로 약 8초 뒤 터집니다. 3초간 표시된 뒤 사라지고 머리 위에 작은 3·2·1 카운트가 뜹니다.</p>
+        <p>분홍(환영 경보) 계열은 장판이 사라져도 머리 위 카운트가 끝나야 터집니다. "끝난 줄 알고 본대로 돌아왔다가 폭사"가 가장 흔한 사고입니다.</p>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>탱버 튀는 문제</h3><div class="tags"><span class="tag n">특히 3넴</span></div></div>
+      <div class="body">
+        <p>넉백 구슬이 터지거나 수정 텔포가 끝나는 순간 탱 어그로가 잠깐 리셋됩니다. 이때 딜러가 계속 딜을 넣으면 탱버(탱커용 강공격)가 딜러에게 튑니다.</p>
+        <p class="me"><b>내 할 일</b> 구슬·텔포 직후 1~2초는 딜을 늦추세요. 매·늑대처럼 설치형으로 계속 때리는 딜도 어그로를 먹습니다. 공대장이 원하면 위협 사격을 챙겨 튄 탱버를 받아줄 수 있습니다.</p>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>타타(무적)</h3><div class="tags"><span class="tag all">파티에 있으면</span></div></div>
+      <div class="body">
+        <p>명함 기준 무적 3초입니다. 1넴 장벽을 전원 동시에 넘을 때, 3넴 폭탄 장판과 구슬이 겹칠 때 쓰면 사고가 크게 줄어듭니다. 3넴에서는 구슬이 3~5번 깜빡였을 때가 사용 타이밍입니다. 악몽은 재사용 대기가 길어 사실상 한 번만 씁니다.</p>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>건틀릿 모드</h3><div class="tags"><span class="tag all">선택</span></div></div>
+      <div class="body">
+        <p>1·2·3넴을 한 번에 연속으로 도는 도전 모드입니다. 전멸하면 처음부터 다시 하고, 랜덤 매칭이면 1시간 반쯤 걸립니다. 앞 보스에서 받은 버프가 이어져 3넴은 오히려 쉽다는 후기도 있습니다. 2넴 악몽 0% 단계에서 탱만 남기고 뛰어내리는 꼼수는 건틀릿에서는 쓰면 안 됩니다.</p>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>공팟 예절</h3><div class="tags"><span class="tag all">팁</span></div></div>
+      <div class="body">
+        <p>공대장이 쓰는 택틱이 정석과 달라도 그날은 공대장 징을 따르세요. 특히 2넴 타일 깨는 순서는 공대마다 번호가 다릅니다. 시작 전에 징 위치를 한 번 눈으로 확인해 두면 리트가 줄어듭니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 1넴 -->
+<section class="boss" id="p1">
+  <div class="boss-head">
+    <span class="num">1넴</span>
+    <h2>기원 · 네 개의 방</h2>
+    <div class="meta"><span>방마다 에너지 <b>0 → 120</b> (1초에 1)</span><span>방 이동 <b>시계 방향</b></span><span>악몽 0% 버티기 <b>약 35초</b></span></div>
+  </div>
+
+  <div class="check">
+    <h3>딜러 체크 5가지</h3>
+    <ol>
+      <li>왼쪽 퀘스트 창의 "N호 방 에너지"를 봅니다. 120이 되면 방 전체가 감전되니 그 전에 다음 방으로 갑니다.</li>
+      <li>장벽은 <b>내 파티 차례에만</b> 넘습니다. 한꺼번에 넘으면 전원 피해가 겹쳐 전멸합니다.</li>
+      <li>줄(섬멸 광선) 대상이 되면 징에 서서 줄이 코어를 지나게 맞추고, 레이저 예고가 뜨면 줄 위에서 비킵니다.</li>
+      <li>쉐어는 3~4명씩 나눠 맞고, 쉐어끼리 겹치지 않습니다. 치유 감소가 중첩되면 풀 수 없습니다.</li>
+      <li>환영 동기화는 <b>본체와 분신이 둘 다 착지할 때까지</b> 보스에게 다가가지 않습니다.</li>
+    </ol>
+  </div>
+
+  <div class="figrow">
+    <figure>
+      <div class="fig">
+        <svg viewBox="0 0 300 270" role="img" aria-label="원형 경기장을 십자 장벽으로 나눈 네 방과 시계 방향 이동">
+          <circle cx="150" cy="135" r="118" class="s-arena"></circle>
+          <line x1="32" y1="135" x2="268" y2="135" class="s-bar"></line>
+          <line x1="150" y1="17" x2="150" y2="253" class="s-bar"></line>
+          <text x="88" y="190" class="s-txt" text-anchor="middle" font-size="22">1</text>
+          <text x="88" y="92" class="s-txt" text-anchor="middle" font-size="22">2</text>
+          <text x="212" y="92" class="s-txt" text-anchor="middle" font-size="22">3</text>
+          <text x="212" y="190" class="s-txt" text-anchor="middle" font-size="22">4</text>
+          <text x="88" y="210" class="s-txt" text-anchor="middle">시작</text>
+          <path d="M60 165 A 95 95 0 0 1 60 105" class="s-arrowA" marker-end="url(#ahA)"></path>
+          <path d="M120 50 A 95 95 0 0 1 180 50" class="s-arrowA" marker-end="url(#ahA)"></path>
+          <path d="M240 105 A 95 95 0 0 1 240 165" class="s-arrowA" marker-end="url(#ahA)"></path>
+          <circle cx="112" cy="225" r="13" class="s-boss"></circle>
+          <text x="112" y="229" class="s-bossT" text-anchor="middle">보스</text>
+        </svg>
+      </div>
+      <figcaption>방은 십자 광막(파란 점선)으로 나뉘고 1→2→3→4 시계 방향으로 옮깁니다. 탱은 보스를 방 가장자리에 붙여 둡니다. 광막을 넘으면 전원 피해와 함께 그 방에 쫄(방해 가상체)이 나옵니다.</figcaption>
+    </figure>
+    <figure>
+      <div class="fig">
+        <svg viewBox="0 0 300 230" role="img" aria-label="세 명의 줄로 코어 네 개를 꿰는 배치">
+          <rect x="0" y="0" width="300" height="230" rx="8" class="s-arena"></rect>
+          <line x1="40" y1="185" x2="260" y2="185" class="s-teth"></line>
+          <line x1="260" y1="185" x2="150" y2="35" class="s-teth"></line>
+          <line x1="150" y1="35" x2="40" y2="185" class="s-teth"></line>
+          <circle cx="110" cy="185" r="11" class="s-core"></circle>
+          <circle cx="190" cy="185" r="11" class="s-core"></circle>
+          <circle cx="210" cy="117" r="11" class="s-core"></circle>
+          <circle cx="90" cy="117" r="11" class="s-core"></circle>
+          <circle cx="40" cy="185" r="14" class="s-me"></circle><text x="40" y="189" class="s-meT" text-anchor="middle">A</text>
+          <circle cx="260" cy="185" r="14" class="s-me"></circle><text x="260" y="189" class="s-meT" text-anchor="middle">B</text>
+          <circle cx="150" cy="35" r="14" class="s-me"></circle><text x="150" y="39" class="s-meT" text-anchor="middle">C</text>
+          <text x="150" y="214" class="s-txt" text-anchor="middle">A–B 줄 하나가 코어 2개를 꿴다</text>
+        </svg>
+      </div>
+      <figcaption>섬멸 광선은 대상이 항상 3명인데, 하드·악몽은 코어(빨간 원)가 4개입니다. 그래서 줄 하나는 코어 2개를 지나야 합니다. 대상자는 미리 찍힌 징에 서고, 힐러와 원거리 딜러가 우선 맡습니다. 코어를 못 지우면 폭발해서 전멸입니다.</figcaption>
+    </figure>
+  </div>
+
+  <div class="mechs">
+    <div class="mech">
+      <div class="name"><h3>방 에너지 · 광막 넘기</h3><div class="tags"><span class="tag all">전 난이도</span></div></div>
+      <div class="body">
+        <p>방마다 120초 안에 다음 방으로 옮깁니다. 광막을 넘을 때마다 전원 피해와 함께 쫄이 소환됩니다(파티별 약 5초 간격). 근접형 I형은 지속 HP 감소, 원거리형 V형은 공격력 감소를 겁니다. <span class="nm">악몽에서는 V형이 몬스터 피해 감소 장판도 깔아서 끊어야 합니다.</span></p>
+        <p>이동 예시(일본 공대 매크로): 2파티 106초 → 3파티 110초 → 4파티 114초 → 1파티 118초. 한섭 디시 공략은 95~100초부터 1파티부터 넘깁니다. 첫 이동조에 탱 1명을 넣어 쫄 어그로를 받고, 보스 메인탱은 마지막 파티와 같이 넘어갑니다.</p>
+        <p class="me"><b>내 할 일</b> 내 파티 번호를 미리 확인하세요(모바일은 UI가 달라 헷갈립니다). 넘어가면 쫄을 광역으로 빨리 정리하고 V형부터 끊습니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p1-room.jpg" alt="왼쪽 퀘스트 창에 방 1~4의 에너지가 n/120으로 표시된 화면" width="800" height="240"><figcaption>왼쪽 퀘스트 창의 네 줄이 방 1~4 에너지입니다. 지금 방 줄이 120에 가까워지면 이동 준비. <span class="src">blueprotocol-fan</span></figcaption></figure>
+          <figure class="shot"><img src="img/p1-barrier.jpg" alt="인게임 공략 가이드의 방해 가상체 설명 화면" width="760" height="511"><figcaption>인게임 가이드 '방해 가상체'. 광막(파란 벽)을 넘을 때마다 그 방에 기계 환영이 소환됩니다. <span class="src">디시 38883</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>섬멸 광선 · 코어</h3><div class="tags"><span class="tag all">전 난이도</span><span class="tag h">하드부터 코어 4개</span></div></div>
+      <div class="body">
+        <p>필드에 보라색 에너지 코어가 생기고, 무작위 3명이 줄로 이어집니다. 잠시 뒤 각 대상자 위치에서 줄 방향으로 레이저가 나가 코어를 지웁니다. 줄 위에 서 있는 사람은 큰 피해를 받습니다.</p>
+        <p class="me"><b>내 할 일</b> 대상이면 정해진 징으로 갑니다. 대상이 아니면 줄과 레이저 예고 선 위에서 벗어납니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p1-beam.jpg" alt="필드의 빨간 코어들과 플레이어 사이에 이어진 파란 줄" width="760" height="424"><figcaption>분홍 원이 코어입니다. 파란 직선이 대상자 3명을 잇는 줄이고, 이 줄이 코어 위를 지나야 레이저가 코어를 지웁니다. <span class="src">blueprotocol-fan</span></figcaption></figure>
+          <figure class="shot"><img src="img/p1-beam-map.jpg" alt="Bidoof 가이드의 방 번호와 보스 고정 위치, 광선 대상자 징 위치 지도" width="760" height="427"><figcaption>방 번호(1~4), 보스를 붙여 둘 위치(노란 아이콘), 광선 대상자가 설 자리(초록 원) 예시. <span class="src">Bidoof 2D 가이드 3:36</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>쉐어(치유 감소)</h3><div class="tags"><span class="tag all">전 난이도</span></div></div>
+      <div class="body">
+        <p>3명에게 쉐어가 붙고 맞은 사람은 치유 감소 디버프를 받습니다. 디버프는 해제가 안 되고 겹치면 중첩되므로 쉐어 3개를 서로 떨어뜨리고, 가까운 쉐어에 3~4명씩 들어갑니다. 직전의 단일 대상 공격은 대시로 피할 수 있습니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p1-share.jpg" alt="분홍 쉐어 원 세 개에 파티원이 나뉘어 모인 장면" width="760" height="426"><figcaption>분홍 원 세 개가 서로 떨어져 있고 각 원에 몇 명씩 들어가 있습니다. 원끼리 겹치면 치유 감소가 두 번 붙습니다. <span class="src">blueprotocol-fan</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>도넛 3연</h3><div class="tags"><span class="tag h">하드</span><span class="tag n">악몽 순서 기억</span></div></div>
+      <div class="body">
+        <p>하드는 안쪽·가운데·바깥 장판이 세 번 연속 터집니다. 예고를 보고 다음 안전 구역으로 옮기면 됩니다.</p>
+        <p class="nm">악몽은 세 예고가 먼저 차례로 보인 뒤, 보인 순서대로 터집니다. 순서를 외워야 하고 같은 안전 구역이 연속으로 나오기도 합니다. 공대장이 "안쪽 → 가운데 → 바깥"처럼 불러 주는 경우가 많습니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p1-donut.jpg" alt="바닥 전체에 분홍 동심원 장판이 깔린 장면" width="760" height="427"><figcaption>분홍 동심원이 깔리면 도넛 3연입니다. 분홍으로 칠해진 고리가 곧 터질 구역이니 그 고리 밖으로 옮깁니다. <span class="src">Bidoof 2D 가이드 6:20</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>환영 동기화</h3><div class="tags"><span class="tag all">전 난이도</span></div></div>
+      <div class="body">
+        <p>본체와 똑같은 분신이 나오고, 둘이 시간차로 뛰어올라 착지하며 거리 비례 피해를 줍니다(분신 → 본체 → 분신 순으로 착지하는 패턴도 있습니다). 탱은 미리 보스를 방 끝으로 끌어 둡니다.</p>
+        <p class="me"><b>내 할 일</b> 본체에서 먼저 멀어지고 다음에 분신에서 멀어집니다. 한 번 피했다고 바로 붙으면 두 번째 착지에 죽습니다. 뎀감을 여기 쓰면 안전합니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p1-sync.jpg" alt="인게임 공략 가이드의 환영 동기화 설명 화면, 본체와 분홍 분신" width="760" height="506"><figcaption>인게임 가이드 '환영 동기화'. 오른쪽이 본체, 왼쪽 분홍이 분신입니다. 둘 다 착지해야 끝납니다. <span class="src">디시 38883</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>원형 탱버</h3><div class="tags"><span class="tag all">탱 담당</span></div></div>
+      <div class="body"><p>보스 앞에 큰 빨간 원이 생깁니다. 서브탱이 들어가 맞아야 하고, 아무도 없으면 전체 공격이 추가로 나갑니다. 딜러는 원 밖에 있으면 됩니다.</p></div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>0% 버티기 · 엇갈린 펄스</h3><div class="tags"><span class="tag n">악몽 전용</span></div></div>
+      <div class="body">
+        <p>보스 HP를 0으로 만들면 바로 끝나지 않고 약 35초 버티기로 넘어갑니다. 회전하는 거대 부채꼴(파란 피자 장판)과, 대상자를 따라오는 직사각형 레이저가 반복됩니다. 부채꼴은 대시로 무효화되지 않아 직접 안전 구역으로 걸어가야 합니다.</p>
+        <p class="me"><b>내 할 일</b> 레이저 대상이면 맵 중앙으로 가서 예고를 중앙 쪽으로 향하게 둡니다(레이저가 십자로 모여 남들이 피하기 쉬워집니다). 대상이 아니면 외곽 끝까지 가지 마세요. 부채꼴을 피할 공간이 없어집니다. 한 명이라도 살아 있으면 클리어됩니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p1-zero-guide.jpg" alt="인게임 공략 가이드의 엇갈린 펄스 설명 화면" width="760" height="524"><figcaption>인게임 가이드 '엇갈린 펄스'. 파란 부채꼴과 대상자를 따라오는 직선 장판이 같이 깔립니다. <span class="src">디시 38883</span></figcaption></figure>
+          <figure class="shot"><img src="img/p1-zero.jpg" alt="악몽 0% 단계에서 레이저가 방사형으로 깔린 실전 화면" width="760" height="421"><figcaption>실전 화면. 방사형으로 깔린 빨간·파란 선이 0% 단계 공격 예고입니다. 대시로는 못 피하니 선 사이 빈 곳으로 걸어서 옮깁니다. <span class="src">디시 38883</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <details class="tl">
+    <summary>방 하나 안에서 기믹이 오는 시간(초)</summary>
+    <div class="tlgrid">
+      <div>
+        <h4>하드 · 첫 방</h4>
+        <ol class="seq">
+          <li><span class="t">7</span><span>원형 탱버</span></li>
+          <li><span class="t">28</span><span>코어 출현</span></li>
+          <li><span class="t">37</span><span class="k">줄 대상 확정</span></li>
+          <li><span class="t">53</span><span>도넛 3연 예고 → 58·64·71 발동</span></li>
+          <li><span class="t">71</span><span>쉐어</span></li>
+          <li><span class="t">84</span><span class="k">환영 동기화 (분신 → 88 본체 → 94 분신)</span></li>
+          <li><span class="t">105</span><span>원형 탱버</span></li>
+          <li><span class="t">106~</span><span>파티별 광막 이동</span></li>
+        </ol>
+      </div>
+      <div>
+        <h4>하드 · 두 번째 방</h4>
+        <ol class="seq">
+          <li><span class="t">28</span><span>코어 출현</span></li>
+          <li><span class="t">38</span><span class="k">줄 대상 확정</span></li>
+          <li><span class="t">43</span><span>쉐어</span></li>
+          <li><span class="t">56</span><span>원형 탱버</span></li>
+          <li><span class="t">72</span><span class="k">환영 동기화</span></li>
+          <li><span class="t">95</span><span>도넛 3연 예고 → 101·107·113</span></li>
+          <li><span class="t">114</span><span>쉐어 + 탱버</span></li>
+        </ol>
+      </div>
+      <div>
+        <h4>악몽 · 첫 방</h4>
+        <ol class="seq">
+          <li><span class="t">10</span><span>원형 탱버</span></li>
+          <li><span class="t">28</span><span>코어 출현 → 33 줄 확정</span></li>
+          <li><span class="t">50</span><span class="k">도넛 예고 3개 → 58 연속 발동</span></li>
+          <li><span class="t">63</span><span>쉐어 예고</span></li>
+          <li><span class="t">81</span><span class="k">환영 동기화</span></li>
+          <li><span class="t">108</span><span>원형 탱버</span></li>
+        </ol>
+        <p class="note" style="margin-top:6px">일본 공략(blueprotocol-fan, 9/21) 기준 수치입니다. 서버·딜량에 따라 몇 초씩 다를 수 있습니다.</p>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- 2넴 -->
+<section class="boss" id="p2">
+  <div class="boss-head">
+    <span class="num">2넴</span>
+    <h2>계속 · 3×3 바닥 깨기</h2>
+    <div class="meta"><span>궤도포 1발 <b>금 감</b> · 2발 <b>붕괴</b></span><span>중앙 칸은 <b>끝까지 보존</b></span><span>악몽 0% 버티기 <b>약 50초</b></span></div>
+  </div>
+
+  <div class="check">
+    <h3>딜러 체크 5가지</h3>
+    <ol>
+      <li>궤도포는 딜러에게 번호와 함께 붙습니다. 내 번호의 징 칸으로 가서 버리고, 범위가 확정되면 그 칸에서 나옵니다.</li>
+      <li>2회차 궤도포의 <b>1번은 큰 원</b>입니다. 큰 원을 받으면 맵 모서리 칸 구석에 버려 옆 칸을 건드리지 않습니다.</li>
+      <li><b>중앙 칸에는 절대 궤도포를 버리지 않습니다.</b> 큐브 공격 때 유일하게 안전한 칸입니다.</li>
+      <li>쌍둥이 로봇은 두 칸에 떨어뜨려 각각 잡습니다. 붙으면 서로 큰 피해 감소를 받습니다.</li>
+      <li>후반(대시 이후)은 방향이 반대입니다. 징 번호가 뒤집힌다는 것만 기억하세요.</li>
+    </ol>
+  </div>
+
+  <figure>
+    <div class="fig wide">
+      <svg viewBox="0 0 640 210" role="img" aria-label="2넴 바닥 아홉 칸이 궤도포로 깨져 쌍둥이 단계에 네 칸만 남는 과정">
+        <!-- panel 1 -->
+        <g transform="translate(10,28)">
+          <text x="69" y="-10" class="s-lbl" text-anchor="middle">기본 배치</text>
+          <rect x="0" y="0" width="46" height="46" class="s-tile"></rect><rect x="46" y="0" width="46" height="46" class="s-tile"></rect><rect x="92" y="0" width="46" height="46" class="s-tile"></rect>
+          <rect x="0" y="46" width="46" height="46" class="s-tile"></rect><rect x="46" y="46" width="46" height="46" class="s-tile"></rect><rect x="92" y="46" width="46" height="46" class="s-tile"></rect>
+          <rect x="0" y="92" width="46" height="46" class="s-tile"></rect><rect x="46" y="92" width="46" height="46" class="s-tile"></rect><rect x="92" y="92" width="46" height="46" class="s-tile"></rect>
+          <text x="23" y="28" class="s-txt" text-anchor="middle">⑤</text><text x="69" y="28" class="s-txt" text-anchor="middle">④</text><text x="115" y="28" class="s-txt" text-anchor="middle">③</text>
+          <text x="115" y="74" class="s-txt" text-anchor="middle">②</text><text x="23" y="120" class="s-txt" text-anchor="middle">⑥</text><text x="115" y="120" class="s-txt" text-anchor="middle">①</text>
+          <circle cx="69" cy="69" r="13" class="s-boss"></circle><text x="69" y="73" class="s-bossT" text-anchor="middle">보스</text>
+        </g>
+        <!-- panel 2 -->
+        <g transform="translate(170,28)">
+          <text x="69" y="-10" class="s-lbl" text-anchor="middle">궤도포 1회차</text>
+          <rect x="0" y="0" width="46" height="46" class="s-tile"></rect><rect x="46" y="0" width="46" height="46" class="s-tile"></rect><rect x="92" y="0" width="46" height="46" class="s-tile"></rect>
+          <rect x="0" y="46" width="46" height="46" class="s-tile"></rect><rect x="46" y="46" width="46" height="46" class="s-tile"></rect><rect x="92" y="46" width="46" height="46" class="s-crack"></rect>
+          <rect x="0" y="92" width="46" height="46" class="s-tile"></rect><rect x="46" y="92" width="46" height="46" class="s-tile"></rect><rect x="92" y="92" width="46" height="46" class="s-crack"></rect>
+          <circle cx="115" cy="69" r="12" class="s-hit"></circle><circle cx="125" cy="125" r="12" class="s-hit"></circle>
+          <text x="115" y="73" class="s-meT" text-anchor="middle">2</text><text x="125" y="129" class="s-meT" text-anchor="middle">1</text>
+          <circle cx="69" cy="69" r="13" class="s-boss"></circle><text x="69" y="73" class="s-bossT" text-anchor="middle">보스</text>
+          <text x="69" y="158" class="s-sub" text-anchor="middle">1번 → ① 구석, 2번 → ②</text>
+        </g>
+        <!-- panel 3 -->
+        <g transform="translate(330,28)">
+          <text x="69" y="-10" class="s-lbl" text-anchor="middle">궤도포 2회차</text>
+          <rect x="0" y="0" width="46" height="46" class="s-crack"></rect><rect x="46" y="0" width="46" height="46" class="s-crack"></rect><rect x="92" y="0" width="46" height="46" class="s-crack"></rect>
+          <rect x="0" y="46" width="46" height="46" class="s-tile"></rect><rect x="46" y="46" width="46" height="46" class="s-tile"></rect><rect x="93" y="47" width="44" height="44" class="s-gone"></rect>
+          <rect x="0" y="92" width="46" height="46" class="s-tile"></rect><rect x="46" y="92" width="46" height="46" class="s-tile"></rect><rect x="93" y="93" width="44" height="44" class="s-gone"></rect>
+          <circle cx="126" cy="12" r="20" class="s-hit"></circle><circle cx="69" cy="23" r="12" class="s-hit"></circle><circle cx="23" cy="23" r="12" class="s-hit"></circle>
+          <text x="126" y="16" class="s-meT" text-anchor="middle">1</text><text x="69" y="27" class="s-meT" text-anchor="middle">2</text><text x="23" y="27" class="s-meT" text-anchor="middle">3</text>
+          <circle cx="69" cy="69" r="13" class="s-boss"></circle><text x="69" y="73" class="s-bossT" text-anchor="middle">보스</text>
+          <text x="69" y="158" class="s-sub" text-anchor="middle">큰 원 1번은 ③ 모서리로</text>
+        </g>
+        <!-- panel 4 -->
+        <g transform="translate(490,28)">
+          <text x="69" y="-10" class="s-lbl" text-anchor="middle">쌍둥이 단계</text>
+          <rect x="1" y="1" width="44" height="44" class="s-gone"></rect><rect x="47" y="1" width="44" height="44" class="s-gone"></rect><rect x="93" y="1" width="44" height="44" class="s-gone"></rect>
+          <rect x="0" y="46" width="46" height="46" class="s-tile"></rect><rect x="46" y="46" width="46" height="46" class="s-tile"></rect><rect x="93" y="47" width="44" height="44" class="s-gone"></rect>
+          <rect x="0" y="92" width="46" height="46" class="s-tile"></rect><rect x="46" y="92" width="46" height="46" class="s-tile"></rect><rect x="93" y="93" width="44" height="44" class="s-gone"></rect>
+          <circle cx="69" cy="69" r="13" class="s-boss"></circle><text x="69" y="73" class="s-bossT" text-anchor="middle">로봇A</text>
+          <circle cx="23" cy="115" r="13" class="s-boss"></circle><text x="23" y="119" class="s-bossT" text-anchor="middle">로봇B</text>
+          <circle cx="44" cy="128" r="10" class="s-me"></circle><text x="44" y="132" class="s-meT" text-anchor="middle">딜</text>
+          <text x="69" y="158" class="s-sub" text-anchor="middle">메인탱 중앙, 서브탱 ⑥</text>
+        </g>
+        <g transform="translate(10,195)">
+          <rect x="0" y="-11" width="14" height="14" class="s-crack"></rect><text x="20" y="0" class="s-sub">금 간 칸 (붕괴 충격 때 무너짐)</text>
+          <rect x="230" y="-11" width="14" height="14" class="s-gone"></rect><text x="250" y="0" class="s-sub">무너진 칸</text>
+          <circle cx="360" cy="-4" r="7" class="s-hit"></circle><text x="372" y="0" class="s-sub">궤도포 범위(번호 = 대상 순서)</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>일본 공대(kanbatch) 처리도를 옮긴 것입니다. 바깥 다섯 칸을 순서대로 버리고 중앙을 포함한 네 칸에서 쌍둥이 단계를 치릅니다. 쌍둥이 단계에서는 서브탱 쪽 로봇(⑥)부터 다 같이 잡습니다. 한섭 공대는 징 번호를 따로 찍는 경우가 많으니(예: 먼 줄 1·2·3, 오른쪽 4·5), 칸 위치는 공대장 징을 따르세요.</figcaption>
+  </figure>
+
+  <div class="figrow">
+    <figure>
+      <div class="fig">
+        <svg viewBox="0 0 300 160" role="img" aria-label="큐브 정사각형이면 네 모서리, 십자면 상하좌우 칸이 맞는다">
+          <g transform="translate(15,22)">
+            <text x="57" y="-8" class="s-lbl" text-anchor="middle">큐브가 정사각형</text>
+            <rect x="0" y="0" width="38" height="38" class="s-hatch"></rect><rect x="38" y="0" width="38" height="38" class="s-tile"></rect><rect x="76" y="0" width="38" height="38" class="s-hatch"></rect>
+            <rect x="0" y="38" width="38" height="38" class="s-tile"></rect><rect x="38" y="38" width="38" height="38" class="s-tile"></rect><rect x="76" y="38" width="38" height="38" class="s-tile"></rect>
+            <rect x="0" y="76" width="38" height="38" class="s-hatch"></rect><rect x="38" y="76" width="38" height="38" class="s-tile"></rect><rect x="76" y="76" width="38" height="38" class="s-hatch"></rect>
+            <text x="57" y="62" class="s-txt" text-anchor="middle">안전</text>
+          </g>
+          <g transform="translate(170,22)">
+            <text x="57" y="-8" class="s-lbl" text-anchor="middle">큐브가 십자</text>
+            <rect x="0" y="0" width="38" height="38" class="s-tile"></rect><rect x="38" y="0" width="38" height="38" class="s-hatch"></rect><rect x="76" y="0" width="38" height="38" class="s-tile"></rect>
+            <rect x="0" y="38" width="38" height="38" class="s-hatch"></rect><rect x="38" y="38" width="38" height="38" class="s-tile"></rect><rect x="76" y="38" width="38" height="38" class="s-hatch"></rect>
+            <rect x="0" y="76" width="38" height="38" class="s-tile"></rect><rect x="38" y="76" width="38" height="38" class="s-hatch"></rect><rect x="76" y="76" width="38" height="38" class="s-tile"></rect>
+            <text x="57" y="62" class="s-txt" text-anchor="middle">안전</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>위상 매트릭스: 보스가 필드 밖에서 작은 큐브 4개를 띄우고, 같은 모양의 칸에 큰 큐브를 떨어뜨립니다. 어느 쪽이든 중앙은 맞지 않습니다.</figcaption>
+    </figure>
+    <figure>
+      <div class="fig">
+        <svg viewBox="0 0 300 160" role="img" aria-label="악몽 순찰 로봇 세 줄과 탱커가 줄 끝을 막는 위치">
+          <g transform="translate(30,15)">
+            <rect x="0" y="0" width="44" height="44" class="s-tile"></rect><rect x="44" y="0" width="44" height="44" class="s-tile"></rect><rect x="88" y="0" width="44" height="44" class="s-tile"></rect>
+            <rect x="0" y="44" width="44" height="44" class="s-tile"></rect><rect x="44" y="44" width="44" height="44" class="s-tile"></rect><rect x="88" y="44" width="44" height="44" class="s-tile"></rect>
+            <rect x="0" y="88" width="44" height="44" class="s-tile"></rect><rect x="44" y="88" width="44" height="44" class="s-tile"></rect><rect x="88" y="88" width="44" height="44" class="s-tile"></rect>
+            <line x1="125" y1="22" x2="10" y2="22" class="s-arrow" marker-end="url(#ah)" marker-start="url(#ah)"></line>
+            <line x1="125" y1="66" x2="10" y2="66" class="s-arrow" marker-end="url(#ah)" marker-start="url(#ah)"></line>
+            <line x1="125" y1="110" x2="10" y2="110" class="s-arrow" marker-end="url(#ah)" marker-start="url(#ah)"></line>
+            <rect x="140" y="12" width="20" height="20" class="s-orb"></rect><rect x="140" y="56" width="20" height="20" class="s-orb"></rect><rect x="140" y="100" width="20" height="20" class="s-orb"></rect>
+            <circle cx="176" cy="22" r="11" class="s-me"></circle><text x="176" y="26" class="s-meT" text-anchor="middle">T2</text>
+            <circle cx="176" cy="66" r="11" class="s-me"></circle><text x="176" y="70" class="s-meT" text-anchor="middle">T3</text>
+            <text x="200" y="114" class="s-sub">세 번째는</text><text x="200" y="130" class="s-sub">그냥 피함</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption class="nm">악몽 순찰 로봇: 세 줄에 하나씩 나와 칸을 오가며 범위 피해를 줍니다. 서브탱 둘이 줄 끝에서 어그로를 잡아 세워 둡니다. 세 번째 로봇은 막지 않는 게 정석이라 딜러가 지나가는 경로를 피하면 됩니다.</figcaption>
+    </figure>
+  </div>
+
+  <div class="mechs">
+    <div class="mech">
+      <div class="name"><h3>환·섬멸 궤도포</h3><div class="tags"><span class="tag all">전 난이도</span><span class="tag h">하드부터 낙하 빨라짐</span></div></div>
+      <div class="body">
+        <p>딜러에게 숫자와 원형 예고가 붙고, 카운트가 끝나면 그 칸에 궤도포가 떨어집니다. 칸은 멀쩡함 → 금 감 → 붕괴의 3단계이고, 한 발에 한 단계씩 진행됩니다. 하드부터는 서로 다른 순번의 대상자가 같은 칸에 함께 서면 안 됩니다.</p>
+        <p class="me"><b>내 할 일</b> 번호가 뜨면 내 번호 징 칸으로 가서 예고를 놓고, 확정되면 바로 빠져나옵니다. 칸이 무너질 때 같이 떨어지지 않게 주의하세요. 금 간 칸을 계획 밖에 많이 남기면 다음 붕괴 충격 때 서 있을 칸이 사라집니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p2-rail.jpg" alt="인게임 공략 가이드의 환 섬멸 궤도포 설명, 대상자 발밑 빨간 원" width="760" height="530"><figcaption>인게임 가이드 '환·섬멸 궤도포'. 대상자 발밑의 빨간 원이 궤도포 낙하 범위입니다. 이 원을 징 칸에 두고 나옵니다. <span class="src">디시 38957</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>직선 쉐어 · 큰 폭탄</h3><div class="tags"><span class="tag all">전 난이도</span></div></div>
+      <div class="body"><p>1회차 궤도포 뒤에 직선 쉐어와 플레이어 대상 거리 감쇠 폭탄이 같이 옵니다. 직선 쉐어는 모여 맞고, 폭탄 대상자는 사람들에게서 멀리 떨어져 터뜨립니다.</p></div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>붕괴 충격</h3><div class="tags"><span class="tag all">전 난이도</span></div></div>
+      <div class="body">
+        <p>보스가 에너지를 모아 한 번 크게 폭발합니다. 거리 비례 피해이고, 이때 금 간 칸은 전부 무너집니다.</p>
+        <p class="me"><b>내 할 일</b> 남은 칸의 바깥쪽으로 물러납니다. 뎀감이 넉넉하면 원거리 딜러는 계속 딜해도 됩니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p2-shock.jpg" alt="인게임 공략 가이드의 붕괴 충격 설명 화면" width="760" height="499"><figcaption>인게임 가이드 '붕괴 충격'. 금 간 발판은 전부 무너지고, 폭발 피해는 거리에 비례해 줄어듭니다. <span class="src">디시 38957</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>쌍둥이 로봇(쌍생 초계기)</h3><div class="tags"><span class="tag h">하드부터 붙으면 강화</span></div></div>
+      <div class="body">
+        <p>탱 2명에게 작은 원 예고가 붙고, 그 칸에 로봇이 소환됩니다. 로봇은 에너지가 차면 자폭해서 발밑 칸을 깹니다. 둘이 가까우면 서로 큰 피해 감소를 받고, 둘 다 잡아야 보스가 돌아옵니다. 그동안 보스는 필드 밖에서 큐브 공격을 반복합니다.</p>
+        <p class="me"><b>내 할 일</b> 공대장이 정한 로봇부터 잡고, 바깥 보스의 큐브 모양(정사각/십자)을 보고 맞는 칸을 피합니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p2-twin.jpg" alt="탱1과 탱2가 각각 다른 칸에서 쌍둥이 로봇을 잡는 실전 화면" width="760" height="502"><figcaption>노란 원 두 개가 탱1·탱2입니다. 로봇을 서로 다른 칸으로 떨어뜨려 놓은 모습입니다. <span class="src">디시 38957</span></figcaption></figure>
+          <figure class="shot"><img src="img/p2-cube.jpg" alt="필드 밖 보스 옆에 떠 있는 파란 큐브" width="573" height="466"><figcaption>필드 밖 보스 옆의 파란 큐브 4개. 이 배치가 정사각인지 십자인지 봅니다. <span class="src">blueprotocol-fan</span></figcaption></figure>
+          <figure class="shot"><img src="img/p2-cube-hit.jpg" alt="큐브 공격으로 칸들이 빨갛게 칠해진 화면" width="760" height="426"><figcaption>큐브가 떨어질 칸이 빨갛게 칠해집니다. 빨갛지 않은 칸(대개 중앙)으로 옮깁니다. <span class="src">blueprotocol-fan</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>바닥 복구 · 대시</h3><div class="tags"><span class="tag all">전 난이도</span></div></div>
+      <div class="body"><p>로봇 둘을 잡으면 칸이 모두 복구되고, 보스가 중앙에 착지하자마자 구석으로 대시합니다. 따라가지 말고 중앙에서 기다립니다. 이후 후반 사이클은 순찰 로봇이 반대쪽에서 나오므로 궤도포 칸 순서도 반대로 뒤집힙니다(한섭 공대에서 흔히 "2페는 4·5·6번 징").</p></div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>시한 폭탄</h3><div class="tags"><span class="tag n">악몽</span></div></div>
+      <div class="body"><p>보스 공격 중 한 명 머리 위에 타이머가 뜹니다. 구석으로 가서 폭탄을 바닥에 내려놓습니다. 한섭 디시 공략(8/15) 기준이며 일본 공략에는 따로 적혀 있지 않습니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p2-timebomb.jpg" alt="파티원 머리 위에 빨간 시한 폭탄이 붙은 화면" width="246" height="238"><figcaption>노란 네모 안이 시한 폭탄 대상자입니다. 머리 위 빨간 원통이 폭탄입니다. <span class="src">디시 38957</span></figcaption></figure>
+          <figure class="shot"><img src="img/p2-patrol.jpg" alt="순찰 로봇 위치와 안전한 칸을 표시한 실전 화면" width="760" height="427"><figcaption>순찰 로봇(노란 원)과 남은 안전 칸(SAFE). 빨간 X는 이미 깬 칸, 검은 원은 이번에 깰 칸입니다. <span class="src">디시 38957</span></figcaption></figure>
+        </div></div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>0% 버티기</h3><div class="tags"><span class="tag n">악몽 전용</span></div></div>
+      <div class="body">
+        <p>HP가 0이 되면 아홉 칸이 복구되고 약 50초간 궤도포와 분신 로봇 돌진이 이어집니다. 궤도포는 살아 있는 인원 수만큼 나와서, 사람이 많을수록 칸이 빨리 사라집니다. 로봇 본체에 닿거나 돌진에 맞으면 탱도 즉사합니다.</p>
+        <p class="me"><b>내 할 일</b> 공대가 "탱만 남기기"를 고르면 딜러와 힐러는 뛰어내려 눕습니다(탱 1~3명 생존). 건틀릿에서는 이 방법을 쓰지 않고 다 같이 칸을 아끼며 버팁니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p2-zero.jpg" alt="악몽 0% 단계의 분홍 레이저와 분신 로봇 돌진 화면" width="760" height="430"><figcaption>0% 단계. 분홍 직선은 돌진·레이저 예고, 바닥의 빨간 원은 궤도포 범위로 보입니다. <span class="src">디시 38957</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <details class="tl">
+    <summary>기믹 순서 (하드 / 악몽)</summary>
+    <div class="tlgrid">
+      <div>
+        <h4>하드</h4>
+        <ol class="seq">
+          <li><span class="t">전반</span><span>부채꼴 → 바닥 웨이브 → 솟구침</span></li>
+          <li><span class="t"></span><span class="k">궤도포 1회차</span></li>
+          <li><span class="t"></span><span>직선 쉐어 + 플레이어 거리감쇠</span></li>
+          <li><span class="t"></span><span class="k">궤도포 2회차</span></li>
+          <li><span class="t"></span><span>보스 붕괴 충격</span></li>
+          <li><span class="t"></span><span class="k">쌍둥이 로봇 + 바깥 큐브 반복</span></li>
+          <li><span class="t"></span><span>로봇 처치 → 바닥 복구 → 대시</span></li>
+          <li><span class="t">후반</span><span>궤도포 1·2회차 (방향 반대)</span></li>
+          <li><span class="t"></span><span>직선 쉐어·거리감쇠 → 붕괴 충격 → 웨이브</span></li>
+        </ol>
+      </div>
+      <div>
+        <h4>악몽 (하드와 다른 곳만)</h4>
+        <ol class="seq">
+          <li><span class="t">전반</span><span>궤도포 1회차 뒤 플레이어 거리감쇠</span></li>
+          <li><span class="t"></span><span class="k">순찰 로봇 3기 출현 → 궤도포 2회차</span></li>
+          <li><span class="t">후반</span><span>궤도포 1회차 → 웨이브 → <span class="k">순찰 로봇</span> → 궤도포 2회차</span></li>
+          <li><span class="t">0%</span><span class="k">약 50초: 궤도포 + 로봇 돌진 4회, 바닥 복구 1회</span></li>
+        </ol>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- 3넴 -->
+<section class="boss" id="p3">
+  <div class="boss-head">
+    <span class="num">3넴</span>
+    <h2>종결 · 두 발판과 시간 정지</h2>
+    <div class="meta"><span>수정 하드 <b>1→2</b> · 악몽 <b>1→2→3</b></span><span>폭탄 장판 <b>화살표 사라진 뒤 10초</b></span><span>넉백 약 <b>1.5칸</b></span></div>
+  </div>
+
+  <div class="check">
+    <h3>딜러 체크 6가지</h3>
+    <ol>
+      <li>수정은 <b>1 → 2 → 3 순서로 2~3초 간격</b>. 줄이 연결된 사람에게 맡기고, 내가 대상이 아니면 손대지 않습니다. 같은 수정을 두 번 누르면 전멸입니다.</li>
+      <li>넉백 구슬은 가만히 서 있으면 구슬 기준 바깥으로, 걷고 있으면 걷는 방향으로 날아갑니다. 날아가고 싶은 쪽으로 미리 걸어 두세요.</li>
+      <li>폭탄(원거리) 장판이 붙으면 모서리로 가서, 머리 위 카운트가 끝나 터진 걸 확인한 뒤 돌아옵니다.</li>
+      <li>시간 정지(교향곡) 때는 내 머리 위 예고 3개와 순서를 외웁니다.</li>
+      <li>구슬이 터지거나 텔포가 끝난 직후 1~2초는 딜을 늦춥니다. 탱버가 나에게 튈 수 있습니다.</li>
+      <li>보스 옆 총은 어그로를 가진 사람을 향합니다. 탱 뒤쪽 모서리(탱버 처리 자리)에는 서지 않습니다.</li>
+    </ol>
+  </div>
+
+  <div class="figrow">
+    <figure>
+      <div class="fig">
+        <svg viewBox="0 0 300 300" role="img" aria-label="위아래 두 발판, 가운데 보스와 총, 탱과 파티 위치, 구석의 구슬과 수정">
+          <rect x="40" y="16" width="70" height="86" class="s-tile"></rect><rect x="110" y="16" width="70" height="86" class="s-tile"></rect><rect x="180" y="16" width="70" height="86" class="s-tile"></rect>
+          <rect x="40" y="198" width="70" height="86" class="s-tile"></rect><rect x="110" y="198" width="70" height="86" class="s-tile"></rect><rect x="180" y="198" width="70" height="86" class="s-tile"></rect>
+          <line x1="40" y1="102" x2="250" y2="102" stroke="var(--cyan)" stroke-width="4"></line>
+          <line x1="40" y1="198" x2="250" y2="198" stroke="var(--cyan)" stroke-width="4"></line>
+          <rect x="52" y="118" width="22" height="22" rx="4" class="s-orb" opacity=".55"></rect><rect x="52" y="158" width="22" height="22" rx="4" class="s-orb" opacity=".55"></rect>
+          <text x="40" y="153" class="s-sub" text-anchor="end">총</text>
+          <circle cx="110" cy="150" r="16" class="s-boss"></circle><text x="110" y="154" class="s-bossT" text-anchor="middle">보스</text>
+          <circle cx="75" cy="58" r="11" class="s-orb"></circle><circle cx="215" cy="58" r="11" class="s-orb"></circle>
+          <circle cx="75" cy="240" r="11" class="s-orb"></circle><circle cx="215" cy="240" r="11" class="s-orb"></circle>
+          <circle cx="62" cy="214" r="12" class="s-me"></circle><text x="62" y="218" class="s-meT" text-anchor="middle">탱</text>
+          <circle cx="150" cy="214" r="12" class="s-me"></circle><text x="150" y="218" class="s-meT" text-anchor="middle">딜</text>
+          <path d="M84 230 L 84 110" class="s-arrowA" marker-end="url(#ahA)"></path>
+          <text x="265" y="62" class="s-sub">구슬·</text><text x="265" y="78" class="s-sub">수정</text>
+          <text x="265" y="244" class="s-sub">구슬·</text><text x="265" y="260" class="s-sub">수정</text>
+        </svg>
+      </div>
+      <figcaption>발판이 위아래로 둘이고 가운데 틈에 보스와 총이 있습니다. 탱은 총 앞 아래 발판 왼쪽, 딜·힐은 아래 발판 가운데에서 시작합니다. 하드·악몽은 구슬 넉백을 타고 탱이 위 발판으로 건너갑니다(분홍 화살표). 구슬과 수정은 각 발판의 왼쪽·오른쪽 칸에 나옵니다.</figcaption>
+    </figure>
+    <figure>
+      <div class="fig">
+        <svg viewBox="0 0 300 300" role="img" aria-label="폭탄 장판 대상 네 명은 네 모서리, 나머지는 가운데">
+          <rect x="20" y="40" width="86" height="150" class="s-tile"></rect><rect x="106" y="40" width="86" height="150" class="s-tile"></rect><rect x="192" y="40" width="86" height="150" class="s-tile"></rect>
+          <g fill="var(--danger)">
+            <polygon points="36,48 41,60 54,60 44,68 48,81 36,73 24,81 28,68 18,60 31,60"></polygon>
+            <polygon points="262,48 267,60 280,60 270,68 274,81 262,73 250,81 254,68 244,60 257,60"></polygon>
+            <polygon points="36,150 41,162 54,162 44,170 48,183 36,175 24,183 28,170 18,162 31,162"></polygon>
+            <polygon points="262,150 267,162 280,162 270,170 274,183 262,175 250,183 254,170 244,162 257,162"></polygon>
+          </g>
+          <circle cx="149" cy="115" r="18" class="s-me"></circle><text x="149" y="119" class="s-meT" text-anchor="middle">본대</text>
+          <text x="150" y="24" class="s-lbl" text-anchor="middle">폭탄 터지기 직전 위치</text>
+          <g transform="translate(20,212)">
+            <rect x="0" y="0" width="258" height="70" rx="8" fill="var(--chip)"></rect>
+            <circle cx="40" cy="35" r="12" class="s-orb"></circle>
+            <g stroke="var(--accent)" stroke-width="2.5" fill="none" marker-end="url(#ahA)">
+              <line x1="54" y1="35" x2="80" y2="35"></line><line x1="26" y1="35" x2="6" y2="35"></line><line x1="40" y1="21" x2="40" y2="6"></line><line x1="40" y1="49" x2="40" y2="64"></line>
+            </g>
+            <text x="98" y="30" class="s-lbl">서 있으면: 구슬 기준 바깥으로</text>
+            <text x="98" y="50" class="s-lbl">걷는 중이면: 걷는 방향으로</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>폭탄(원거리, 거리 감쇠) 대상 4명은 서로 겹치지 않게 네 모서리로 갑니다. 구슬과 같이 나오면 구슬을 먼저 타고 그다음 장판을 처리합니다. 공팟에서는 대상자 2명을 반대 발판으로 넘기는 단순한 방법을 쓰기도 합니다.</figcaption>
+    </figure>
+  </div>
+
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 520 200" role="img" aria-label="수정 연결 순서와 번개 장판 단계 위치">
+        <g transform="translate(10,20)">
+          <text x="110" y="-4" class="s-lbl" text-anchor="middle">수정 연결 (악몽 1·2·3)</text>
+          <rect x="0" y="6" width="220" height="60" class="s-tile"></rect>
+          <rect x="0" y="110" width="220" height="60" class="s-tile"></rect>
+          <rect x="10" y="22" width="24" height="24" rx="3" class="s-orb"></rect><rect x="186" y="22" width="24" height="24" rx="3" class="s-orb"></rect>
+          <rect x="10" y="128" width="24" height="24" rx="3" class="s-orb"></rect><rect x="186" y="128" width="24" height="24" rx="3" class="s-orb"></rect>
+          <line x1="34" y1="34" x2="100" y2="34" class="s-teth"></line><circle cx="106" cy="34" r="10" class="s-me"></circle><text x="106" y="38" class="s-meT" text-anchor="middle">3</text>
+          <line x1="34" y1="140" x2="92" y2="132" class="s-teth"></line><circle cx="98" cy="132" r="10" class="s-me"></circle><text x="98" y="136" class="s-meT" text-anchor="middle">1</text>
+          <line x1="186" y1="140" x2="128" y2="150" class="s-teth"></line><circle cx="122" cy="150" r="10" class="s-me"></circle><text x="122" y="154" class="s-meT" text-anchor="middle">2</text>
+          <text x="110" y="92" class="s-sub" text-anchor="middle">줄 연결된 사람이 번호 순서로 2~3초 간격 상호작용</text>
+        </g>
+        <g transform="translate(290,20)">
+          <text x="105" y="-4" class="s-lbl" text-anchor="middle">번개 장판 단계</text>
+          <rect x="0" y="6" width="60" height="54" class="s-tile"></rect><rect x="60" y="6" width="60" height="54" class="s-tile"></rect><rect x="120" y="6" width="60" height="54" class="s-tile"></rect>
+          <rect x="0" y="60" width="60" height="54" class="s-hatch"></rect><rect x="60" y="60" width="60" height="54" class="s-hatch"></rect><rect x="120" y="60" width="60" height="54" class="s-hatch"></rect>
+          <rect x="0" y="114" width="60" height="54" class="s-tile"></rect><rect x="60" y="114" width="60" height="54" class="s-tile"></rect><rect x="120" y="114" width="60" height="54" class="s-tile"></rect>
+          <circle cx="18" cy="24" r="11" class="s-mk"></circle><text x="18" y="28" class="s-mkT" text-anchor="middle">1</text>
+          <circle cx="18" cy="150" r="11" class="s-mk"></circle><text x="18" y="154" class="s-mkT" text-anchor="middle">2</text>
+          <line x1="172" y1="38" x2="44" y2="38" class="s-arrow" marker-end="url(#ah)"></line>
+          <line x1="172" y1="134" x2="44" y2="134" class="s-arrow" marker-end="url(#ah)"></line>
+          <text x="90" y="92" class="s-txt" text-anchor="middle">중앙 레이저</text>
+          <rect x="188" y="8" width="20" height="20" class="s-orb"></rect><rect x="188" y="146" width="20" height="20" class="s-orb"></rect>
+          <text x="214" y="24" class="s-sub">환영</text><text x="214" y="162" class="s-sub">로봇</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>왼쪽: 수정 단계에는 모든 칸에 빨간 원이 퍼진 뒤 하늘에서 레이저가 떨어집니다. 맞는 수정을 순서대로 누르면 안전 지대로 순간이동합니다. 오른쪽: 사이클 끝 번개 단계는 1번이나 2번 징에서 대기하고, 번개 장판을 두 번 피한 뒤 중앙 줄 레이저를 피합니다. <span class="nm">악몽은 오른쪽 모서리에 환영 로봇이 나와 원거리 장판을 쏩니다.</span></figcaption>
+  </figure>
+
+  <div class="mechs">
+    <div class="mech">
+      <div class="name"><h3>넉백 구슬</h3><div class="tags"><span class="tag all">전 난이도</span><span class="tag h">하드부터 탱 이동</span></div></div>
+      <div class="body">
+        <p>발판 왼쪽이나 오른쪽 칸에 큰 보라 구슬이 생기고, 시간이 지나면 터져 약 1.5칸 밀어냅니다. 슈퍼아머로 버틸 수 없습니다. 가만히 서 있으면 구슬 기준 바깥쪽으로, 이동 중이면 이동하는 방향으로 날아갑니다. 발판 바깥의 진한 회색 테두리에 서 있으면 넉백 범위 밖입니다.</p>
+        <p class="me"><b>내 할 일</b> 남을 거면 범위 밖 테두리로, 건너갈 거면 날아가고 싶은 쪽으로 미리 걸어 둡니다. 공중에서 쓸 수 있는 스킬이나 방향키+평타로 제자리 착지하는 방법(글리치)도 있지만 탱 어그로를 뺏기 쉬우니 공대가 원할 때만 씁니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p3-orb.jpg" alt="발판 위에 큰 보라 구슬이 생긴 실전 화면" width="760" height="425"><figcaption>발판 왼쪽의 큰 보라 구슬. 화면 문구는 "해당 위치를 골라 맞은편 발판으로 날아가되 떨어지지 말라"는 안내입니다. <span class="src">blueprotocol-fan</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>장판 4종</h3><div class="tags"><span class="tag all">전 난이도</span></div></div>
+      <div class="body">
+        <p><b>개인 장판</b>은 따로 맞기만 하면 됩니다. <b>쉐어</b>는 모여 맞습니다. <b>폭탄(원거리)</b>은 거리 감쇠라 모서리로 멀리 빠집니다. <b>파동 장판</b>은 폭탄의 강화형으로 항상 넉백 구슬과 같이 나옵니다.</p>
+        <p>파동 장판은 대상자를 따라다니다가 머리 위 파란 게이지가 다 떨어지면 바닥에 고정됩니다. 고정된 걸 확인한 뒤 대시로 빠져나옵니다. 게이지만 보고 먼저 대시하면 장판을 본대로 끌고 갑니다. 대상이 아닌 사람은 같이 구슬을 탄 뒤 바로 대시로 빠집니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p3-bomb.jpg" alt="주황 화살표 모양 표식이 바닥에 퍼진 원거리 장판" width="711" height="578"><figcaption>주황 꺾쇠 표식이 넓게 퍼진 게 폭탄(원거리) 장판입니다. 대상자는 모서리로 빠집니다. <span class="src">디시 39276</span></figcaption></figure>
+          <figure class="shot"><img src="img/p3-wave.jpg" alt="파동 장판 대상자와 대시 타이밍을 비교한 두 장면" width="760" height="273"><figcaption>파동 장판. 왼쪽은 아직 따라다니는 상태, 오른쪽(대시타이밍)은 화살표가 사라지고 파란 파동만 남아 바닥에 고정된 순간입니다. <span class="src">디시 39276</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>수정 연결(연결의 시련)</h3><div class="tags"><span class="tag h">하드 1·2</span><span class="tag n">악몽 1·2·3</span></div></div>
+      <div class="body">
+        <p>번호마다 2명의 머리 위에 숫자가 뜨고, 그중 한 명은 정답 수정과 줄로 이어집니다. 모든 칸에 빨간 원이 커지고, 최대가 되면 하늘에서 지속 즉사 레이저가 떨어집니다. 정답 수정을 1 → 2 → 3 순서로 약 2~3초 간격으로 누르면 안전 지대가 생기고 순간이동합니다.</p>
+        <p class="me"><b>내 할 일</b> 누르는 사람이 꼭 번호 대상일 필요는 없지만, 줄 연결된 사람에게 맡기는 게 사고가 적습니다. 대상이 둘이면 먼저 간 사람이 누르고 다른 사람은 가지 않습니다. 2사이클부터는 수정과 구슬이 동시에 나와 공중에서 텔포되므로, 수정 담당이 아니면 구슬을 무시하고 딜을 이어가도 됩니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p3-crystal.jpg" alt="두 플레이어 머리 위에 숫자 2가 뜬 화면" width="760" height="424"><figcaption>분홍 원 두 곳이 머리 위 숫자 '2' 대상자입니다. 둘 중 줄이 이어진 사람이 2번 수정을 누릅니다. 바닥의 빨간 원이 커지면 레이저가 떨어집니다. <span class="src">blueprotocol-fan</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>천공의 리듬 · 종말의 교향곡</h3><div class="tags"><span class="tag all">전 난이도</span><span class="tag n">악몽 피해 큼</span></div></div>
+      <div class="body">
+        <p>화면에 분홍 사슬이 뜨며 시간이 멈추고, 각자에게 예고 3개가 차례로 표시됩니다. 사슬이 풀리면 표시된 순서대로 터집니다. 한섭 공략 기준 실제 처리 순서는 <b>쉐어 → 폭탄 → 개인</b>입니다.</p>
+        <p class="me"><b>내 할 일</b> 폭탄을 받은 사람은 사슬이 풀리자마자 최대한 멀리 갑니다. 나머지는 쉐어를 같이 맞은 뒤 흩어져 개인 장판을 뺍니다. 폭탄 대상자가 쉐어에 끼면 이어지는 폭탄에 파티가 큰 피해를 받습니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p3-sym-guide.jpg" alt="인게임 공략 가이드의 천공의 리듬 종말의 교향곡 설명 화면" width="760" height="486"><figcaption>인게임 가이드. 분홍 사슬이 화면을 덮으면 시간 정지입니다. <span class="src">디시 39015</span></figcaption></figure>
+          <figure class="shot"><img src="img/p3-sym.jpg" alt="분홍 사슬 아래 파티원들 발밑에 겹친 원들" width="760" height="427"><figcaption>실전. 사슬이 걸린 동안 각자 발밑에 예고가 차례로 뜹니다. 이 순서를 외웁니다. <span class="src">Bidoof 2D 가이드 12:44</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>환영 경보(분홍 지연 장판)</h3><div class="tags"><span class="tag all">전 난이도</span></div></div>
+      <div class="body"><p>분홍 화살표 폭탄, 분홍 개인, 분홍 쉐어는 머리 위 아주 작은 카운트다운이 끝나야 발동합니다. 폭탄은 화살표가 사라지고 약 10초 뒤에 터집니다. 캐릭터를 확대해 카운트가 빠진 걸 보고 돌아오세요.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p3-warn.jpg" alt="인게임 공략 가이드의 환영 경보 설명, 세 단계로 커지는 분홍 장판" width="760" height="479"><figcaption>인게임 가이드 '환영 경보'. 분홍 장판이 왼쪽에서 오른쪽 순서로 커지다가 카운트다운이 끝날 때 터집니다. <span class="src">디시 39015</span></figcaption></figure>
+        </div></div>
+    </div>
+    <div class="mech">
+      <div class="name"><h3>탱버 2종 · 큐브 타일</h3><div class="tags"><span class="tag h">하드 1종</span><span class="tag n">악몽 2종 동시</span></div></div>
+      <div class="body">
+        <p>빨간 원은 일반 탱버(지정 약 4초 뒤), 분홍 원은 지연 탱버(일반 탱버가 터지고 약 4초 뒤)입니다. 탱들이 뒤쪽 모서리로 빠져 혼자 맞습니다. 큐브 타일 공격은 2넴과 같은 방식이라, 오른쪽 환영 분신 로봇을 보면 어느 칸이 맞을지 알 수 있습니다. 오른쪽 로봇의 파란 큐브 하나가 가려져 잘 안 보이면 중앙이 위험합니다.</p>
+        <div class="shots">
+          <figure class="shot"><img src="img/p3-tank.jpg" alt="빨간 원으로 표시된 탱커가 보스 옆 총 앞에 선 화면" width="760" height="194"><figcaption>빨간 원이 총 앞에서 어그로를 잡은 탱입니다. 총은 어그로 대상에게 쏘니 딜러는 이 방향에 서지 않습니다. <span class="src">blueprotocol-fan</span></figcaption></figure>
+          <figure class="shot"><img src="img/p3-buster.jpg" alt="탱크버스터1과 탱크버스터2가 표시된 실전 화면" width="760" height="430"><figcaption>노란 선 두 개가 탱크버스터1(일반)과 탱크버스터2(지연)입니다. 딜러는 이 원들에 들어가지 않습니다. <span class="src">디시 39015</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <details class="tl" open>
+    <summary>악몽 기믹 순서 (한섭 공대 정리, 10/6)</summary>
+    <div class="tlgrid">
+      <div>
+        <h4>1페이즈</h4>
+        <ol class="seq">
+          <li><span class="t">1</span><span>일반 장판 3종(쉐어·산개·개인)</span></li>
+          <li><span class="t">2</span><span>큐브 → 탱버+지연탱버 → 큐브 타일 → 넉백 구슬</span></li>
+          <li><span class="t">3</span><span class="k">넉백 구슬 → 수정 1·2·3</span></li>
+          <li><span class="t">4</span><span>탱버+지연탱버 → 큐브 타일 → 구슬 → 파동 장판(구슬과 멀리)</span></li>
+          <li><span class="t">5</span><span class="k">교향곡 (지연 장판 3종)</span></li>
+          <li><span class="t">6</span><span>큐브 타일 → 탱버+지연 장판 → 큐브 타일</span></li>
+          <li><span class="t">7</span><span>큐브 타일 → 일반 장판 → 넉백 구슬 (산개면 타타)</span></li>
+          <li><span class="t">8</span><span>번개 장판 → 중앙 레이저</span></li>
+        </ol>
+      </div>
+      <div>
+        <h4>2페이즈</h4>
+        <ol class="seq">
+          <li><span class="t">1</span><span>환영 로봇 → 넉백 구슬 (로봇 반대쪽 끝으로)</span></li>
+          <li><span class="t">2</span><span>지연 장판 → 큐브 타일 → 구슬 → 파동 장판</span></li>
+          <li><span class="t">3</span><span class="k">넉백 구슬 → 수정 1·2·3</span></li>
+          <li><span class="t">4</span><span>지연 장판 직후 일반 장판 → 탱버 2종</span></li>
+          <li><span class="t">5</span><span class="k">교향곡</span></li>
+          <li><span class="t">이후</span><span>보스 HP가 남아 있으면 딜 부족</span></li>
+        </ol>
+        <p class="note" style="margin-top:6px">2페이즈부터는 환영 로봇이 뜨면 무조건 반대쪽 끝으로 갑니다. 구슬이 터지는 순간 로봇 공격이 같이 들어옵니다.</p>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- 영상 -->
+<section class="boss" id="videos">
+  <div class="boss-head">
+    <span class="num">영상</span>
+    <h2>영상 모음</h2>
+    <div class="meta"><span>가이드는 영어 해설(Bidoof 2D), 실전은 힐러·탱·딜 시점을 섞었습니다</span></div>
+  </div>
+
+  <div class="callout">처음 보면 <b>Bidoof 2D 가이드</b>로 기믹 구간만 골라 보고, 다음에 <b>하드 실전</b> 하나를 처음부터 끝까지 보는 순서를 권합니다. 한국어 해설 영상은 찾지 못했고, 한국 공대 실전 영상만 있습니다.</div>
+
+  <div>
+    <h3 style="margin-bottom:6px">1넴 기원</h3>
+    <div class="vids">
+      <div class="vid"><span class="kind">가이드</span><div><a href="https://www.youtube.com/watch?v=CPU2elnScRc">Origin Mech 가이드</a> · Bidoof 2D · 17:26
+        <div class="chap"><a href="https://www.youtube.com/watch?v=CPU2elnScRc&t=50s">0:50</a>배치 <a href="https://www.youtube.com/watch?v=CPU2elnScRc&t=152s">2:32</a>코어·섬멸 광선 <a href="https://www.youtube.com/watch?v=CPU2elnScRc&t=332s">5:32</a>도넛 3연 <a href="https://www.youtube.com/watch?v=CPU2elnScRc&t=400s">6:40</a>쉐어 <a href="https://www.youtube.com/watch?v=CPU2elnScRc&t=458s">7:38</a>환영 동기화 <a href="https://www.youtube.com/watch?v=CPU2elnScRc&t=500s">8:20</a>방·광막 <a href="https://www.youtube.com/watch?v=CPU2elnScRc&t=903s">15:03</a>악몽 0%</div></div></div>
+      <div class="vid"><span class="kind">하드</span><div><a href="https://www.youtube.com/watch?v=FzcjFfpz2f0">Origin + Continuation (Hard)</a> · LaylaMMO 힐러 시점 · 9:53 · 기원 0:00</div></div>
+      <div class="vid"><span class="kind">하드</span><div><a href="https://www.youtube.com/watch?v=7cr5GlugcCw">P1 하드 공략, 타타 없이 클리어</a> · kanbatch(일본어) · 13:16</div></div>
+      <div class="vid"><span class="kind">악몽</span><div><a href="https://www.youtube.com/watch?v=0R_4bte74vU">Origin Mech (Nightmare)</a> · LaylaMMO · 7:21</div></div>
+    </div>
+  </div>
+
+  <div>
+    <h3 style="margin-bottom:6px">2넴 계속</h3>
+    <div class="vids">
+      <div class="vid"><span class="kind">가이드</span><div><a href="https://www.youtube.com/watch?v=Q8eWNZ3s6lM">Continuation Mech 가이드</a> · Bidoof 2D · 20:07
+        <div class="chap"><a href="https://www.youtube.com/watch?v=Q8eWNZ3s6lM&t=29s">0:29</a>타일 깨기 전략 <a href="https://www.youtube.com/watch?v=Q8eWNZ3s6lM&t=400s">6:40</a>궤도포 <a href="https://www.youtube.com/watch?v=Q8eWNZ3s6lM&t=463s">7:43</a>쉐어·큰 폭탄 <a href="https://www.youtube.com/watch?v=Q8eWNZ3s6lM&t=525s">8:45</a>순찰 로봇(악몽) <a href="https://www.youtube.com/watch?v=Q8eWNZ3s6lM&t=649s">10:49</a>쌍둥이·큐브 <a href="https://www.youtube.com/watch?v=Q8eWNZ3s6lM&t=879s">14:39</a>후반 타일 <a href="https://www.youtube.com/watch?v=Q8eWNZ3s6lM&t=976s">16:16</a>악몽 0%</div></div></div>
+      <div class="vid"><span class="kind">하드</span><div><a href="https://www.youtube.com/watch?v=FzcjFfpz2f0&t=213s">Origin + Continuation (Hard)</a> · LaylaMMO · 계속은 3:33부터</div></div>
+      <div class="vid"><span class="kind">하드</span><div><a href="https://www.youtube.com/watch?v=0UswzxJnofQ">P2 실제 모집에서 쓰는 공략, 지휘자 시점</a> · kanbatch · 6:10</div></div>
+      <div class="vid"><span class="kind">악몽</span><div><a href="https://www.youtube.com/watch?v=wujv_10yBpM">Continuation Mech (Nightmare)</a> · LaylaMMO · 7:04</div></div>
+      <div class="vid"><span class="kind">악몽</span><div><a href="https://www.youtube.com/watch?v=UgXFcJfT6s8">시즌3 레이드 2넴 악몽</a> · 치킨너겟(한섭) · 9:09</div></div>
+    </div>
+  </div>
+
+  <div>
+    <h3 style="margin-bottom:6px">3넴 종결</h3>
+    <div class="vids">
+      <div class="vid"><span class="kind">가이드</span><div><a href="https://www.youtube.com/watch?v=5X60hBgZy0Q">Final Mech 가이드</a> · Bidoof 2D · 24:09
+        <div class="chap"><a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=52s">0:52</a>배치 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=114s">1:54</a>기믹 순서 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=215s">3:35</a>탱버 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=304s">5:04</a>인과의 워프 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=707s">11:47</a>수정 1회차 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=734s">12:14</a>교향곡 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=834s">13:54</a>환영 경보 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=1054s">17:34</a>수정 2회차 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=1131s">18:51</a>경보 겹침</div></div></div>
+      <div class="vid"><span class="kind">짧은 클립</span><div><a href="https://www.youtube.com/watch?v=LSmZSmKJSRo">교향곡 처리</a> 31초 · <a href="https://www.youtube.com/watch?v=dTpzeJm0LDI">수정 연결</a> 21초 · Bidoof 2D</div></div>
+      <div class="vid"><span class="kind">하드</span><div><a href="https://www.youtube.com/watch?v=tKON7MBEhno">Final Mech (Hard)</a> · LaylaMMO 힐러 시점 · 7:57</div></div>
+      <div class="vid"><span class="kind">하드</span><div><a href="https://www.youtube.com/watch?v=2CIReWIihAo">P3 하드, 3연 한 번에 클리어</a> · kanbatch · 22:20</div></div>
+      <div class="vid"><span class="kind">악몽</span><div><a href="https://www.youtube.com/watch?v=Qt5GCbv3KXE">Final Mech (Nightmare)</a> · LaylaMMO · 5:58</div></div>
+      <div class="vid"><span class="kind">악몽</span><div><a href="https://www.youtube.com/watch?v=_2nYIEEHaS8">나이트메어 레이드: 종결 질풍 시점</a> · 파투(한섭, 공대장 공략 글 포함) · 7:21</div></div>
+    </div>
+  </div>
+
+  <div>
+    <h3 style="margin-bottom:6px">건틀릿</h3>
+    <div class="vids">
+      <div class="vid"><span class="kind">가이드</span><div><a href="https://www.youtube.com/watch?v=4h5CINQJ9jE">Nightmare Gauntlet Guide</a> · Bidoof 2D · 6:20 · DPS 요구치, 에어로나 사용 타이밍</div></div>
+      <div class="vid"><span class="kind">악몽</span><div><a href="https://www.youtube.com/watch?v=MLPGZKTmO0Q">악몽 건틀릿 12인 클리어, 탱커 시점</a> · 치킨너겟(한섭) · 29:36</div></div>
+    </div>
+  </div>
+</section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>2026-10-23 정리. 한섭 기준 이름은 디시 공략글을 따랐고, 일본 공략과 다르게 부르는 기믹은 한섭 표현을 썼습니다. 시간 수치는 일본 공략 기준이라 실제와 몇 초 다를 수 있습니다.</p>
+    <ul>
+      <li><a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=38883">디시 bpt 38883 기원 공략</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=38957">38957 계속 공략</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39015">39015 종결 공략</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39096">39096 종결 수정</a></li>
+      <li><a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39070">39070 넉백 구슬</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39092">39092 폭탄+구슬</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39276">39276 3넴 장판 종류</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39400">39400 3넴 질문 댓글</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39409">39409 3넴 악몽 순서</a></li>
+      <li><a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39355">39355 악몽 2넴</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39334">39334 악몽 2넴 후기</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39408">39408</a>·<a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39420">39420 탱버 튐</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39474">39474 2넴 쫄탱</a>, <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39388">39388 악몽 종결 후기</a></li>
+      <li>blueprotocol-fan <a href="https://blueprotocol-fan.com/bpsr-s3raid-1st/">P1 始</a>, <a href="https://blueprotocol-fan.com/bpsr-s3raid-2nd/">P2 継</a>, <a href="https://blueprotocol-fan.com/bpsr-s3raid-3rd/">P3 終</a> (일본, 9월)</li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.tabs a'));
+  var ids = links.map(function (a) { return a.getAttribute('href').slice(1); });
+  function mark() {
+    var y = window.scrollY + 120, cur = ids[0];
+    ids.forEach(function (id) { var el = document.getElementById(id); if (el && el.offsetTop <= y) cur = id; });
+    links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', mark, { passive: true });
+  mark();
+})();
+</script>
+
+</body>
+</html>
