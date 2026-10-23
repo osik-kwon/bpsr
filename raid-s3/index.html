@@ -684,9 +684,9 @@ html { scroll-behavior: smooth; }
 
   <figure>
     <div class="fig">
-      <svg viewBox="0 0 520 200" role="img" aria-label="수정 연결 순서와 번개 장판 단계 위치">
+      <svg viewBox="0 0 520 200" role="img" aria-label="수정 텔포 순서와 번개 장판 단계 위치">
         <g transform="translate(10,20)">
-          <text x="110" y="-4" class="s-lbl" text-anchor="middle">수정 연결 (악몽 1·2·3)</text>
+          <text x="110" y="-4" class="s-lbl" text-anchor="middle">수정 텔포 (악몽 1·2·3)</text>
           <rect x="0" y="6" width="220" height="60" class="s-tile"></rect>
           <rect x="0" y="110" width="220" height="60" class="s-tile"></rect>
           <rect x="10" y="22" width="24" height="24" rx="3" class="s-orb"></rect><rect x="186" y="22" width="24" height="24" rx="3" class="s-orb"></rect>
@@ -730,6 +730,7 @@ html { scroll-behavior: smooth; }
       <div class="body">
         <p><b>개인 장판</b>은 따로 맞기만 하면 됩니다. <b>쉐어</b>는 모여 맞습니다. <b>폭탄(원거리)</b>은 거리 감쇠라 모서리로 멀리 빠집니다. <b>파동 장판</b>은 폭탄의 강화형으로 항상 넉백 구슬과 같이 나옵니다.</p>
         <p>파동 장판은 대상자를 따라다니다가 머리 위 파란 게이지가 다 떨어지면 바닥에 고정됩니다. 고정된 걸 확인한 뒤 대시로 빠져나옵니다. 게이지만 보고 먼저 대시하면 장판을 본대로 끌고 갑니다. 대상이 아닌 사람은 같이 구슬을 탄 뒤 바로 대시로 빠집니다.</p>
+        <p>영어 가이드에서는 이 패턴을 '연결의 시련(Trial of Connection)'이라는 지뢰로 설명합니다. 3~4명에게 붙고 10~11초 뒤 자동으로 바닥에 깔리며, 그 3초 뒤 터집니다. 1회차는 구슬 근처에 있다가 같이 타고, 깔린 뒤 1초쯤 기다렸다 E 대시로 빠집니다. 2회차는 바로 떨어지지 않으니, 레이저가 발판을 거의 다 가로지를 때 깔고 대시합니다.</p>
         <div class="shots">
           <figure class="shot"><img src="img/p3-bomb.jpg" alt="주황 화살표 모양 표식이 바닥에 퍼진 원거리 장판" width="711" height="578"><figcaption>주황 꺾쇠 표식이 넓게 퍼진 게 폭탄(원거리) 장판입니다. 대상자는 모서리로 빠집니다. <span class="src">디시 39276</span></figcaption></figure>
           <figure class="shot"><img src="img/p3-wave.jpg" alt="파동 장판 대상자와 대시 타이밍을 비교한 두 장면" width="760" height="273"><figcaption>파동 장판. 왼쪽은 아직 따라다니는 상태, 오른쪽(대시타이밍)은 화살표가 사라지고 파란 파동만 남아 바닥에 고정된 순간입니다. <span class="src">디시 39276</span></figcaption></figure>
@@ -737,9 +738,10 @@ html { scroll-behavior: smooth; }
       </div>
     </div>
     <div class="mech">
-      <div class="name"><h3>수정 연결(연결의 시련)</h3><div class="tags"><span class="tag h">하드 1·2</span><span class="tag n">악몽 1·2·3</span></div></div>
+      <div class="name"><h3>수정 텔포(정해진 귀환)</h3><div class="tags"><span class="tag h">하드 1·2</span><span class="tag n">악몽 1·2·3</span></div></div>
       <div class="body">
-        <p>번호마다 2명의 머리 위에 숫자가 뜨고, 그중 한 명은 정답 수정과 줄로 이어집니다. 모든 칸에 빨간 원이 커지고, 최대가 되면 하늘에서 지속 즉사 레이저가 떨어집니다. 정답 수정을 1 → 2 → 3 순서로 약 2~3초 간격으로 누르면 안전 지대가 생기고 순간이동합니다.</p>
+        <p>맵 네 모서리에 수정이 생기고, 번호마다 2명의 머리 위에 숫자가 뜹니다. 그중 한 명은 정답 수정과 줄로 이어집니다. 곧 모든 칸에 빨간 예고가 깔리고 지속 즉사 레이저가 떨어지는데, 예고 중간중간 안전 칸이 생깁니다.</p>
+        <p>수정을 누르면 레이저가 시작될 때 파티 전원이 그 수정 위치로 순간이동합니다. 다음 수정을 누르기까지 걸린 시간만큼 지난 뒤 다음 수정으로 또 이동합니다. 그래서 1번을 누르고 약 2초, 2번을 누르고 약 2초 간격을 두어야 이동하는 순간 그 자리가 안전 칸이 됩니다. 너무 빨리 연달아 누르면 안전 칸이 생기기 전에 옮겨져 죽습니다(Bidoof 가이드 7:30~8:20 설명).</p>
         <p class="me"><b>내 할 일</b> 누르는 사람이 꼭 번호 대상일 필요는 없지만, 줄 연결된 사람에게 맡기는 게 사고가 적습니다. 대상이 둘이면 먼저 간 사람이 누르고 다른 사람은 가지 않습니다. 2사이클부터는 수정과 구슬이 동시에 나와 공중에서 텔포되므로, 수정 담당이 아니면 구슬을 무시하고 딜을 이어가도 됩니다.</p>
         <div class="shots">
           <figure class="shot"><img src="img/p3-crystal.jpg" alt="두 플레이어 머리 위에 숫자 2가 뜬 화면" width="760" height="424"><figcaption>분홍 원 두 곳이 머리 위 숫자 '2' 대상자입니다. 둘 중 줄이 이어진 사람이 2번 수정을 누릅니다. 바닥의 빨간 원이 커지면 레이저가 떨어집니다. <span class="src">blueprotocol-fan</span></figcaption></figure>
@@ -845,8 +847,8 @@ html { scroll-behavior: smooth; }
     <h3 style="margin-bottom:6px">3넴 종결</h3>
     <div class="vids">
       <div class="vid"><span class="kind">가이드</span><div><a href="https://www.youtube.com/watch?v=5X60hBgZy0Q">Final Mech 가이드</a> · Bidoof 2D · 24:09
-        <div class="chap"><a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=52s">0:52</a>배치 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=114s">1:54</a>기믹 순서 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=215s">3:35</a>탱버 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=304s">5:04</a>인과의 워프 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=707s">11:47</a>수정 1회차 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=734s">12:14</a>교향곡 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=834s">13:54</a>환영 경보 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=1054s">17:34</a>수정 2회차 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=1131s">18:51</a>경보 겹침</div></div></div>
-      <div class="vid"><span class="kind">짧은 클립</span><div><a href="https://www.youtube.com/watch?v=LSmZSmKJSRo">교향곡 처리</a> 31초 · <a href="https://www.youtube.com/watch?v=dTpzeJm0LDI">수정 연결</a> 21초 · Bidoof 2D</div></div>
+        <div class="chap"><a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=52s">0:52</a>배치 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=114s">1:54</a>기믹 순서 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=215s">3:35</a>탱버 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=304s">5:04</a>인과의 워프 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=410s">6:50</a>수정 텔포 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=707s">11:47</a>파동 지뢰 1회차 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=734s">12:14</a>교향곡 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=834s">13:54</a>환영 경보 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=1054s">17:34</a>파동 지뢰 2회차 <a href="https://www.youtube.com/watch?v=5X60hBgZy0Q&t=1131s">18:51</a>경보 겹침</div></div></div>
+      <div class="vid"><span class="kind">짧은 클립</span><div><a href="https://www.youtube.com/watch?v=LSmZSmKJSRo">교향곡 처리</a> 31초 · <a href="https://www.youtube.com/watch?v=dTpzeJm0LDI">파동 지뢰</a> 21초 · Bidoof 2D</div></div>
       <div class="vid"><span class="kind">하드</span><div><a href="https://www.youtube.com/watch?v=tKON7MBEhno">Final Mech (Hard)</a> · LaylaMMO 힐러 시점 · 7:57</div></div>
       <div class="vid"><span class="kind">하드</span><div><a href="https://www.youtube.com/watch?v=2CIReWIihAo">P3 하드, 3연 한 번에 클리어</a> · kanbatch · 22:20</div></div>
       <div class="vid"><span class="kind">악몽</span><div><a href="https://www.youtube.com/watch?v=Qt5GCbv3KXE">Final Mech (Nightmare)</a> · LaylaMMO · 5:58</div></div>
