@@ -1,0 +1,427 @@
+{
+  "id": "boss2-hard",
+  "title": "2넴 계속 · 하드",
+  "notes": "판정 모양·크기와 바닥 칸 배치는 테이블, 기믹 순서는 공략 노트, 발생 시각과 대상·자리는 추정. 쌍둥이 로봇·순찰 로봇 전투는 재현하지 않고 그 구간의 큐브만 넣었다",
+  "arena": {
+    "type": "grid",
+    "cols": 3,
+    "rows": 3,
+    "tileW": 20,
+    "tileH": 15,
+    "tileModel": "sm_stk_singlefloor_001a.glb",
+    "radius": 40,
+    "src": "table(바닥 타일 9개 배치 좌표, 칸 20m×15m)"
+  },
+  "player": {
+    "speed": 6.0,
+    "dashDist": 8,
+    "dashCd": 3,
+    "dashIframe": 0.4,
+    "src": "table(모델 테이블 RunVelocity 6m/s; 기본값이라 실제 전투 이동 속도와 같다는 보장은 없음) + estimate(대시 거리·쿨·무적)",
+    "start": [
+      4,
+      -3
+    ]
+  },
+  "boss": {
+    "pos": [
+      0,
+      -15
+    ],
+    "dir": 90,
+    "height": 13.4,
+    "scale": 0.7,
+    "model": "boss2.glb",
+    "src": "table(몬스터 103200, 모델 ch_mon_dajiqiren04_02, 배율 0.7) + estimate(서는 자리)",
+    "anims": {
+      "idle": "04_fidle",
+      "cleave": "04_atk_cleave",
+      "shock": "04_atk_fatal_start",
+      "charge": "04_run",
+      "lineShare": "04_atk_share",
+      "cannon": "04_atk_phantom_core"
+    },
+    "animSrc": "클립은 클라 실측, 기믹과의 대응은 추정"
+  },
+  "partySpots": [
+    [
+      -6,
+      -4
+    ],
+    [
+      6,
+      -5
+    ],
+    [
+      -9,
+      0
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      -4,
+      4
+    ],
+    [
+      4,
+      4
+    ],
+    [
+      0,
+      6
+    ]
+  ],
+  "roomEnergyMax": 120,
+  "noCurtain": true,
+  "duration": 184,
+  "fx": {},
+  "events": [
+    {
+      "t": 5,
+      "type": "cleave",
+      "name": "부채꼴 내려치기",
+      "hit": 2.5,
+      "r": 35,
+      "angle": 60,
+      "dir": 90,
+      "src": "guide(기믹 순서) + table(浮空顺劈: 반경 35m·60°, 2.5초 뒤) + estimate(시각·자리)"
+    },
+    {
+      "t": 14,
+      "type": "wave",
+      "name": "바닥 웨이브",
+      "cast": 2.1,
+      "gap": 2.5,
+      "width": 8,
+      "len": 45,
+      "sets": [
+        [
+          -16,
+          0,
+          16
+        ],
+        [
+          -8,
+          8
+        ]
+      ],
+      "src": "guide(기믹 순서) + table(真实承诺: 띠 45m×8m, 2.1초 뒤) + estimate(띠 배치·간격)"
+    },
+    {
+      "t": 24,
+      "type": "cannon",
+      "name": "궤도포 1회차",
+      "follow": 5,
+      "fall": 2.98,
+      "shots": [
+        {
+          "who": "me",
+          "r": 6.7,
+          "tile": [
+            2,
+            1
+          ]
+        },
+        {
+          "who": 0,
+          "r": 6.7,
+          "tile": [
+            0,
+            1
+          ],
+          "at": [
+            -25,
+            0
+          ],
+          "big": false
+        }
+      ],
+      "src": "guide(기믹 순서) + table(轨道炮落地爆炸: 반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하) + estimate(시각·자리)"
+    },
+    {
+      "t": 38,
+      "type": "lineShare",
+      "name": "직선 쉐어",
+      "cast": 5,
+      "len": 36.2,
+      "width": 7,
+      "bot": 1,
+      "at": [
+        0,
+        8
+      ],
+      "src": "guide(기믹 순서) + table(贯穿轰击: 길이 36.2m·폭 7m) + estimate(시각·자리)"
+    },
+    {
+      "t": 38,
+      "type": "bomb",
+      "name": "거리 감쇠 폭탄",
+      "cast": 5,
+      "safeDist": 20,
+      "bot": 2,
+      "at": [
+        -27,
+        -19
+      ],
+      "src": "guide(기믹 순서) + table(距离衰减爆炸: 반경 26m) + estimate(안전 거리 20m, 대상·자리)"
+    },
+    {
+      "t": 50,
+      "type": "cannon",
+      "name": "궤도포 2회차",
+      "follow": 5,
+      "fall": 2.98,
+      "shots": [
+        {
+          "who": 0,
+          "r": 16,
+          "tile": [
+            2,
+            2
+          ],
+          "at": [
+            28,
+            21
+          ],
+          "big": true
+        },
+        {
+          "who": 1,
+          "r": 6.7,
+          "tile": [
+            1,
+            2
+          ],
+          "at": [
+            0,
+            18
+          ],
+          "big": false
+        },
+        {
+          "who": "me",
+          "r": 6.7,
+          "tile": [
+            0,
+            2
+          ]
+        }
+      ],
+      "src": "guide(기믹 순서) + table(轨道炮落地爆炸: 반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하) + estimate(시각·자리)"
+    },
+    {
+      "t": 66,
+      "type": "shock",
+      "name": "붕괴 충격",
+      "cast": 4.73,
+      "safeDist": 21,
+      "src": "guide(기믹 순서) + table(史诗狂怒: 4.73초 뒤 반경 50m) + estimate(안전 거리 21m)"
+    },
+    {
+      "t": 76,
+      "type": "bossMove",
+      "to": [
+        0,
+        -27
+      ],
+      "dir": 90
+    },
+    {
+      "t": 80,
+      "type": "cubes",
+      "name": "큐브 십자",
+      "cast": 4,
+      "pattern": "cross",
+      "src": "guide(기믹 순서)(큐브 모양대로 칸이 터지고 중앙은 안전) + table(相位映射爆炸: 칸 하나 20m×15m) + estimate(시각·모양별 칸)"
+    },
+    {
+      "t": 90,
+      "type": "cubes",
+      "name": "큐브 정사각",
+      "cast": 4,
+      "pattern": "square",
+      "src": "guide(기믹 순서)(큐브 모양대로 칸이 터지고 중앙은 안전) + table(相位映射爆炸: 칸 하나 20m×15m) + estimate(시각·모양별 칸)"
+    },
+    {
+      "t": 100,
+      "type": "cubes",
+      "name": "큐브 십자",
+      "cast": 4,
+      "pattern": "cross",
+      "src": "guide(기믹 순서)(큐브 모양대로 칸이 터지고 중앙은 안전) + table(相位映射爆炸: 칸 하나 20m×15m) + estimate(시각·모양별 칸)"
+    },
+    {
+      "t": 110,
+      "type": "tiles",
+      "op": "restore",
+      "src": "guide(기믹 순서)"
+    },
+    {
+      "t": 112,
+      "type": "bossMove",
+      "to": [
+        0,
+        0
+      ],
+      "dir": 90
+    },
+    {
+      "t": 114,
+      "type": "charge",
+      "name": "돌진",
+      "cast": 2.55,
+      "from": [
+        0,
+        0
+      ],
+      "to": [
+        24,
+        18
+      ],
+      "width": 11.7,
+      "src": "guide(기믹 순서) + table(第75次冲锋: 폭 11.7m, 2.55초 뒤 출발) + estimate(방향)"
+    },
+    {
+      "t": 121,
+      "type": "bossMove",
+      "to": [
+        0,
+        -15
+      ],
+      "dir": 90
+    },
+    {
+      "t": 124,
+      "type": "cannon",
+      "name": "궤도포 3회차(반대)",
+      "follow": 5,
+      "fall": 2.98,
+      "shots": [
+        {
+          "who": "me",
+          "r": 6.7,
+          "tile": [
+            0,
+            1
+          ]
+        },
+        {
+          "who": 0,
+          "r": 6.7,
+          "tile": [
+            2,
+            1
+          ],
+          "at": [
+            25,
+            0
+          ],
+          "big": false
+        }
+      ],
+      "src": "guide(기믹 순서) + table(轨道炮落地爆炸: 반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하) + estimate(시각·자리)"
+    },
+    {
+      "t": 140,
+      "type": "cannon",
+      "name": "궤도포 4회차(반대)",
+      "follow": 5,
+      "fall": 2.98,
+      "shots": [
+        {
+          "who": 0,
+          "r": 16,
+          "tile": [
+            0,
+            2
+          ],
+          "at": [
+            -28,
+            21
+          ],
+          "big": true
+        },
+        {
+          "who": 1,
+          "r": 6.7,
+          "tile": [
+            1,
+            2
+          ],
+          "at": [
+            0,
+            18
+          ],
+          "big": false
+        },
+        {
+          "who": "me",
+          "r": 6.7,
+          "tile": [
+            2,
+            2
+          ]
+        }
+      ],
+      "src": "guide(기믹 순서) + table(轨道炮落地爆炸: 반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하) + estimate(시각·자리)"
+    },
+    {
+      "t": 154,
+      "type": "lineShare",
+      "name": "직선 쉐어",
+      "cast": 5,
+      "len": 36.2,
+      "width": 7,
+      "bot": 1,
+      "at": [
+        0,
+        8
+      ],
+      "src": "guide(기믹 순서) + table(贯穿轰击: 길이 36.2m·폭 7m) + estimate(시각·자리)"
+    },
+    {
+      "t": 154,
+      "type": "bomb",
+      "name": "거리 감쇠 폭탄",
+      "cast": 5,
+      "safeDist": 20,
+      "bot": 2,
+      "at": [
+        27,
+        -19
+      ],
+      "src": "guide(기믹 순서) + table(距离衰减爆炸: 반경 26m) + estimate(안전 거리 20m, 대상·자리)"
+    },
+    {
+      "t": 164,
+      "type": "shock",
+      "name": "붕괴 충격",
+      "cast": 4.73,
+      "safeDist": 21,
+      "src": "guide(기믹 순서) + table(史诗狂怒: 4.73초 뒤 반경 50m) + estimate(안전 거리 21m)"
+    },
+    {
+      "t": 174,
+      "type": "wave",
+      "name": "바닥 웨이브",
+      "cast": 2.1,
+      "gap": 2.5,
+      "width": 8,
+      "len": 45,
+      "sets": [
+        [
+          -16,
+          0,
+          16
+        ],
+        [
+          -8,
+          8
+        ]
+      ],
+      "src": "guide(기믹 순서) + table(真实承诺: 띠 45m×8m, 2.1초 뒤) + estimate(띠 배치·간격)"
+    }
+  ]
+}

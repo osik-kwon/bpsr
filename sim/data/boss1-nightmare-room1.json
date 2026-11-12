@@ -1,0 +1,318 @@
+{
+  "id": "boss1-nightmare-room1-2",
+  "title": "1넴 기원 · 악몽 · 1~2번 방",
+  "notes": "src가 measured면 클라 씬 실측, guide면 공략 노트 타임라인, estimate면 영상 기준 추정값 악몽 두 번째 방 타임라인은 공략 노트에 없어 하드 두 번째 방 순서에 악몽 규칙(도넛 예고 암기, 줄 확정 4초)을 입힌 추정이다",
+  "arena": {
+    "radius": 31.4,
+    "model": "arena1.glb",
+    "src": "measured(탑 꼭대기 바닥 메시 끝)"
+  },
+  "player": {
+    "speed": 6.0,
+    "dashDist": 8,
+    "dashCd": 3,
+    "dashIframe": 0.4,
+    "src": "table(모델 테이블 RunVelocity 6m/s; 기본값이라 실제 전투 이동 속도와 같다는 보장은 없음) + estimate(대시 거리·쿨·무적)"
+  },
+  "boss": {
+    "room": 1,
+    "dist": 26,
+    "height": 11.5,
+    "scale": 0.6,
+    "model": "boss1.glb",
+    "src": "estimate(위치) + table(몬스터 103100, 모델 ch_mon_dajiqiren04_01, 배율 0.6 → 높이 11.5m)",
+    "anims": {
+      "idle": "04_fidle",
+      "tankbuster": "04_atk_fatal_start",
+      "cleave": "04_atk_cleave",
+      "cores": "04_atk_phantom_core",
+      "tether": "04_atk_destruction_laser",
+      "share": "04_atk_share",
+      "phantom": "04_atk_decay",
+      "curtain": "04_atk_charge_start"
+    },
+    "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름으로 본 추정"
+  },
+  "fx": {
+    "tankbuster": {
+      "hit": "raidmech_aoe_zhisi_hit"
+    },
+    "cleave": {
+      "at": "boss",
+      "cast": "raidmech01_cleave_cast",
+      "hit": "raidmech01_cleave"
+    },
+    "share": {
+      "hit": "raidmech01_share_pink"
+    },
+    "tether": {
+      "at": "boss",
+      "hit": "raidmech01_destruction_laser_cast"
+    },
+    "phantom": {
+      "hit": "raidmech01_decay",
+      "hitByColor": {
+        "pink": "raidmech01_decay_pink"
+      }
+    },
+    "cores": {
+      "start": "raidmech01_phantom_core_start",
+      "loop": "raidmech01_phantom_core_loop"
+    }
+  },
+  "fxSrc": "이펙트는 클라 실측(입자를 메시 한 장으로 단순화). decay는 중국어 원문(衰减)이 거리 감쇠라 환영 동기화 착지에 연결. 탱버·도넛은 대응 이펙트를 특정하지 못해 비움",
+  "roomEnergyMax": 120,
+  "events": [
+    {
+      "t": 10,
+      "type": "tankbuster",
+      "name": "원형 탱버",
+      "cast": 4,
+      "r": 5,
+      "noDodge": true,
+      "src": "guide(시각) + table(致死: 보스 앞 8m, 반경 5m 원)"
+    },
+    {
+      "t": 18,
+      "type": "cleave",
+      "name": "내려치기",
+      "hit": 2.47,
+      "r": 30,
+      "angle": 60,
+      "src": "estimate(시각) + table(顺劈: 부채꼴 30m·60°, 스킬 시작 2.47초 뒤 타격, 대시 회피 가능)"
+    },
+    {
+      "t": 28,
+      "type": "cores",
+      "name": "코어 출현",
+      "count": 4,
+      "src": "guide"
+    },
+    {
+      "t": 29,
+      "type": "tether",
+      "name": "섬멸 광선",
+      "cast": 4,
+      "fire": 2.75,
+      "width": 2,
+      "src": "guide(33초 줄 확정) + table(발사 2.75초, 폭 2m) + estimate(줄 표시 시작, 배치)"
+    },
+    {
+      "t": 50,
+      "type": "donut3",
+      "name": "도넛 3연",
+      "hits": [
+        58,
+        60.5,
+        63
+      ],
+      "safe": [
+        "out",
+        "out",
+        "in"
+      ],
+      "bands": [
+        [
+          0,
+          11.5
+        ],
+        [
+          12.5,
+          17.5
+        ],
+        [
+          18.5,
+          30
+        ]
+      ],
+      "src": "guide(50초 예고 3개 → 58초부터 연속 발동, 같은 안전 구역 연속 가능) + table(고리 치수) + estimate(예고·발동 간격 2.5초, 안전 고리 순서)",
+      "preview": [
+        50,
+        52.5,
+        55
+      ],
+      "previewDur": 2.3
+    },
+    {
+      "t": 64,
+      "type": "share",
+      "name": "쉐어",
+      "cast": 5,
+      "r": 6,
+      "src": "guide(63초 쉐어 예고) + fx(반경) + estimate(도넛과 겹치지 않게 1초 늦춤)",
+      "okMsg": "쉐어 참여, 팀원 생존",
+      "failMsg": "쉐어 밖, 인원이 모자라 팀원 사망"
+    },
+    {
+      "t": 81,
+      "type": "phantom",
+      "name": "환영 동기화",
+      "lands": [
+        [
+          "clone",
+          83
+        ],
+        [
+          "boss",
+          85
+        ],
+        [
+          "clone",
+          91
+        ]
+      ],
+      "safeDist": 20,
+      "src": "guide"
+    },
+    {
+      "t": 99,
+      "type": "cleave",
+      "name": "내려치기",
+      "hit": 2.47,
+      "r": 30,
+      "angle": 60,
+      "src": "estimate(시각) + table(顺劈)"
+    },
+    {
+      "t": 106,
+      "type": "curtain",
+      "name": "광막 이동",
+      "open": 110,
+      "close": 120,
+      "purify": 30,
+      "src": "guide(시각) + table(净化房间: 30m×30m)",
+      "continue": true
+    },
+    {
+      "t": 108,
+      "type": "tankbuster",
+      "name": "원형 탱버",
+      "cast": 4,
+      "r": 5,
+      "noDodge": true,
+      "src": "guide(시각) + table(致死: 보스 앞 8m, 반경 5m 원)"
+    },
+    {
+      "t": 148,
+      "type": "cores",
+      "name": "코어 출현",
+      "count": 4,
+      "src": "estimate(하드 두 번째 방 순서를 악몽에 적용) / guide(하드 두 번째 방 타임라인, 방 진입 120초 기준)"
+    },
+    {
+      "t": 154,
+      "type": "tether",
+      "name": "섬멸 광선(팀원 대상)",
+      "role": "party",
+      "cast": 4,
+      "fire": 2.75,
+      "width": 2,
+      "src": "estimate(하드 두 번째 방 순서를 악몽에 적용) / guide(하드 두 번째 방 타임라인, 방 진입 120초 기준) + table(발사 2.75초, 폭 2m) + estimate(대상이 팀원 3명인 경우로 설정)"
+    },
+    {
+      "t": 163,
+      "type": "share",
+      "name": "쉐어",
+      "cast": 5,
+      "r": 6,
+      "okMsg": "쉐어 참여, 팀원 생존",
+      "failMsg": "쉐어 밖, 인원이 모자라 팀원 사망",
+      "src": "estimate(하드 두 번째 방 순서를 악몽에 적용) / guide(하드 두 번째 방 타임라인, 방 진입 120초 기준) + fx(반경)"
+    },
+    {
+      "t": 176,
+      "type": "tankbuster",
+      "name": "원형 탱버",
+      "cast": 4,
+      "r": 5,
+      "noDodge": true,
+      "src": "estimate(하드 두 번째 방 순서를 악몽에 적용) / guide(하드 두 번째 방 타임라인, 방 진입 120초 기준) + table(致死)"
+    },
+    {
+      "t": 192,
+      "type": "phantom",
+      "name": "환영 동기화",
+      "lands": [
+        [
+          "clone",
+          194
+        ],
+        [
+          "boss",
+          196
+        ],
+        [
+          "clone",
+          202
+        ]
+      ],
+      "safeDist": 20,
+      "src": "estimate(하드 두 번째 방 순서를 악몽에 적용) / guide(하드 두 번째 방 타임라인, 방 진입 120초 기준)"
+    },
+    {
+      "t": 206,
+      "type": "cleave",
+      "name": "내려치기",
+      "hit": 2.47,
+      "r": 30,
+      "angle": 60,
+      "src": "estimate(하드 두 번째 방 순서를 악몽에 적용) / estimate(시각) + table(顺劈)"
+    },
+    {
+      "t": 213,
+      "type": "donut3",
+      "name": "도넛 3연",
+      "hits": [
+        221,
+        223.5,
+        226
+      ],
+      "safe": [
+        "mid",
+        "in",
+        "in"
+      ],
+      "bands": [
+        [
+          0,
+          11.5
+        ],
+        [
+          12.5,
+          17.5
+        ],
+        [
+          18.5,
+          30
+        ]
+      ],
+      "src": "estimate(하드 두 번째 방 순서를 악몽에 적용) / guide(하드 두 번째 방 타임라인, 방 진입 120초 기준) + table(고리 치수) + estimate(안전 고리 순서)",
+      "preview": [
+        213,
+        215.5,
+        218
+      ],
+      "previewDur": 2.3
+    },
+    {
+      "t": 233,
+      "type": "share",
+      "name": "쉐어",
+      "cast": 5,
+      "r": 6,
+      "okMsg": "쉐어 참여, 팀원 생존",
+      "failMsg": "쉐어 밖, 인원이 모자라 팀원 사망",
+      "src": "estimate(하드 두 번째 방 순서를 악몽에 적용) / guide(하드 두 번째 방 타임라인, 방 진입 120초 기준)"
+    },
+    {
+      "t": 233,
+      "type": "tankbuster",
+      "name": "원형 탱버",
+      "cast": 4,
+      "r": 5,
+      "noDodge": true,
+      "src": "estimate(하드 두 번째 방 순서를 악몽에 적용) / guide(하드 두 번째 방 타임라인, 방 진입 120초 기준)"
+    }
+  ],
+  "duration": 240
+}

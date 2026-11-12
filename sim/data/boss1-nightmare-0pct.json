@@ -1,0 +1,162 @@
+{
+  "id": "boss1-nightmare-0pct",
+  "title": "1넴 기원 · 악몽 · 0% 버티기(엇갈린 펄스)",
+  "notes": "회전 부채꼴과 따라오는 직선 광선을 재현. 모양·치수·회전 속도·발사 지연은 테이블, 단계 길이 35초는 공략 노트, 발생 시각·횟수·대상 수·광선 방향(대상자에서 중심 쪽)은 추정",
+  "arena": {
+    "radius": 31.4,
+    "model": "arena1.glb",
+    "src": "measured(탑 꼭대기 바닥 메시 끝)"
+  },
+  "player": {
+    "speed": 6.0,
+    "dashDist": 8,
+    "dashCd": 3,
+    "dashIframe": 0.4,
+    "src": "table(모델 테이블 RunVelocity 6m/s; 기본값이라 실제 전투 이동 속도와 같다는 보장은 없음) + estimate(대시 거리·쿨·무적)"
+  },
+  "boss": {
+    "room": 1,
+    "dist": 0,
+    "height": 11.5,
+    "scale": 0.6,
+    "model": "boss1.glb",
+    "src": "estimate(중앙 배치)",
+    "anims": {
+      "idle": "04_fidle"
+    },
+    "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름으로 본 추정"
+  },
+  "roomEnergyMax": 120,
+  "duration": 35,
+  "fx": {},
+  "events": [
+    {
+      "t": 2,
+      "type": "spin",
+      "name": "회전 부채꼴 1",
+      "warn": 3,
+      "r": 31,
+      "angle": 45,
+      "tick": 0.5,
+      "segs": [
+        [
+          0,
+          5,
+          30
+        ],
+        [
+          6,
+          11,
+          -30
+        ]
+      ],
+      "noDodge": true,
+      "src": "estimate(시각·예고 3초·피해 간격) + table(运动会: 반경 31m·45° 네 방향, 30°/초로 5초 회전 뒤 반대로 5초)"
+    },
+    {
+      "t": 3,
+      "type": "lasers",
+      "name": "추적 광선 1",
+      "follow": 3,
+      "fire": 2.73,
+      "width": 2,
+      "len": 70,
+      "bots": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "src": "guide(대상자를 따라오는 직선 장판, 방사형 예고) + table(电磁脉冲发射: 길이 70m·폭 2m, 고정 2.73초 뒤 발사, 대시 무효) + estimate(시각·추적 3초·대상 5명·방향)"
+    },
+    {
+      "t": 9,
+      "type": "lasers",
+      "name": "추적 광선 2",
+      "follow": 3,
+      "fire": 2.73,
+      "width": 2,
+      "len": 70,
+      "bots": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "src": "guide(대상자를 따라오는 직선 장판, 방사형 예고) + table(电磁脉冲发射: 길이 70m·폭 2m, 고정 2.73초 뒤 발사, 대시 무효) + estimate(시각·추적 3초·대상 5명·방향)"
+    },
+    {
+      "t": 15,
+      "type": "lasers",
+      "name": "추적 광선 3",
+      "follow": 3,
+      "fire": 2.73,
+      "width": 2,
+      "len": 70,
+      "bots": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "src": "guide(대상자를 따라오는 직선 장판, 방사형 예고) + table(电磁脉冲发射: 길이 70m·폭 2m, 고정 2.73초 뒤 발사, 대시 무효) + estimate(시각·추적 3초·대상 5명·방향)"
+    },
+    {
+      "t": 19,
+      "type": "spin",
+      "name": "회전 부채꼴 2",
+      "warn": 3,
+      "r": 31,
+      "angle": 45,
+      "tick": 0.5,
+      "segs": [
+        [
+          0,
+          5,
+          -30
+        ],
+        [
+          6,
+          11,
+          30
+        ]
+      ],
+      "noDodge": true,
+      "src": "위와 같음(방향 반대는 추정)"
+    },
+    {
+      "t": 21,
+      "type": "lasers",
+      "name": "추적 광선 4",
+      "follow": 3,
+      "fire": 2.73,
+      "width": 2,
+      "len": 70,
+      "bots": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "src": "guide(대상자를 따라오는 직선 장판, 방사형 예고) + table(电磁脉冲发射: 길이 70m·폭 2m, 고정 2.73초 뒤 발사, 대시 무효) + estimate(시각·추적 3초·대상 5명·방향)"
+    },
+    {
+      "t": 27,
+      "type": "lasers",
+      "name": "추적 광선 5",
+      "follow": 3,
+      "fire": 2.73,
+      "width": 2,
+      "len": 70,
+      "bots": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "src": "guide(대상자를 따라오는 직선 장판, 방사형 예고) + table(电磁脉冲发射: 길이 70m·폭 2m, 고정 2.73초 뒤 발사, 대시 무효) + estimate(시각·추적 3초·대상 5명·방향)"
+    }
+  ],
+  "noCurtain": true,
+  "party": "ring"
+}
