@@ -5,7 +5,7 @@ import { Sim, roomAngle } from './engine.js';
 import { Fx } from './fx.js';
 
 const scenario = new URLSearchParams(location.search).get('s') || 'boss1-hard';
-const data = await (await fetch(`./data/${scenario}.json`)).json();
+const data = await (await fetch(`./data/${scenario}.json`, { cache: 'no-cache' })).json();
 const spd = +new URLSearchParams(location.search).get('speed'); if (spd > 0) data.player.speed = spd;   // 이동 속도 덮어쓰기(?speed=5)
 const sim = new Sim(data);
 const $ = id => document.getElementById(id);
@@ -189,7 +189,7 @@ function drawFx() {
   }
 }
 
-// 입력: 키보드·마우스 전용
+// 입력: 키보드·마우스, 터치 기기는 아래 터치 조작을 함께 쓴다
 const keys = new Set(); let yaw = GRID ? -Math.PI / 2 : roomAngle(1) + Math.PI, pitch = 0.5, zoom = 16, paused = true, dashQueued = false, interactQueued = false, speedMul = 1;
 addEventListener('keydown', e => {
   keys.add(e.code);
@@ -212,10 +212,51 @@ addEventListener('mousemove', e => {
 });
 addEventListener('wheel', e => { zoom = Math.max(6, Math.min(45, zoom + e.deltaY * 0.02)); }, { passive: true });
 function restart() { sim.reset(); realFx.clear(); seen = new WeakSet(); paused = false; $('overlay').style.display = 'none'; $('results').innerHTML = ''; shown = 0; }
-$('start').onclick = () => { restart(); lock(); };
+$('start').onclick = () => { restart(); if (!document.body.classList.contains('touch')) lock(); };
+
+// 터치: 화면 왼쪽은 누른 자리에 생기는 조이스틱, 오른쪽은 드래그 시점·두 손가락 줌. 터치 이벤트에서 파생되는 마우스 이벤트는 preventDefault로 막는다
+const STICK_R = 50, stick = { id: null, ox: 0, oy: 0, x: 0, y: 0 }, cams = new Map();
+let pinch = 0;
+const touchUI = () => document.body.classList.add('touch');
+if (matchMedia('(pointer: coarse)').matches) touchUI();
+function drawStick() {
+  const on = stick.id !== null; $('stick').style.display = on ? 'block' : 'none'; if (!on) return;
+  $('stick').style.transform = `translate(${stick.ox - STICK_R}px, ${stick.oy - STICK_R}px)`;
+  $('knob').style.transform = `translate(${stick.x * STICK_R}px, ${stick.y * STICK_R}px)`;
+}
+const cv = renderer.domElement;
+cv.addEventListener('pointerdown', e => {
+  if (e.pointerType === 'mouse') return;
+  e.preventDefault(); touchUI(); try { cv.setPointerCapture(e.pointerId); } catch {}
+  if (e.clientX < innerWidth * 0.45 && stick.id === null) { Object.assign(stick, { id: e.pointerId, ox: e.clientX, oy: e.clientY, x: 0, y: 0 }); drawStick(); }
+  else { cams.set(e.pointerId, { x: e.clientX, y: e.clientY }); pinch = 0; }
+});
+cv.addEventListener('pointermove', e => {
+  if (e.pointerId === stick.id) {
+    const dx = e.clientX - stick.ox, dy = e.clientY - stick.oy, l = Math.hypot(dx, dy), k = l > STICK_R ? STICK_R / l : 1;
+    stick.x = dx * k / STICK_R; stick.y = dy * k / STICK_R; drawStick(); return;
+  }
+  const c = cams.get(e.pointerId); if (!c) return;
+  if (cams.size === 1) { yaw += (e.clientX - c.x) * 0.008; pitch = Math.max(0.12, Math.min(1.35, pitch + (e.clientY - c.y) * 0.006)); }
+  c.x = e.clientX; c.y = e.clientY;
+  if (cams.size === 2) {
+    const [a, b] = [...cams.values()], d = Math.hypot(a.x - b.x, a.y - b.y);
+    if (pinch) zoom = Math.max(6, Math.min(45, zoom * pinch / d)); pinch = d;
+  }
+});
+const release = e => { if (e.pointerId === stick.id) { stick.id = null; drawStick(); } cams.delete(e.pointerId); pinch = 0; };
+cv.addEventListener('pointerup', release); cv.addEventListener('pointercancel', release);
+// 버튼은 누르는 순간 반응하도록 pointerdown에서 처리
+const tap = (id, fn) => $(id).addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); fn(); });
+tap('tDash', () => dashQueued = true);
+tap('tAct', () => interactQueued = true);
+tap('tPause', () => { if (!sim.done) paused = !paused; });
+tap('tLock', () => setLock(!sim.attackLock));
+tap('tRe', () => restart());
 
 function input() {
-  const f = (keys.has('KeyW') ? 1 : 0) - (keys.has('KeyS') ? 1 : 0), r = (keys.has('KeyD') ? 1 : 0) - (keys.has('KeyA') ? 1 : 0);
+  let f = (keys.has('KeyW') ? 1 : 0) - (keys.has('KeyS') ? 1 : 0), r = (keys.has('KeyD') ? 1 : 0) - (keys.has('KeyA') ? 1 : 0);
+  if (stick.id !== null && Math.hypot(stick.x, stick.y) > 0.2) { f = -stick.y; r = stick.x; }
   // 카메라가 보는 방향 기준 이동
   const fx_ = -Math.cos(yaw), fz = -Math.sin(yaw);
   const dash = dashQueued, interact = interactQueued; dashQueued = interactQueued = false;
@@ -223,12 +264,13 @@ function input() {
 }
 
 // 공격 중 이동 묶임 옵션(기본 꺼짐, T로 전환, 주소의 lock=1로 켬)
-function setLock(on) { sim.attackLock = on; try { localStorage.setItem('lock', on ? '1' : '0'); } catch {} $('lockState').textContent = on ? '켜짐' : '꺼짐'; }
+function setLock(on) { sim.attackLock = on; try { localStorage.setItem('lock', on ? '1' : '0'); } catch {} $('lockState').textContent = on ? '켜짐' : '꺼짐'; $('tLock').classList.toggle('on', on); }
 { const q = new URLSearchParams(location.search).get('lock'); let saved = null; try { saved = localStorage.getItem('lock'); } catch {} setLock((q ?? saved ?? '0') === '1'); }
 let shown = 0;
 function hud() {
   $('atk').textContent = sim.attackLock ? `공격 가동 ${sim.t > 0 ? Math.round(sim.player.attackTime / sim.t * 100) : 0}%${sim.player.lock > 0 ? ' · 공격 중' : ''}` : '';
   $('clock').textContent = sim.t.toFixed(1) + '초' + (paused && !sim.done && sim.t > 0 ? ' (일시정지)' : '');
+  $('tPause').textContent = paused ? '계속' : '정지';
   $('energy').textContent = GRID ? `남은 칸 ${sim.tiles.filter(v => v < 2).length} / ${sim.tiles.length}` : `${sim.room}번 방 에너지 ${Math.floor(sim.energy)} / ${data.roomEnergyMax}`;
   $('bar').firstElementChild.style.width = (GRID ? sim.t / data.duration : sim.energy / data.roomEnergyMax) * 100 + '%';
   $('upcoming').innerHTML = sim.upcoming().slice(0, 5).map(e => `<div class="row"><b>${e.t}초</b><span>${e.name}</span></div>`).join('') || '없음';
