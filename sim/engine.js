@@ -32,7 +32,7 @@ export function inside(s, p) {
 }
 
 export class Sim {
-  constructor(data) { this.data = data; this.attackLock = false; this.reset(); }
+  constructor(data, combat = null) { this.data = data; this.attackLock = false; this.combat = combat; this.reset(); }
   reset() {
     const d = this.data;
     this.t = 0; this.done = false; this.log = []; this.tele = []; this.cores = []; this.markers = [];
@@ -48,6 +48,7 @@ export class Sim {
     // 파티원 7명은 보스 뒤쪽 근처에 모여 있는 고정 표식
     this.roomStart = 0; this.bots = this.partySpots(this.room);
     this.pending = d.events.map(e => ({ ...e })).sort((a, b) => a.t - b.t);
+    this.combat?.reset();
   }
   result(name, ok, msg) { this.log.push({ t: +this.t.toFixed(1), name, ok, msg }); }
   // 판정 예고 등록: kind avoid=안에 있으면 실패, soak=하나 안에 있어야 성공, far=거리 safeDist 이상이어야 성공
@@ -194,7 +195,13 @@ export class Sim {
     else if (s.kind === 'soak') { const n = s.spots.filter(c => inside(c, p)).length; this.result(s.name, n === 1, n === 1 ? (s.okMsg ?? '쉐어 참여') : n ? '쉐어 겹침(치유 감소 중첩)' : (s.failMsg ?? '쉐어 밖')); if (s.reset) this.bots = this.partySpots(this.room); }
   }
 
-  // input: {mx, mz} 정규화된 이동 방향, dash 불리언
+  // 전투장 밖으로 나가지 못하게 한다
+  clamp(p) {
+    const d = this.data;
+    if (this.grid) { const g = this.grid, X = g.cols * g.tileW / 2 + 1.5, Z = g.rows * g.tileH / 2 + 1.5; p.x = Math.max(-X, Math.min(X, p.x)); p.z = Math.max(-Z, Math.min(Z, p.z)); }
+    else { const r = Math.hypot(p.x, p.z), R = d.arena.radius - 0.5; if (r > R) { p.x *= R / r; p.z *= R / r; } }
+  }
+  // input: {mx, mz} 정규화된 이동 방향, dash 불리언. 직업(combat)이 있으면 atk(누르고 있음)·skill(이번에 누른 스킬 ID)도 받는다
   step(dt, input) {
     if (this.done) return;
     const d = this.data, p = this.player;
@@ -205,14 +212,19 @@ export class Sim {
     this.moveDir = l > 0 ? { x: input.mx / l, z: input.mz / l } : null;
     // 공격 중 이동 묶임: 가만히 있으면 스킬을 쓰기 시작하고, 그 동작이 끝날 때까지 이동 입력이 먹지 않는다(대시는 동작을 끊는다)
     const canDash = input.dash && p.dashCd === 0 && l > 0;
+    if (this.combat) {
+      // 직업 조작: 동작이 강제하는 이동(회피·미끄러지기)과 이동 입력을 합친다
+      const m = this.t < this.freezeUntil ? { free: false, dx: 0, dz: 0 } : this.combat.step(dt, input, this);
+      if (l > 0 && m.free) { m.dx += input.mx / l * d.player.speed * dt; m.dz += input.mz / l * d.player.speed * dt; }
+      if (m.dx || m.dz) { p.x += m.dx; p.z += m.dz; this.clamp(p); }
+    } else {
     if (p.lock > 0) { p.lock -= dt; p.attackTime += dt; if (canDash) p.lock = 0; }
     else if (this.attackLock && l === 0) { p.lock = this.lockTimes[p.lockN++ % this.lockTimes.length]; }
     if (l > 0 && !(p.lock > 0)) {
       let step = d.player.speed * dt;
       if (canDash) { step += d.player.dashDist; p.dashCd = d.player.dashCd; p.iframe = d.player.dashIframe; }
-      p.x += input.mx / l * step; p.z += input.mz / l * step;
-      if (this.grid) { const g = this.grid, X = g.cols * g.tileW / 2 + 1.5, Z = g.rows * g.tileH / 2 + 1.5; p.x = Math.max(-X, Math.min(X, p.x)); p.z = Math.max(-Z, Math.min(Z, p.z)); }
-      else { const r = Math.hypot(p.x, p.z), R = d.arena.radius - 0.5; if (r > R) { p.x *= R / r; p.z *= R / r; } }
+      p.x += input.mx / l * step; p.z += input.mz / l * step; this.clamp(p);
+    }
     }
     while (this.pending.length && this.pending[0].t <= this.t) this.spawn(this.pending.shift());
     // 넉백 구슬

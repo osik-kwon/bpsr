@@ -2,12 +2,14 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Sim, roomAngle } from './engine.js';
+import { Combat } from './combat.js';
 import { Fx } from './fx.js';
 
 const scenario = new URLSearchParams(location.search).get('s') || 'boss1-hard';
 const data = await (await fetch(`./data/${scenario}.json`, { cache: 'no-cache' })).json();
 const spd = +new URLSearchParams(location.search).get('speed'); if (spd > 0) data.player.speed = spd;   // 이동 속도 덮어쓰기(?speed=5)
-const sim = new Sim(data);
+const cls = await (await fetch('./data/class-archer.json', { cache: 'no-cache' })).json();
+const sim = new Sim(data, new Combat(cls));
 const $ = id => document.getElementById(id);
 $('title').textContent = data.title;
 
@@ -131,8 +133,55 @@ function movePerson(g, pos, dt, lookAt) {
   if (want !== g.cur && g.acts[want]) { g.acts[g.cur]?.fadeOut(0.12); g.acts[want].reset().fadeIn(0.12).play(); g.cur = want; }
   g.mixer.update(dt);
 }
+// 내 캐릭터: 진행 중인 스킬 동작의 클립을 동작 경과 시각에 맞춰 보여 주고, 없으면 달리기·대기를 반복한다
+function animPlayer(g, p, dt) {
+  const C = sim.combat, a = C.act;
+  const dx = g.last ? p.x - g.last.x : 0, dz = g.last ? p.z - g.last.z : 0, d = Math.hypot(dx, dz), moving = dt > 0 && d > 0.3 * dt && d < 3;
+  g.position.set(p.x, 0, p.z); g.last = { x: p.x, z: p.z };
+  if (a) g.rotation.y = C.face === 'move' && a.dir && !a.back ? Math.atan2(a.dir.x, a.dir.z) : Math.atan2(sim.boss.x - p.x, sim.boss.z - p.z);
+  else if (moving) g.rotation.y = Math.atan2(dx, dz);
+  if (!g.mixer) return;
+  let name = moving ? cls.run : cls.idle, time = null;
+  if (a) { const segs = (a.back && a.s.animBack) || a.s.anim; let seg = segs[0]; for (const sg of segs) if (a.t >= sg.t) seg = sg; name = seg.clip; time = a.t - seg.t; }
+  const act = g.acts[name]; if (!act) return;
+  if (name !== g.cur || (time !== null && time < g.curT)) {
+    const prev = g.acts[g.cur]; act.reset(); act.setLoop(time === null ? THREE.LoopRepeat : THREE.LoopOnce, Infinity); act.clampWhenFinished = true; act.play();
+    if (prev && prev !== act) prev.crossFadeTo(act, 0.08, false);
+    g.cur = name;
+  }
+  if (time !== null) { act.time = Math.min(time, act.getClip().duration - 0.001); act.timeScale = 0; } else act.timeScale = 1;
+  g.curT = time ?? 0; g.mixer.update(dt);
+}
+// 스킬 이펙트·화살: combat이 쌓아 둔 사건을 꺼내 재생한다
+const pcFx = new Fx(scene, './assets/fx-pc/'), shots = [], HIT_Y = Math.min(data.boss.height * 0.45, 6);
+const arrowGeo = new THREE.CylinderGeometry(0.035, 0.035, 1, 6), UP = new THREE.Vector3(0, 1, 0);
+const me = () => ({ x: sim.player.x, z: sim.player.z, yaw: player.rotation.y });
+function drainCombat() {
+  const C = sim.combat, q = C.fxq; if (!q.length) return; C.fxq = [];
+  for (const e of q) {
+    if (e.kind === 'cast') for (const f of e.s.fx ?? []) pcFx.play(f.name, e.t + f.t, e.x, e.z, 0, f.dur ? e.t + f.t + f.dur : null, { follow: me });
+    else if (e.kind === 'zone') pcFx.play(e.zone.fx, e.t, e.x, e.z, 0, e.t + e.zone.dur, { center: true, scale: 0.6, alpha: 0.3 });   // 보스를 가리지 않게 줄이고 옅게
+    else if (e.kind === 'shot') {
+      const from = new THREE.Vector3(e.x, 1.35, e.z), to = new THREE.Vector3(sim.boss.x + (Math.random() - 0.5) * 2, HIT_Y + (Math.random() - 0.5) * 2, sim.boss.z + (Math.random() - 0.5) * 2);
+      const dir = to.clone().sub(from), len = dir.length(); dir.normalize(); if (!e.ok) to.copy(from).addScaledVector(dir, cls.range);
+      const m = new THREE.Mesh(arrowGeo, new THREE.MeshBasicMaterial({ color: e.big ? 0xffe9a0 : 0xbfe9ff, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false }));
+      m.quaternion.setFromUnitVectors(UP, dir); m.scale.set(e.big ? 2.2 : 0.9, e.big ? 5 : 2.4, e.big ? 2.2 : 0.9); scene.add(m);
+      shots.push({ m, from, dir, t0: e.t, dur: (e.ok ? len : cls.range) / 80, to, ok: e.ok, big: e.big });
+    }
+  }
+}
+function drawShots() {
+  for (let i = shots.length - 1; i >= 0; i--) {
+    const sh = shots[i], u = (sim.t - sh.t0) / sh.dur;
+    if (u >= 1 || u < 0) {
+      if (u >= 1 && sh.ok) pcFx.play(sh.big ? 'rodri_exattack01_hit' : 'skill_rodri-01_attack_bullet01_hit', sim.t, sh.to.x, sh.to.z, 0, null, { center: true, y: sh.to.y - 1 });
+      scene.remove(sh.m); sh.m.material.dispose(); shots.splice(i, 1); continue;
+    }
+    sh.m.position.copy(sh.from).lerp(sh.to, u);
+  }
+}
 const pcN = +new URLSearchParams(location.search).get('pc') || 0;
-const player = person(0x3fb950, PCS[pcN % PCS.length]);
+const player = person(0x3fb950, cls.model);
 const bots = sim.bots.map((_, i) => person(0x9aa4b2, PCS[(pcN + i + 1) % PCS.length]));
 
 // 실제 이펙트: 새로 생긴 예고·코어를 보고 시전·타격 시각에 재생을 걸어 둔다
@@ -182,6 +231,7 @@ function drawFx() {
     for (const part of s.shape === 'multi' ? s.spots : [s]) fx.add(shapeMesh(part, COLORS[s.color], s.kind === 'far' || s.kind === 'show' ? fill * 0.4 : fill));
   }
   for (const c of sim.cores) { const m = new THREE.Mesh(new THREE.SphereGeometry(1.5, 16, 12), new THREE.MeshBasicMaterial({ color: 0xb38cff })); m.position.set(c.x, 1.4, c.z); fx.add(m); }
+  for (const z of sim.combat.zones) { const m = shapeMesh({ shape: 'ring', x: z.x, z: z.z, rIn: z.r - 0.2, rOut: z.r }, 0x7fd4ff, 0.6); m.position.y = 0.09; fx.add(m); }   // 내가 깔아 둔 지속 피해 범위
   for (const mk of sim.markers) { const m = flat(new THREE.Mesh(new THREE.RingGeometry(1.0, 1.4, 32), new THREE.MeshBasicMaterial({ color: 0x3fb950, side: THREE.DoubleSide }))); m.position.set(mk.x, 0.08, mk.z); fx.add(m); if (/^\d+$/.test(mk.label ?? '')) { const l = markLabels[mk.label] ??= label(mk.label, 3, '#3fb950'); const c = l.clone(); c.position.set(mk.x, 2.2, mk.z); fx.add(c); } }
   if (sim.tether) {
     // 대상 3명을 잇는 삼각형 줄(확정 전에는 내 꼭짓점이 나를 따라온다)
@@ -191,28 +241,34 @@ function drawFx() {
 }
 
 // 입력: 키보드·마우스, 터치 기기는 아래 터치 조작을 함께 쓴다
-const keys = new Set(); let yaw = GRID ? -Math.PI / 2 : roomAngle(1) + Math.PI, pitch = 0.5, zoom = 16, paused = true, dashQueued = false, interactQueued = false, speedMul = 1;
+const keys = new Set(); let yaw = GRID ? -Math.PI / 2 : roomAngle(1) + Math.PI, pitch = 0.5, zoom = 16, paused = true, dashQueued = false, interactQueued = false, speedMul = 1, atkHeld = false, skillQueued = null;
+const SKILL_KEYS = { Digit1: 's1', Digit2: 's2', Digit3: 's3', Digit4: 's4', KeyQ: 'ult', KeyK: 'sp' };
 addEventListener('keydown', e => {
   keys.add(e.code);
   if (e.code === 'ShiftLeft' || e.code === 'Space') { dashQueued = true; e.preventDefault(); }
   if (e.code === 'KeyE' || e.code === 'KeyF') interactQueued = true;
   if (e.code === 'KeyR') restart();
   if (e.code === 'KeyP' && !sim.done) paused = !paused;
-  if (e.code === 'KeyT') setLock(!sim.attackLock);
+  if (SKILL_KEYS[e.code] && !e.repeat) skillQueued = SKILL_KEYS[e.code];
+  if (e.code === 'KeyJ') atkHeld = true;
 });
-addEventListener('keyup', e => keys.delete(e.code));
-addEventListener('blur', () => keys.clear());
+addEventListener('keyup', e => { keys.delete(e.code); if (e.code === 'KeyJ') atkHeld = false; });
+addEventListener('blur', () => { keys.clear(); atkHeld = false; });
 // 포인터 잠금이 거부되는 환경에서는 드래그로 시점을 돌린다
 const lock = () => { try { renderer.domElement.requestPointerLock?.()?.catch?.(() => {}); } catch {} };
 renderer.domElement.addEventListener('click', lock);
 let dragging = false;
-renderer.domElement.addEventListener('mousedown', () => dragging = true); addEventListener('mouseup', () => dragging = false);
+// 마우스가 시점 조작에 잠겨 있을 때는 좌클릭(누르고 있기) 평타, 우클릭 특수 공격
+const locked = () => document.pointerLockElement === renderer.domElement;
+renderer.domElement.addEventListener('mousedown', e => { if (locked()) { if (e.button === 0) atkHeld = true; else if (e.button === 2) skillQueued = 'sp'; } else if (e.button === 0) dragging = true; });
+addEventListener('mouseup', e => { if (e.button === 0) { dragging = false; atkHeld = false; } });
+addEventListener('contextmenu', e => e.preventDefault());
 addEventListener('mousemove', e => {
   if (document.pointerLockElement !== renderer.domElement && !dragging) return;
   yaw += e.movementX * 0.0035; pitch = Math.max(0.12, Math.min(1.35, pitch + e.movementY * 0.003));
 });
 addEventListener('wheel', e => { zoom = Math.max(6, Math.min(45, zoom + e.deltaY * 0.02)); }, { passive: true });
-function restart() { sim.reset(); realFx.clear(); seen = new WeakSet(); paused = false; $('overlay').style.display = 'none'; $('results').innerHTML = ''; shown = 0; }
+function restart() { sim.reset(); realFx.clear(); pcFx.clear(); for (const sh of shots.splice(0)) scene.remove(sh.m); atkHeld = false; skillQueued = null; seen = new WeakSet(); paused = false; $('overlay').style.display = 'none'; $('results').innerHTML = ''; shown = 0; }
 $('start').onclick = () => { restart(); if (!document.body.classList.contains('touch')) lock(); };
 
 // 터치: 화면 왼쪽은 누른 자리에 생기는 조이스틱, 오른쪽은 드래그 시점·두 손가락 줌. 터치 이벤트에서 파생되는 마우스 이벤트는 preventDefault로 막는다
@@ -249,10 +305,8 @@ const release = e => { if (e.pointerId === stick.id) { stick.id = null; drawStic
 cv.addEventListener('pointerup', release); cv.addEventListener('pointercancel', release);
 // 버튼은 누르는 순간 반응하도록 pointerdown에서 처리
 const tap = (id, fn) => $(id).addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); fn(); });
-tap('tDash', () => dashQueued = true);
 tap('tAct', () => interactQueued = true);
 tap('tPause', () => { if (!sim.done) paused = !paused; });
-tap('tLock', () => setLock(!sim.attackLock));
 tap('tRe', () => restart());
 
 function input() {
@@ -260,16 +314,33 @@ function input() {
   if (stick.id !== null && Math.hypot(stick.x, stick.y) > 0.2) { f = -stick.y; r = stick.x; }
   // 카메라가 보는 방향 기준 이동
   const fx_ = -Math.cos(yaw), fz = -Math.sin(yaw);
-  const dash = dashQueued, interact = interactQueued; dashQueued = interactQueued = false;
-  return { mx: fx_ * f - fz * r, mz: fz * f + fx_ * r, dash, interact };
+  const dash = dashQueued, interact = interactQueued, skill = skillQueued; dashQueued = interactQueued = false; skillQueued = null;
+  return { mx: fx_ * f - fz * r, mz: fz * f + fx_ * r, dash, interact, atk: atkHeld, skill };
 }
 
-// 공격 중 이동 묶임 옵션(기본 꺼짐, T로 전환, 주소의 lock=1로 켬)
-function setLock(on) { sim.attackLock = on; try { localStorage.setItem('lock', on ? '1' : '0'); } catch {} $('lockState').textContent = on ? '켜짐' : '꺼짐'; $('tLock').classList.toggle('on', on); }
-{ const q = new URLSearchParams(location.search).get('lock'); let saved = null; try { saved = localStorage.getItem('lock'); } catch {} setLock((q ?? saved ?? '0') === '1'); }
+// 스킬바: 슬롯마다 아이콘·키·충전 수·쿨타임. 터치에서는 누르는 순간 시전하고 평타는 누르고 있는 동안 이어진다
+const slots = cls.bar.map(id => {
+  const el = document.createElement('button'); el.className = 'sk'; el.dataset.id = id;
+  el.innerHTML = '<img alt=""><i class="cdm"></i><b class="key"></b><em class="n"></em><span class="cdt"></span>'; $('skills').append(el);
+  el.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); try { el.setPointerCapture(e.pointerId); } catch {} if (id === 'atk') atkHeld = true; else if (id === 'dodge') dashQueued = true; else skillQueued = id; });
+  const up = () => { if (id === 'atk') atkHeld = false; }; el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+  return { id, el, img: el.querySelector('img'), key: el.querySelector('.key'), n: el.querySelector('.n'), cdt: el.querySelector('.cdt'), icon: undefined };
+});
+function drawSkills() {
+  const C = sim.combat;
+  for (const o of slots) {
+    const s = C.slot(o.id);
+    if (o.icon !== s.icon) { o.icon = s.icon; o.img.style.display = s.icon ? 'block' : 'none'; if (s.icon) o.img.src = './assets/ui/' + s.icon; o.el.title = s.name; o.key.textContent = s.key ?? ''; if (!s.icon) o.cdt.style.fontSize = '12px'; }
+    const wait = s.left > 0 && !s.ready;
+    o.el.style.setProperty('--p', s.left > 0 && s.total ? (s.left / s.total).toFixed(3) : 0);
+    o.el.classList.toggle('off', !s.ready); o.el.classList.toggle('act', s.active);
+    o.n.textContent = s.n ?? ''; o.cdt.textContent = wait ? Math.ceil(s.left) : s.icon ? '' : s.name;
+  }
+  const L = $('light'); L.firstElementChild.style.width = C.light / cls.light.max * 100 + '%'; L.classList.toggle('recast', C.recast); L.classList.toggle('focus', C.focus > 0);
+}
 let shown = 0;
 function hud() {
-  $('atk').textContent = sim.attackLock ? `공격 가동 ${sim.t > 0 ? Math.round(sim.player.attackTime / sim.t * 100) : 0}%${sim.player.lock > 0 ? ' · 공격 중' : ''}` : '';
+  const cs = sim.combat.summary(sim.t); $('atk').textContent = `가상 딜 ${cs.dmg.toLocaleString()} · 초당 ${cs.dps.toLocaleString()}${sim.combat.recast ? ' · 라이트 리캐스트' : ''}${sim.combat.focus > 0 ? ' · 정신 집중' : ''}`; drawSkills();
   $('clock').textContent = sim.t.toFixed(1) + '초' + (paused && !sim.done && sim.t > 0 ? ' (일시정지)' : '');
   $('tPause').textContent = paused ? '계속' : '정지';
   $('energy').textContent = GRID ? `남은 칸 ${sim.tiles.filter(v => v < 2).length} / ${sim.tiles.length}` : `${sim.room}번 방 에너지 ${Math.floor(sim.energy)} / ${data.roomEnergyMax}`;
@@ -285,7 +356,7 @@ function hud() {
   if (sim.done && $('overlay').style.display === 'none') {
     const s = sim.score(); document.exitPointerLock?.();
     $('ovTitle').textContent = `결과 ${s.ok} / ${s.total}`;
-    $('ovBody').innerHTML = sim.log.filter(r => !r.ok).map(r => `${r.t}초 ${r.name} — ${r.msg}`).join('<br>') || '모든 기믹을 처리했습니다.';
+    $('ovBody').innerHTML = `가상 딜 ${cs.dmg.toLocaleString()} (초당 ${cs.dps.toLocaleString()}) · 스킬 동작 시간 ${cs.uptime}% · 사거리 밖 ${cs.whiff}회<br><br>` + (sim.log.filter(r => !r.ok).map(r => `${r.t}초 ${r.name} — ${r.msg}`).join('<br>') || '모든 기믹을 처리했습니다.');
     $('start').textContent = '다시 하기'; $('overlay').style.display = 'flex';
   }
 }
@@ -297,14 +368,14 @@ function tick(now) {
   // 프레임이 느려도 실제 시간과 맞도록 1/60초 단위로 나눠 진행
   let dt = Math.min(0.25, (now - last) / 1000) * speedMul; last = now;
   const adt = paused || sim.done ? 0 : dt;   // 동작 재생용 경과 시간
-  if (!paused && !sim.done) { const inp = input(); for (; dt > 0 && !sim.done; dt -= 1 / 60, inp.dash = inp.interact = false) sim.step(Math.min(dt, 1 / 60), inp); }
+  if (!paused && !sim.done && dt > 0) { const inp = input(); for (; dt > 0 && !sim.done; dt -= 1 / 60, inp.dash = inp.interact = false, inp.skill = null) sim.step(Math.min(dt, 1 / 60), inp); }
   const p = sim.player;
-  movePerson(player, p, adt, sim.boss);
-  player.ring.material.color.set(p.iframe > 0 ? 0xffffff : p.lock > 0 ? 0xd29922 : 0x3fb950);   // 발밑 고리: 흰색 대시 무적, 주황 공격 중(이동 불가)
+  animPlayer(player, p, adt); drainCombat(); drawShots();
+  player.ring.material.color.set(p.iframe > 0 ? 0xffffff : sim.combat.recast ? 0xffd24a : sim.combat.act ? 0xd29922 : 0x3fb950);   // 발밑 고리: 흰색 회피 무적, 금색 라이트 리캐스트, 주황 스킬 동작 중
   boss.position.set(sim.boss.x, data.boss.y ?? 0, sim.boss.z); if (GRID) { boss.rotation.y = Math.atan2(Math.cos(sim.bossDir), Math.sin(sim.bossDir)); drawTiles(); } else face(boss, p); bossAnim(boss); if (sim.clone) bossAnim(clone);
   clone.visible = !!sim.clone; if (sim.clone) { clone.position.set(sim.clone.x, 0, sim.clone.z); face(clone, p); }
   sim.bots.forEach((b, i) => movePerson(bots[i], b, adt, sim.boss));
-  drawFx(); scheduleFx(); realFx.update(sim.t);
+  drawFx(); scheduleFx(); realFx.update(sim.t); pcFx.update(sim.t);
   camera.position.set(p.x + Math.cos(yaw) * Math.cos(pitch) * zoom, 1.5 + Math.sin(pitch) * zoom, p.z + Math.sin(yaw) * Math.cos(pitch) * zoom);
   camera.lookAt(p.x, 1.5, p.z);
   const fc = window.__sim.freeCam; if (fc) { camera.position.set(fc[0], fc[1], fc[2]); camera.lookAt(fc[3], fc[4], fc[5]); }   // 검증용 고정 시점
@@ -313,4 +384,4 @@ function tick(now) {
 function frame(now) { tick(now); requestAnimationFrame(frame); }
 requestAnimationFrame(frame);
 // 검증·디버깅용 핸들
-window.__sim = { sim, data, realFx, keys, scene, camera, boss, tick, setSpeed: v => speedMul = v, restart, view: (y, p, z) => { yaw = y; pitch = p; zoom = z; } };
+window.__sim = { sim, data, realFx, pcFx, player, cast: id => skillQueued = id, hold: v => atkHeld = v, keys, scene, camera, boss, tick, setSpeed: v => speedMul = v, restart, view: (y, p, z) => { yaw = y; pitch = p; zoom = z; } };

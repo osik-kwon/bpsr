@@ -1,0 +1,85 @@
+{
+ "id": "archer",
+ "name": "디바인 아처 · 매활",
+ "model": "pc_archer.glb",
+ "notes": "쿨타임·충전 수·라이트 에너지 규칙은 클라 테이블과 스킬 설명, 동작·이펙트 연결은 클라 연출 데이터. 동작 중 이동 불가 시간, 타격 시각, 위력, 사거리, 회피 횟수·무적 시간, 정신 집중 지속 시간은 추정",
+ "range": 25,
+ "light": { "max": 100, "drain": 25, "src": "desc(백발백중)" },
+ "focus": { "dur": 15, "haste": 1.2, "spRecharge": 2, "src": "desc(특수 공격 쿨타임 50% 감소) + estimate(지속 시간·가속)" },
+ "idle": "fidle",
+ "run": "frun",
+ "bar": ["atk", "sp", "s1", "s2", "s3", "s4", "ult", "dodge"],
+ "skills": {
+  "dodge": {
+   "name": "회피", "key": "Shift", "icon": null, "charges": 3, "recharge": 2.5,
+   "dur": 0.45, "root": 0.45, "iframe": [0, 0.4], "move": { "t0": 0, "t1": 0.35, "dist": 5, "dir": "input", "fallback": "back" },
+   "anim": [{ "clip": "dodge_f", "t": 0 }], "animBack": [{ "clip": "dodge_b", "t": 0 }],
+   "src": "estimate(횟수·거리·무적)"
+  },
+  "atk": {
+   "name": "백발백중", "key": "좌클릭", "icon": "atk.png", "hold": true,
+   "combo": [
+    { "dur": 0.42, "root": 0.3, "hits": [{ "t": 0.2, "dmg": 60, "light": 2 }], "anim": [{ "clip": "attack01", "t": 0 }], "fx": [{ "name": "skill_rodri-01_attack01", "t": 0.18 }] },
+    { "dur": 0.42, "root": 0.3, "hits": [{ "t": 0.2, "dmg": 60, "light": 2 }], "anim": [{ "clip": "attack02", "t": 0 }], "fx": [{ "name": "skill_rodri-01_attack01", "t": 0.18 }] },
+    { "dur": 0.5, "root": 0.36, "hits": [{ "t": 0.26, "dmg": 70, "light": 2 }], "anim": [{ "clip": "attack03", "t": 0 }], "fx": [{ "name": "skill_rodri-01_attack02", "t": 0.24 }] },
+    { "dur": 0.7, "root": 0.5, "hits": [{ "t": 0.4, "dmg": 100, "light": 2 }], "anim": [{ "clip": "attack04", "t": 0 }], "fx": [{ "name": "skill_rodri-01_attack04", "t": 0.38 }] }
+   ],
+   "src": "desc(화살당 라이트 2pt) + estimate(시각·위력)"
+  },
+  "sp": {
+   "name": "더블 애로우", "key": "우클릭", "icon": "tg02.png", "charges": 3, "recharge": 7, "special": true,
+   "dur": 0.85, "root": 0.55, "move": { "t0": 0, "t1": 0.3, "dist": 5, "dir": "input", "fallback": "forward" },
+   "hits": [{ "t": 0.4, "dmg": 130 }, { "t": 0.5, "dmg": 130 }],
+   "anim": [{ "clip": "spskill06_start", "t": 0 }, { "clip": "spskill06_end", "t": 0.3 }],
+   "fx": [{ "name": "rodri_spskill06_attack", "t": 0.38 }],
+   "recast": {
+    "name": "쿼드러플 애로우", "icon": "tg03.png",
+    "dur": 1.5, "root": 1.2,
+    "hits": [{ "t": 0.85, "dmg": 450, "big": true }, { "t": 0.95, "dmg": 450, "big": true }, { "t": 1.05, "dmg": 450, "big": true }, { "t": 1.15, "dmg": 450, "big": true }],
+    "anim": [{ "clip": "spskill05_fast_start", "t": 0 }, { "clip": "spattack02_sp_end", "t": 0.73 }],
+    "fx": [{ "name": "skill_rodri-01_lagong", "t": 0.3 }, { "name": "rodri_spskill04_release", "t": 0.85 }]
+   },
+   "src": "table(3충전, 7초) + clip(미끄러지는 거리 5.0m, 0.30초) + estimate(타격 시각·위력)"
+  },
+  "s1": {
+   "name": "화살비", "key": "1", "icon": "kx03.png", "cd": 20,
+   "dur": 0.9, "root": 0.6, "lightOnCast": 20,
+   "zone": { "t": 0.55, "dur": 5, "tick": 0.5, "dmg": 90, "light": 2, "lightMax": 10, "r": 5, "fx": "rodri_spskill03_rain" },
+   "anim": [{ "clip": "spskill03", "t": 0 }],
+   "fx": [{ "name": "rodri_spskill03_release", "t": 0.45 }],
+   "src": "table(20초) + desc(시전 시 20pt, 타격당 2pt 최대 10pt) + estimate(지속·위력)"
+  },
+  "s2": {
+   "name": "위협 사격", "key": "2", "icon": "kx06.png", "charges": 2, "recharge": 25,
+   "dur": 1.1, "root": 0.9, "move": { "t0": 0.1, "t1": 0.6, "dist": 3, "dir": "input", "fallback": "none" },
+   "hits": [{ "t": 0.6, "dmg": 250 }],
+   "anim": [{ "clip": "spattack02_start", "t": 0 }, { "clip": "spattack02_loop", "t": 0.37 }, { "clip": "spattack02_fall", "t": 0.7 }],
+   "fx": [{ "name": "rodri_spskill06_attack", "t": 0.58 }],
+   "src": "table(2충전, 25초) + estimate. 물리 대미지 면역 5초는 기믹 판정에 반영하지 않음"
+  },
+  "s3": {
+   "name": "라이트 봄버", "key": "3", "icon": "kx04.png", "cd": 30,
+   "dur": 2.0, "root": 1.6, "pauseDrain": true, "recastMul": 1.5,
+   "zone": { "t": 1.45, "dur": 3, "tick": 0.3, "dmg": 160, "r": 5, "fx": "rodri_spskill04_cast" },
+   "anim": [{ "clip": "spskill05_start", "t": 0 }, { "clip": "spskill05_end", "t": 1.43 }],
+   "fx": [{ "name": "rodri_spskill04_generate", "t": 0.1, "dur": 1.35 }, { "name": "rodri_spskill04_release", "t": 1.43 }],
+   "src": "table(30초) + clip(모으기 1.43초) + desc(리캐스트 중 50% 추가, 에너지 소모 중단) + estimate(지속·위력)"
+  },
+  "s4": {
+   "name": "정신 집중", "key": "4", "icon": "kx02.png", "cd": 45,
+   "dur": 0.6, "root": 0.4, "buff": "focus",
+   "anim": [{ "clip": "spskill02", "t": 0 }],
+   "fx": [{ "name": "rodri_spskill02_release", "t": 0.1 }, { "name": "rodri_spskill02_buff", "t": 0.3 }],
+   "src": "table(45초) + estimate(동작 시간)"
+  },
+  "ult": {
+   "name": "샤이닝 애로우", "key": "Q", "icon": "ult.png", "cd": 60,
+   "dur": 2.6, "root": 2.2,
+   "hits": [{ "t": 1.9, "dmg": 1200, "big": true }],
+   "zone": { "t": 2.0, "dur": 3, "tick": 0.5, "dmg": 200, "r": 6, "fx": "skill_rodri-01_skill_ult01" },
+   "anim": [{ "clip": "skill_ult_01", "t": 0 }],
+   "fx": [{ "name": "skill_rodri_ult_shifa", "t": 0.2 }, { "name": "skill_rodri-01_skill_ult01_xuli", "t": 0.9 }, { "name": "skill_rodri-01_skill_ult01_shoot", "t": 1.85 }],
+   "src": "table(60초) + clip(3.03초) + estimate(타격 시각·위력)"
+  }
+ }
+}
