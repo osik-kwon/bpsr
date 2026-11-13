@@ -184,6 +184,7 @@
    "t": 37,
    "type": "aoe",
    "name": "탱버(거리 감쇠, 떨어지기)",
+   "tank": "carry",
    "spots": [
     [
      24,
@@ -198,6 +199,7 @@
    "t": 40,
    "type": "aoe",
    "name": "지연 탱버",
+   "tank": "drop",
    "spots": [
     [
      25,
@@ -330,6 +332,7 @@
    "t": 118,
    "type": "aoe",
    "name": "탱버(거리 감쇠, 떨어지기)",
+   "tank": "carry",
    "spots": [
     [
      24,
@@ -516,6 +519,7 @@
    "t": 196,
    "type": "aoe",
    "name": "탱버(거리 감쇠, 떨어지기)",
+   "tank": "carry",
    "spots": [
     [
      24,
@@ -530,6 +534,7 @@
    "t": 198,
    "type": "aoe",
    "name": "지연 탱버",
+   "tank": "drop",
    "spots": [
     [
      25,
@@ -928,6 +933,7 @@
    "t": 370,
    "type": "aoe",
    "name": "탱버(거리 감쇠, 떨어지기)",
+   "tank": "carry",
    "spots": [
     [
      24,
@@ -942,6 +948,7 @@
    "t": 372,
    "type": "aoe",
    "name": "지연 탱버",
+   "tank": "drop",
    "spots": [
     [
      25,

@@ -32,7 +32,7 @@ export function inside(s, p) {
 }
 
 export class Sim {
-  constructor(data, combat = null) { this.data = data; this.attackLock = false; this.combat = combat; this.reset(); }
+  constructor(data, combat = null) { this.data = data; this.attackLock = false; this.combat = combat; this.tank = !!combat?.cls.tank; this.reset(); }
   reset() {
     const d = this.data;
     this.t = 0; this.done = false; this.log = []; this.tele = []; this.cores = []; this.markers = [];
@@ -73,7 +73,8 @@ export class Sim {
     this.curType = e.type; this.curNoDodge = !!e.noDodge;
     const front = polar(roomAngle(this.room), this.data.boss.dist - 8);
     if (e.type === 'tankbuster') {
-      this.add({ name: e.name, kind: 'avoid', shape: 'circle', ...front, r: e.r, hitAt: e.t + e.cast, color: 'red' });
+      // 탱커 직업이면 보스 앞에서 내가 받아야 한다
+      this.add({ name: this.tank ? `${e.name} · 내가 받기` : e.name, kind: this.tank ? 'take' : 'avoid', shape: 'circle', ...front, r: e.r, hitAt: e.t + e.cast, color: 'red' });
     } else if (e.type === 'cores') {
       this.cores = this.triangle().cores.slice(0, e.count).map(c => ({ ...c, alive: true }));
     } else if (e.type === 'tether') {
@@ -130,7 +131,10 @@ export class Sim {
       this.add({ name: e.name, kind: 'alone', shape: 'circle', follow: true, x: 0, z: 0, r: e.r, hitAt: e.t + e.cast, color: e.color ?? 'yellow', reset: !!e.bots });
     } else if (e.type === 'aoe') {
       // 정해진 자리에 깔리는 원형 장판(탱버, 번개 등)
-      this.add({ name: e.name, kind: e.kind ?? 'avoid', shape: 'multi', spots: e.spots.map(([x, z, r]) => ({ shape: 'circle', x, z, r })), hitAt: e.t + e.cast, color: e.color ?? 'red' });
+      // 탱커 직업: carry는 나를 따라오는 탱버를 본대에서 떼어 놓고, drop은 내가 선 자리에 깔린 원에서 나온다
+      if (this.tank && e.tank === 'carry') this.add({ name: `${e.name} · 내가 받기`, kind: 'alone', shape: 'circle', follow: true, x: 0, z: 0, r: e.spots[0][2], hitAt: e.t + e.cast, color: 'red' });
+      else if (this.tank && e.tank === 'drop') this.add({ name: e.name, kind: 'avoid', shape: 'circle', x: this.player.x, z: this.player.z, r: e.spots[0][2], hitAt: e.t + e.cast, color: e.color ?? 'red' });
+      else this.add({ name: e.name, kind: e.kind ?? 'avoid', shape: 'multi', spots: e.spots.map(([x, z, r]) => ({ shape: 'circle', x, z, r })), hitAt: e.t + e.cast, color: e.color ?? 'red' });
     } else if (e.type === 'puddle') {
       // 개인 장판: 시전 순간 나와 파티원이 선 자리에 원이 깔리고 cast초 뒤 터진다. 내 원에서 걸어 나온다
       const spots = [this.player, ...this.bots].map(c => ({ shape: 'circle', x: c.x, z: c.z, r: e.r }));
@@ -189,6 +193,7 @@ export class Sim {
   resolve(s) {
     const p = this.player, safe = p.iframe > 0 && !s.noDodge;
     if (s.kind === 'avoid') { const hit = inside(s, p) && !safe; if (!s.quiet || hit) this.result(s.name, !hit, hit ? '범위 안에서 맞음' : '회피'); }
+    else if (s.kind === 'take') { const ok = inside(s, p); this.result(s.name, ok, ok ? '탱버를 받아냄' : '탱버 자리를 비움(탱커가 보스 앞에서 받아야 함)'); }
     else if (s.kind === 'far') { const d = dist(p, s); const ok = d >= s.r; this.result(s.name, ok, ok ? `거리 ${d.toFixed(0)}m` : `너무 가까움 ${d.toFixed(0)}m (${s.r}m 이상)`); }
     else if (s.kind === 'in') { const ok = inside(s, p); this.result(s.name, ok, ok ? '쉐어 참여, 팀원 생존' : '쉐어 밖, 인원이 모자라 팀원 사망'); if (s.reset) this.bots = this.partySpots(this.room); }
     else if (s.kind === 'alone') { const dmin = Math.min(...this.bots.map(b => dist(b, p))); const ok = dmin >= s.r; this.result(s.name, ok, ok ? `가장 가까운 팀원 ${dmin.toFixed(0)}m` : `팀원과 너무 가까움 ${dmin.toFixed(0)}m (${s.r}m 이상)`); if (s.reset) this.bots = this.partySpots(this.room); }
