@@ -16,7 +16,7 @@ export class Combat {
     return { id, name: s.name, icon: s.icon, key: s.key, n: c ? c.n : null, left: c ? (c.n < s.charges ? c.t : 0) : this.cd[id], total: c ? s.recharge : s.cd, ready: this.ready(id), active: this.act?.id === id };
   }
   start(id, sim, input) {
-    if (id === 'sp' && !this.recast && this.light >= this.cls.light.max) this.recast = true;   // 가득 찬 상태로 특수 공격을 쓰면 리캐스트 진입
+    if (id === 'sp' && this.cls.light && !this.recast && this.light >= this.cls.light.max) this.recast = true;   // 가득 찬 상태로 특수 공격을 쓰면 리캐스트 진입
     const s = id === 'atk' ? { ...this.cls.skills.atk.combo[this.combo], name: this.cls.skills.atk.name } : this.def(id);
     const p = sim.player, b = sim.boss, l = Math.hypot(input.mx, input.mz), bd = Math.hypot(b.x - p.x, b.z - p.z) || 1;
     const fwd = { x: (b.x - p.x) / bd, z: (b.z - p.z) / bd }, inp = l > 0 ? { x: input.mx / l, z: input.mz / l } : null;
@@ -30,7 +30,7 @@ export class Combat {
     if (s.iframe?.[0] === 0) p.iframe = Math.max(p.iframe, s.iframe[1]);
     this.buf = null; this.fxq.push({ kind: 'cast', id, t: sim.t, s, x: p.x, z: p.z });
   }
-  gain(n) { if (!this.recast) this.light = Math.min(this.cls.light.max, this.light + n); }
+  gain(n) { if (this.cls.light && !this.recast) this.light = Math.min(this.cls.light.max, this.light + n); }
   hit(sim, id, h, at, mul = 1) {
     const p = sim.player, b = sim.boss, ok = Math.hypot(b.x - at.x, b.z - at.z) <= (at.r ?? this.cls.range);
     if (ok) { const v = h.dmg * mul * (this.cls.dmgScale ?? 1); this.dmg += v; this.by[id] = (this.by[id] ?? 0) + v; if (h.light) this.gain(h.light); } else this.whiff++;
@@ -58,7 +58,7 @@ export class Combat {
     let a = this.act;
     if (a) {
       const t0 = a.t; a.t += dt * (a.id === 'dodge' ? 1 : haste); this.busy += dt;
-      for (const h of a.s.hits ?? []) if (h.t > t0 && h.t <= a.t) { const ok = this.hit(sim, a.id, h, p, a.mul); this.fxq.push({ kind: 'shot', id: a.id, t: sim.t, x: p.x, z: p.z, ok, big: h.big }); }
+      for (const h of a.s.hits ?? []) if (h.t > t0 && h.t <= a.t) { const ok = this.hit(sim, a.id, h, p, a.mul); this.fxq.push({ kind: 'shot', id: a.id, t: sim.t, x: p.x, z: p.z, ok, big: h.big, hitFx: a.s.hitFx }); }
       const z = a.s.zone;
       if (z && z.t > t0 && z.t <= a.t) { const Z = { ...z, id: a.id, x: sim.boss.x, z: sim.boss.z, until: sim.t + z.dur, next: sim.t + z.tick, mul: a.mul, got: 0 }; this.zones.push(Z); this.fxq.push({ kind: 'zone', id: a.id, t: sim.t, x: Z.x, z: Z.z, zone: Z }); }
       const m = a.s.move;

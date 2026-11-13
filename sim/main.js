@@ -8,10 +8,15 @@ import { Fx } from './fx.js';
 const scenario = new URLSearchParams(location.search).get('s') || 'boss1-hard';
 const data = await (await fetch(`./data/${scenario}.json`, { cache: 'no-cache' })).json();
 const spd = +new URLSearchParams(location.search).get('speed'); if (spd > 0) data.player.speed = spd;   // 이동 속도 덮어쓰기(?speed=5)
-const cls = await (await fetch('./data/class-archer.json', { cache: 'no-cache' })).json();
+// 직업: 주소의 c 또는 마지막에 고른 값(기본 디바인 아처)
+const CLS_IDS = ['archer', 'olvera', 'boyce', 'tina', 'iruna', 'comeau', 'farfara', 'guitar', 'tata'];
+let clsId = new URLSearchParams(location.search).get('c'); try { clsId ??= localStorage.getItem('cls'); } catch {}
+if (!CLS_IDS.includes(clsId)) clsId = 'archer';
+const cls = await (await fetch(`./data/class-${clsId}.json`, { cache: 'no-cache' })).json();
 const sim = new Sim(data, new Combat(cls));
 const $ = id => document.getElementById(id);
-$('title').textContent = data.title;
+$('title').textContent = `${data.title} · ${cls.name}`;
+{ const sel = $('cls'); sel.value = clsId; sel.onchange = () => { try { localStorage.setItem('cls', sel.value); } catch {} const q = new URLSearchParams(location.search); q.set('c', sel.value); location.search = q; }; }
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -159,7 +164,7 @@ function animPlayer(g, p, dt) {
   if (!g.mixer) return;
   let name = moving ? cls.run : cls.idle, time = null;
   if (a) { const segs = (a.back && a.s.animBack) || a.s.anim; let seg = segs[0]; for (const sg of segs) if (a.t >= sg.t) seg = sg; name = seg.clip; time = a.t - seg.t; }
-  const act = g.acts[name]; if (!act) return;
+  const act = g.acts[name] ?? g.acts[cls.idle] ?? g.acts.as_f_base_idle ?? g.acts.idle;   // 클립이 없는 동작은 대기 자세로 둔다 if (!act) return; name = act.getClip().name;
   if (name !== g.cur || (time !== null && time < g.curT)) {
     const prev = g.acts[g.cur]; act.reset(); act.setLoop(time === null ? THREE.LoopRepeat : THREE.LoopOnce, Infinity); act.clampWhenFinished = true; act.play();
     if (prev && prev !== act) prev.crossFadeTo(act, 0.08, false);
@@ -169,7 +174,7 @@ function animPlayer(g, p, dt) {
   g.curT = time ?? 0; g.mixer.update(dt);
 }
 // 스킬 이펙트·화살: combat이 쌓아 둔 사건을 꺼내 재생한다
-const pcFx = new Fx(scene, './assets/fx-pc/'), shots = [], HIT_Y = Math.min(data.boss.height * 0.45, 6);
+const pcFx = new Fx(scene, cls.fxBase ?? './assets/fx-pc/'), shots = [], HIT_Y = Math.min(data.boss.height * 0.45, 6);
 const arrowGeo = new THREE.CylinderGeometry(0.035, 0.035, 1, 6), UP = new THREE.Vector3(0, 1, 0);
 const me = () => ({ x: sim.player.x, z: sim.player.z, yaw: player.rotation.y });
 function drainCombat() {
@@ -177,12 +182,15 @@ function drainCombat() {
   for (const e of q) {
     if (e.kind === 'cast') for (const f of e.s.fx ?? []) pcFx.play(f.name, e.t + f.t, e.x, e.z, 0, f.dur ? e.t + f.t + f.dur : null, { follow: me });
     else if (e.kind === 'zone') pcFx.play(e.zone.fx, e.t, e.x, e.z, 0, e.t + e.zone.dur, { center: true, scale: 0.6, alpha: 0.3 });   // 보스를 가리지 않게 줄이고 옅게
-    else if (e.kind === 'shot') {
+    else if (e.kind === 'shot' && cls.ranged === false) {   // 근접: 화살 없이 보스 앞쪽에 타격 이펙트만
+      const dx = e.x - sim.boss.x, dz = e.z - sim.boss.z, l = Math.hypot(dx, dz) || 1, k = Math.min(l - 1.5, 6);
+      if (e.ok && e.hitFx) pcFx.play(e.hitFx, e.t, sim.boss.x + dx / l * k, sim.boss.z + dz / l * k, 0, null, { center: true, y: 0.6 });
+    } else if (e.kind === 'shot') {
       const from = new THREE.Vector3(e.x, 1.35, e.z), to = new THREE.Vector3(sim.boss.x + (Math.random() - 0.5) * 2, HIT_Y + (Math.random() - 0.5) * 2, sim.boss.z + (Math.random() - 0.5) * 2);
       const dir = to.clone().sub(from), len = dir.length(); dir.normalize(); if (!e.ok) to.copy(from).addScaledVector(dir, cls.range);
       const m = new THREE.Mesh(arrowGeo, new THREE.MeshBasicMaterial({ color: e.big ? 0xffe9a0 : 0xbfe9ff, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false }));
       m.quaternion.setFromUnitVectors(UP, dir); m.scale.set(e.big ? 2.2 : 0.9, e.big ? 5 : 2.4, e.big ? 2.2 : 0.9); scene.add(m);
-      shots.push({ m, from, dir, t0: e.t, dur: (e.ok ? len : cls.range) / 80, to, ok: e.ok, big: e.big });
+      shots.push({ m, from, dir, t0: e.t, dur: (e.ok ? len : cls.range) / 80, to, ok: e.ok, big: e.big, hitFx: e.hitFx });
     }
   }
 }
@@ -190,7 +198,7 @@ function drawShots() {
   for (let i = shots.length - 1; i >= 0; i--) {
     const sh = shots[i], u = (sim.t - sh.t0) / sh.dur;
     if (u >= 1 || u < 0) {
-      if (u >= 1 && sh.ok) pcFx.play(sh.big ? 'rodri_exattack01_hit' : 'skill_rodri-01_attack_bullet01_hit', sim.t, sh.to.x, sh.to.z, 0, null, { center: true, y: sh.to.y - 1 });
+      if (u >= 1 && sh.ok && (sh.hitFx || !cls.auto)) pcFx.play(sh.hitFx ?? (sh.big ? 'rodri_exattack01_hit' : 'skill_rodri-01_attack_bullet01_hit'), sim.t, sh.to.x, sh.to.z, 0, null, { center: true, y: sh.to.y - 1 });
       scene.remove(sh.m); sh.m.material.dispose(); shots.splice(i, 1); continue;
     }
     sh.m.position.copy(sh.from).lerp(sh.to, u);
@@ -361,12 +369,14 @@ function drawSkills() {
     o.el.classList.toggle('off', !s.ready); o.el.classList.toggle('act', s.active);
     o.n.textContent = s.n ?? ''; o.cdt.textContent = wait ? Math.ceil(s.left) : s.icon ? '' : s.name;
   }
-  const L = $('light'); L.firstElementChild.style.width = C.light / cls.light.max * 100 + '%'; L.classList.toggle('recast', C.recast); L.classList.toggle('focus', C.focus > 0);
+  const L = $('light'); L.style.display = cls.light ? '' : 'none'; if (!cls.light) return;
+  L.firstElementChild.style.width = C.light / cls.light.max * 100 + '%'; L.classList.toggle('recast', C.recast); L.classList.toggle('focus', C.focus > 0);
 }
+const BENCH = cls.benchmark?.dps ?? 3450000;
 const fmt = v => v >= 1e8 ? (v / 1e8).toFixed(2) + '억' : v >= 1e4 ? Math.round(v / 1e4).toLocaleString() + '만' : Math.round(v).toLocaleString();
 let shown = 0;
 function hud() {
-  const cs = sim.combat.summary(sim.t); $('atk').textContent = `추정 딜 ${fmt(cs.dmg)} · 초당 ${fmt(cs.dps)} (기준의 ${Math.round(cs.dps / cls.benchmark.dps * 100)}%)${sim.combat.recast ? ' · 라이트 리캐스트' : ''}${sim.combat.focus > 0 ? ' · 정신 집중' : ''}`; drawSkills();
+  const cs = sim.combat.summary(sim.t); $('atk').textContent = `추정 딜 ${fmt(cs.dmg)} · 초당 ${fmt(cs.dps)} (기준의 ${Math.round(cs.dps / BENCH * 100)}%)${sim.combat.recast ? ' · 라이트 리캐스트' : ''}${sim.combat.focus > 0 ? ' · 정신 집중' : ''}`; drawSkills();
   $('clock').textContent = sim.t.toFixed(1) + '초' + (paused && !sim.done && sim.t > 0 ? ' (일시정지)' : '');
   $('tPause').textContent = paused ? '계속' : '정지';
   $('energy').textContent = GRID ? `남은 칸 ${sim.tiles.filter(v => v < 2).length} / ${sim.tiles.length}` : `${sim.room}번 방 에너지 ${Math.floor(sim.energy)} / ${data.roomEnergyMax}`;
@@ -382,7 +392,7 @@ function hud() {
   if (sim.done && $('overlay').style.display === 'none') {
     const s = sim.score(); document.exitPointerLock?.();
     $('ovTitle').textContent = `결과 ${s.ok} / ${s.total}`;
-    $('ovBody').innerHTML = `추정 딜 ${fmt(cs.dmg)} · 초당 ${fmt(cs.dps)} (시즌3 풀육성 매활 허수아비 기준 ${fmt(cls.benchmark.dps)}의 ${Math.round(cs.dps / cls.benchmark.dps * 100)}%) · 스킬 동작 시간 ${cs.uptime}% · 사거리 밖 ${cs.whiff}회<br><br>` + (sim.log.filter(r => !r.ok).map(r => `${r.t}초 ${r.name} — ${r.msg}`).join('<br>') || '모든 기믹을 처리했습니다.');
+    $('ovBody').innerHTML = `추정 딜 ${fmt(cs.dmg)} · 초당 ${fmt(cs.dps)} (기준 ${fmt(BENCH)}의 ${Math.round(cs.dps / BENCH * 100)}%) · 스킬 동작 시간 ${cs.uptime}% · 사거리 밖 ${cs.whiff}회<br><br>` + (sim.log.filter(r => !r.ok).map(r => `${r.t}초 ${r.name} — ${r.msg}`).join('<br>') || '모든 기믹을 처리했습니다.');
     $('start').textContent = '다시 하기'; $('overlay').style.display = 'flex';
   }
 }

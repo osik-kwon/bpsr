@@ -1,0 +1,407 @@
+{
+ "id": "iruna",
+ "name": "버던트 오라클",
+ "model": "pc_iruna.glb?v=1",
+ "fxBase": "./assets/fx-iruna/",
+ "auto": true,
+ "ranged": true,
+ "range": 25,
+ "notes": "클라 데이터에서 자동 생성. 스킬 슬롯·이름·쿨타임·충전, 동작 길이, 근접 타격 시각·피해 계수는 클라 값. 발사체 스킬의 타격, 동작 중 이동 불가 시간, 회피는 추정. 직업 고유 자원과 버프는 넣지 않았다",
+ "idle": "as_f_iruna-01_fidle",
+ "run": "as_f_iruna-01_frun",
+ "bar": [
+  "atk",
+  "sp",
+  "s1",
+  "s2",
+  "s3",
+  "s4",
+  "ult",
+  "dodge"
+ ],
+ "skills": {
+  "dodge": {
+   "name": "회피",
+   "key": "Shift",
+   "icon": null,
+   "charges": 3,
+   "recharge": 2.5,
+   "dur": 0.45,
+   "root": 0.45,
+   "iframe": [
+    0,
+    0.4
+   ],
+   "move": {
+    "t0": 0,
+    "t1": 0.35,
+    "dist": 5,
+    "dir": "input",
+    "fallback": "back"
+   },
+   "anim": [
+    {
+     "clip": "as_f_iruna-01_dodge_f",
+     "t": 0
+    }
+   ],
+   "animBack": [
+    {
+     "clip": "as_f_iruna-01_dodge_b",
+     "t": 0
+    }
+   ],
+   "src": "estimate(횟수·거리·무적)"
+  },
+  "atk": {
+   "name": "덩굴 조종",
+   "key": "좌클릭",
+   "icon": "iruna_weapon_fh_skill_atk.png",
+   "hold": true,
+   "combo": [
+    {
+     "dur": 0.62,
+     "root": 0.27,
+     "hits": [
+      {
+       "t": 0.15,
+       "dmg": 12.6
+      }
+     ],
+     "anim": [
+      {
+       "clip": "as_f_iruna-01_attack01",
+       "t": 0
+      }
+     ],
+     "fx": [
+      {
+       "name": "jl_attack01_01",
+       "t": 0.05
+      },
+      {
+       "name": "jl_attack01_02",
+       "t": 0.05
+      }
+     ],
+     "src": "table(타격 시각·피해 계수)",
+     "hitFx": "jl_attack01_hit"
+    },
+    {
+     "dur": 1.17,
+     "root": 0.82,
+     "hits": [
+      {
+       "t": 0.3,
+       "dmg": 11.2
+      },
+      {
+       "t": 0.7,
+       "dmg": 11.2
+      }
+     ],
+     "anim": [
+      {
+       "clip": "as_f_iruna-01_attack02",
+       "t": 0
+      }
+     ],
+     "fx": [
+      {
+       "name": "jl_attack02_02",
+       "t": 0.05
+      },
+      {
+       "name": "jl_attack02_04",
+       "t": 0.2
+      }
+     ],
+     "src": "table(타격 시각·피해 계수)",
+     "hitFx": "jl_attack02_hit"
+    },
+    {
+     "dur": 1.3,
+     "root": 0.95,
+     "hits": [
+      {
+       "t": 0.43,
+       "dmg": 11.2
+      },
+      {
+       "t": 0.58,
+       "dmg": 11.2
+      },
+      {
+       "t": 0.83,
+       "dmg": 11.2
+      }
+     ],
+     "anim": [
+      {
+       "clip": "as_f_iruna-01_attack03",
+       "t": 0
+      }
+     ],
+     "fx": [
+      {
+       "name": "jl_attack03_05",
+       "t": 0.05
+      },
+      {
+       "name": "jl_attack03_06",
+       "t": 0.33
+      },
+      {
+       "name": "jl_attack03_011",
+       "t": 0.33
+      }
+     ],
+     "src": "table(타격 시각·피해 계수)",
+     "hitFx": "jl_attack03_hit"
+    },
+    {
+     "dur": 1.59,
+     "root": 1.24,
+     "hits": [
+      {
+       "t": 0.18,
+       "dmg": 14
+      },
+      {
+       "t": 1.12,
+       "dmg": 14
+      }
+     ],
+     "anim": [
+      {
+       "clip": "as_f_iruna-01_attack04",
+       "t": 0
+      }
+     ],
+     "fx": [
+      {
+       "name": "jl_attack04_02",
+       "t": 0.05
+      },
+      {
+       "name": "jl_attack04_01",
+       "t": 0.08
+      }
+     ],
+     "src": "table(타격 시각·피해 계수)",
+     "hitFx": "jl_attack02_hit"
+    }
+   ],
+   "src": "table"
+  },
+  "sp": {
+   "dur": 0.5,
+   "root": 0.35,
+   "hits": [
+    {
+     "t": 0.25,
+     "dmg": 250
+    }
+   ],
+   "anim": [
+    {
+     "clip": "as_f_iruna-01_skill03_start",
+     "t": 0
+    }
+   ],
+   "fx": [
+    {
+     "name": "jl_skill03_01_loop",
+     "t": 0.05
+    },
+    {
+     "name": "jl_skill03_02",
+     "t": 0.15
+    },
+    {
+     "name": "jl_skill03_01",
+     "t": 0.15
+    }
+   ],
+   "src": "estimate(타격 정보가 클라에 없어 가정값) + estimate(쿨타임: 실제로는 직업 자원을 쓰는 스킬이라 임의로 둠)",
+   "name": "생명의 꽃",
+   "key": "우클릭",
+   "icon": "iruna_weapon_fh_skill_passive.png",
+   "skillId": 1507,
+   "cd": 6
+  },
+  "s1": {
+   "dur": 1.47,
+   "root": 1.12,
+   "hits": [
+    {
+     "t": 1.02,
+     "dmg": 600
+    }
+   ],
+   "anim": [
+    {
+     "clip": "as_f_iruna-01_spattack03",
+     "t": 0
+    }
+   ],
+   "fx": [
+    {
+     "name": "skill_iruna-01_spattack03_start_1",
+     "t": 0.05
+    },
+    {
+     "name": "skill_iruna-01_spattack03_start_2",
+     "t": 0.92
+    }
+   ],
+   "src": "estimate(타격 정보가 클라에 없어 가정값)",
+   "name": "자유의 씨앗",
+   "key": "1",
+   "icon": "iruna_weapon_fh-01_kx09.png",
+   "skillId": 1519,
+   "charges": 2,
+   "recharge": 15,
+   "special": false
+  },
+  "s2": {
+   "dur": 0.75,
+   "root": 0.4,
+   "hits": [
+    {
+     "t": 0.3,
+     "dmg": 600
+    }
+   ],
+   "anim": [
+    {
+     "clip": "as_f_iruna-01_spattack04_start",
+     "t": 0
+    }
+   ],
+   "fx": [
+    {
+     "name": "jl_attack04_02",
+     "t": 0.05
+    },
+    {
+     "name": "jl_attack04_02_ym",
+     "t": 0.2
+    },
+    {
+     "name": "skill_iruna-01_spattack04_loop",
+     "t": 0.2
+    }
+   ],
+   "src": "estimate(타격 정보가 클라에 없어 가정값)",
+   "name": "인퓨전",
+   "key": "2",
+   "icon": "iruna_weapon_fh-01_kx01.png",
+   "skillId": 1520,
+   "cd": 22
+  },
+  "s3": {
+   "dur": 0.75,
+   "root": 0.4,
+   "hits": [
+    {
+     "t": 0.3,
+     "dmg": 600
+    }
+   ],
+   "anim": [
+    {
+     "clip": "as_f_iruna-01_spattack05_start",
+     "t": 0
+    }
+   ],
+   "fx": [
+    {
+     "name": "skill_iruna-01_spattack05",
+     "t": 0.05
+    },
+    {
+     "name": "skill_iruna-01_spattack04_loop",
+     "t": 0.2
+    }
+   ],
+   "src": "estimate(타격 정보가 클라에 없어 가정값)",
+   "name": "숲의 기도",
+   "key": "3",
+   "icon": "iruna_weapon_fh-01_kx02.png",
+   "skillId": 1521,
+   "cd": 20
+  },
+  "s4": {
+   "dur": 0.96,
+   "root": 0.61,
+   "hits": [
+    {
+     "t": 0.51,
+     "dmg": 600
+    }
+   ],
+   "anim": [
+    {
+     "clip": "as_f_iruna-01_spattack06",
+     "t": 0
+    }
+   ],
+   "fx": [
+    {
+     "name": "skill_iruna-01_spattack06_shifa",
+     "t": 0.05
+    }
+   ],
+   "src": "estimate(타격 정보가 클라에 없어 가정값)",
+   "name": "양분 주기",
+   "key": "4",
+   "icon": "iruna_weapon_fh-01_kx04.png",
+   "skillId": 1522,
+   "cd": 15
+  },
+  "ult": {
+   "dur": 1.57,
+   "root": 1.22,
+   "hits": [
+    {
+     "t": 1.1,
+     "dmg": 175,
+     "big": true
+    }
+   ],
+   "anim": [
+    {
+     "clip": "as_f_iruna-01_ult01_start",
+     "t": 0
+    },
+    {
+     "clip": "as_f_iruna-01_ult01_end",
+     "t": 1.37
+    }
+   ],
+   "fx": [
+    {
+     "name": "skill_iruna-01_ingtou",
+     "t": 0.05
+    },
+    {
+     "name": "skill_iruna-01_ingtou2",
+     "t": 1
+    }
+   ],
+   "src": "table(타격 시각·피해 계수)",
+   "name": "만개・희망의 결계",
+   "key": "Q",
+   "icon": "iruna_weapon_fh-01_ult.png",
+   "skillId": 1509,
+   "cd": 60
+  }
+ },
+ "dmgScale": 17129,
+ "benchmark": {
+  "dps": 3450000,
+  "idealPctPerSec": 201.4,
+  "src": "디바인 아처 기준치(중섭 S3 매활 허수아비 3.45M)를 그대로 빌려 쓴 상대값. 이 직업의 실제 딜과는 무관하다"
+ }
+}
