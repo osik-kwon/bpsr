@@ -363,9 +363,10 @@ function drawSkills() {
   }
   const L = $('light'); L.firstElementChild.style.width = C.light / cls.light.max * 100 + '%'; L.classList.toggle('recast', C.recast); L.classList.toggle('focus', C.focus > 0);
 }
+const fmt = v => v >= 1e8 ? (v / 1e8).toFixed(2) + '억' : v >= 1e4 ? Math.round(v / 1e4).toLocaleString() + '만' : Math.round(v).toLocaleString();
 let shown = 0;
 function hud() {
-  const cs = sim.combat.summary(sim.t); $('atk').textContent = `가상 딜 ${cs.dmg.toLocaleString()} · 초당 ${cs.dps.toLocaleString()}${sim.combat.recast ? ' · 라이트 리캐스트' : ''}${sim.combat.focus > 0 ? ' · 정신 집중' : ''}`; drawSkills();
+  const cs = sim.combat.summary(sim.t); $('atk').textContent = `추정 딜 ${fmt(cs.dmg)} · 초당 ${fmt(cs.dps)} (기준의 ${Math.round(cs.dps / cls.benchmark.dps * 100)}%)${sim.combat.recast ? ' · 라이트 리캐스트' : ''}${sim.combat.focus > 0 ? ' · 정신 집중' : ''}`; drawSkills();
   $('clock').textContent = sim.t.toFixed(1) + '초' + (paused && !sim.done && sim.t > 0 ? ' (일시정지)' : '');
   $('tPause').textContent = paused ? '계속' : '정지';
   $('energy').textContent = GRID ? `남은 칸 ${sim.tiles.filter(v => v < 2).length} / ${sim.tiles.length}` : `${sim.room}번 방 에너지 ${Math.floor(sim.energy)} / ${data.roomEnergyMax}`;
@@ -381,7 +382,7 @@ function hud() {
   if (sim.done && $('overlay').style.display === 'none') {
     const s = sim.score(); document.exitPointerLock?.();
     $('ovTitle').textContent = `결과 ${s.ok} / ${s.total}`;
-    $('ovBody').innerHTML = `가상 딜 ${cs.dmg.toLocaleString()} (초당 ${cs.dps.toLocaleString()}) · 스킬 동작 시간 ${cs.uptime}% · 사거리 밖 ${cs.whiff}회<br><br>` + (sim.log.filter(r => !r.ok).map(r => `${r.t}초 ${r.name} — ${r.msg}`).join('<br>') || '모든 기믹을 처리했습니다.');
+    $('ovBody').innerHTML = `추정 딜 ${fmt(cs.dmg)} · 초당 ${fmt(cs.dps)} (시즌3 풀육성 매활 허수아비 기준 ${fmt(cls.benchmark.dps)}의 ${Math.round(cs.dps / cls.benchmark.dps * 100)}%) · 스킬 동작 시간 ${cs.uptime}% · 사거리 밖 ${cs.whiff}회<br><br>` + (sim.log.filter(r => !r.ok).map(r => `${r.t}초 ${r.name} — ${r.msg}`).join('<br>') || '모든 기믹을 처리했습니다.');
     $('start').textContent = '다시 하기'; $('overlay').style.display = 'flex';
   }
 }

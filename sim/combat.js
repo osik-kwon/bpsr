@@ -33,7 +33,7 @@ export class Combat {
   gain(n) { if (!this.recast) this.light = Math.min(this.cls.light.max, this.light + n); }
   hit(sim, id, h, at, mul = 1) {
     const p = sim.player, b = sim.boss, ok = Math.hypot(b.x - at.x, b.z - at.z) <= (at.r ?? this.cls.range);
-    if (ok) { const v = h.dmg * mul; this.dmg += v; this.by[id] = (this.by[id] ?? 0) + v; if (h.light) this.gain(h.light); } else this.whiff++;
+    if (ok) { const v = h.dmg * mul * (this.cls.dmgScale ?? 1); this.dmg += v; this.by[id] = (this.by[id] ?? 0) + v; if (h.light) this.gain(h.light); } else this.whiff++;
     return ok;
   }
   // 한 스텝 진행. 반환: free(이동 입력 허용), dx·dz(동작이 강제로 옮기는 거리)
