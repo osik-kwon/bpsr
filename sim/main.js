@@ -64,7 +64,7 @@ for (const rot of data.noCurtain || GRID ? [] : [0, Math.PI / 2]) {
 const markLabels = {};   // 징 번호 글자는 한 번만 만든다
 function label(text, size = 3, color = '#ffffff') {
   const cv = document.createElement('canvas'); cv.width = cv.height = 128;
-  const g = cv.getContext('2d'); g.fillStyle = color; g.font = 'bold 72px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, 64, 68);
+  const g = cv.getContext('2d'); g.fillStyle = color; g.font = `bold ${text.length > 1 ? 44 : 72}px sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, 64, 68);
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), depthTest: false, transparent: true })); s.scale.set(size, size, 1); return s;
 }
 for (let n = 1; n <= (GRID ? 0 : 4); n++) { const s = label(String(n), 5, '#58a6ff'); s.position.set(Math.cos(roomAngle(n)) * (R - 5), 6, Math.sin(roomAngle(n)) * (R - 5)); scene.add(s); }
@@ -115,7 +115,9 @@ function person(color, model) {
   g.last = null;
   loadGlb('./assets/' + model).then(m => {
     if (!m) return;
-    g.remove(cap); g.add(m.scene); m.scene.traverse(o => { if (o.isSkinnedMesh) o.frustumCulled = false; });
+    g.remove(cap); g.add(m.scene);
+    // 얼굴·옷이 조명 방향에 따라 어둡게 죽지 않도록 자기 색을 조금 스스로 내게 한다
+    m.scene.traverse(o => { if (o.isMesh) { o.frustumCulled = false; const mt = o.material; if (mt.map && mt.emissive) { mt.emissive.set(0xffffff); mt.emissiveMap = mt.map; mt.emissiveIntensity = 0.45; } } });
     g.mixer = new THREE.AnimationMixer(m.scene); g.acts = Object.fromEntries(m.animations.map(c => [c.name, g.mixer.clipAction(c)]));
     g.cur = 'idle'; g.acts.idle?.play();
   });
@@ -207,6 +209,7 @@ function scheduleFx() {
 }
 // 예고 도형은 매 프레임 다시 만든다(개수가 적다)
 const fx = new THREE.Group(); scene.add(fx);
+const shareBeam = new THREE.CylinderGeometry(1.1, 1.1, 14, 20, 1, true);
 const COLORS = { red: 0xf85149, pink: 0xff7eb6, blue: 0x58a6ff, yellow: 0xd29922 };
 function shapeMesh(s, color, fill) {
   const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.2 + 0.45 * fill, depthWrite: false, side: THREE.DoubleSide });
@@ -223,12 +226,20 @@ function shapeMesh(s, color, fill) {
   return m;
 }
 function drawFx() {
-  for (const c of [...fx.children]) { if (!c.isSprite) { c.geometry?.dispose(); c.material?.dispose(); } fx.remove(c); }
+  for (const c of [...fx.children]) { if (!c.isSprite) { if (c.geometry !== shareBeam) c.geometry?.dispose(); c.material?.dispose(); } fx.remove(c); }
   for (const s of sim.visible()) {
     const fill = s.live ? 1 : Math.min(1, (sim.t - (s.showFrom ?? s.start)) / Math.max(0.1, s.hitAt - (s.showFrom ?? s.start)));
     // 거리 비례(far)는 안전 거리 바깥이 안전하다는 뜻으로 테두리만 진하게
     if (s.orb) { const m = new THREE.Mesh(new THREE.SphereGeometry(2.2, 20, 14), new THREE.MeshBasicMaterial({ color: 0xb38cff, transparent: true, opacity: 0.85 })); m.position.set(s.x, 2.6, s.z); fx.add(m); }
     for (const part of s.shape === 'multi' ? s.spots : [s]) fx.add(shapeMesh(part, COLORS[s.color], s.kind === 'far' || s.kind === 'show' ? fill * 0.4 : fill));
+    // 들어가야 하는 원(쉐어)은 멀리서도 보이게 굵은 테두리·빛기둥·글자를 세운다
+    if (s.kind === 'in' || s.kind === 'soak') for (const part of s.shape === 'multi' ? s.spots : [s]) {
+      if (part.shape !== 'circle') continue;
+      const edge = shapeMesh({ shape: 'ring', x: part.x, z: part.z, rIn: part.r - 0.45, rOut: part.r }, 0xffffff, 1); edge.position.y = 0.1; fx.add(edge);
+      const beam = new THREE.Mesh(shareBeam, new THREE.MeshBasicMaterial({ color: COLORS[s.color], transparent: true, opacity: 0.28 + 0.2 * Math.sin(sim.t * 6), depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
+      beam.position.set(part.x, 7, part.z); fx.add(beam);
+      const l = (markLabels['쉐어'] ??= label('쉐어', 6, '#ffb3d4')).clone(); l.scale.set(4.5, 4.5, 1); l.position.set(part.x, 6.5, part.z); fx.add(l);
+    }
   }
   for (const c of sim.cores) { const m = new THREE.Mesh(new THREE.SphereGeometry(1.5, 16, 12), new THREE.MeshBasicMaterial({ color: 0xb38cff })); m.position.set(c.x, 1.4, c.z); fx.add(m); }
   for (const z of sim.combat.zones) { const m = shapeMesh({ shape: 'ring', x: z.x, z: z.z, rIn: z.r - 0.2, rOut: z.r }, 0x7fd4ff, 0.6); m.position.y = 0.09; fx.add(m); }   // 내가 깔아 둔 지속 피해 범위
