@@ -1,648 +1,860 @@
 {
-  "id": "boss2-nightmare",
-  "title": "2넴 계속 · 악몽",
-  "notes": "판정 모양·크기와 바닥 칸 배치는 테이블, 기믹 순서는 공략 노트, 발생 시각과 대상·자리는 추정. 쌍둥이 로봇·순찰 로봇 전투는 재현하지 않고 그 구간의 큐브만 넣었다 악몽은 하드 타임라인에 공략 노트의 차이점(내 거리 감쇠, 순찰 로봇, 시한 폭탄, 0% 버티기 약 50초)을 더한 것이고 그 시각·자리는 추정",
-  "arena": {
-    "type": "grid",
-    "cols": 3,
-    "rows": 3,
-    "tileW": 20,
-    "tileH": 15,
-    "tileModel": "sm_stk_singlefloor_001a.glb",
-    "radius": 40,
-    "src": "table(바닥 타일 9개 배치 좌표, 칸 20m×15m)"
-  },
-  "player": {
-    "speed": 6.0,
-    "dashDist": 8,
-    "dashCd": 3,
-    "dashIframe": 0.4,
-    "src": "table(모델 테이블 RunVelocity 6m/s; 기본값이라 실제 전투 이동 속도와 같다는 보장은 없음) + estimate(대시 거리·쿨·무적)",
-    "start": [
-      4,
-      -3
-    ]
-  },
-  "boss": {
-    "pos": [
-      0,
-      -15
-    ],
-    "dir": 90,
-    "height": 13.4,
-    "scale": 0.7,
-    "model": "boss2.glb",
-    "src": "table(몬스터 103200, 모델 ch_mon_dajiqiren04_02, 배율 0.7) + estimate(서는 자리)",
-    "anims": {
-      "idle": "04_fidle",
-      "cleave": "04_atk_cleave",
-      "shock": "04_atk_fatal_start",
-      "charge": "04_run",
-      "lineShare": "04_atk_share",
-      "cannon": "04_atk_phantom_core"
-    },
-    "animSrc": "클립은 클라 실측, 기믹과의 대응은 추정"
-  },
-  "partySpots": [
-    [
-      -6,
-      -4
-    ],
-    [
-      6,
-      -5
-    ],
-    [
-      -9,
-      0
-    ],
-    [
-      9,
-      1
-    ],
-    [
-      -4,
-      4
-    ],
-    [
-      4,
-      4
-    ],
-    [
-      0,
-      6
-    ]
-  ],
-  "roomEnergyMax": 120,
-  "noCurtain": true,
-  "duration": 234,
-  "fx": {},
-  "events": [
-    {
-      "t": 5,
-      "type": "cleave",
-      "name": "부채꼴 내려치기",
-      "hit": 2.5,
-      "r": 35,
-      "angle": 60,
-      "dir": 90,
-      "src": "guide(기믹 순서) + table(浮空顺劈: 반경 35m·60°, 2.5초 뒤) + estimate(시각·자리)"
-    },
-    {
-      "t": 14,
-      "type": "wave",
-      "name": "바닥 웨이브",
-      "cast": 2.1,
-      "gap": 2.5,
-      "width": 8,
-      "len": 45,
-      "sets": [
-        [
-          -16,
-          0,
-          16
-        ],
-        [
-          -8,
-          8
-        ]
-      ],
-      "src": "guide(기믹 순서) + table(真实承诺: 띠 45m×8m, 2.1초 뒤) + estimate(띠 배치·간격)"
-    },
-    {
-      "t": 24,
-      "type": "cannon",
-      "name": "궤도포 1회차",
-      "follow": 5,
-      "fall": 2.98,
-      "shots": [
-        {
-          "who": "me",
-          "r": 6.7,
-          "tile": [
-            2,
-            1
-          ]
-        },
-        {
-          "who": 0,
-          "r": 6.7,
-          "tile": [
-            0,
-            1
-          ],
-          "at": [
-            -25,
-            0
-          ],
-          "big": false
-        }
-      ],
-      "src": "guide(기믹 순서) + table(轨道炮落地爆炸: 반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하) + estimate(시각·자리)"
-    },
-    {
-      "t": 38,
-      "type": "lineShare",
-      "name": "직선 쉐어",
-      "cast": 5,
-      "len": 36.2,
-      "width": 7,
-      "bot": 1,
-      "at": [
-        0,
-        8
-      ],
-      "src": "guide(기믹 순서) + table(贯穿轰击: 길이 36.2m·폭 7m) + estimate(시각·자리)"
-    },
-    {
-      "t": 38,
-      "type": "bomb",
-      "name": "거리 감쇠 폭탄",
-      "cast": 5,
-      "safeDist": 20,
-      "bot": 2,
-      "at": [
-        -27,
-        -19
-      ],
-      "src": "guide(기믹 순서) + table(距离衰减爆炸: 반경 26m) + estimate(안전 거리 20m, 대상·자리)"
-    },
-    {
-      "t": 44.5,
-      "type": "spread",
-      "name": "내 거리 감쇠",
-      "r": 15,
-      "cast": 4.5,
-      "color": "red",
-      "src": "guide(악몽에서 달라지는 점)(1회차 궤도포 뒤 플레이어 거리 감쇠) + estimate(안전 거리 15m)"
-    },
-    {
-      "t": 50,
-      "type": "cannon",
-      "name": "궤도포 2회차",
-      "follow": 5,
-      "fall": 2.98,
-      "shots": [
-        {
-          "who": 0,
-          "r": 16,
-          "tile": [
-            2,
-            2
-          ],
-          "at": [
-            28,
-            21
-          ],
-          "big": true
-        },
-        {
-          "who": 1,
-          "r": 6.7,
-          "tile": [
-            1,
-            2
-          ],
-          "at": [
-            0,
-            18
-          ],
-          "big": false
-        },
-        {
-          "who": "me",
-          "r": 6.7,
-          "tile": [
-            0,
-            2
-          ]
-        }
-      ],
-      "src": "guide(기믹 순서) + table(轨道炮落地爆炸: 반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하) + estimate(시각·자리)"
-    },
-    {
-      "t": 60,
-      "type": "aoe",
-      "name": "순찰 로봇",
-      "spots": [
-        [
-          -20,
-          -15,
-          6
-        ],
-        [
-          0,
-          0,
-          6
-        ],
-        [
-          20,
-          15,
-          6
-        ]
-      ],
-      "cast": 4,
-      "color": "yellow",
-      "src": "guide(악몽에서 달라지는 점)(세 줄에 하나씩 나와 범위 피해) + estimate(자리·반경)"
-    },
-    {
-      "t": 66,
-      "type": "shock",
-      "name": "붕괴 충격",
-      "cast": 4.73,
-      "safeDist": 21,
-      "src": "guide(기믹 순서) + table(史诗狂怒: 4.73초 뒤 반경 50m) + estimate(안전 거리 21m)"
-    },
-    {
-      "t": 76,
-      "type": "bossMove",
-      "to": [
-        0,
-        -27
-      ],
-      "dir": 90
-    },
-    {
-      "t": 80,
-      "type": "cubes",
-      "name": "큐브 십자",
-      "cast": 4,
-      "pattern": "cross",
-      "src": "guide(기믹 순서)(큐브 모양대로 칸이 터지고 중앙은 안전) + table(相位映射爆炸: 칸 하나 20m×15m) + estimate(시각·모양별 칸)"
-    },
-    {
-      "t": 90,
-      "type": "cubes",
-      "name": "큐브 정사각",
-      "cast": 4,
-      "pattern": "square",
-      "src": "guide(기믹 순서)(큐브 모양대로 칸이 터지고 중앙은 안전) + table(相位映射爆炸: 칸 하나 20m×15m) + estimate(시각·모양별 칸)"
-    },
-    {
-      "t": 100,
-      "type": "cubes",
-      "name": "큐브 십자",
-      "cast": 4,
-      "pattern": "cross",
-      "src": "guide(기믹 순서)(큐브 모양대로 칸이 터지고 중앙은 안전) + table(相位映射爆炸: 칸 하나 20m×15m) + estimate(시각·모양별 칸)"
-    },
-    {
-      "t": 104,
-      "type": "spread",
-      "name": "시한 폭탄",
-      "r": 15,
-      "cast": 5,
-      "color": "red",
-      "src": "guide(악몽에서 달라지는 점)(대상자가 구석으로 가서 내려놓음) + estimate"
-    },
-    {
-      "t": 110,
-      "type": "tiles",
-      "op": "restore",
-      "src": "guide(기믹 순서)"
-    },
-    {
-      "t": 112,
-      "type": "bossMove",
-      "to": [
-        0,
-        0
-      ],
-      "dir": 90
-    },
-    {
-      "t": 114,
-      "type": "charge",
-      "name": "돌진",
-      "cast": 2.55,
-      "from": [
-        0,
-        0
-      ],
-      "to": [
-        24,
-        18
-      ],
-      "width": 11.7,
-      "src": "guide(기믹 순서) + table(第75次冲锋: 폭 11.7m, 2.55초 뒤 출발) + estimate(방향)"
-    },
-    {
-      "t": 121,
-      "type": "bossMove",
-      "to": [
-        0,
-        -15
-      ],
-      "dir": 90
-    },
-    {
-      "t": 124,
-      "type": "cannon",
-      "name": "궤도포 3회차(반대)",
-      "follow": 5,
-      "fall": 2.98,
-      "shots": [
-        {
-          "who": "me",
-          "r": 6.7,
-          "tile": [
-            0,
-            1
-          ]
-        },
-        {
-          "who": 0,
-          "r": 6.7,
-          "tile": [
-            2,
-            1
-          ],
-          "at": [
-            25,
-            0
-          ],
-          "big": false
-        }
-      ],
-      "src": "guide(기믹 순서) + table(轨道炮落地爆炸: 반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하) + estimate(시각·자리)"
-    },
-    {
-      "t": 140,
-      "type": "cannon",
-      "name": "궤도포 4회차(반대)",
-      "follow": 5,
-      "fall": 2.98,
-      "shots": [
-        {
-          "who": 0,
-          "r": 16,
-          "tile": [
-            0,
-            2
-          ],
-          "at": [
-            -28,
-            21
-          ],
-          "big": true
-        },
-        {
-          "who": 1,
-          "r": 6.7,
-          "tile": [
-            1,
-            2
-          ],
-          "at": [
-            0,
-            18
-          ],
-          "big": false
-        },
-        {
-          "who": "me",
-          "r": 6.7,
-          "tile": [
-            2,
-            2
-          ]
-        }
-      ],
-      "src": "guide(기믹 순서) + table(轨道炮落地爆炸: 반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하) + estimate(시각·자리)"
-    },
-    {
-      "t": 154,
-      "type": "lineShare",
-      "name": "직선 쉐어",
-      "cast": 5,
-      "len": 36.2,
-      "width": 7,
-      "bot": 1,
-      "at": [
-        0,
-        8
-      ],
-      "src": "guide(기믹 순서) + table(贯穿轰击: 길이 36.2m·폭 7m) + estimate(시각·자리)"
-    },
-    {
-      "t": 154,
-      "type": "bomb",
-      "name": "거리 감쇠 폭탄",
-      "cast": 5,
-      "safeDist": 20,
-      "bot": 2,
-      "at": [
-        27,
-        -19
-      ],
-      "src": "guide(기믹 순서) + table(距离衰减爆炸: 반경 26m) + estimate(안전 거리 20m, 대상·자리)"
-    },
-    {
-      "t": 164,
-      "type": "shock",
-      "name": "붕괴 충격",
-      "cast": 4.73,
-      "safeDist": 21,
-      "src": "guide(기믹 순서) + table(史诗狂怒: 4.73초 뒤 반경 50m) + estimate(안전 거리 21m)"
-    },
-    {
-      "t": 182,
-      "type": "tiles",
-      "op": "restore",
-      "src": "guide(악몽에서 달라지는 점)(0%에서 아홉 칸 복구)"
-    },
-    {
-      "t": 183,
-      "type": "bossMove",
-      "to": [
-        0,
-        -27
-      ],
-      "dir": 90
-    },
-    {
-      "t": 186,
-      "type": "cannon",
-      "name": "0% 궤도포",
-      "follow": 4,
-      "fall": 2.98,
-      "shots": [
-        {
-          "who": "me",
-          "r": 6.7,
-          "tile": [
-            2,
-            2
-          ]
-        },
-        {
-          "who": 0,
-          "r": 6.7,
-          "tile": [
-            1,
-            2
-          ],
-          "at": [
-            0,
-            19
-          ]
-        }
-      ],
-      "src": "guide(악몽에서 달라지는 점)(0% 약 50초: 궤도포 + 로봇 돌진 4회) + table(궤도포) + estimate(시각·칸)"
-    },
-    {
-      "t": 190,
-      "type": "charge",
-      "name": "분신 돌진",
-      "cast": 3.2,
-      "from": [
-        33,
-        0
-      ],
-      "to": [
-        -33,
-        0
-      ],
-      "width": 9.6,
-      "src": "guide(악몽에서 달라지는 점) + table(运动会冲锋: 폭 9.6m) + table(분신 위치 x ±33m) + estimate(줄·시각)"
-    },
-    {
-      "t": 198,
-      "type": "cannon",
-      "name": "0% 궤도포",
-      "follow": 4,
-      "fall": 2.98,
-      "shots": [
-        {
-          "who": "me",
-          "r": 6.7,
-          "tile": [
-            0,
-            2
-          ]
-        },
-        {
-          "who": 0,
-          "r": 6.7,
-          "tile": [
-            1,
-            2
-          ],
-          "at": [
-            0,
-            19
-          ]
-        }
-      ],
-      "src": "guide(악몽에서 달라지는 점)(0% 약 50초: 궤도포 + 로봇 돌진 4회) + table(궤도포) + estimate(시각·칸)"
-    },
-    {
-      "t": 202,
-      "type": "charge",
-      "name": "분신 돌진",
-      "cast": 3.2,
-      "from": [
-        -33,
-        -15
-      ],
-      "to": [
-        33,
-        -15
-      ],
-      "width": 9.6,
-      "src": "guide(악몽에서 달라지는 점) + table(运动会冲锋: 폭 9.6m) + table(분신 위치 x ±33m) + estimate(줄·시각)"
-    },
-    {
-      "t": 210,
-      "type": "cannon",
-      "name": "0% 궤도포",
-      "follow": 4,
-      "fall": 2.98,
-      "shots": [
-        {
-          "who": "me",
-          "r": 6.7,
-          "tile": [
-            2,
-            1
-          ]
-        },
-        {
-          "who": 0,
-          "r": 6.7,
-          "tile": [
-            1,
-            2
-          ],
-          "at": [
-            0,
-            19
-          ]
-        }
-      ],
-      "src": "guide(악몽에서 달라지는 점)(0% 약 50초: 궤도포 + 로봇 돌진 4회) + table(궤도포) + estimate(시각·칸)"
-    },
-    {
-      "t": 214,
-      "type": "charge",
-      "name": "분신 돌진",
-      "cast": 3.2,
-      "from": [
-        33,
-        15
-      ],
-      "to": [
-        -33,
-        15
-      ],
-      "width": 9.6,
-      "src": "guide(악몽에서 달라지는 점) + table(运动会冲锋: 폭 9.6m) + table(분신 위치 x ±33m) + estimate(줄·시각)"
-    },
-    {
-      "t": 222,
-      "type": "cannon",
-      "name": "0% 궤도포",
-      "follow": 4,
-      "fall": 2.98,
-      "shots": [
-        {
-          "who": "me",
-          "r": 6.7,
-          "tile": [
-            0,
-            1
-          ]
-        },
-        {
-          "who": 0,
-          "r": 6.7,
-          "tile": [
-            1,
-            2
-          ],
-          "at": [
-            0,
-            19
-          ]
-        }
-      ],
-      "src": "guide(악몽에서 달라지는 점)(0% 약 50초: 궤도포 + 로봇 돌진 4회) + table(궤도포) + estimate(시각·칸)"
-    },
-    {
-      "t": 226,
-      "type": "charge",
-      "name": "분신 돌진",
-      "cast": 3.2,
-      "from": [
-        -33,
-        0
-      ],
-      "to": [
-        33,
-        0
-      ],
-      "width": 9.6,
-      "src": "guide(악몽에서 달라지는 점) + table(运动会冲锋: 폭 9.6m) + table(분신 위치 x ±33m) + estimate(줄·시각)"
-    }
+ "id": "boss2-nightmare",
+ "title": "2넴 계속 · 악몽",
+ "notes": "기믹 순서와 전투 경과 시각은 실전 영상(악몽) 프레임 분석, 칸 깨는 순서는 maxroll 방법 1, 판정 모양·크기는 테이블. 직선 띠의 줄 위치, 큐브 무늬 순서, 보스가 선 방향은 추정. 기계 경비병(보스 이탈 구간의 로봇) 전투는 재현하지 않고 큐브만 넣었다",
+ "arena": {
+  "type": "grid",
+  "cols": 3,
+  "rows": 3,
+  "tileW": 20,
+  "tileH": 15,
+  "tileModel": "sm_stk_singlefloor_001a.glb",
+  "radius": 40,
+  "src": "table(바닥 타일 9개 배치 좌표, 칸 20m×15m)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "src": "table(모델 테이블 RunVelocity 6m/s; 기본값이라 실제 전투 이동 속도와 같다는 보장은 없음) + estimate(대시 거리·쿨·무적)",
+  "start": [
+   0,
+   2
   ]
+ },
+ "boss": {
+  "pos": [
+   9,
+   0
+  ],
+  "dir": 180,
+  "height": 13.4,
+  "scale": 0.7,
+  "model": "boss2.glb",
+  "src": "table(몬스터 103200, 모델 ch_mon_dajiqiren04_02, 배율 0.7) + video(중앙 칸 가장자리에 서서 본대를 봄)",
+  "anims": {
+   "idle": "04_fidle",
+   "cleave": "04_atk_cleave",
+   "shock": "04_atk_fatal_start",
+   "charge": "04_run",
+   "lineShare": "04_atk_share",
+   "cannon": "04_atk_phantom_core"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 추정"
+ },
+ "partySpots": [
+  [
+   2,
+   -3
+  ],
+  [
+   -3,
+   -2
+  ],
+  [
+   -4,
+   3
+  ],
+  [
+   3,
+   4
+  ],
+  [
+   -1,
+   5
+  ],
+  [
+   5,
+   1
+  ],
+  [
+   -6,
+   0
+  ]
+ ],
+ "roomEnergyMax": 120,
+ "noCurtain": true,
+ "duration": 374,
+ "fx": {},
+ "events": [
+  {
+   "t": 0,
+   "type": "marks",
+   "pos": [
+    [
+     -27,
+     -20
+    ],
+    [
+     0,
+     -20
+    ],
+    [
+     27,
+     -20
+    ],
+    [
+     27,
+     0
+    ],
+    [
+     27,
+     15
+    ]
+   ],
+   "src": "guide(maxroll 방법 1 징 위치)"
+  },
+  {
+   "t": 17,
+   "type": "wave",
+   "name": "평행 번개 띠",
+   "cast": 2.1,
+   "gap": 1.75,
+   "width": 8,
+   "len": 45,
+   "sets": [
+    [
+     -16,
+     0,
+     16
+    ],
+    [
+     -8,
+     8
+    ],
+    [
+     -16,
+     0,
+     16
+    ],
+    [
+     -8,
+     8
+    ],
+    [
+     -16,
+     0,
+     16
+    ]
+   ],
+   "src": "video(평행 2~3줄이 남북으로 전장을 관통, 약 1.5~2초 간격 4~5파, 폭은 칸의 절반쯤, 반 칸씩 비켜 피함) + table(真实承诺: 45m×8m, 2.1초 뒤) + estimate(줄 위치)"
+  },
+  {
+   "t": 28,
+   "type": "puddle",
+   "name": "개인 원 → 낙뢰",
+   "r": 4,
+   "cast": 3.5,
+   "color": "blue",
+   "src": "video(각자 발밑 붉은 원 뒤 푸른 낙뢰) + estimate(반경·지연)"
+  },
+  {
+   "t": 31,
+   "type": "cannon",
+   "name": "궤도포 1회차(북쪽 두 칸)",
+   "follow": 8,
+   "fall": 2.98,
+   "shots": [
+    {
+     "who": "me",
+     "r": 6.7,
+     "tile": [
+      1,
+      0
+     ]
+    },
+    {
+     "who": 0,
+     "r": 6.7,
+     "tile": [
+      1,
+      0
+     ],
+     "at": [
+      4,
+      -20
+     ]
+    },
+    {
+     "who": 1,
+     "r": 6.7,
+     "tile": [
+      0,
+      0
+     ],
+     "at": [
+      -26,
+      -19
+     ]
+    },
+    {
+     "who": 2,
+     "r": 6.7,
+     "tile": [
+      0,
+      0
+     ],
+     "at": [
+      -22,
+      -20
+     ]
+    }
+   ],
+   "src": "video(문구→첫 낙하 6~8초, 징 칸의 바깥 가장자리에 버림, 칸은 2발에 완파, 중앙 금지) + guide(maxroll 방법 1의 칸 순서) + table(반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하)"
+  },
+  {
+   "t": 58,
+   "type": "lineShare",
+   "name": "직선 쉐어",
+   "cast": 5,
+   "len": 36.2,
+   "width": 7,
+   "bot": 1,
+   "at": [
+    -2,
+    2
+   ],
+   "src": "video(보스에서 본대 쪽으로 겨냥하는 직선 1줄, 전원 한 점에 모임) + table(贯穿轰击 51.67×10에 배율 0.7)"
+  },
+  {
+   "t": 58,
+   "type": "bomb",
+   "name": "감쇠 폭탄",
+   "cast": 5,
+   "safeDist": 20,
+   "bot": 2,
+   "at": [
+    -24,
+    18
+   ],
+   "src": "video(쉐어와 동시에 대상자가 본대에서 멀리 이탈) + table(거리 감쇠)"
+  },
+  {
+   "t": 74,
+   "type": "aoe",
+   "kind": "show",
+   "name": "순찰 로봇(탱커가 원에 들어가 세움)",
+   "spots": [
+    [
+     -20,
+     -8,
+     6
+    ],
+    [
+     0,
+     -8,
+     6
+    ],
+    [
+     20,
+     -8,
+     6
+    ]
+   ],
+   "cast": 10,
+   "color": "yellow",
+   "src": "video(깨진 칸 쪽에서 열마다 한 기, 탱커가 가장자리에서 감지 원에 들어가 차단) + estimate(원 크기)"
+  },
+  {
+   "t": 88,
+   "type": "cannon",
+   "name": "궤도포 2회차(동쪽 세 칸)",
+   "follow": 6,
+   "fall": 2.98,
+   "shots": [
+    {
+     "who": 0,
+     "r": 6.7,
+     "tile": [
+      2,
+      0
+     ],
+     "at": [
+      26,
+      -19
+     ]
+    },
+    {
+     "who": 1,
+     "r": 6.7,
+     "tile": [
+      2,
+      0
+     ],
+     "at": [
+      22,
+      -20
+     ]
+    },
+    {
+     "who": "me",
+     "r": 6.7,
+     "tile": [
+      2,
+      1
+     ]
+    },
+    {
+     "who": 2,
+     "r": 6.7,
+     "tile": [
+      2,
+      1
+     ],
+     "at": [
+      27,
+      -3
+     ]
+    },
+    {
+     "who": 3,
+     "r": 16,
+     "tile": [
+      2,
+      2
+     ],
+     "at": [
+      28,
+      21
+     ],
+     "big": true
+    },
+    {
+     "who": 4,
+     "r": 6.7,
+     "tile": [
+      2,
+      2
+     ],
+     "at": [
+      24,
+      12
+     ]
+    }
+   ],
+   "src": "video(문구→첫 낙하 6~8초, 징 칸의 바깥 가장자리에 버림, 칸은 2발에 완파, 중앙 금지) + guide(maxroll 방법 1의 칸 순서) + table(반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하)"
+  },
+  {
+   "t": 110,
+   "type": "shock",
+   "name": "붕괴 충격",
+   "cast": 4.73,
+   "safeDist": 21,
+   "src": "video(문구→판정 약 5초, 금 간 칸 전부 붕괴) + table(4.73초, 30m에 배율 0.7)"
+  },
+  {
+   "t": 128,
+   "type": "bossMove",
+   "to": [
+    46,
+    0
+   ],
+   "dir": 180
+  },
+  {
+   "t": 146,
+   "type": "cubes",
+   "name": "에너지 큐브 십자",
+   "cast": 5,
+   "pattern": "cross",
+   "src": "video(칸 전체가 붉게 예고된 뒤 큐브 낙하, 십자 또는 네 귀퉁이, 중앙은 안전) + estimate(회차별 무늬)"
+  },
+  {
+   "t": 160,
+   "type": "cubes",
+   "name": "에너지 큐브 귀퉁이",
+   "cast": 5,
+   "pattern": "square",
+   "src": "video(칸 전체가 붉게 예고된 뒤 큐브 낙하, 십자 또는 네 귀퉁이, 중앙은 안전) + estimate(회차별 무늬)"
+  },
+  {
+   "t": 174,
+   "type": "cubes",
+   "name": "에너지 큐브 십자",
+   "cast": 5,
+   "pattern": "cross",
+   "src": "video(칸 전체가 붉게 예고된 뒤 큐브 낙하, 십자 또는 네 귀퉁이, 중앙은 안전) + estimate(회차별 무늬)"
+  },
+  {
+   "t": 183,
+   "type": "tiles",
+   "op": "restore"
+  },
+  {
+   "t": 183,
+   "type": "marks",
+   "pos": [
+    [
+     -27,
+     20
+    ],
+    [
+     0,
+     20
+    ],
+    [
+     27,
+     20
+    ],
+    [
+     27,
+     0
+    ],
+    [
+     27,
+     -20
+    ],
+    [
+     -27,
+     0
+    ],
+    [
+     -27,
+     -20
+    ]
+   ],
+   "src": "guide(maxroll 방법 1 징 위치)"
+  },
+  {
+   "t": 190,
+   "type": "bossMove",
+   "to": [
+    0,
+    0
+   ],
+   "dir": 270
+  },
+  {
+   "t": 196,
+   "type": "charge",
+   "name": "돌진",
+   "cast": 2.55,
+   "from": [
+    0,
+    0
+   ],
+   "to": [
+    0,
+    -18
+   ],
+   "width": 10,
+   "src": "video(복구 뒤 정면 직사각 예고 후 가장자리까지 돌진, 폭 약 10m) + estimate(방향)"
+  },
+  {
+   "t": 200,
+   "type": "cannon",
+   "name": "궤도포 3회차(남쪽 두 칸)",
+   "follow": 8,
+   "fall": 2.98,
+   "shots": [
+    {
+     "who": "me",
+     "r": 6.7,
+     "tile": [
+      1,
+      2
+     ]
+    },
+    {
+     "who": 0,
+     "r": 6.7,
+     "tile": [
+      1,
+      2
+     ],
+     "at": [
+      4,
+      20
+     ]
+    },
+    {
+     "who": 1,
+     "r": 6.7,
+     "tile": [
+      0,
+      2
+     ],
+     "at": [
+      -26,
+      19
+     ]
+    },
+    {
+     "who": 2,
+     "r": 6.7,
+     "tile": [
+      0,
+      2
+     ],
+     "at": [
+      -22,
+      20
+     ]
+    }
+   ],
+   "src": "video(문구→첫 낙하 6~8초, 징 칸의 바깥 가장자리에 버림, 칸은 2발에 완파, 중앙 금지) + guide(maxroll 방법 1의 칸 순서) + table(반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하)"
+  },
+  {
+   "t": 234,
+   "type": "wave",
+   "name": "평행 번개 띠",
+   "cast": 2.1,
+   "gap": 1.75,
+   "width": 8,
+   "len": 45,
+   "sets": [
+    [
+     -16,
+     0,
+     16
+    ],
+    [
+     -8,
+     8
+    ],
+    [
+     -16,
+     0,
+     16
+    ],
+    [
+     -8,
+     8
+    ],
+    [
+     -16,
+     0,
+     16
+    ]
+   ],
+   "src": "video(평행 2~3줄이 남북으로 전장을 관통, 약 1.5~2초 간격 4~5파, 폭은 칸의 절반쯤, 반 칸씩 비켜 피함) + table(真实承诺: 45m×8m, 2.1초 뒤) + estimate(줄 위치)"
+  },
+  {
+   "t": 247,
+   "type": "aoe",
+   "kind": "show",
+   "name": "순찰 로봇(탱커가 원에 들어가 세움)",
+   "spots": [
+    [
+     -20,
+     8,
+     6
+    ],
+    [
+     0,
+     8,
+     6
+    ],
+    [
+     20,
+     8,
+     6
+    ]
+   ],
+   "cast": 10,
+   "color": "yellow",
+   "src": "video(깨진 칸 쪽에서 열마다 한 기, 탱커가 가장자리에서 감지 원에 들어가 차단) + estimate(원 크기)"
+  },
+  {
+   "t": 250,
+   "type": "cannon",
+   "name": "궤도포 4회차(동쪽 세 칸)",
+   "follow": 6,
+   "fall": 2.98,
+   "shots": [
+    {
+     "who": 0,
+     "r": 6.7,
+     "tile": [
+      2,
+      2
+     ],
+     "at": [
+      26,
+      19
+     ]
+    },
+    {
+     "who": 1,
+     "r": 6.7,
+     "tile": [
+      2,
+      2
+     ],
+     "at": [
+      22,
+      20
+     ]
+    },
+    {
+     "who": "me",
+     "r": 6.7,
+     "tile": [
+      2,
+      1
+     ]
+    },
+    {
+     "who": 2,
+     "r": 6.7,
+     "tile": [
+      2,
+      1
+     ],
+     "at": [
+      27,
+      3
+     ]
+    },
+    {
+     "who": 3,
+     "r": 16,
+     "tile": [
+      2,
+      0
+     ],
+     "at": [
+      28,
+      -21
+     ],
+     "big": true
+    },
+    {
+     "who": 4,
+     "r": 6.7,
+     "tile": [
+      2,
+      0
+     ],
+     "at": [
+      24,
+      -12
+     ]
+    }
+   ],
+   "src": "video(문구→첫 낙하 6~8초, 징 칸의 바깥 가장자리에 버림, 칸은 2발에 완파, 중앙 금지) + guide(maxroll 방법 1의 칸 순서) + table(반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하)"
+  },
+  {
+   "t": 274,
+   "type": "shock",
+   "name": "붕괴 충격",
+   "cast": 4.73,
+   "safeDist": 21,
+   "src": "video(문구→판정 약 5초, 금 간 칸 전부 붕괴) + table(4.73초, 30m에 배율 0.7)"
+  },
+  {
+   "t": 288,
+   "type": "cannon",
+   "name": "궤도포 5회차(서쪽 두 칸)",
+   "follow": 8,
+   "fall": 2.98,
+   "shots": [
+    {
+     "who": "me",
+     "r": 6.7,
+     "tile": [
+      0,
+      0
+     ]
+    },
+    {
+     "who": 0,
+     "r": 6.7,
+     "tile": [
+      0,
+      0
+     ],
+     "at": [
+      -26,
+      -19
+     ]
+    },
+    {
+     "who": 1,
+     "r": 6.7,
+     "tile": [
+      0,
+      1
+     ],
+     "at": [
+      -27,
+      3
+     ]
+    },
+    {
+     "who": 2,
+     "r": 6.7,
+     "tile": [
+      0,
+      1
+     ],
+     "at": [
+      -27,
+      -3
+     ]
+    }
+   ],
+   "src": "video(문구→첫 낙하 6~8초, 징 칸의 바깥 가장자리에 버림, 칸은 2발에 완파, 중앙 금지) + guide(maxroll 방법 1의 칸 순서) + table(반경 6.7m·큰 것 16m, 고정 2.98초 뒤 낙하)"
+  },
+  {
+   "t": 304,
+   "type": "lineShare",
+   "name": "직선 쉐어",
+   "cast": 5,
+   "len": 36.2,
+   "width": 7,
+   "bot": 1,
+   "at": [
+    -2,
+    -2
+   ],
+   "src": "video(보스에서 본대 쪽으로 겨냥하는 직선 1줄, 전원 한 점에 모임) + table(贯穿轰击 51.67×10에 배율 0.7)"
+  },
+  {
+   "t": 304,
+   "type": "bomb",
+   "name": "감쇠 폭탄",
+   "cast": 5,
+   "safeDist": 20,
+   "bot": 2,
+   "at": [
+    6,
+    -22
+   ],
+   "src": "video(쉐어와 동시에 대상자가 본대에서 멀리 이탈) + table(거리 감쇠)"
+  },
+  {
+   "t": 318,
+   "type": "tiles",
+   "op": "restore"
+  },
+  {
+   "t": 318,
+   "type": "marks",
+   "pos": [],
+   "src": "guide(maxroll 방법 1 징 위치)"
+  },
+  {
+   "t": 319,
+   "type": "bossMove",
+   "to": [
+    40,
+    -30
+   ],
+   "dir": 135
+  },
+  {
+   "t": 322,
+   "type": "cubes",
+   "name": "0% 섬멸 · 동쪽 열 붕괴",
+   "cast": 7,
+   "tiles": [
+    [
+     2,
+     0
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     2,
+     2
+    ]
+   ],
+   "destroy": true,
+   "src": "video(0%에서 폭 1칸×길이 3칸 열이 붉게 예고되고 약 7초 뒤 번개와 함께 붕괴)"
+  },
+  {
+   "t": 333,
+   "type": "charge",
+   "name": "0% 섬멸 · 번개선",
+   "cast": 3,
+   "from": [
+    -30,
+    -15
+   ],
+   "to": [
+    30,
+    -15
+   ],
+   "width": 8,
+   "keepBoss": true,
+   "src": "video(전장을 가로지르는 번개선) + estimate(위치)"
+  },
+  {
+   "t": 343,
+   "type": "cubes",
+   "name": "0% 섬멸 · 서쪽 열 붕괴",
+   "cast": 7,
+   "tiles": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "destroy": true,
+   "src": "video(다음 열 예고·붕괴, 마지막에 한 열 3칸만 남음)"
+  },
+  {
+   "t": 353,
+   "type": "charge",
+   "name": "0% 섬멸 · 번개선",
+   "cast": 3,
+   "from": [
+    -30,
+    15
+   ],
+   "to": [
+    30,
+    15
+   ],
+   "width": 8,
+   "keepBoss": true,
+   "src": "video(전장을 가로지르는 번개선) + estimate(위치)"
+  },
+  {
+   "t": 360,
+   "type": "charge",
+   "name": "0% 섬멸 · 번개선",
+   "cast": 3,
+   "from": [
+    -30,
+    0
+   ],
+   "to": [
+    30,
+    0
+   ],
+   "width": 8,
+   "keepBoss": true,
+   "src": "video(전장을 가로지르는 번개선) + estimate(위치)"
+  },
+  {
+   "t": 366,
+   "type": "charge",
+   "name": "0% 섬멸 · 번개선",
+   "cast": 3,
+   "from": [
+    -30,
+    -15
+   ],
+   "to": [
+    30,
+    -15
+   ],
+   "width": 8,
+   "keepBoss": true,
+   "src": "video(전장을 가로지르는 번개선) + estimate(위치)"
+  }
+ ]
 }

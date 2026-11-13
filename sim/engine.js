@@ -129,7 +129,14 @@ export class Sim {
       this.add({ name: e.name, kind: 'alone', shape: 'circle', follow: true, x: 0, z: 0, r: e.r, hitAt: e.t + e.cast, color: e.color ?? 'yellow', reset: !!e.bots });
     } else if (e.type === 'aoe') {
       // 정해진 자리에 깔리는 원형 장판(탱버, 번개 등)
-      this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots: e.spots.map(([x, z, r]) => ({ shape: 'circle', x, z, r })), hitAt: e.t + e.cast, color: e.color ?? 'red' });
+      this.add({ name: e.name, kind: e.kind ?? 'avoid', shape: 'multi', spots: e.spots.map(([x, z, r]) => ({ shape: 'circle', x, z, r })), hitAt: e.t + e.cast, color: e.color ?? 'red' });
+    } else if (e.type === 'puddle') {
+      // 개인 장판: 시전 순간 나와 파티원이 선 자리에 원이 깔리고 cast초 뒤 터진다. 내 원에서 걸어 나온다
+      const spots = [this.player, ...this.bots].map(c => ({ shape: 'circle', x: c.x, z: c.z, r: e.r }));
+      this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots, hitAt: e.t + e.cast, color: e.color ?? 'red' });
+    } else if (e.type === 'marks') {
+      // 공대가 바닥에 찍는 징(궤도포를 버릴 자리 번호)
+      this.markers = e.pos.map(([x, z], i) => ({ x, z, label: String(i + 1) }));
     } else if (e.type === 'orb') {
       // 넉백 구슬: 터질 때 범위 안에 있으면 push만큼 날아간다. 걷는 중이면 걷는 방향, 서 있으면 구슬 반대쪽
       this.orbs.push({ name: e.name, x: e.at[0], z: e.at[1], r: e.r, push: e.push, hitAt: e.t + e.cast, start: e.t });
@@ -149,14 +156,15 @@ export class Sim {
       // 큐브: 십자(변 가운데 칸)나 정사각(모서리 칸) 모양으로 칸이 터진다. 중앙은 맞지 않는다. tiles로 칸을 직접 줄 수도 있다
       const g = this.grid, set = e.tiles ? e.tiles : e.pattern === 'cross' ? [[1, 0], [0, 1], [2, 1], [1, 2]] : [[0, 0], [2, 0], [0, 2], [2, 2]];
       const spots = set.map(t => this.tileIdx(t)).filter(i => this.tiles[i] < 2).map(i => this.tileRect(i));
-      if (spots.length) this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots, hitAt: e.t + e.cast, color: e.color ?? 'red' });
+      if (spots.length) this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots, hitAt: e.t + e.cast, color: e.color ?? 'red', destroy: e.destroy ? set.map(t => this.tileIdx(t)) : null });
     } else if (e.type === 'charge') {
       // 돌진: 보스가 from에서 to로 달리는 길이 판정이고, 끝나면 보스가 to에 선다
-      this.boss = { x: e.from[0], z: e.from[1] }; this.bossDir = Math.atan2(e.to[1] - e.from[1], e.to[0] - e.from[0]);
-      this.add({ name: e.name, kind: 'avoid', shape: 'line', a: { x: e.from[0], z: e.from[1] }, b: { x: e.to[0], z: e.to[1] }, w: e.width, hitAt: e.t + e.cast, color: 'red', bossTo: e.to });
+      if (!e.keepBoss) { this.boss = { x: e.from[0], z: e.from[1] }; this.bossDir = Math.atan2(e.to[1] - e.from[1], e.to[0] - e.from[0]); }
+      this.add({ name: e.name, kind: 'avoid', shape: 'line', a: { x: e.from[0], z: e.from[1] }, b: { x: e.to[0], z: e.to[1] }, w: e.width, hitAt: e.t + e.cast, color: 'red', bossTo: e.keepBoss ? null : e.to });
     } else if (e.type === 'bossMove') {
       this.boss = { x: e.to[0], z: e.to[1] }; if (e.dir != null) this.bossDir = e.dir * Math.PI / 180;
     } else if (e.type === 'tiles') {
+      if (e.op === 'fill') this.tiles = this.tiles.map(() => 0);   // 틈까지 메워진 한 장 바닥
       if (e.op === 'restore') this.tiles = this.tiles.map((v, i) => (this.grid.missing ?? []).some(t => this.tileIdx(t) === i) ? 2 : 0);
     } else if (e.type === 'wave') {
       // 바닥 웨이브: 세로 띠들이 번갈아 터진다. sets: [[x 중심들], ...]가 gap초 간격
@@ -258,6 +266,7 @@ export class Sim {
     const due = this.tele.filter(s => s.hitAt <= this.t);
     for (const s of due) {
       if (s.damage) for (const i of s.damage) this.tiles[i] = Math.min(2, this.tiles[i] + 1);
+      if (s.destroy) for (const i of s.destroy) this.tiles[i] = 2;
       if (s.tileOp === 'collapse') this.tiles = this.tiles.map(v => v === 1 ? 2 : v);
       if (s.bossTo) this.boss = { x: s.bossTo[0], z: s.bossTo[1] };
     }

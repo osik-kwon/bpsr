@@ -59,6 +59,7 @@ for (const rot of data.noCurtain || GRID ? [] : [0, Math.PI / 2]) {
   const c = new THREE.Mesh(new THREE.PlaneGeometry(R * 2, 7), curtainMat); c.position.y = 3.5; c.rotation.y = rot; scene.add(c);
 }
 // 방 번호
+const markLabels = {};   // 징 번호 글자는 한 번만 만든다
 function label(text, size = 3, color = '#ffffff') {
   const cv = document.createElement('canvas'); cv.width = cv.height = 128;
   const g = cv.getContext('2d'); g.fillStyle = color; g.font = 'bold 72px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, 64, 68);
@@ -173,7 +174,7 @@ function shapeMesh(s, color, fill) {
   return m;
 }
 function drawFx() {
-  for (const c of [...fx.children]) { c.geometry?.dispose(); c.material?.dispose(); fx.remove(c); }
+  for (const c of [...fx.children]) { if (!c.isSprite) { c.geometry?.dispose(); c.material?.dispose(); } fx.remove(c); }
   for (const s of sim.visible()) {
     const fill = s.live ? 1 : Math.min(1, (sim.t - (s.showFrom ?? s.start)) / Math.max(0.1, s.hitAt - (s.showFrom ?? s.start)));
     // 거리 비례(far)는 안전 거리 바깥이 안전하다는 뜻으로 테두리만 진하게
@@ -181,7 +182,7 @@ function drawFx() {
     for (const part of s.shape === 'multi' ? s.spots : [s]) fx.add(shapeMesh(part, COLORS[s.color], s.kind === 'far' || s.kind === 'show' ? fill * 0.4 : fill));
   }
   for (const c of sim.cores) { const m = new THREE.Mesh(new THREE.SphereGeometry(1.5, 16, 12), new THREE.MeshBasicMaterial({ color: 0xb38cff })); m.position.set(c.x, 1.4, c.z); fx.add(m); }
-  for (const mk of sim.markers) { const m = flat(new THREE.Mesh(new THREE.RingGeometry(1.0, 1.4, 32), new THREE.MeshBasicMaterial({ color: 0x3fb950, side: THREE.DoubleSide }))); m.position.set(mk.x, 0.08, mk.z); fx.add(m); }
+  for (const mk of sim.markers) { const m = flat(new THREE.Mesh(new THREE.RingGeometry(1.0, 1.4, 32), new THREE.MeshBasicMaterial({ color: 0x3fb950, side: THREE.DoubleSide }))); m.position.set(mk.x, 0.08, mk.z); fx.add(m); if (/^\d+$/.test(mk.label ?? '')) { const l = markLabels[mk.label] ??= label(mk.label, 3, '#3fb950'); const c = l.clone(); c.position.set(mk.x, 2.2, mk.z); fx.add(c); } }
   if (sim.tether) {
     // 대상 3명을 잇는 삼각형 줄(확정 전에는 내 꼭짓점이 나를 따라온다)
     const { A, B, C, V } = sim.tether, me = C ?? V ?? sim.player;
