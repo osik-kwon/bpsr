@@ -108,6 +108,21 @@ const boss = actor(0x4a4f5c, data.boss.model), clone = actor(0xe26fa8, data.boss
 const face = (o, t) => { const dx = t.x - o.position.x, dz = t.z - o.position.z; if (dx * dx + dz * dz > 0.01) o.rotation.y = Math.atan2(dx, dz); };
 // 나와 파티원: 인게임 캐릭터 모델(tools/bossanim.py char 산출물). 파일이 없으면 캡슐로 그린다
 const PCS = ['pc_f1.glb', 'pc_m1.glb', 'pc_f2.glb', 'pc_m2.glb', 'pc_f3.glb', 'pc_m3.glb', 'pc_f4.glb', 'pc_m4.glb'];
+// 캐릭터를 게임처럼 보이게: 얼굴은 조명 없이 제 색 그대로, 나머지는 두 단계 툰 음영, 그리고 뒤집어 부풀린 외곽선
+const toonRamp = new THREE.DataTexture(new Uint8Array([150, 150, 150, 255, 255, 255, 255, 255]), 2, 1); toonRamp.minFilter = toonRamp.magFilter = THREE.NearestFilter; toonRamp.needsUpdate = true;
+const outlineMat = new THREE.MeshBasicMaterial({ color: 0x2a1a1c, side: THREE.BackSide });
+outlineMat.onBeforeCompile = sh => { sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n#ifdef USE_SKINNING\ntransformed += normalize(objectNormal) * 0.0035;\n#endif'); };
+function toonify(root) {
+  const maxAniso = renderer.capabilities.getMaxAnisotropy(), add = [];
+  root.traverse(o => {
+    if (!o.isMesh) return; o.frustumCulled = false;
+    const src = o.material, face = /head|lash/.test(src.name), opt = { map: src.map, color: src.color, vertexColors: src.vertexColors, side: src.side, transparent: src.transparent, name: src.name };
+    if (src.map) { src.map.anisotropy = maxAniso; src.map.needsUpdate = true; }
+    o.material = face ? new THREE.MeshBasicMaterial(opt) : new THREE.MeshToonMaterial({ ...opt, gradientMap: toonRamp });
+    if (o.isSkinnedMesh && !/lash/.test(src.name)) add.push(o);
+  });
+  for (const o of add) { const ol = new THREE.SkinnedMesh(o.geometry, outlineMat); ol.bind(o.skeleton, o.bindMatrix); ol.frustumCulled = false; o.parent.add(ol); }
+}
 function person(color, model) {
   const g = new THREE.Group(); scene.add(g);
   const cap = new THREE.Mesh(new THREE.CapsuleGeometry(0.38, 1.0, 4, 10), new THREE.MeshStandardMaterial({ color })); cap.position.y = 0.9; g.add(cap);
@@ -116,8 +131,7 @@ function person(color, model) {
   loadGlb('./assets/' + model).then(m => {
     if (!m) return;
     g.remove(cap); g.add(m.scene);
-    // 얼굴·옷이 조명 방향에 따라 어둡게 죽지 않도록 자기 색을 조금 스스로 내게 한다
-    m.scene.traverse(o => { if (o.isMesh) { o.frustumCulled = false; const mt = o.material; if (mt.map && mt.emissive) { mt.emissive.set(0xffffff); mt.emissiveMap = mt.map; mt.emissiveIntensity = 0.45; } } });
+    toonify(m.scene);
     g.mixer = new THREE.AnimationMixer(m.scene); g.acts = Object.fromEntries(m.animations.map(c => [c.name, g.mixer.clipAction(c)]));
     g.cur = 'idle'; g.acts.idle?.play();
   });
