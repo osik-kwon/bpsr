@@ -43,7 +43,7 @@ export class Sim {
     this.t = 0; this.done = false; this.log = []; this.tele = []; this.cores = []; this.markers = [];
     this.room = d.boss.room; this.energy = 0; this.crossedEarly = false; this.spin = null; this.curtain = null; this.tether = null; this.lasers = [];
     // 격자 전투장(2·3넴): 타일 상태 0 멀쩡, 1 금 감, 2 무너짐(없는 칸도 2)
-    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.links = []; this.bossScale = 1;
+    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.links = []; this.bossY = null; this.bossScale = 1;
     if (this.grid) { this.tiles = Array.from({ length: A.cols * A.rows }, (_, i) => (A.missing ?? []).some(([c, r]) => c + r * A.cols === i) ? 2 : 0); }
     this.boss = d.boss.pos ? { x: d.boss.pos[0], z: d.boss.pos[1] } : polar(roomAngle(this.room), d.boss.dist);
     this.bossDir = (d.boss.dir ?? 90) * Math.PI / 180;
@@ -76,9 +76,10 @@ export class Sim {
     return { A, B, M, cores: [at(A, B, 1 / 3), at(A, B, 2 / 3), at(B, M, 0.5), at(M, A, 0.5)] };
   }
   spawn(e) {
-    this.curType = e.type; this.curNoDodge = !!e.noDodge;
+    this.curType = e.fx ?? e.type; this.curNoDodge = !!e.noDodge;
     if (e.bossTo) this.boss = { x: e.bossTo[0], z: e.bossTo[1] };
     if (e.bossScale) this.bossScale = e.bossScale;
+    if (e.bossY != null) this.bossY = e.bossY;
     const front = polar(roomAngle(this.room), this.data.boss.dist - 8);
     if (e.type === 'tankbuster') {
       // 탱커 직업이면 보스 앞에서 내가 받아야 한다

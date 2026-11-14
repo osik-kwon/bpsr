@@ -4,8 +4,9 @@
  "notes": "기믹 종류와 대처는 영문 공략(GamesFuze, 하드 기준), 판정 모양·크기·타격 시점은 클라 스킬 데이터. 기믹 순서와 시각은 추정이며 실제는 체력 구간(분신 66%·33%)과 서버 패턴을 따른다. 분신 처치 경쟁, 전장 내려찍기(회피 불가), 평타 연계, 단계별 수식어는 주소의 m 값(17~20)으로 더한다. 17단부터 붙는 진화(일반 공격 대미지 증가)는 판정에 영향이 없다. 전투장 반경과 옷장 자리는 추정",
  "noCurtain": true,
  "arena": {
-  "radius": 25,
-  "src": "estimate(전장 전체 판정 반경 25m 스킬 기준)"
+  "radius": 30,
+  "model": "arena_tina.glb",
+  "src": "measured(씬 dng_main_1001_tina_s3 보스방: 바닥 높이 110m, 발판 조각 끝 약 32~35m)"
  },
  "player": {
   "speed": 6.0,
@@ -75,7 +76,13 @@
    "bot": 0,
    "purify": 15,
    "anim": "sigil",
-   "src": "guide(징표는 30초 뒤 폭발, 상호작용으로 넘김. 정화는 15초 타이머, 탱커만 버팀) + estimate(시작 시각, 넘기는 거리 4m)"
+   "src": "guide(징표는 30초 뒤 폭발, 상호작용으로 넘김. 정화는 15초 타이머, 탱커만 버팀) + estimate(시작 시각, 넘기는 거리 4m)",
+   "fxList": [
+    {
+     "name": "dina_atk_b_gas",
+     "at": "boss"
+    }
+   ]
   },
   {
    "t": 22,
@@ -102,7 +109,8 @@
     0,
     0
    ],
-   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)",
+   "fx": "slash"
   },
   {
    "t": 25.5,
@@ -124,7 +132,8 @@
    ],
    "cast": 2.0,
    "noDodge": false,
-   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)",
+   "fx": "slash"
   },
   {
    "t": 27.6,
@@ -146,7 +155,8 @@
    ],
    "cast": 2.0,
    "noDodge": false,
-   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)",
+   "fx": "slash"
   },
   {
    "t": 29.7,
@@ -168,7 +178,8 @@
    ],
    "cast": 2.0,
    "noDodge": false,
-   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)",
+   "fx": "slash"
   },
   {
    "t": 36,
@@ -195,11 +206,46 @@
    "dur": 26.4,
    "bossTo": [
     0,
-    -32
+    -50
    ],
-   "bossScale": 6,
+   "bossScale": 17.5,
    "anim": "big",
-   "src": "guide(거대화하면 옷장 4개, 상호작용 시 맞은편 옷장으로 이동) + estimate(옷장 자리)"
+   "src": "guide(거대화하면 옷장 4개, 상호작용 시 맞은편 옷장으로 이동) + table(거대체 33707 배치 (0, 79, -50), 모델 배율 35) + estimate(옷장 자리)",
+   "bossY": -31,
+   "fxList": [
+    {
+     "name": "dina_guizitishi",
+     "at": [
+      20,
+      0
+     ],
+     "dur": 26.4
+    },
+    {
+     "name": "dina_guizitishi",
+     "at": [
+      0,
+      20
+     ],
+     "dur": 26.4
+    },
+    {
+     "name": "dina_guizitishi",
+     "at": [
+      -20,
+      0
+     ],
+     "dur": 26.4
+    },
+    {
+     "name": "dina_guizitishi",
+     "at": [
+      0,
+      -20
+     ],
+     "dur": 26.4
+    }
+   ]
   },
   {
    "t": 38,
@@ -208,12 +254,12 @@
    "warn": 3,
    "origin": [
     0,
-    -32
+    -50
    ],
-   "from": 165,
-   "vel": -18.75,
+   "from": 150,
+   "vel": -15,
    "dur": 8,
-   "len": 70,
+   "len": 90,
    "width": 7,
    "noDodge": true,
    "src": "guide(오른쪽에서 왼쪽으로 느리게 휩쓸며 닿으면 즉사, 절반쯤 지났을 때 옷장으로 넘어간다) + estimate(속도·폭)"
@@ -249,7 +295,7 @@
     ]
    ],
    "bossTo": [
-    32,
+    50,
     0
    ],
    "src": "guide(자리를 옮겨 한 번 더 휩쓴다) + estimate(옮기는 자리)"
@@ -260,13 +306,13 @@
    "name": "거대화 창 휩쓸기 2",
    "warn": 3,
    "origin": [
-    32,
+    50,
     0
    ],
-   "from": 255,
-   "vel": -18.75,
+   "from": 240,
+   "vel": -15,
    "dur": 8,
-   "len": 70,
+   "len": 90,
    "width": 7,
    "noDodge": true,
    "src": "guide + estimate"
@@ -289,7 +335,8 @@
     0
    ],
    "bossScale": 1,
-   "src": "estimate"
+   "src": "estimate",
+   "bossY": 0
   },
   {
    "t": 65,
@@ -337,7 +384,13 @@
    "bot": 0,
    "purify": 15,
    "anim": "sigil",
-   "src": "guide + estimate"
+   "src": "guide + estimate",
+   "fxList": [
+    {
+     "name": "dina_atk_b_gas",
+     "at": "boss"
+    }
+   ]
   },
   {
    "t": 76,
@@ -350,7 +403,8 @@
    ],
    "cast": 2.5,
    "anim": "phantom",
-   "src": "table(扇形刀刃冲击: 부채꼴 반경 17.5m·60°, 2.50초) + guide(분신 단계에도 부채꼴 장판을 피한다) + estimate(방향)"
+   "src": "table(扇形刀刃冲击: 부채꼴 반경 17.5m·60°, 2.50초) + guide(분신 단계에도 부채꼴 장판을 피한다) + estimate(방향)",
+   "fx": "fan"
   },
   {
    "t": 80,
@@ -363,7 +417,8 @@
     340
    ],
    "cast": 2.5,
-   "src": "table + estimate"
+   "src": "table + estimate",
+   "fx": "fan"
   },
   {
    "t": 84,
@@ -387,7 +442,8 @@
     ]
    ],
    "cast": 2.1,
-   "src": "table(分身被击败自爆: 원 반경 12.5m, 2.10초) + guide(분신은 죽은 뒤 터진다) + estimate(분신 자리)"
+   "src": "table(分身被击败自爆: 원 반경 12.5m, 2.10초) + guide(분신은 죽은 뒤 터진다) + estimate(분신 자리)",
+   "fx": "burst"
   },
   {
    "t": 92,
@@ -414,7 +470,8 @@
     0,
     0
    ],
-   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)",
+   "fx": "slash"
   },
   {
    "t": 95.5,
@@ -436,7 +493,8 @@
    ],
    "cast": 2.0,
    "noDodge": false,
-   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)",
+   "fx": "slash"
   },
   {
    "t": 97.6,
@@ -458,7 +516,8 @@
    ],
    "cast": 2.0,
    "noDodge": false,
-   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)",
+   "fx": "slash"
   },
   {
    "t": 99.7,
@@ -480,7 +539,8 @@
    ],
    "cast": 2.0,
    "noDodge": false,
-   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)",
+   "fx": "slash"
   },
   {
    "t": 104,
@@ -646,5 +706,28 @@
     }
    ]
   }
- }
+ },
+ "fxBase": "./assets/fx-tinaboss/",
+ "fx": {
+  "slash": {
+   "at": "boss",
+   "cast": "dina_atk_ex_berserk_start",
+   "hit": "dina_atk_ex_berserk_huahen"
+  },
+  "fan": {
+   "at": "boss",
+   "hit": "dina_atk_s_sp_sweep"
+  },
+  "spread": {
+   "hit": "dina_atk_s_downfall_jitui"
+  },
+  "puddle": {
+   "cast": "dina_dark_xuzhuodimian",
+   "hit": "dina_dark_endskill_boom"
+  },
+  "burst": {
+   "hit": "dina_atk_ex_phantom_break"
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss/dina), 기믹과의 대응은 이름으로 본 추정"
 }

@@ -7,7 +7,7 @@ import { Fx } from './fx.js';
 
 const scenario = new URLSearchParams(location.search).get('s') || 'boss1-hard';
 const data = await (await fetch(`./data/${scenario}.json`, { cache: 'no-cache' })).json();
-applyVariant(data, new URLSearchParams(location.search).get('m'));   // 변형(?m=18 등)
+applyVariant(data, new URLSearchParams(location.search).get('m')); data.events.sort((a, b) => a.t - b.t);   // 변형(?m=18 등)
 const spd = +new URLSearchParams(location.search).get('speed'); if (spd > 0) data.player.speed = spd;   // 이동 속도 덮어쓰기(?speed=5)
 // 직업: 주소의 c 또는 마지막에 고른 값(기본 디바인 아처)
 const CLS_IDS = ['archer', 'olvera', 'boyce', 'tina', 'iruna', 'comeau', 'farfara', 'guitar', 'tata'];
@@ -210,9 +210,14 @@ const player = person(0x3fb950, cls.model);
 const bots = sim.bots.map((_, i) => person(0x9aa4b2, PCS[(pcN + i + 1) % PCS.length]));
 
 // 실제 이펙트: 새로 생긴 예고·코어를 보고 시전·타격 시각에 재생을 걸어 둔다
-const realFx = new Fx(scene, './assets/fx/'); let seen = new WeakSet();
+const realFx = new Fx(scene, data.fxBase ?? './assets/fx/'); let seen = new WeakSet(), evFx = 0;
 function scheduleFx() {
   const F = data.fx ?? {};
+  // 이벤트에 직접 붙인 이펙트(fxList: name, at 'boss' 또는 [x, z], t 지연, dur 지속)
+  for (; evFx < data.events.length && data.events[evFx].t <= sim.t; evFx++) for (const f of data.events[evFx].fxList ?? []) {
+    const e = data.events[evFx], at = f.at === 'boss' || !f.at ? sim.boss : { x: f.at[0], z: f.at[1] }, t0 = e.t + (f.t ?? 0);
+    realFx.play(f.name, t0, at.x, at.z, f.at === 'boss' || !f.at ? boss.rotation.y : 0, f.dur ? t0 + f.dur : null, f.opt);
+  }
   for (const s of sim.tele) {
     if (seen.has(s)) continue; seen.add(s);
     const m = F[s.type]; if (!m) continue;
@@ -275,7 +280,7 @@ function drawFx() {
 }
 
 // 입력: 키보드·마우스, 터치 기기는 아래 터치 조작을 함께 쓴다
-const keys = new Set(); let yaw = GRID ? -Math.PI / 2 : roomAngle(1) + Math.PI, pitch = 0.5, zoom = 16, paused = true, dashQueued = false, interactQueued = false, speedMul = 1, atkHeld = false, skillQueued = null;
+const keys = new Set(); let yaw = GRID ? -Math.PI / 2 : data.boss.pos && data.player.start ? Math.atan2(data.player.start[1] - data.boss.pos[1], data.player.start[0] - data.boss.pos[0]) : roomAngle(1) + Math.PI, pitch = 0.5, zoom = 16, paused = true, dashQueued = false, interactQueued = false, speedMul = 1, atkHeld = false, skillQueued = null;
 const SKILL_KEYS = { Digit1: 's1', Digit2: 's2', Digit3: 's3', Digit4: 's4', KeyQ: 'ult', KeyK: 'sp' };
 addEventListener('keydown', e => {
   keys.add(e.code);
@@ -302,7 +307,7 @@ addEventListener('mousemove', e => {
   yaw += e.movementX * 0.0035; pitch = Math.max(0.12, Math.min(1.35, pitch + e.movementY * 0.003));
 });
 addEventListener('wheel', e => { zoom = Math.max(6, Math.min(45, zoom + e.deltaY * 0.02)); }, { passive: true });
-function restart() { sim.reset(); realFx.clear(); pcFx.clear(); for (const sh of shots.splice(0)) scene.remove(sh.m); atkHeld = false; skillQueued = null; seen = new WeakSet(); paused = false; $('overlay').style.display = 'none'; $('results').innerHTML = ''; shown = 0; }
+function restart() { sim.reset(); realFx.clear(); pcFx.clear(); for (const sh of shots.splice(0)) scene.remove(sh.m); atkHeld = false; skillQueued = null; seen = new WeakSet(); evFx = 0; paused = false; $('overlay').style.display = 'none'; $('results').innerHTML = ''; shown = 0; }
 $('start').onclick = () => { restart(); if (!document.body.classList.contains('touch')) lock(); };
 
 // 터치: 화면 왼쪽은 누른 자리에 생기는 조이스틱, 오른쪽은 드래그 시점·두 손가락 줌. 터치 이벤트에서 파생되는 마우스 이벤트는 preventDefault로 막는다
@@ -409,7 +414,7 @@ function tick(now) {
   const p = sim.player;
   animPlayer(player, p, adt); drainCombat(); drawShots();
   player.ring.material.color.set(p.iframe > 0 ? 0xffffff : sim.combat.recast ? 0xffd24a : sim.combat.act ? 0xd29922 : 0x3fb950);   // 발밑 고리: 흰색 회피 무적, 금색 라이트 리캐스트, 주황 스킬 동작 중
-  boss.position.set(sim.boss.x, data.boss.y ?? 0, sim.boss.z); boss.scale.setScalar(sim.bossScale ?? 1); if (GRID) { boss.rotation.y = Math.atan2(Math.cos(sim.bossDir), Math.sin(sim.bossDir)); drawTiles(); } else face(boss, p); bossAnim(boss); if (sim.clone) bossAnim(clone);
+  boss.position.set(sim.boss.x, sim.bossY ?? data.boss.y ?? 0, sim.boss.z); boss.scale.setScalar(sim.bossScale ?? 1); if (GRID) { boss.rotation.y = Math.atan2(Math.cos(sim.bossDir), Math.sin(sim.bossDir)); drawTiles(); } else face(boss, p); bossAnim(boss); if (sim.clone) bossAnim(clone);
   clone.visible = !!sim.clone; if (sim.clone) { clone.position.set(sim.clone.x, 0, sim.clone.z); face(clone, p); }
   sim.bots.forEach((b, i) => movePerson(bots[i], b, adt, sim.boss));
   drawFx(); scheduleFx(); realFx.update(sim.t); pcFx.update(sim.t);
