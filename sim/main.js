@@ -225,8 +225,10 @@ function scheduleFx() {
     const yaw = m.at === 'boss' ? boss.rotation.y : 0, done = new Set();
     for (const p of spots) {
       const key = p.x.toFixed(1) + ',' + p.z.toFixed(1); if (done.has(key)) continue; done.add(key);
-      if (m.cast) realFx.play(m.cast, s.showFrom ?? s.start, p.x, p.z, yaw);
-      if (m.hit) realFx.play(m.hitByColor?.[s.color] ?? m.hit, s.hitAt, p.x, p.z, yaw);
+      // castOpt·hitOpt: 크기·투명도 등, hitDur: 긴 이펙트를 잘라 쓸 길이, castLoop: 예고 이펙트를 터질 때까지 반복. 나를 따라다니는 원은 터지는 순간의 내 자리에 놓는다
+      const fol = s.follow ? { follow: () => ({ x: sim.player.x, z: sim.player.z, yaw: 0 }) } : null;
+      if (m.cast) realFx.play(m.cast, s.showFrom ?? s.start, p.x, p.z, yaw, m.castLoop ? s.hitAt : null, { ...m.castOpt, ...fol });   // castLoop: 터질 때까지 반복
+      if (m.hit) realFx.play(m.hitByColor?.[s.color] ?? m.hit, s.hitAt, p.x, p.z, yaw, m.hitDur ? s.hitAt + m.hitDur : null, { ...m.hitOpt, ...fol });
     }
   }
   const C = F.cores;
