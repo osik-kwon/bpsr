@@ -148,16 +148,16 @@ console.log('PASS');
   console.log(L.ok ? 'PASS' : 'FAIL', '탱커가 탱버를 끝으로 가져가면 성공', L.msg ?? '');
 }
 
-// 마스터 던전 티나: 가만히 있으면 실패가 쌓이고, 모범 동선이면 전부 성공
+// 마스터 던전 티나(시즌3 16단+): 가만히 있으면 실패가 쌓이고, 모범 동선이면 전부 성공
 {
   const d = JSON.parse(fs.readFileSync(new URL('./data/tina-master.json', import.meta.url)));
   const run = (plan, acts) => { const t = new Sim(d); const A = [...acts]; while (!t.done) { const g = plan.filter(([at]) => at <= t.t).pop()?.[1], dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t.log; };
   const idle = run([], []);
-  console.log(idle.filter(r => !r.ok).length >= 5 ? 'PASS' : 'FAIL', '티나: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
-  const S = k => [Math.cos((22.5 + 45 * k) * Math.PI / 180) * 10, Math.sin((22.5 + 45 * k) * Math.PI / 180) * 10];
-  const slash = t0 => [[t0, S(0)], [t0 + 3.45, S(1)], [t0 + 5.55, S(2)], [t0 + 7.65, S(3)]];
-  const plan = [[0, [6, 5]], ...slash(22), [32, [19, 0]], [46.1, [-2, 19]], [57.05, [0, 10]], [69, [7, 4]], ...slash(92), [102, [0, 10]]];
-  const ok = run(plan, [8, 45, 57, 75]);
+  console.log(idle.filter(r => !r.ok).length >= 8 ? 'PASS' : 'FAIL', '티나: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
+  const P = a => [Math.cos(a * Math.PI / 180) * 10, Math.sin(a * Math.PI / 180) * 10];
+  const plan = [[0, [0, 18]], [6.1, [13, -20]], [16.1, [0, 8]], [22.1, [-17, 1]], [30.1, P(157.5)], [34.45, P(202.5)], [36.55, P(247.5)], [38.65, P(292.5)], [41, [14, 14]], [53.25, [11.5, 23]],
+    [58, [0, 18]], [74.1, [19, 0]], [92, [0, 19]], [103.1, [12, -12]], [116, [18, 0]], [131.1, [-14, 10]]];
+  const ok = run(plan, [6, 74, 91, 103, 131]);
   console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '티나: 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
 }
 
@@ -165,14 +165,14 @@ console.log('PASS');
 {
   const { applyVariant } = await import('./engine.js');
   const load = m => applyVariant(JSON.parse(fs.readFileSync(new URL('./data/tina-master.json', import.meta.url))), m);
-  let t = new Sim(load('18')); while (t.t < 16) t.step(0.05, t.player.z > 7 ? { mx: 0.5, mz: -0.87 } : { mx: 0, mz: 0 });   // 탱커 파티원 곁에 붙어 있으면 실패
+  let t = new Sim(load('18')); while (t.t < 20) t.step(0.05, t.player.z > 7 ? { mx: 0.5, mz: -0.87 } : { mx: 0, mz: 0 });   // 탱커 파티원 곁에 붙어 있으면 실패
   const a = t.log.find(r => r.name.includes('서프라이즈'));
-  t = new Sim(load('18')); while (t.t < 16) t.step(0.05, t.t > 10 ? { mx: 0, mz: 1 } : { mx: 0, mz: 0 });
+  t = new Sim(load('18')); while (t.t < 20) t.step(0.05, t.t > 10 ? { mx: 0, mz: 1 } : { mx: 0, mz: 0 });
   const b = t.log.find(r => r.name.includes('서프라이즈'));
   console.log(a && !a.ok && b && b.ok ? 'PASS' : 'FAIL', '티나 18단 폭탄', a?.msg, '/', b?.msg);
-  t = new Sim(load('19')); while (t.t < 20) t.step(0.05, { mx: 0, mz: 0 });
+  t = new Sim(load('19')); while (t.t < 31) t.step(0.05, { mx: 0, mz: 0 });
   const c = t.log.find(r => r.name === '약화 연결');
-  t = new Sim(load('19')); while (t.t < 20) { const k = t.links[0], g = k && t.bots[k.bot], dx = g ? g.x - t.player.x : 0, dz = g ? g.z - t.player.z : 0, l = Math.hypot(dx, dz) || 1; t.step(0.05, g ? { mx: dx / l, mz: dz / l } : { mx: 0, mz: 0 }); }
+  t = new Sim(load('19')); while (t.t < 31) { const k = t.links[0], g = k && t.bots[k.bot], dx = g ? g.x - t.player.x : 0, dz = g ? g.z - t.player.z : 0, l = Math.hypot(dx, dz) || 1; t.step(0.05, g ? { mx: dx / l, mz: dz / l } : { mx: 0, mz: 0 }); }
   const e = t.log.find(r => r.name === '약화 연결');
   console.log(c && !c.ok && e && e.ok ? 'PASS' : 'FAIL', '티나 19단 연결', c?.msg, '/', e?.msg);
   console.log(load('20').title.includes('20단') && load('20').events.length === load('0').events.length + 2 ? 'PASS' : 'FAIL', '티나 20단 변형 적용');

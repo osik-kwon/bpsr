@@ -43,7 +43,7 @@ export class Sim {
     this.t = 0; this.done = false; this.log = []; this.tele = []; this.cores = []; this.markers = [];
     this.room = d.boss.room; this.energy = 0; this.crossedEarly = false; this.spin = null; this.curtain = null; this.tether = null; this.lasers = [];
     // 격자 전투장(2·3넴): 타일 상태 0 멀쩡, 1 금 감, 2 무너짐(없는 칸도 2)
-    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.links = []; this.bossY = null; this.bossScale = 1;
+    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.links = []; this.bossY = null; this.curse = null; this.hazards = []; this.strikes = null; this.waves = []; this.bossScale = 1;
     if (this.grid) { this.tiles = Array.from({ length: A.cols * A.rows }, (_, i) => (A.missing ?? []).some(([c, r]) => c + r * A.cols === i) ? 2 : 0); }
     this.boss = d.boss.pos ? { x: d.boss.pos[0], z: d.boss.pos[1] } : polar(roomAngle(this.room), d.boss.dist);
     this.bossDir = (d.boss.dir ?? 90) * Math.PI / 180;
@@ -167,6 +167,24 @@ export class Sim {
       // 부채꼴 여러 장: center에서 dirs(도) 방향으로 반각 half(도)인 부채꼴이 동시에 터진다
       const [x, z] = e.center ?? [this.boss.x, this.boss.z];
       this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots: e.dirs.map(d => ({ shape: 'sector', x, z, r: e.r, dir: d * Math.PI / 180, half: e.half * Math.PI / 180 })), hitAt: e.t + e.cast, showFrom: e.showFrom, color: e.color ?? 'red' });
+    } else if (e.type === 'safe') {
+      // 안전지대: 터질 때 지정한 원(spots) 가운데 하나 안에 있어야 한다
+      this.add({ name: e.name, kind: 'soak', shape: 'multi', spots: e.spots.map(([x, z]) => ({ shape: 'circle', x, z, r: e.r })), hitAt: e.t + e.cast, color: e.color ?? 'blue', okMsg: e.okMsg, failMsg: e.failMsg });
+    } else if (e.type === 'rects') {
+      // 직사각형 여러 장(십자 범위 등): [x, z, 가로, 세로]
+      this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots: e.rects.map(([x, z, w, h]) => ({ shape: 'rect', x, z, w, h })), hitAt: e.t + e.cast, color: e.color ?? 'red' });
+    } else if (e.type === 'curse') {
+      // 저주 옷장: 내 옷장에서 상호작용해 저주를 받아 오고, 터질 때 전투장 가장자리(edge 이상)·옷장에서 away 이상 떨어져 있어야 한다. 터진 자리에 독 장판이 남는다
+      this.curse = { name: e.name, at: { x: e.pos[0], z: e.pos[1] }, hitAt: e.t + e.charge, start: e.t, taken: false, edge: e.edge, away: e.away, poison: e.poison, others: e.others ?? [] };
+    } else if (e.type === 'clearHazards') {
+      this.hazards = [];
+    } else if (e.type === 'strikes') {
+      // 번호 순 강타: order 순서(파티원 번호 또는 'me')로 한 명씩 원(r) 강타 뒤 그 자리에서 오른쪽 반면(sweepR) 휩쓸기. 두 번 이상 맞으면 실패
+      if (e.bots) this.bots = e.bots.map(([x, z]) => ({ x, z }));
+      this.strikes = { name: e.name, order: e.order, t0: e.t + e.cast, gap: e.gap, r: e.r, sr: e.sweepR, sd: e.sweepDelay, lock: e.lock ?? 0.6, start: e.t, hits: 0, cur: null, reset: !!e.bots };
+    } else if (e.type === 'tide') {
+      // 해일·벽: from에서 to로 dur초 동안 밀려오는 띠(두께 thick, 폭 span). 닿으면 실패
+      this.waves.push({ name: e.name, a: { x: e.from[0], z: e.from[1] }, b: { x: e.to[0], z: e.to[1] }, t0: e.t + e.warn, dur: e.dur, thick: e.thick, span: e.span, start: e.t, hits: 0, noDodge: !!e.noDodge });
     } else if (e.type === 'link') {
       // 약화 연결: 가장 먼 파티원과 줄로 이어지고, r 안으로 다가가면 풀린다
       const bot = this.bots.reduce((m, b, i) => dist(b, this.player) > dist(this.bots[m], this.player) ? i : m, 0);
@@ -268,6 +286,40 @@ export class Sim {
       }
     }
     this.orbs = this.orbs.filter(o => o.hitAt > this.t);
+    // 저주 옷장과 독 장판
+    const cz = this.curse;
+    if (cz) {
+      if (!cz.taken && input.interact && dist(cz.at, p) <= 3.5) cz.taken = true;
+      if (this.t >= cz.hitAt) {
+        const d = Math.hypot(p.x, p.z), dc = this.closets ? Math.min(...this.closets.pos.map(c => dist(c, p))) : 99;
+        if (!cz.taken) this.result(cz.name, false, '저주를 받아 오지 않아 옷장에서 크게 폭발');
+        else { const ok = d >= cz.edge && dc >= cz.away; this.result(cz.name, ok, ok ? `가장자리에서 터뜨림(중심에서 ${d.toFixed(0)}m)` : d < cz.edge ? `전투 자리에 너무 가까움(중심에서 ${d.toFixed(0)}m, ${cz.edge}m 이상)` : `옷장에 너무 가까움 ${dc.toFixed(0)}m`); this.hazards.push({ x: p.x, z: p.z, r: cz.poison, in: true, start: this.t }); }
+        for (const [x, z] of cz.others) this.hazards.push({ x, z, r: cz.poison, start: this.t });
+        this.curse = null;
+      }
+    }
+    for (const h of this.hazards) { const i = dist(h, p) <= h.r; if (i && !h.in) this.result('독 장판', false, '남아 있는 독 장판을 밟음'); h.in = i; }
+    // 번호 순 강타
+    const sk = this.strikes;
+    if (sk) {
+      const k = Math.max(0, Math.floor((this.t - sk.t0 + sk.lock) / sk.gap));
+      if (this.t >= sk.t0 - sk.lock && k < sk.order.length && sk.cur?.k !== k && !(sk.cur && !sk.cur.swept)) {
+        const who = sk.order[k], tp = who === 'me' ? p : this.bots[who];
+        sk.cur = { k, me: who === 'me', x: tp.x, z: tp.z, face: Math.atan2(tp.z - this.boss.z, tp.x - this.boss.x), T: sk.t0 + k * sk.gap };
+      }
+      const c = sk.cur;
+      if (c) {
+        if (!c.hit && this.t >= c.T) { c.hit = true; if (dist(c, p) <= sk.r && !(p.iframe > 0 && !c.me)) sk.hits++; }
+        if (!c.swept && this.t >= c.T + sk.sd) { c.swept = true; if (inside(this.strikeSweep(c), p) && !(p.iframe > 0)) sk.hits++;
+          if (c.k === sk.order.length - 1) { this.result(sk.name, sk.hits <= 1, sk.hits <= 1 ? `${sk.hits}번 맞음(내 차례 강타만)` : `${sk.hits}번 맞음 — 두 번 이상이면 즉사`); if (sk.reset) this.bots = this.partySpots(this.room); this.strikes = null; } }
+      }
+    }
+    // 해일·벽
+    for (const w of this.waves) {
+      if (this.t >= w.t0 && this.t <= w.t0 + w.dur && inside(this.waveShape(w, this.t), p) && !(p.iframe > 0 && !w.noDodge)) { if (!w.in) w.hits++; w.in = true; } else w.in = false;
+      if (this.t > w.t0 + w.dur) { this.result(w.name, w.hits === 0, w.hits ? '밀려오는 띠에 닿음' : '뒤로 넘어가 회피'); w.done = true; }
+    }
+    this.waves = this.waves.filter(w => !w.done);
     // 약화 연결
     for (const k of this.links) {
       const near = dist(this.bots[k.bot], p) <= k.r;
@@ -393,6 +445,12 @@ export class Sim {
       return { a: { x: a.x, z: a.z }, b: { x: a.x + ux * L.len, z: a.z + uz * L.len }, mine: k === 0 };
     });
   }
+  strikeSweep(c) { return { shape: 'sector', x: c.x, z: c.z, r: this.strikes.sr, dir: c.face - Math.PI * 2 / 3, half: Math.PI / 2 }; }
+  waveShape(w, t) {
+    const u = Math.max(0, Math.min(1, (t - w.t0) / w.dur)), cx = w.a.x + (w.b.x - w.a.x) * u, cz = w.a.z + (w.b.z - w.a.z) * u;
+    const dx = w.b.x - w.a.x, dz = w.b.z - w.a.z, l = Math.hypot(dx, dz) || 1, px = -dz / l * w.span / 2, pz = dx / l * w.span / 2;
+    return { shape: 'line', a: { x: cx - px, z: cz - pz }, b: { x: cx + px, z: cz + pz }, w: w.thick };
+  }
   sweepShape(sw, t) {
     const a = (sw.from + sw.vel * Math.max(0, Math.min(sw.dur, t - sw.t0))) * Math.PI / 180;
     const o = sw.origin ?? this.boss;
@@ -411,6 +469,12 @@ export class Sim {
     for (const o of this.orbs) out.push({ shape: 'circle', x: o.x, z: o.z, r: o.r, name: o.name, kind: 'avoid', color: 'pink', start: o.start, hitAt: o.hitAt, orb: true });
     for (const m of this.mines) out.push({ shape: 'circle', x: this.player.x, z: this.player.z, r: m.r, name: m.name, kind: 'show', color: 'blue', start: this.t, hitAt: m.lockAt });
     for (const sw of this.sweeps) out.push({ ...this.sweepShape(sw, this.t), name: sw.name, kind: 'avoid', color: 'red', start: sw.start, hitAt: this.t < sw.t0 ? sw.t0 : sw.t0 + sw.dur, live: this.t >= sw.t0 });
+    if (this.curse) { const cu = this.curse; out.push({ shape: 'circle', ...(cu.taken ? this.player : cu.at), r: cu.taken ? cu.poison : 3.5, name: cu.taken ? `${cu.name} (가장자리로 들고 가기)` : `${cu.name} (내 옷장에서 E)`, kind: 'show', color: 'pink', start: cu.start, hitAt: cu.hitAt }); }
+    for (const h of this.hazards) out.push({ shape: 'circle', x: h.x, z: h.z, r: h.r, name: '독 장판', kind: 'avoid', color: 'pink', start: h.start, hitAt: h.start + 999, quietLabel: true });
+    if (this.strikes?.cur) { const sk = this.strikes, c = sk.cur, nm = `${sk.name} ${c.k + 1}번${c.me ? ' (내 차례)' : ''}`;
+      if (!c.hit) out.push({ shape: 'circle', x: c.x, z: c.z, r: sk.r, name: nm, kind: 'avoid', color: 'red', start: c.T - sk.lock, hitAt: c.T });
+      if (!c.swept) out.push({ ...this.strikeSweep(c), name: `${nm} 반면 휩쓸기`, kind: 'avoid', color: 'red', start: c.T - sk.lock, hitAt: c.T + sk.sd }); }
+    for (const w of this.waves) out.push({ ...this.waveShape(w, this.t), name: w.name, kind: 'avoid', color: 'pink', start: w.start, hitAt: this.t < w.t0 ? w.t0 : w.t0 + w.dur, live: this.t >= w.t0 });
     for (const k of this.links) out.push({ shape: 'line', a: { x: this.player.x, z: this.player.z }, b: { ...this.bots[k.bot] }, w: 0.5, name: `${k.name} (이어진 파티원에게 다가가기)`, kind: 'show', color: 'pink', start: k.start, hitAt: k.until });
     if (this.sigil) { const sg = this.sigil, at = sg.mine && !this.tank ? this.bots[sg.bot] : null;
       out.push({ shape: 'circle', ...(at ?? this.player), r: at ? sg.r : 1.5, name: this.tank ? `${sg.name} (넘겨받아 버티기)` : sg.mine ? `${sg.name} (탱커 곁에서 E)` : `${sg.name} (넘김)`, kind: 'show', color: sg.mine || this.tank ? 'pink' : 'yellow', start: sg.start, hitAt: sg.hitAt }); }

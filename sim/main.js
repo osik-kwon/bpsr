@@ -208,6 +208,8 @@ function drawShots() {
 const pcN = +new URLSearchParams(location.search).get('pc') || 0;
 const player = person(0x3fb950, cls.model);
 const bots = sim.bots.map((_, i) => person(0x9aa4b2, PCS[(pcN + i + 1) % PCS.length]));
+// 파티원 역할 표시(던전 5인 파티: 탱·힐·딜)
+(data.partyRoles ?? []).forEach((r, i) => { if (!bots[i]) return; const l = label(r, 1.6, r === '탱' ? '#58a6ff' : r === '힐' ? '#3fb950' : '#f0883e'); l.position.y = 2.6; bots[i].add(l); });
 
 // 실제 이펙트: 새로 생긴 예고·코어를 보고 시전·타격 시각에 재생을 걸어 둔다
 const realFx = new Fx(scene, data.fxBase ?? './assets/fx/'); let seen = new WeakSet(), evFx = 0;
