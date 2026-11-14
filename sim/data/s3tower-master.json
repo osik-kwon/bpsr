@@ -6,7 +6,8 @@
  "arena": {
   "radius": 26,
   "model": "arena_kart.glb",
-  "src": "estimate(반경) + measured(씬 dng_hero_1121_tower_s3 보스 자리 둘레)"
+  "src": "estimate(반경) + measured(씬 dng_hero_1121_tower_s3 보스 자리 둘레)",
+  "clipY": 12
  },
  "player": {
   "speed": 6.0,

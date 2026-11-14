@@ -6,7 +6,8 @@
  "arena": {
   "radius": 28,
   "model": "arena_direhowl.glb",
-  "src": "estimate(반경) + measured(씬 dng_branch_6541_beast 보스 자리 둘레)"
+  "src": "estimate(반경) + measured(씬 dng_branch_6541_beast 보스 자리 둘레)",
+  "clipY": 10
  },
  "player": {
   "speed": 6.0,

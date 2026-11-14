@@ -39,7 +39,12 @@ const gltf = new GLTFLoader();
 const loadGlb = url => gltf.loadAsync(url).then(g => g, () => null);
 // 전투장 환경: 바닥이 y=0, 중심이 원점이 되도록 변환돼 있다
 const GRID = data.arena.type === 'grid' ? data.arena : null;
-if (!GRID && data.arena.model) loadGlb('./assets/' + data.arena.model).then(env => { if (env) { scene.add(env.scene); disc.visible = false; } });
+if (!GRID && data.arena.model) loadGlb('./assets/' + data.arena.model).then(env => {
+  if (!env) return;
+  // clipY: 보스방 위층 바닥·천장이 위에서 보는 시야를 가리면 그 높이 위를 잘라 낸다
+  if (data.arena.clipY != null) { renderer.localClippingEnabled = true; const pl = [new THREE.Plane(new THREE.Vector3(0, -1, 0), data.arena.clipY)]; env.scene.traverse(o => { if (o.isMesh) o.material.clippingPlanes = pl; }); }
+  scene.add(env.scene); disc.visible = false;
+});
 // 격자 전투장(2·3넴): 바닥 타일 프리팹을 칸마다 놓고, 금 간 칸은 붉게 물들이고 무너진 칸은 숨긴다
 const tileObjs = [];
 if (GRID) {
@@ -271,7 +276,7 @@ function drawFx() {
       const edge = shapeMesh({ shape: 'ring', x: part.x, z: part.z, rIn: part.r - 0.45, rOut: part.r }, 0xffffff, 1); edge.position.y = 0.1; fx.add(edge);
       const beam = new THREE.Mesh(shareBeam, new THREE.MeshBasicMaterial({ color: COLORS[s.color], transparent: true, opacity: 0.28 + 0.2 * Math.sin(sim.t * 6), depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
       beam.position.set(part.x, 7, part.z); fx.add(beam);
-      const l = (markLabels['쉐어'] ??= label('쉐어', 6, '#ffb3d4')).clone(); l.scale.set(4.5, 4.5, 1); l.position.set(part.x, 6.5, part.z); fx.add(l);
+      const lt = s.label ?? '쉐어', l = (markLabels[lt] ??= label(lt, 6, '#ffb3d4')).clone(); l.scale.set(4.5, 4.5, 1); l.position.set(part.x, 6.5, part.z); fx.add(l);
     }
   }
   for (const c of sim.cores) { const m = new THREE.Mesh(new THREE.SphereGeometry(1.5, 16, 12), new THREE.MeshBasicMaterial({ color: 0xb38cff })); m.position.set(c.x, 1.4, c.z); fx.add(m); }

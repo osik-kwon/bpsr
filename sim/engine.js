@@ -214,7 +214,7 @@ export class Sim {
       this.add({ name: e.name, kind: 'lineup', shape: 'line', a: { x: e.from[0], z: e.from[1] }, b: { x: e.to[0], z: e.to[1] }, w: e.width, gap: e.gap, hitAt: e.t + e.cast, color: 'pink', reset: !!e.bots });
     } else if (e.type === 'safe') {
       // 안전지대: 터질 때 지정한 원(spots) 가운데 하나 안에 있어야 한다
-      this.add({ name: e.name, kind: 'soak', shape: 'multi', spots: e.ring ? [{ shape: 'ring', x: 0, z: 0, rIn: e.ring[0], rOut: e.ring[1] }] : e.spots.map(([x, z]) => ({ shape: 'circle', x, z, r: e.r })), hitAt: e.t + e.cast, color: e.color ?? 'blue', okMsg: e.okMsg, failMsg: e.failMsg });
+      this.add({ name: e.name, kind: 'soak', shape: 'multi', spots: e.ring ? [{ shape: 'ring', x: 0, z: 0, rIn: e.ring[0], rOut: e.ring[1] }] : e.spots.map(([x, z]) => ({ shape: 'circle', x, z, r: e.r })), hitAt: e.t + e.cast, color: e.color ?? 'blue', okMsg: e.okMsg, failMsg: e.failMsg, label: e.label ?? '안전' });
     } else if (e.type === 'rects') {
       // 직사각형 여러 장(십자 범위 등): [x, z, 가로, 세로]
       this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots: e.rects.map(([x, z, w, h]) => ({ shape: 'rect', x, z, w, h })), hitAt: e.t + e.cast, color: e.color ?? 'red' });
