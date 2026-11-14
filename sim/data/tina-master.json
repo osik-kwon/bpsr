@@ -1,0 +1,526 @@
+{
+ "id": "tina-master",
+ "title": "티나의 정신 세계 · 마스터 막보스",
+ "notes": "기믹 종류와 대처는 영문 공략(GamesFuze, 하드 기준), 판정 모양·크기·타격 시점은 클라 스킬 데이터. 기믹 순서와 시각은 추정이며 실제는 체력 구간(분신 66%·33%)과 서버 패턴을 따른다. 분신 처치 경쟁, 전장 내려찍기(회피 불가), 평타 연계, 17단 이상 수식어는 넣지 않았다. 전투장 반경과 옷장 자리는 추정",
+ "noCurtain": true,
+ "arena": {
+  "radius": 25,
+  "src": "estimate(전장 전체 판정 반경 25m 스킬 기준)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   0,
+   12
+  ],
+  "src": "레이드 시나리오와 같은 값"
+ },
+ "boss": {
+  "pos": [
+   0,
+   0
+  ],
+  "height": 3.4,
+  "scale": 2.0,
+  "model": "boss_tina.glb",
+  "src": "table(몬스터 33701, 모델 배율 2.0; 거대체 33707은 배율 35)",
+  "anims": {
+   "idle": "as_wpnpc_f_base_tinaboss_fidle",
+   "sigil": "as_wpnpc_f_base_tinaboss_atk_b_gas",
+   "slash": "as_wpnpc_f_base_tinaboss_atk_ex_berserk_start",
+   "big": "as_wpnpc_f_base_tinaboss_big_atk_gas",
+   "spread": "as_wpnpc_f_base_tinaboss_atk_s_downfall_start",
+   "phantom": "as_wpnpc_f_base_tinaboss_atk_ex_phantom_start"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름으로 본 추정"
+ },
+ "partySpots": [
+  [
+   4,
+   6
+  ],
+  [
+   -8,
+   10
+  ],
+  [
+   8,
+   10
+  ],
+  [
+   -12,
+   4
+  ],
+  [
+   12,
+   4
+  ],
+  [
+   -5,
+   15
+  ],
+  [
+   5,
+   15
+  ]
+ ],
+ "events": [
+  {
+   "t": 5,
+   "type": "sigil",
+   "name": "허식의 징표 → 정화",
+   "bot": 0,
+   "purify": 15,
+   "anim": "sigil",
+   "src": "guide(징표는 30초 뒤 폭발, 상호작용으로 넘김. 정화는 15초 타이머, 탱커만 버팀) + estimate(시작 시각, 넘기는 거리 4m)"
+  },
+  {
+   "t": 22,
+   "type": "sectors",
+   "name": "창날 난무 1타",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    67.5,
+    112.5,
+    157.5,
+    247.5,
+    292.5,
+    337.5
+   ],
+   "cast": 3.4,
+   "noDodge": false,
+   "anim": "slash",
+   "bossTo": [
+    0,
+    0
+   ],
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+  },
+  {
+   "t": 25.5,
+   "type": "sectors",
+   "name": "창날 난무 2타",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    22.5,
+    112.5,
+    157.5,
+    202.5,
+    292.5,
+    337.5
+   ],
+   "cast": 2.0,
+   "noDodge": false,
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+  },
+  {
+   "t": 27.6,
+   "type": "sectors",
+   "name": "창날 난무 3타",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    22.5,
+    67.5,
+    157.5,
+    202.5,
+    247.5,
+    337.5
+   ],
+   "cast": 2.0,
+   "noDodge": false,
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+  },
+  {
+   "t": 29.7,
+   "type": "sectors",
+   "name": "창날 난무 4타",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    22.5,
+    67.5,
+    112.5,
+    202.5,
+    247.5,
+    292.5
+   ],
+   "cast": 2.0,
+   "noDodge": false,
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+  },
+  {
+   "t": 36,
+   "type": "closets",
+   "name": "옷장",
+   "pos": [
+    [
+     20,
+     0
+    ],
+    [
+     0,
+     20
+    ],
+    [
+     -20,
+     0
+    ],
+    [
+     0,
+     -20
+    ]
+   ],
+   "dur": 26.4,
+   "bossTo": [
+    0,
+    -32
+   ],
+   "bossScale": 6,
+   "anim": "big",
+   "src": "guide(거대화하면 옷장 4개, 상호작용 시 맞은편 옷장으로 이동) + estimate(옷장 자리)"
+  },
+  {
+   "t": 38,
+   "type": "sweep",
+   "name": "거대화 창 휩쓸기 1",
+   "warn": 3,
+   "origin": [
+    0,
+    -32
+   ],
+   "from": 165,
+   "vel": -18.75,
+   "dur": 8,
+   "len": 70,
+   "width": 7,
+   "noDodge": true,
+   "src": "guide(오른쪽에서 왼쪽으로 느리게 휩쓸며 닿으면 즉사, 절반쯤 지났을 때 옷장으로 넘어간다) + estimate(속도·폭)"
+  },
+  {
+   "t": 42,
+   "type": "puddle",
+   "name": "바닥 함정",
+   "r": 4.5,
+   "cast": 4,
+   "color": "yellow",
+   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(주황 원, 맞으면 긴 기절)"
+  },
+  {
+   "t": 49,
+   "type": "marks",
+   "pos": [
+    [
+     20,
+     0
+    ],
+    [
+     0,
+     20
+    ],
+    [
+     -20,
+     0
+    ],
+    [
+     0,
+     -20
+    ]
+   ],
+   "bossTo": [
+    32,
+    0
+   ],
+   "src": "guide(자리를 옮겨 한 번 더 휩쓴다) + estimate(옮기는 자리)"
+  },
+  {
+   "t": 50,
+   "type": "sweep",
+   "name": "거대화 창 휩쓸기 2",
+   "warn": 3,
+   "origin": [
+    32,
+    0
+   ],
+   "from": 255,
+   "vel": -18.75,
+   "dur": 8,
+   "len": 70,
+   "width": 7,
+   "noDodge": true,
+   "src": "guide + estimate"
+  },
+  {
+   "t": 54,
+   "type": "puddle",
+   "name": "바닥 함정",
+   "r": 4.5,
+   "cast": 4,
+   "color": "yellow",
+   "src": "table + guide"
+  },
+  {
+   "t": 62.5,
+   "type": "marks",
+   "pos": [],
+   "bossTo": [
+    0,
+    0
+   ],
+   "bossScale": 1,
+   "src": "estimate"
+  },
+  {
+   "t": 65,
+   "type": "spread",
+   "name": "표적 베기(산개)",
+   "r": 4.5,
+   "cast": 3,
+   "anim": "spread",
+   "bots": [
+    [
+     10,
+     0
+    ],
+    [
+     -10,
+     0
+    ],
+    [
+     0,
+     -10
+    ],
+    [
+     14,
+     10
+    ],
+    [
+     -14,
+     10
+    ],
+    [
+     7,
+     -14
+    ],
+    [
+     -7,
+     -14
+    ]
+   ],
+   "src": "guide(모든 플레이어 발밑에 원, 한 명씩 벤다. 겹치면 여러 번 맞음) + table(无敌斩 원 반경 4.5m) + estimate(시전 시간)"
+  },
+  {
+   "t": 72,
+   "type": "sigil",
+   "name": "허식의 징표 → 정화",
+   "bot": 0,
+   "purify": 15,
+   "anim": "sigil",
+   "src": "guide + estimate"
+  },
+  {
+   "t": 76,
+   "type": "sectors",
+   "name": "칼날 부채꼴",
+   "r": 17.5,
+   "half": 30,
+   "dirs": [
+    90
+   ],
+   "cast": 2.5,
+   "anim": "phantom",
+   "src": "table(扇形刀刃冲击: 부채꼴 반경 17.5m·60°, 2.50초) + guide(분신 단계에도 부채꼴 장판을 피한다) + estimate(방향)"
+  },
+  {
+   "t": 80,
+   "type": "sectors",
+   "name": "칼날 부채꼴",
+   "r": 17.5,
+   "half": 30,
+   "dirs": [
+    200,
+    340
+   ],
+   "cast": 2.5,
+   "src": "table + estimate"
+  },
+  {
+   "t": 84,
+   "type": "aoe",
+   "name": "분신 자폭",
+   "spots": [
+    [
+     -14,
+     -8,
+     12.5
+    ],
+    [
+     14,
+     -8,
+     12.5
+    ],
+    [
+     0,
+     17,
+     12.5
+    ]
+   ],
+   "cast": 2.1,
+   "src": "table(分身被击败自爆: 원 반경 12.5m, 2.10초) + guide(분신은 죽은 뒤 터진다) + estimate(분신 자리)"
+  },
+  {
+   "t": 92,
+   "type": "sectors",
+   "name": "창날 난무 1타",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    67.5,
+    112.5,
+    157.5,
+    247.5,
+    292.5,
+    337.5
+   ],
+   "cast": 3.4,
+   "noDodge": false,
+   "anim": "slash",
+   "bossTo": [
+    0,
+    0
+   ],
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+  },
+  {
+   "t": 95.5,
+   "type": "sectors",
+   "name": "창날 난무 2타",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    22.5,
+    112.5,
+    157.5,
+    202.5,
+    292.5,
+    337.5
+   ],
+   "cast": 2.0,
+   "noDodge": false,
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+  },
+  {
+   "t": 97.6,
+   "type": "sectors",
+   "name": "창날 난무 3타",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    22.5,
+    67.5,
+    157.5,
+    202.5,
+    247.5,
+    337.5
+   ],
+   "cast": 2.0,
+   "noDodge": false,
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+  },
+  {
+   "t": 99.7,
+   "type": "sectors",
+   "name": "창날 난무 4타",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    22.5,
+    67.5,
+    112.5,
+    202.5,
+    247.5,
+    292.5
+   ],
+   "cast": 2.0,
+   "noDodge": false,
+   "src": "table(枪刃狂袭: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(8조각 중 맞은편 2조각이 안전, 4회, 안전 조각이 옆으로 돈다) + estimate(타 사이 간격, 도는 방향)"
+  },
+  {
+   "t": 104,
+   "type": "spread",
+   "name": "표적 베기(산개)",
+   "r": 4.5,
+   "cast": 3,
+   "anim": "spread",
+   "bots": [
+    [
+     10,
+     0
+    ],
+    [
+     -10,
+     0
+    ],
+    [
+     0,
+     -10
+    ],
+    [
+     14,
+     10
+    ],
+    [
+     -14,
+     10
+    ],
+    [
+     7,
+     -14
+    ],
+    [
+     -7,
+     -14
+    ]
+   ],
+   "src": "guide + table + estimate"
+  }
+ ],
+ "duration": 112
+}

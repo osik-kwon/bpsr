@@ -38,7 +38,7 @@ export class Sim {
     this.t = 0; this.done = false; this.log = []; this.tele = []; this.cores = []; this.markers = [];
     this.room = d.boss.room; this.energy = 0; this.crossedEarly = false; this.spin = null; this.curtain = null; this.tether = null; this.lasers = [];
     // 격자 전투장(2·3넴): 타일 상태 0 멀쩡, 1 금 감, 2 무너짐(없는 칸도 2)
-    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = [];
+    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.bossScale = 1;
     if (this.grid) { this.tiles = Array.from({ length: A.cols * A.rows }, (_, i) => (A.missing ?? []).some(([c, r]) => c + r * A.cols === i) ? 2 : 0); }
     this.boss = d.boss.pos ? { x: d.boss.pos[0], z: d.boss.pos[1] } : polar(roomAngle(this.room), d.boss.dist);
     this.bossDir = (d.boss.dir ?? 90) * Math.PI / 180;
@@ -72,6 +72,8 @@ export class Sim {
   }
   spawn(e) {
     this.curType = e.type; this.curNoDodge = !!e.noDodge;
+    if (e.bossTo) this.boss = { x: e.bossTo[0], z: e.bossTo[1] };
+    if (e.bossScale) this.bossScale = e.bossScale;
     const front = polar(roomAngle(this.room), this.data.boss.dist - 8);
     if (e.type === 'tankbuster') {
       // 탱커 직업이면 보스 앞에서 내가 받아야 한다
@@ -155,9 +157,20 @@ export class Sim {
       this.mines.push({ name: e.name, lockAt: e.t + e.follow, fuse: e.fuse, r: e.r, away: e.away, safeDist: e.safeDist });
     } else if (e.type === 'freeze') {
       this.freezeUntil = e.t + e.dur; this.freezeText = e.text;
+    } else if (e.type === 'sectors') {
+      // 부채꼴 여러 장: center에서 dirs(도) 방향으로 반각 half(도)인 부채꼴이 동시에 터진다
+      const [x, z] = e.center ?? [this.boss.x, this.boss.z];
+      this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots: e.dirs.map(d => ({ shape: 'sector', x, z, r: e.r, dir: d * Math.PI / 180, half: e.half * Math.PI / 180 })), hitAt: e.t + e.cast, showFrom: e.showFrom, color: e.color ?? 'red' });
+    } else if (e.type === 'sigil') {
+      // 징표: 든 사람이 purify초 뒤 강타를 맞는다. 탱커가 아니면 탱커 파티원(bot) 곁에서 상호작용으로 넘기고, 탱커면 파티원이 넘겨 준 징표를 들고 버틴다
+      this.sigil = { name: e.name, bot: e.bot, hitAt: e.t + e.purify, start: e.t, mine: !this.tank, r: e.r ?? 4 };
+    } else if (e.type === 'closets') {
+      // 옷장: 곁에서 상호작용하면 맞은편 옷장으로 순간이동한다
+      this.closets = { pos: e.pos.map(([x, z]) => ({ x, z })), until: e.t + e.dur, r: e.r ?? 3.5 };
+      this.markers = this.closets.pos.map((c, i) => ({ ...c, label: '옷장' }));
     } else if (e.type === 'sweep') {
       // 반쪽 휩쓸기: 보스에서 나온 긴 광선이 from에서 vel(도/초)로 dur초 동안 돈다. 대시 무적으로 넘을 수 있다
-      this.sweeps.push({ name: e.name, t0: e.t + e.warn, start: e.t, from: e.from, vel: e.vel, dur: e.dur, len: e.len, width: e.width, hits: 0 });
+      this.sweeps.push({ name: e.name, t0: e.t + e.warn, start: e.t, from: e.from, vel: e.vel, dur: e.dur, len: e.len, width: e.width, hits: 0, origin: e.origin ? { x: e.origin[0], z: e.origin[1] } : null, noDodge: !!e.noDodge });
     } else if (e.type === 'cubes') {
       // 큐브: 십자(변 가운데 칸)나 정사각(모서리 칸) 모양으로 칸이 터진다. 중앙은 맞지 않는다. tiles로 칸을 직접 줄 수도 있다
       const g = this.grid, set = e.tiles ? e.tiles : e.pattern === 'cross' ? [[1, 0], [0, 1], [2, 1], [1, 2]] : [[0, 0], [2, 0], [0, 2], [2, 2]];
@@ -245,6 +258,23 @@ export class Sim {
       }
     }
     this.orbs = this.orbs.filter(o => o.hitAt > this.t);
+    // 징표 넘기기
+    const sg = this.sigil;
+    if (sg) {
+      const tk = this.bots[sg.bot];
+      if (sg.mine && !this.tank && input.interact && dist(tk, p) <= sg.r) sg.mine = false;
+      if (this.t >= sg.hitAt) {
+        if (this.tank) this.result(sg.name, true, '징표를 넘겨받아 강타를 받아냄(생존기 필요)');
+        else this.result(sg.name, !sg.mine, sg.mine ? '징표를 든 채 강타를 맞음' : '탱커에게 징표를 넘김');
+        this.sigil = null;
+      }
+    }
+    // 옷장 순간이동
+    const cl = this.closets;
+    if (cl) {
+      if (input.interact) { const i = cl.pos.findIndex(c => dist(c, p) <= cl.r); if (i >= 0) { const o = cl.pos[(i + cl.pos.length / 2) % cl.pos.length]; p.x = o.x; p.z = o.z; } }
+      if (this.t >= cl.until) { this.closets = null; this.markers = []; }
+    }
     // 수정 텔포
     const cr = this.crystal;
     if (cr) {
@@ -265,7 +295,7 @@ export class Sim {
     this.mines = this.mines.filter(m => m.lockAt > this.t);
     // 반쪽 휩쓸기
     for (const sw of this.sweeps) {
-      if (this.t >= sw.t0 && this.t <= sw.t0 + sw.dur && inside(this.sweepShape(sw, this.t), p) && !(p.iframe > 0)) { if (!sw.in) sw.hits++; sw.in = true; } else sw.in = false;
+      if (this.t >= sw.t0 && this.t <= sw.t0 + sw.dur && inside(this.sweepShape(sw, this.t), p) && !(p.iframe > 0 && !sw.noDodge)) { if (!sw.in) sw.hits++; sw.in = true; } else sw.in = false;
       if (this.t > sw.t0 + sw.dur) { this.result(sw.name, sw.hits === 0, sw.hits ? `광선에 ${sw.hits}번 맞음` : '광선을 넘어 회피'); sw.done = true; }
     }
     this.sweeps = this.sweeps.filter(sw => !sw.done);
@@ -349,7 +379,8 @@ export class Sim {
   }
   sweepShape(sw, t) {
     const a = (sw.from + sw.vel * Math.max(0, Math.min(sw.dur, t - sw.t0))) * Math.PI / 180;
-    return { shape: 'line', a: { ...this.boss }, b: { x: this.boss.x + Math.cos(a) * sw.len, z: this.boss.z + Math.sin(a) * sw.len }, w: sw.width };
+    const o = sw.origin ?? this.boss;
+    return { shape: 'line', a: { x: o.x, z: o.z }, b: { x: o.x + Math.cos(a) * sw.len, z: o.z + Math.sin(a) * sw.len }, w: sw.width };
   }
   // 회전 부채꼴의 시각 t에서의 모양
   spinShape(t) {
@@ -364,6 +395,8 @@ export class Sim {
     for (const o of this.orbs) out.push({ shape: 'circle', x: o.x, z: o.z, r: o.r, name: o.name, kind: 'avoid', color: 'pink', start: o.start, hitAt: o.hitAt, orb: true });
     for (const m of this.mines) out.push({ shape: 'circle', x: this.player.x, z: this.player.z, r: m.r, name: m.name, kind: 'show', color: 'blue', start: this.t, hitAt: m.lockAt });
     for (const sw of this.sweeps) out.push({ ...this.sweepShape(sw, this.t), name: sw.name, kind: 'avoid', color: 'red', start: sw.start, hitAt: this.t < sw.t0 ? sw.t0 : sw.t0 + sw.dur, live: this.t >= sw.t0 });
+    if (this.sigil) { const sg = this.sigil, at = sg.mine && !this.tank ? this.bots[sg.bot] : null;
+      out.push({ shape: 'circle', ...(at ?? this.player), r: at ? sg.r : 1.5, name: this.tank ? `${sg.name} (넘겨받아 버티기)` : sg.mine ? `${sg.name} (탱커 곁에서 E)` : `${sg.name} (넘김)`, kind: 'show', color: sg.mine || this.tank ? 'pink' : 'yellow', start: sg.start, hitAt: sg.hitAt }); }
     if (this.crystal) out.push({ shape: 'circle', ...this.crystal.pos[this.crystal.mine], r: 4, name: `${this.crystal.name} (내 수정에서 E)`, kind: 'show', color: 'yellow', start: this.crystal.start, hitAt: this.crystal.fire });
     if (this.t < this.freezeUntil) out.push({ shape: 'circle', x: this.player.x, z: this.player.z, r: 1, name: this.freezeText, kind: 'show', color: 'pink', start: this.t, hitAt: this.freezeUntil });
     for (const C of this.cannons) for (const sh of C.shots) out.push({ shape: 'circle', ...(sh.who === 'me' ? this.player : this.bots[sh.who]), r: sh.r, name: C.name, kind: 'show', color: 'red', start: this.t, hitAt: C.lockAt });

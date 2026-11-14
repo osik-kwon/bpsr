@@ -147,3 +147,16 @@ console.log('PASS');
   L = run('boss3-nightmare', t => t.t < 40 ? [24, -18] : null).find(r => r.name.includes('거리 감쇠'));
   console.log(L.ok ? 'PASS' : 'FAIL', '탱커가 탱버를 끝으로 가져가면 성공', L.msg ?? '');
 }
+
+// 마스터 던전 티나: 가만히 있으면 실패가 쌓이고, 모범 동선이면 전부 성공
+{
+  const d = JSON.parse(fs.readFileSync(new URL('./data/tina-master.json', import.meta.url)));
+  const run = (plan, acts) => { const t = new Sim(d); const A = [...acts]; while (!t.done) { const g = plan.filter(([at]) => at <= t.t).pop()?.[1], dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t.log; };
+  const idle = run([], []);
+  console.log(idle.filter(r => !r.ok).length >= 5 ? 'PASS' : 'FAIL', '티나: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
+  const S = k => [Math.cos((22.5 + 45 * k) * Math.PI / 180) * 10, Math.sin((22.5 + 45 * k) * Math.PI / 180) * 10];
+  const slash = t0 => [[t0, S(0)], [t0 + 3.45, S(1)], [t0 + 5.55, S(2)], [t0 + 7.65, S(3)]];
+  const plan = [[0, [6, 5]], ...slash(22), [32, [19, 0]], [46.1, [-2, 19]], [57.05, [0, 10]], [69, [7, 4]], ...slash(92), [102, [0, 10]]];
+  const ok = run(plan, [8, 45, 57, 75]);
+  console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '티나: 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+}

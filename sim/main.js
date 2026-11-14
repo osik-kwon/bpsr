@@ -37,7 +37,7 @@ const gltf = new GLTFLoader();
 const loadGlb = url => gltf.loadAsync(url).then(g => g, () => null);
 // 전투장 환경: 바닥이 y=0, 중심이 원점이 되도록 변환돼 있다
 const GRID = data.arena.type === 'grid' ? data.arena : null;
-if (!GRID) loadGlb('./assets/' + data.arena.model).then(env => { if (env) { scene.add(env.scene); disc.visible = false; } });
+if (!GRID && data.arena.model) loadGlb('./assets/' + data.arena.model).then(env => { if (env) { scene.add(env.scene); disc.visible = false; } });
 // 격자 전투장(2·3넴): 바닥 타일 프리팹을 칸마다 놓고, 금 간 칸은 붉게 물들이고 무너진 칸은 숨긴다
 const tileObjs = [];
 if (GRID) {
@@ -72,7 +72,7 @@ function label(text, size = 3, color = '#ffffff') {
   const g = cv.getContext('2d'); g.fillStyle = color; g.font = `bold ${text.length > 1 ? 44 : 72}px sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, 64, 68);
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), depthTest: false, transparent: true })); s.scale.set(size, size, 1); return s;
 }
-for (let n = 1; n <= (GRID ? 0 : 4); n++) { const s = label(String(n), 5, '#58a6ff'); s.position.set(Math.cos(roomAngle(n)) * (R - 5), 6, Math.sin(roomAngle(n)) * (R - 5)); scene.add(s); }
+for (let n = 1; n <= (GRID || data.noCurtain ? 0 : 4); n++) { const s = label(String(n), 5, '#58a6ff'); s.position.set(Math.cos(roomAngle(n)) * (R - 5), 6, Math.sin(roomAngle(n)) * (R - 5)); scene.add(s); }
 
 // 보스·분신: 크기만 맞춘 자체 도형
 function standin(color, h) {
@@ -103,7 +103,7 @@ function bossAnim(g) {
   if (!g.clips) return;
   const A = data.boss.anims, t = sim.t;
   for (let i = data.events.length - 1; i >= 0; i--) {
-    const e = data.events[i], name = A[e.type], c = g.clips[name];
+    const e = data.events[i], name = A[e.anim ?? e.type], c = g.clips[name];
     if (c && t >= e.t && t < e.t + c.duration) return setPose(g, name, t - e.t);
   }
   const idle = g.clips[A.idle]; if (idle) setPose(g, A.idle, t % idle.duration);
@@ -379,8 +379,8 @@ function hud() {
   const cs = sim.combat.summary(sim.t); $('atk').textContent = `추정 딜 ${fmt(cs.dmg)} · 초당 ${fmt(cs.dps)} (기준의 ${Math.round(cs.dps / BENCH * 100)}%)${sim.combat.recast ? ' · 라이트 리캐스트' : ''}${sim.combat.focus > 0 ? ' · 정신 집중' : ''}`; drawSkills();
   $('clock').textContent = sim.t.toFixed(1) + '초' + (paused && !sim.done && sim.t > 0 ? ' (일시정지)' : '');
   $('tPause').textContent = paused ? '계속' : '정지';
-  $('energy').textContent = GRID ? `남은 칸 ${sim.tiles.filter(v => v < 2).length} / ${sim.tiles.length}` : `${sim.room}번 방 에너지 ${Math.floor(sim.energy)} / ${data.roomEnergyMax}`;
-  $('bar').firstElementChild.style.width = (GRID ? sim.t / data.duration : sim.energy / data.roomEnergyMax) * 100 + '%';
+  $('energy').textContent = GRID ? `남은 칸 ${sim.tiles.filter(v => v < 2).length} / ${sim.tiles.length}` : (data.roomEnergyMax ? `${sim.room}번 방 에너지 ${Math.floor(sim.energy)} / ${data.roomEnergyMax}` : `${Math.floor(sim.t)}초 / ${data.duration}초`);
+  $('bar').firstElementChild.style.width = (GRID || !data.roomEnergyMax ? sim.t / data.duration : sim.energy / data.roomEnergyMax) * 100 + '%';
   $('upcoming').innerHTML = sim.upcoming().slice(0, 5).map(e => `<div class="row"><b>${e.t}초</b><span>${e.name}</span></div>`).join('') || '없음';
   for (; shown < sim.log.length; shown++) {
     const r = sim.log[shown], d = document.createElement('div'); d.className = 'row ' + (r.ok ? 'ok' : 'bad');
@@ -408,7 +408,7 @@ function tick(now) {
   const p = sim.player;
   animPlayer(player, p, adt); drainCombat(); drawShots();
   player.ring.material.color.set(p.iframe > 0 ? 0xffffff : sim.combat.recast ? 0xffd24a : sim.combat.act ? 0xd29922 : 0x3fb950);   // 발밑 고리: 흰색 회피 무적, 금색 라이트 리캐스트, 주황 스킬 동작 중
-  boss.position.set(sim.boss.x, data.boss.y ?? 0, sim.boss.z); if (GRID) { boss.rotation.y = Math.atan2(Math.cos(sim.bossDir), Math.sin(sim.bossDir)); drawTiles(); } else face(boss, p); bossAnim(boss); if (sim.clone) bossAnim(clone);
+  boss.position.set(sim.boss.x, data.boss.y ?? 0, sim.boss.z); boss.scale.setScalar(sim.bossScale ?? 1); if (GRID) { boss.rotation.y = Math.atan2(Math.cos(sim.bossDir), Math.sin(sim.bossDir)); drawTiles(); } else face(boss, p); bossAnim(boss); if (sim.clone) bossAnim(clone);
   clone.visible = !!sim.clone; if (sim.clone) { clone.position.set(sim.clone.x, 0, sim.clone.z); face(clone, p); }
   sim.bots.forEach((b, i) => movePerson(bots[i], b, adt, sim.boss));
   drawFx(); scheduleFx(); realFx.update(sim.t); pcFx.update(sim.t);
