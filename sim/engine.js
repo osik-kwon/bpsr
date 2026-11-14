@@ -58,7 +58,8 @@ export class Sim {
   partySpots(room) {
     if (this.data.partySpots) return this.data.partySpots.map(([x, z]) => ({ x, z }));
     if (this.data.party === 'ring') return Array.from({ length: 7 }, (_, i) => polar(i * TAU / 7 + 0.3, 18));   // 전투장에 흩어진 배치
-    return Array.from({ length: 7 }, (_, i) => polar(roomAngle(room) + (i - 3) * 0.12, 15 + (i % 2) * 2)); }
+    // 보스 앞 탱버 원(반경 5m) 밖, 내 시작 자리 양옆
+    return Array.from({ length: 7 }, (_, i) => polar(roomAngle(room) + (i < 4 ? i - 4 : i - 3) * 0.2, 11 + (i % 2))); }
   // 격자 도우미: 칸 번호(없으면 -1), 칸 사각형
   tileAt(x, z) { const g = this.grid, c = Math.floor(x / g.tileW + g.cols / 2), r = Math.floor(z / g.tileH + g.rows / 2); return c < 0 || r < 0 || c >= g.cols || r >= g.rows ? -1 : c + r * g.cols; }
   tileRect(i) { const g = this.grid, c = i % g.cols, r = Math.floor(i / g.cols); return { shape: 'rect', x: (c - (g.cols - 1) / 2) * g.tileW, z: (r - (g.rows - 1) / 2) * g.tileH, w: g.tileW, h: g.tileH }; }
