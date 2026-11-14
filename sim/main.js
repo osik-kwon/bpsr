@@ -1,12 +1,13 @@
 // 화면·입력 담당. 판정은 engine.js가 계산한다. assets/의 GLB(tools/simasset.py 산출물)가 없으면 자체 도형으로 그린다.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { Sim, roomAngle } from './engine.js';
+import { Sim, roomAngle, applyVariant } from './engine.js';
 import { Combat } from './combat.js';
 import { Fx } from './fx.js';
 
 const scenario = new URLSearchParams(location.search).get('s') || 'boss1-hard';
 const data = await (await fetch(`./data/${scenario}.json`, { cache: 'no-cache' })).json();
+applyVariant(data, new URLSearchParams(location.search).get('m'));   // 변형(?m=18 등)
 const spd = +new URLSearchParams(location.search).get('speed'); if (spd > 0) data.player.speed = spd;   // 이동 속도 덮어쓰기(?speed=5)
 // 직업: 주소의 c 또는 마지막에 고른 값(기본 디바인 아처)
 const CLS_IDS = ['archer', 'olvera', 'boyce', 'tina', 'iruna', 'comeau', 'farfara', 'guitar', 'tata'];

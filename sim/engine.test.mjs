@@ -160,3 +160,20 @@ console.log('PASS');
   const ok = run(plan, [8, 45, 57, 75]);
   console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '티나: 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
 }
+
+// 티나 단계별 수식어: 18단 폭탄은 본대에서 빠져야 하고, 19단 연결은 이어진 파티원에게 다가가야 풀린다
+{
+  const { applyVariant } = await import('./engine.js');
+  const load = m => applyVariant(JSON.parse(fs.readFileSync(new URL('./data/tina-master.json', import.meta.url))), m);
+  let t = new Sim(load('18')); while (t.t < 16) t.step(0.05, t.player.z > 7 ? { mx: 0.5, mz: -0.87 } : { mx: 0, mz: 0 });   // 탱커 파티원 곁에 붙어 있으면 실패
+  const a = t.log.find(r => r.name.includes('서프라이즈'));
+  t = new Sim(load('18')); while (t.t < 16) t.step(0.05, t.t > 10 ? { mx: 0, mz: 1 } : { mx: 0, mz: 0 });
+  const b = t.log.find(r => r.name.includes('서프라이즈'));
+  console.log(a && !a.ok && b && b.ok ? 'PASS' : 'FAIL', '티나 18단 폭탄', a?.msg, '/', b?.msg);
+  t = new Sim(load('19')); while (t.t < 20) t.step(0.05, { mx: 0, mz: 0 });
+  const c = t.log.find(r => r.name === '약화 연결');
+  t = new Sim(load('19')); while (t.t < 20) { const k = t.links[0], g = k && t.bots[k.bot], dx = g ? g.x - t.player.x : 0, dz = g ? g.z - t.player.z : 0, l = Math.hypot(dx, dz) || 1; t.step(0.05, g ? { mx: dx / l, mz: dz / l } : { mx: 0, mz: 0 }); }
+  const e = t.log.find(r => r.name === '약화 연결');
+  console.log(c && !c.ok && e && e.ok ? 'PASS' : 'FAIL', '티나 19단 연결', c?.msg, '/', e?.msg);
+  console.log(load('20').title.includes('20단') && load('20').events.length === load('0').events.length + 2 ? 'PASS' : 'FAIL', '티나 20단 변형 적용');
+}

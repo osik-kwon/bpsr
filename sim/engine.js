@@ -17,6 +17,11 @@ function segDist(p, a, b) {
   const t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.z - a.z) * dz) / l2));
   return Math.hypot(p.x - (a.x + dx * t), p.z - (a.z + dz * t));
 }
+// 시나리오 변형(예: 마스터 단계별 수식어): variants[key]의 이벤트를 더하고 제목에 꼬리표를 붙인다
+export function applyVariant(data, key) {
+  const v = data.variants?.[key]; if (!v) return data;
+  data.events.push(...v.events); data.title += ` · ${v.label}`; return data;
+}
 export function inside(s, p) {
   if (s.shape === 'circle') return dist(p, s) <= s.r;
   if (s.shape === 'ring') { const d = dist(p, s); return d >= s.rIn && d <= s.rOut; }
@@ -38,7 +43,7 @@ export class Sim {
     this.t = 0; this.done = false; this.log = []; this.tele = []; this.cores = []; this.markers = [];
     this.room = d.boss.room; this.energy = 0; this.crossedEarly = false; this.spin = null; this.curtain = null; this.tether = null; this.lasers = [];
     // 격자 전투장(2·3넴): 타일 상태 0 멀쩡, 1 금 감, 2 무너짐(없는 칸도 2)
-    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.bossScale = 1;
+    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.links = []; this.bossScale = 1;
     if (this.grid) { this.tiles = Array.from({ length: A.cols * A.rows }, (_, i) => (A.missing ?? []).some(([c, r]) => c + r * A.cols === i) ? 2 : 0); }
     this.boss = d.boss.pos ? { x: d.boss.pos[0], z: d.boss.pos[1] } : polar(roomAngle(this.room), d.boss.dist);
     this.bossDir = (d.boss.dir ?? 90) * Math.PI / 180;
@@ -161,6 +166,10 @@ export class Sim {
       // 부채꼴 여러 장: center에서 dirs(도) 방향으로 반각 half(도)인 부채꼴이 동시에 터진다
       const [x, z] = e.center ?? [this.boss.x, this.boss.z];
       this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots: e.dirs.map(d => ({ shape: 'sector', x, z, r: e.r, dir: d * Math.PI / 180, half: e.half * Math.PI / 180 })), hitAt: e.t + e.cast, showFrom: e.showFrom, color: e.color ?? 'red' });
+    } else if (e.type === 'link') {
+      // 약화 연결: 가장 먼 파티원과 줄로 이어지고, r 안으로 다가가면 풀린다
+      const bot = this.bots.reduce((m, b, i) => dist(b, this.player) > dist(this.bots[m], this.player) ? i : m, 0);
+      this.links.push({ name: e.name, bot, r: e.r, start: e.t, until: e.t + e.dur });
     } else if (e.type === 'sigil') {
       // 징표: 든 사람이 purify초 뒤 강타를 맞는다. 탱커가 아니면 탱커 파티원(bot) 곁에서 상호작용으로 넘기고, 탱커면 파티원이 넘겨 준 징표를 들고 버틴다
       this.sigil = { name: e.name, bot: e.bot, hitAt: e.t + e.purify, start: e.t, mine: !this.tank, r: e.r ?? 4 };
@@ -258,6 +267,12 @@ export class Sim {
       }
     }
     this.orbs = this.orbs.filter(o => o.hitAt > this.t);
+    // 약화 연결
+    for (const k of this.links) {
+      const near = dist(this.bots[k.bot], p) <= k.r;
+      if (near || this.t >= k.until) { this.result(k.name, near, near ? `${(this.t - k.start).toFixed(1)}초 만에 연결 해제` : '끝까지 이어져 대미지 감소 유지'); k.done = true; }
+    }
+    this.links = this.links.filter(k => !k.done);
     // 징표 넘기기
     const sg = this.sigil;
     if (sg) {
@@ -395,6 +410,7 @@ export class Sim {
     for (const o of this.orbs) out.push({ shape: 'circle', x: o.x, z: o.z, r: o.r, name: o.name, kind: 'avoid', color: 'pink', start: o.start, hitAt: o.hitAt, orb: true });
     for (const m of this.mines) out.push({ shape: 'circle', x: this.player.x, z: this.player.z, r: m.r, name: m.name, kind: 'show', color: 'blue', start: this.t, hitAt: m.lockAt });
     for (const sw of this.sweeps) out.push({ ...this.sweepShape(sw, this.t), name: sw.name, kind: 'avoid', color: 'red', start: sw.start, hitAt: this.t < sw.t0 ? sw.t0 : sw.t0 + sw.dur, live: this.t >= sw.t0 });
+    for (const k of this.links) out.push({ shape: 'line', a: { x: this.player.x, z: this.player.z }, b: { ...this.bots[k.bot] }, w: 0.5, name: `${k.name} (이어진 파티원에게 다가가기)`, kind: 'show', color: 'pink', start: k.start, hitAt: k.until });
     if (this.sigil) { const sg = this.sigil, at = sg.mine && !this.tank ? this.bots[sg.bot] : null;
       out.push({ shape: 'circle', ...(at ?? this.player), r: at ? sg.r : 1.5, name: this.tank ? `${sg.name} (넘겨받아 버티기)` : sg.mine ? `${sg.name} (탱커 곁에서 E)` : `${sg.name} (넘김)`, kind: 'show', color: sg.mine || this.tank ? 'pink' : 'yellow', start: sg.start, hitAt: sg.hitAt }); }
     if (this.crystal) out.push({ shape: 'circle', ...this.crystal.pos[this.crystal.mine], r: 4, name: `${this.crystal.name} (내 수정에서 E)`, kind: 'show', color: 'yellow', start: this.crystal.start, hitAt: this.crystal.fire });
