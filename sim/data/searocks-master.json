@@ -1,0 +1,580 @@
+{
+ "id": "searocks-master",
+ "title": "심해 나뽀 · 마스터",
+ "notes": "환해 암초 지대 막보스 심해 나뽀(몬스터 4601). 기믹은 data/master-s3-mech-searocks.md, 판정 수치는 클라 스킬 데이터. 핵심은 내 음표(원소)와 같은 것을 고르는 것: 파도는 내 원소 띠를 피하고, 물방울·스피커는 내 원소 것을 쓴다. 분담에서 선 원이 내 음표를 바꾼다. 체력 구간과 시각은 자료가 없어 전부 추정이고, 춤 단계의 분신 처치·박자 판정은 줄였다",
+ "noCurtain": true,
+ "arena": {
+  "radius": 26,
+  "model": "arena_nappo.glb",
+  "src": "estimate(반경) + measured(씬 dng_branch_6561_coral 보스 자리 둘레)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   4,
+   14
+  ],
+  "src": "레이드 시나리오와 같은 값"
+ },
+ "boss": {
+  "pos": [
+   0,
+   0
+  ],
+  "height": 8,
+  "scale": 7.0,
+  "model": "boss_nappo.glb",
+  "src": "table(몬스터 4601 潜水娜宝, 프리팹 ch_mon_battlenappo01_01, 모델 배율 7.0)",
+  "anims": {
+   "idle": "as_mon_battlenappo_fidle",
+   "chant": "as_mon_battlenappo_atk_chant_start",
+   "slash": "as_mon_battlenappo_atk_katanaatk_start",
+   "guitar": "as_mon_battlenappo_atk_guitaratk_start",
+   "sing": "as_mon_battlenappo_atk_phantom_sing",
+   "dance": "as_mon_battlenappo_backpackdance_loop"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름으로 본 추정"
+ },
+ "partySpots": [
+  [
+   0,
+   7
+  ],
+  [
+   -6,
+   12
+  ],
+  [
+   8,
+   10
+  ],
+  [
+   -10,
+   8
+  ]
+ ],
+ "partyRoles": {
+  "dps": [
+   "탱",
+   "힐",
+   "딜",
+   "딜"
+  ],
+  "heal": [
+   "탱",
+   "딜",
+   "딜",
+   "딜"
+  ],
+  "tank": [
+   "힐",
+   "딜",
+   "딜",
+   "딜"
+  ]
+ },
+ "events": [
+  {
+   "t": 1,
+   "type": "marks",
+   "pos": [
+    [
+     20,
+     0
+    ],
+    [
+     -10,
+     17.3
+    ],
+    [
+     -10,
+     -17.3
+    ]
+   ],
+   "src": "table(스피커 몬스터 4603 배치: 보스 둘레 20m 세 곳)"
+  },
+  {
+   "t": 3,
+   "type": "note",
+   "value": "얼음",
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 시작 광역으로 음표(원소)가 붙는다 + estimate(내 음표를 얼음으로 고정)"
+  },
+  {
+   "t": 3,
+   "type": "shapes",
+   "kind": "show",
+   "name": "이중 원소 광역(음표 부여)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 0,
+     "r": 25
+    }
+   ],
+   "cast": 1.5,
+   "color": "pink",
+   "anim": "chant",
+   "src": "table(3340210 원 반경 25m)"
+  },
+  {
+   "t": 8,
+   "type": "shapes",
+   "name": "전방 베기",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 20,
+     "dir": 1.5707963267948966,
+     "half": 1.0471975511965976
+    }
+   ],
+   "cast": 2,
+   "anim": "slash",
+   "src": "table(정면 120°·반경 20m, 0.78초) + estimate(예고·방향)"
+  },
+  {
+   "t": 14,
+   "type": "noteShare",
+   "name": "한랑 교향곡(두 원소 분담)",
+   "spots": {
+    "얼음": [
+     -8,
+     8
+    ],
+    "물": [
+     8,
+     8
+    ]
+   },
+   "r": 5,
+   "cast": 5,
+   "anim": "chant",
+   "src": "table(원 반경 5m, 5.0초) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 얼음 원과 물 원에 나눠 서서 분담, 맞은 원소로 음표가 바뀐다. 원 하나라도 비면 전체 처벌"
+  },
+  {
+   "t": 24,
+   "type": "shapes",
+   "name": "격류 이중주(스피커 파도)",
+   "cast": 3,
+   "anim": "guitar",
+   "byNote": {
+    "얼음": {
+     "spots": [
+      {
+       "shape": "rect",
+       "x": -17,
+       "z": 0,
+       "w": 30,
+       "h": 60
+      }
+     ]
+    },
+    "물": {
+     "spots": [
+      {
+       "shape": "rect",
+       "x": 17,
+       "z": 0,
+       "w": 30,
+       "h": 60
+      }
+     ]
+    }
+   },
+   "spots": [],
+   "src": "table(길이 60·폭 30 띠 두 개, 좌우 17m 치우침) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 자기 음표 원소의 파도만 보이고 그 띠를 피한다. 마스터는 두 원소 동시 + estimate(원소별 배치)"
+  },
+  {
+   "t": 32,
+   "type": "safe",
+   "name": "절찬 연주(같은 원소 물방울 안으로)",
+   "r": 3,
+   "cast": 6,
+   "color": "blue",
+   "okMsg": "같은 원소 물방울 안에서 버팀",
+   "failMsg": "물방울 밖이거나 다른 원소 — 치사",
+   "anim": "sing",
+   "spots": [
+    [
+     0,
+     0
+    ]
+   ],
+   "byNote": {
+    "얼음": {
+     "spots": [
+      [
+       -10,
+       -6
+      ],
+      [
+       10,
+       10
+      ]
+     ]
+    },
+    "물": {
+     "spots": [
+      [
+       10,
+       -6
+      ],
+      [
+       -10,
+       10
+      ]
+     ]
+    }
+   },
+   "src": "table(물방울 반경 3m) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) + estimate(물방울 자리·개수, 6초)"
+  },
+  {
+   "t": 44,
+   "type": "shapes",
+   "kind": "show",
+   "name": "스피커 파괴(전체 공격) → 슈퍼 댄스",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 0,
+     "r": 25
+    }
+   ],
+   "cast": 2,
+   "color": "pink",
+   "anim": "dance",
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 체력이 일정 이하면 스피커를 부수고 전원을 중앙으로 끌어당긴 뒤 춤 단계"
+  },
+  {
+   "t": 48,
+   "type": "shapes",
+   "name": "춤: 주황 조각 타격(보라 보호막 획득)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 15,
+     "dir": 0.7853981633974483,
+     "half": 0.7853981633974483
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 15,
+     "dir": 3.9269908169872414,
+     "half": 0.7853981633974483
+    }
+   ],
+   "cast": 3.84,
+   "color": "yellow",
+   "anim": "dance",
+   "src": "table(조각 반경 15m) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 두 색 90° 조각 중 한 색을 친다. 안 맞은 사람은 반대 색 보호막 + estimate(8박 = 3.84초)"
+  },
+  {
+   "t": 53,
+   "type": "intercept",
+   "name": "변주: 보라 음파구 흡수",
+   "from": [
+    0,
+    -20
+   ],
+   "to": [
+    0,
+    0
+   ],
+   "dur": 4,
+   "r": 2,
+   "want": {
+    "dps": "in",
+    "tank": "in",
+    "heal": "in"
+   },
+   "okMsg": "같은 색 보호막으로 흡수",
+   "failMsg": "음파구가 보스에 닿음",
+   "src": "table(낙하 0.96초 뒤 5m/s로 보스에게) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 같은 색 보호막을 가진 사람이 닿아 흡수"
+  },
+  {
+   "t": 53,
+   "type": "intercept",
+   "name": "변주: 주황 음파구(닿지 말 것)",
+   "from": [
+    20,
+    0
+   ],
+   "to": [
+    0,
+    0
+   ],
+   "dur": 4,
+   "r": 2,
+   "want": {
+    "dps": "out",
+    "tank": "out",
+    "heal": "out"
+   },
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고)"
+  },
+  {
+   "t": 60,
+   "type": "shapes",
+   "name": "춤: 보라 조각 타격(주황 보호막 획득)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 15,
+     "dir": 2.356194490192345,
+     "half": 0.7853981633974483
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 15,
+     "dir": 5.497787143782138,
+     "half": 0.7853981633974483
+    }
+   ],
+   "cast": 3.84,
+   "color": "pink",
+   "anim": "dance",
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고)"
+  },
+  {
+   "t": 65,
+   "type": "intercept",
+   "name": "변주: 주황 음파구 흡수",
+   "from": [
+    -20,
+    0
+   ],
+   "to": [
+    0,
+    0
+   ],
+   "dur": 4,
+   "r": 2,
+   "want": {
+    "dps": "in",
+    "tank": "in",
+    "heal": "in"
+   },
+   "okMsg": "같은 색 보호막으로 흡수",
+   "failMsg": "음파구가 보스에 닿음",
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고)"
+  },
+  {
+   "t": 65,
+   "type": "intercept",
+   "name": "변주: 보라 음파구(닿지 말 것)",
+   "from": [
+    0,
+    20
+   ],
+   "to": [
+    0,
+    0
+   ],
+   "dur": 4,
+   "r": 2,
+   "want": {
+    "dps": "out",
+    "tank": "out",
+    "heal": "out"
+   },
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고)"
+  },
+  {
+   "t": 72,
+   "type": "shapes",
+   "name": "댄스 머신(회전 선분)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": -18,
+      "z": 0
+     },
+     "b": {
+      "x": 18,
+      "z": 0
+     },
+     "w": 2
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": -14
+     },
+     "b": {
+      "x": 0,
+      "z": 14
+     },
+     "w": 2
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": -7,
+      "z": -7
+     },
+     "b": {
+      "x": 7,
+      "z": 7
+     },
+     "w": 2
+    }
+   ],
+   "cast": 4,
+   "anim": "dance",
+   "src": "table(길이 18·14·10, 폭 2 선분이 2.4초 회전 뒤 타격) + estimate(멈춘 방향)"
+  },
+  {
+   "t": 80,
+   "type": "safe",
+   "name": "비등점: 같은 원소 물방울로",
+   "r": 3,
+   "cast": 5,
+   "color": "blue",
+   "okMsg": "물방울 안에서 절찬 연주를 버팀",
+   "failMsg": "물방울 밖 — 치사",
+   "anim": "sing",
+   "spots": [
+    [
+     0,
+     0
+    ]
+   ],
+   "byNote": {
+    "얼음": {
+     "spots": [
+      [
+       6,
+       -6
+      ]
+     ]
+    },
+    "물": {
+     "spots": [
+      [
+       -6,
+       8
+      ]
+     ]
+    }
+   },
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 스피커가 원소 광선을 조준하고 절찬 연주 시전. 같은 색 물방울에 들어간다 + estimate(자리)"
+  },
+  {
+   "t": 85,
+   "type": "carry",
+   "name": "비등점: 물방울을 몰아 같은 원소 스피커에",
+   "pick": [
+    0,
+    0
+   ],
+   "drop": [
+    0,
+    0
+   ],
+   "cast": 10,
+   "pickMsg": "내 물방울에서 E",
+   "dropMsg": "같은 원소 스피커에서 E",
+   "byNote": {
+    "얼음": {
+     "pick": [
+      6,
+      -6
+     ],
+     "drop": [
+      20,
+      0
+     ]
+    },
+    "물": {
+     "pick": [
+      -6,
+      8
+     ],
+     "drop": [
+      -10,
+      17.3
+     ]
+    }
+   },
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 물방울을 밀어 같은 원소 스피커에 부딪히면 스피커가 깨지고 보스가 허약 상태가 된다 + estimate(밀기를 상호작용 두 번으로 대신)"
+  },
+  {
+   "t": 97,
+   "type": "shapes",
+   "kind": "show",
+   "name": "허약(딜 구간)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 0,
+     "r": 4
+    }
+   ],
+   "cast": 5,
+   "color": "green",
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고)"
+  },
+  {
+   "t": 102,
+   "type": "shapes",
+   "name": "허약 해제 밀쳐내기",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 0,
+     "r": 15
+    }
+   ],
+   "cast": 3,
+   "src": "table(3340240 반경 15m)"
+  }
+ ],
+ "variants": {
+  "18": {
+   "label": "18단 맹렬한 열정",
+   "events": [
+    {
+     "t": 20,
+     "type": "freeze",
+     "dur": 3,
+     "text": "맹렬한 열정: 3초 동안 움직이면 체력 감소",
+     "src": "table(수식어 설명문) + estimate(주기; 화면 안내만)"
+    },
+    {
+     "t": 58,
+     "type": "freeze",
+     "dur": 3,
+     "text": "맹렬한 열정: 3초 동안 움직이면 체력 감소",
+     "src": "table(수식어 설명문) + estimate(주기; 화면 안내만)"
+    },
+    {
+     "t": 90,
+     "type": "freeze",
+     "dur": 3,
+     "text": "맹렬한 열정: 3초 동안 움직이면 체력 감소",
+     "src": "table(수식어 설명문) + estimate(주기; 화면 안내만)"
+    }
+   ]
+  }
+ },
+ "duration": 108
+}

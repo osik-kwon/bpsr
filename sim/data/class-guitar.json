@@ -4,6 +4,7 @@
  "model": "pc_guitar.glb?v=1",
  "fxBase": "./assets/fx-guitar/",
  "auto": true,
+ "role": "heal",
  "ranged": true,
  "range": 25,
  "notes": "클라 데이터에서 자동 생성. 스킬 슬롯·이름·쿨타임·충전, 동작 길이, 근접 타격 시각·피해 계수는 클라 값. 발사체 스킬의 타격, 동작 중 이동 불가 시간, 회피는 추정. 직업 고유 자원과 버프는 넣지 않았다",

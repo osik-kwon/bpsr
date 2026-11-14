@@ -177,3 +177,59 @@ console.log('PASS');
   console.log(c && !c.ok && e && e.ok ? 'PASS' : 'FAIL', '티나 19단 연결', c?.msg, '/', e?.msg);
   console.log(load('20').title.includes('20단') && load('20').events.length === load('0').events.length + 2 ? 'PASS' : 'FAIL', '티나 20단 변형 적용');
 }
+
+// 안개 송곳니: 딜러는 압축 돌풍을 밟아 상흔을 만들어야 급습에서 산다
+{
+  const { Combat } = await import('./combat.js');
+  const d = JSON.parse(fs.readFileSync(new URL('./data/misthunt-master.json', import.meta.url)));
+  const run = (role, plan, acts) => { const t = new Sim(d, new Combat({ role, tank: role === 'tank', skills: {} })); const A = [...acts]; while (!t.done) { const g = plan.filter(([at]) => at <= t.t).pop()?.[1], dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t.log; };
+  const idle = run('dps', [], []);
+  console.log(idle.filter(r => !r.ok).length >= 5 ? 'PASS' : 'FAIL', '안개 송곳니: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
+  const T = d.events[0].pos;
+  const ok = run('dps', [[0, [12, 6]], [18, [-6, 12]], [32, [10, 8]], [46, [0, -14]], [59, T[0]], [71, T[3]], [84, [0, 10]], [92, [12, 4]]], [82]);
+  console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '안개 송곳니: 딜러 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+}
+
+// 타나트로스: 딜러 모범 동선(수정 운반 → 화염구 막기 → 분담 → 빛 원 → 광선 회피)
+{
+  const { Combat } = await import('./combat.js');
+  const d = JSON.parse(fs.readFileSync(new URL('./data/factory-master.json', import.meta.url)));
+  const run = (role, plan, acts) => { const t = new Sim(d, new Combat({ role, tank: role === 'tank', skills: {} })); const A = [...acts]; while (!t.done) { const g = plan.filter(([at]) => at <= t.t).pop()?.[1], dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t.log; };
+  const idle = run('dps', [], []);
+  console.log(idle.filter(r => !r.ok).length >= 6 ? 'PASS' : 'FAIL', '타나트로스: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
+  const ok = run('dps', [[0, [-22, 0]], [6.1, [16, 14]], [44, [15, -19]], [70, [-10, 8]], [95.2, [1, 4.5]], [100.2, [-8, -3]], [105.7, [-9, 2]]], [6, 13.5]);
+  console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '타나트로스: 딜러 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+}
+
+// 신벌의 대행자: 탑을 4 → 2 → 6번 칸 순으로 빼앗아 금색 대각선을 만든다. 엉뚱한 탑을 빼앗으면 파란 줄이 생겨 전멸
+{
+  const { Combat } = await import('./combat.js');
+  const d = JSON.parse(fs.readFileSync(new URL('./data/cursedtomb-master.json', import.meta.url)));
+  const run = (plan) => { const t = new Sim(d, new Combat({ role: 'dps', skills: {} })); while (!t.done) { const g = plan.filter(([at]) => at <= t.t).pop()?.[1], dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); t.step(0.05, l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }); } return t.log; };
+  const idle = run([]);
+  console.log(idle.some(r => r.name === '신벌 프로토콜' && !r.ok) ? 'PASS' : 'FAIL', '신벌의 대행자: 탑을 안 빼앗으면 파란 줄로 전멸', idle.filter(r => r.ok).length, '/', idle.length);
+  const ok = run([[0, [4, 2]], [10.1, [9, 7]], [13.2, [3, 3]], [24.1, [8, -8]], [36.1, [16, -10]], [42, [1, -1]], [46.1, [0, 21]], [54.1, [-10, 16]], [63.4, [0, 0]], [80.1, [13, 13]], [94.1, [18, 9]]]);
+  console.log(ok.every(r => r.ok) && ok.some(r => r.name === '프로토콜 붕괴') ? 'PASS' : 'FAIL', '신벌의 대행자: 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+}
+
+// 카트그리프: 딜러 모범 동선(연결 차단 → 쉐어 → 레이저 따라 돌며 막기 → 오브 → 진짜 포털)
+{
+  const { Combat } = await import('./combat.js');
+  const d = JSON.parse(fs.readFileSync(new URL('./data/s3tower-master.json', import.meta.url)));
+  const run = (plan, acts) => { const t = new Sim(d, new Combat({ role: 'dps', skills: {} })); const A = [...acts]; while (!t.done) { let g = plan.filter(([at]) => at <= t.t).pop()?.[1]; if (t.t >= 36 && t.t < 46.5) { const a = (90 + 20 * Math.max(0, t.t - 37)) * Math.PI / 180; g = [Math.cos(a) * 8, Math.sin(a) * 8]; } const dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t.log; };
+  const idle = run([], []);
+  console.log(idle.filter(r => !r.ok).length >= 6 ? 'PASS' : 'FAIL', '카트그리프: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
+  const ok = run([[0, [6, 12]], [8.6, [0, 16]], [25.1, [-6, 8]], [32.1, [0, 8]], [46.5, [0, 14]], [75.1, [20, 0]]], [13, 64]);
+  console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '카트그리프: 딜러 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+}
+
+// 심해 나뽀: 분담에서 물 원에 서면 음표가 물로 바뀌고, 이후 파도·물방울·스피커는 물 쪽을 써야 한다
+{
+  const { Combat } = await import('./combat.js');
+  const d = JSON.parse(fs.readFileSync(new URL('./data/searocks-master.json', import.meta.url)));
+  const run = (plan, acts) => { const t = new Sim(d, new Combat({ role: 'dps', skills: {} })); const A = [...acts]; while (!t.done) { const g = plan.filter(([at]) => at <= t.t).pop()?.[1], dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t; };
+  const idle = run([], []).log;
+  console.log(idle.filter(r => !r.ok).length >= 6 ? 'PASS' : 'FAIL', '심해 나뽀: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
+  const t = run([[0, [18, 6]], [10.1, [8, 8]], [19.1, [-12, 10]], [27.1, [-10, 10]], [38.1, [0, -12]], [52, [0, -8]], [57.1, [-12, 0]], [69.2, [10, -4]], [76.1, [-6, 8]], [85.6, [-10, 17.3]], [92, [-18, 6]]], [85.2, 90.5]);
+  console.log(t.log.every(r => r.ok) && t.note === '물' ? 'PASS' : 'FAIL', '심해 나뽀: 물 음표 모범 동선', t.log.length, t.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+}

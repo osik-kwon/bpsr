@@ -1,0 +1,594 @@
+{
+ "id": "factory-master",
+ "title": "타나트로스 · 마스터",
+ "notes": "기계화 처리소 막보스 타나트로스・최종 형태. 기믹은 data/master-s3-mech-factory.md, 판정 모양·시점은 클라 스킬 데이터. 패턴 시각·체력 구간은 자료가 없어 순서만 공략을 따르고 시각은 전부 추정. 과열 스택, 증기 피해, 포탑·잡몹 처치, 구슬 충전은 줄였다. 전투장은 실제로 사각형에 가깝지만 원형으로 처리",
+ "noCurtain": true,
+ "arena": {
+  "radius": 26,
+  "model": "arena_thanatros.glb",
+  "src": "estimate(반경) + measured(씬 dng_branch_6521_factory 보스 자리 둘레)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   3,
+   13
+  ],
+  "src": "레이드 시나리오와 같은 값"
+ },
+ "boss": {
+  "pos": [
+   0,
+   0
+  ],
+  "height": 5,
+  "scale": 1.0,
+  "model": "boss_thanatros.glb",
+  "src": "table(몬스터 33500, 프리팹 ch_mon_shouren01-duogeerman_01, 모델 배율 1.0)",
+  "anims": {
+   "idle": "as_mon_shouren_fidle",
+   "roar": "as_mon_shouren-duogeerman_battle_show_start",
+   "tornado": "as_mon_shouren-duogeerman_atk_xuli",
+   "bomb": "as_mon_shouren-duogeerman_atk_fire_back_start",
+   "jump": "as_mon_shouren-duogeerman_common_jump_start",
+   "slash": "as_mon_shouren-duogeerman_atk_fight01",
+   "fly": "as_mon_shouren-duogeerman_atk_fly_start",
+   "laser": "as_mon_shouren-duogeerman_atk_laser_shoulder_start"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 추정"
+ },
+ "partySpots": [
+  [
+   0,
+   6
+  ],
+  [
+   -6,
+   12
+  ],
+  [
+   8,
+   10
+  ],
+  [
+   -10,
+   8
+  ]
+ ],
+ "partyRoles": {
+  "dps": [
+   "탱",
+   "힐",
+   "딜",
+   "딜"
+  ],
+  "heal": [
+   "탱",
+   "딜",
+   "딜",
+   "딜"
+  ],
+  "tank": [
+   "힐",
+   "딜",
+   "딜",
+   "딜"
+  ]
+ },
+ "events": [
+  {
+   "t": 3,
+   "type": "shapes",
+   "kind": "show",
+   "name": "폭주 포효(전체 피해)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 0,
+     "r": 26
+    }
+   ],
+   "cast": 1.5,
+   "color": "pink",
+   "anim": "roar",
+   "src": "table(전체 공격 3350010) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+  },
+  {
+   "t": 4,
+   "type": "carry",
+   "name": "증기 분출구 봉쇄",
+   "pick": [
+    -22,
+    0
+   ],
+   "drop": [
+    16,
+    14
+   ],
+   "cast": 20,
+   "pickMsg": "광차에서 E로 수정 들기",
+   "dropMsg": "분출구에서 E로 설치",
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 광차에서 수정을 들어 분출구에 설치하면 봉쇄. 마스터는 분출구 3개(내 몫 1개만 넣음), 첫 분출구는 오른쪽 아래 + estimate(자리, 제한 20초)"
+  },
+  {
+   "t": 12,
+   "type": "spread",
+   "name": "추적 미사일",
+   "r": 3,
+   "cast": 2.3,
+   "src": "table(원 반경 3m, 2.23초) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 파티원과 겹치지 않게"
+  },
+  {
+   "t": 25,
+   "type": "shapes",
+   "name": "화염 회오리 고리 1",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 0,
+     "z": 0,
+     "rIn": 5,
+     "rOut": 9
+    }
+   ],
+   "cast": 3,
+   "color": "yellow",
+   "anim": "tornado",
+   "src": "guide(고리 5~9m 3초, 9~13m 5초, 13~17m 8초) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+  },
+  {
+   "t": 25,
+   "type": "shapes",
+   "name": "화염 회오리 고리 2",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 0,
+     "z": 0,
+     "rIn": 9,
+     "rOut": 13
+    }
+   ],
+   "cast": 5,
+   "color": "yellow",
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+  },
+  {
+   "t": 25,
+   "type": "shapes",
+   "name": "화염 회오리 고리 3",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 0,
+     "z": 0,
+     "rIn": 13,
+     "rOut": 17
+    }
+   ],
+   "cast": 8,
+   "color": "yellow",
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+  },
+  {
+   "t": 26,
+   "type": "intercept",
+   "name": "화염구 막기",
+   "from": [
+    0,
+    0
+   ],
+   "to": [
+    16,
+    14
+   ],
+   "dur": 7,
+   "r": 1.8,
+   "want": {
+    "dps": "in",
+    "tank": "out",
+    "heal": "out"
+   },
+   "failMsg": null,
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 회오리에서 분출구 쪽으로 초속 3m로 굴러가는 화염구를 몸으로 막는다. 6단 이상은 탱커·힐러가 닿으면 즉사 + estimate(판정 반경)"
+  },
+  {
+   "t": 37,
+   "type": "shapes",
+   "name": "대형 폭격",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": -14,
+     "z": -8,
+     "r": 15
+    },
+    {
+     "shape": "circle",
+     "x": 14,
+     "z": -8,
+     "r": 15
+    },
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": -22,
+     "r": 15
+    }
+   ],
+   "cast": 6.2,
+   "anim": "bomb",
+   "src": "table(6.2초 예고) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 마스터는 큰 범위 3개, 없는 쪽으로 피한다 + estimate(자리·반경: 원자료 반경 50m는 전장보다 커서 줄임)"
+  },
+  {
+   "t": 46,
+   "type": "shapes",
+   "kind": "show",
+   "name": "포효 종료(전체 피해)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 0,
+     "r": 26
+    }
+   ],
+   "cast": 1.5,
+   "color": "pink",
+   "src": "table(3350011) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+  },
+  {
+   "t": 50,
+   "type": "stack",
+   "name": "포식 2형: 분담",
+   "at": [
+    15,
+    -19
+   ],
+   "r": 3,
+   "cast": 3.5,
+   "bossTo": [
+    0,
+    -20
+   ],
+   "anim": "jump",
+   "src": "table(점프 31m, 분담 원 반경 3m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + estimate(분담 자리)"
+  },
+  {
+   "t": 50,
+   "type": "shapes",
+   "name": "포식 2형: 전방 부채꼴",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": -20,
+     "r": 49,
+     "dir": 1.5707963267948966,
+     "half": 1.0471975511965976
+    }
+   ],
+   "cast": 3.5,
+   "src": "table(부채꼴 반경 49m·120°, 1.53초) + estimate(예고 시간)"
+  },
+  {
+   "t": 54,
+   "type": "shapes",
+   "name": "포식 2형: 직선",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": -20
+     },
+     "b": {
+      "x": 0,
+      "z": 30
+     },
+     "w": 7
+    }
+   ],
+   "cast": 2,
+   "src": "table(폭 7m 직선, 1.97초)"
+  },
+  {
+   "t": 58,
+   "type": "marks",
+   "pos": [],
+   "bossTo": [
+    0,
+    0
+   ],
+   "src": "estimate"
+  },
+  {
+   "t": 60,
+   "type": "shapes",
+   "name": "열충격(앞뒤 베기)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 15,
+     "dir": 1.5707963267948966,
+     "half": 0.7853981633974483
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": -4,
+     "r": 15,
+     "dir": 4.71238898038469,
+     "half": 0.7853981633974483
+    }
+   ],
+   "cast": 2.95,
+   "anim": "slash",
+   "src": "table(앞·뒤 부채꼴 반경 15m·90°, 2.95초, 뒤쪽 원점 4m 뒤)"
+  },
+  {
+   "t": 68,
+   "type": "shapes",
+   "name": "포탑 등장",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": -14,
+     "z": -10,
+     "r": 6
+    },
+    {
+     "shape": "circle",
+     "x": 14,
+     "z": -10,
+     "r": 6
+    }
+   ],
+   "cast": 1.5,
+   "bossTo": [
+    0,
+    -23
+   ],
+   "anim": "fly",
+   "src": "table(포탑 등장 원 반경 6m, 1초) + estimate(자리)"
+  },
+  {
+   "t": 70,
+   "type": "safe",
+   "name": "과부하 포격: 빛 원에서 충전",
+   "spots": [
+    [
+     -10,
+     8
+    ]
+   ],
+   "r": 4,
+   "cast": 12,
+   "okMsg": "빛 원 안에서 버팀",
+   "failMsg": "빛 원 밖 — 포격에 전멸",
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 체력 25~30%에 포탑 단계, 포탑을 부순 뒤 빛 원 안에서 구슬을 충전해 상호작용. 100초 제한 + estimate(포탑 처치·충전은 줄여서 빛 원에 서 있기로 대신)"
+  },
+  {
+   "t": 84,
+   "type": "shapes",
+   "name": "회오리 피자(2명 지목)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 30,
+     "dir": 1.5707963267948966,
+     "half": 0.5235987755982988
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 30,
+     "dir": 0.8901179185171081,
+     "half": 0.5235987755982988
+    }
+   ],
+   "cast": 4,
+   "bossTo": [
+    0,
+    0
+   ],
+   "anim": "tornado",
+   "src": "guide(마스터 포효 2: 2명 방향 부채꼴 반경 30m·60°, 4초) + estimate(방향)"
+  },
+  {
+   "t": 92,
+   "type": "shapes",
+   "name": "포식 1형: 원 표식",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 0,
+     "r": 6
+    }
+   ],
+   "cast": 3,
+   "anim": "jump",
+   "src": "table(보스 중심 원 반경 6m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+  },
+  {
+   "t": 97,
+   "type": "shapes",
+   "name": "포식 1형: 고리 표식",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 0,
+     "z": 0,
+     "rIn": 8,
+     "rOut": 18
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 25,
+     "dir": 2.443460952792061,
+     "half": 0.5235987755982988
+    }
+   ],
+   "cast": 3,
+   "src": "table(고리 8~18m, 마스터는 대상 방향 부채꼴 반경 25m·60° 추가) + estimate(방향)"
+  },
+  {
+   "t": 104,
+   "type": "shapes",
+   "name": "파괴 광선",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 49,
+     "dir": 1.5707963267948966,
+     "half": 1.0471975511965976
+    }
+   ],
+   "cast": 1.5,
+   "anim": "laser",
+   "src": "table(부채꼴 반경 49m·120°, 1.5초 예고, 180° 돌아 한 번 더)"
+  },
+  {
+   "t": 107,
+   "type": "shapes",
+   "name": "파괴 광선(반대쪽)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 49,
+     "dir": 4.71238898038469,
+     "half": 1.0471975511965976
+    }
+   ],
+   "cast": 1.5,
+   "src": "table"
+  },
+  {
+   "t": 113,
+   "type": "spread",
+   "name": "추적 미사일",
+   "r": 3,
+   "cast": 2.3,
+   "src": "table + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+  }
+ ],
+ "variants": {
+  "18": {
+   "label": "18단 진동",
+   "events": [
+    {
+     "t": 16,
+     "type": "spread",
+     "name": "진동(발밑 구역)",
+     "r": 5,
+     "cast": 4,
+     "color": "yellow",
+     "src": "table(수식어 설명문) + estimate(반경·주기)"
+    },
+    {
+     "t": 64,
+     "type": "spread",
+     "name": "진동(발밑 구역)",
+     "r": 5,
+     "cast": 4,
+     "color": "yellow",
+     "src": "table(수식어 설명문) + estimate(반경·주기)"
+    },
+    {
+     "t": 100,
+     "type": "spread",
+     "name": "진동(발밑 구역)",
+     "r": 5,
+     "cast": 4,
+     "color": "yellow",
+     "src": "table(수식어 설명문) + estimate(반경·주기)"
+    }
+   ]
+  },
+  "20": {
+   "label": "20단 침식의 운석",
+   "events": [
+    {
+     "t": 16,
+     "type": "stack",
+     "name": "침식의 운석(쉐어)",
+     "at": [
+      0,
+      12
+     ],
+     "r": 4,
+     "cast": 5,
+     "src": "table(수식어 설명문: 아무도 분담하지 않으면 전멸급) + estimate(반경·주기·자리)"
+    },
+    {
+     "t": 76,
+     "type": "stack",
+     "name": "침식의 운석(쉐어)",
+     "at": [
+      8,
+      8
+     ],
+     "r": 4,
+     "cast": 5,
+     "src": "table(수식어 설명문: 아무도 분담하지 않으면 전멸급) + estimate(반경·주기·자리)"
+    }
+   ]
+  },
+  "19": {
+   "label": "19단 장난 소동",
+   "events": [
+    {
+     "t": 16,
+     "type": "safe",
+     "name": "장난 소동(폭탄 시전 끊기)",
+     "spots": [
+      [
+       10,
+       4
+      ]
+     ],
+     "r": 4,
+     "cast": 6,
+     "color": "yellow",
+     "okMsg": "폭탄 곁에서 시전을 끊음",
+     "failMsg": "끊지 못함 — 전체 피해와 디버프",
+     "src": "table(수식어 설명문: 시전을 3회 끊으면 소멸) + estimate(곁에 서 있기로 대신)"
+    },
+    {
+     "t": 76,
+     "type": "safe",
+     "name": "장난 소동(폭탄 시전 끊기)",
+     "spots": [
+      [
+       -8,
+       -6
+      ]
+     ],
+     "r": 4,
+     "cast": 6,
+     "color": "yellow",
+     "okMsg": "폭탄 곁에서 시전을 끊음",
+     "failMsg": "끊지 못함 — 전체 피해와 디버프",
+     "src": "table(수식어 설명문: 시전을 3회 끊으면 소멸) + estimate(곁에 서 있기로 대신)"
+    }
+   ]
+  }
+ },
+ "duration": 120
+}

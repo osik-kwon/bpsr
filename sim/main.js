@@ -17,6 +17,7 @@ const cls = await (await fetch(`./data/class-${clsId}.json`, { cache: 'no-cache'
 const sim = new Sim(data, new Combat(cls));
 const $ = id => document.getElementById(id);
 $('title').textContent = `${data.title} · ${cls.name}`;
+const ROLE = { tank: '탱커', heal: '힐러', dps: '딜러' };
 { const sel = $('cls'); sel.value = clsId; sel.onchange = () => { try { localStorage.setItem('cls', sel.value); } catch {} const q = new URLSearchParams(location.search); q.set('c', sel.value); location.search = q; }; }
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -209,7 +210,7 @@ const pcN = +new URLSearchParams(location.search).get('pc') || 0;
 const player = person(0x3fb950, cls.model);
 const bots = sim.bots.map((_, i) => person(0x9aa4b2, PCS[(pcN + i + 1) % PCS.length]));
 // 파티원 역할 표시(던전 5인 파티: 탱·힐·딜)
-(data.partyRoles ?? []).forEach((r, i) => { if (!bots[i]) return; const l = label(r, 1.6, r === '탱' ? '#58a6ff' : r === '힐' ? '#3fb950' : '#f0883e'); l.position.y = 2.6; bots[i].add(l); });
+(Array.isArray(data.partyRoles) ? data.partyRoles : data.partyRoles?.[sim.role] ?? []).forEach((r, i) => { if (!bots[i]) return; const l = label(r, 1.6, r === '탱' ? '#58a6ff' : r === '힐' ? '#3fb950' : '#f0883e'); l.position.y = 2.6; bots[i].add(l); });
 
 // 실제 이펙트: 새로 생긴 예고·코어를 보고 시전·타격 시각에 재생을 걸어 둔다
 const realFx = new Fx(scene, data.fxBase ?? './assets/fx/'); let seen = new WeakSet(), evFx = 0;
@@ -242,7 +243,7 @@ function scheduleFx() {
 // 예고 도형은 매 프레임 다시 만든다(개수가 적다)
 const fx = new THREE.Group(); scene.add(fx);
 const shareBeam = new THREE.CylinderGeometry(1.1, 1.1, 14, 20, 1, true);
-const COLORS = { red: 0xf85149, pink: 0xff7eb6, blue: 0x58a6ff, yellow: 0xd29922 };
+const COLORS = { red: 0xf85149, pink: 0xff7eb6, blue: 0x58a6ff, yellow: 0xd29922, green: 0x3fb950, gray: 0x6e7681 };
 function shapeMesh(s, color, fill) {
   const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.2 + 0.45 * fill, depthWrite: false, side: THREE.DoubleSide });
   let m;
@@ -390,6 +391,8 @@ function hud() {
   $('clock').textContent = sim.t.toFixed(1) + '초' + (paused && !sim.done && sim.t > 0 ? ' (일시정지)' : '');
   $('tPause').textContent = paused ? '계속' : '정지';
   $('energy').textContent = GRID ? `남은 칸 ${sim.tiles.filter(v => v < 2).length} / ${sim.tiles.length}` : (data.roomEnergyMax ? `${sim.room}번 방 에너지 ${Math.floor(sim.energy)} / ${data.roomEnergyMax}` : `${Math.floor(sim.t)}초 / ${data.duration}초`);
+  if (sim.note) $('energy').textContent += ` · 내 음표 ${sim.note}`;
+  if (sim.trees) $('energy').textContent += ` · 내 역할 ${ROLE[sim.role]} · 상흔 ${sim.scars.size ? [...sim.scars].join('·') : '없음'}`;
   $('bar').firstElementChild.style.width = (GRID || !data.roomEnergyMax ? sim.t / data.duration : sim.energy / data.roomEnergyMax) * 100 + '%';
   $('upcoming').innerHTML = sim.upcoming().slice(0, 5).map(e => `<div class="row"><b>${e.t}초</b><span>${e.name}</span></div>`).join('') || '없음';
   for (; shown < sim.log.length; shown++) {

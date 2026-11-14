@@ -1,0 +1,512 @@
+{
+ "id": "misthunt-master",
+ "title": "안개 송곳니 · 마스터",
+ "notes": "안개 속 사냥터 막보스. 기믹 종류·대처는 data/master-s3-mech-misthunt.md(클라 공략 도감 문구, maxroll, 영상 자막), 판정 모양은 클라 스킬 데이터. 순환 순서는 영상 한 건 기준이고 시각·간격은 전부 추정. 핵심은 상흔 관리: 급습 전에 탱커 말고는 상흔을 하나 이상 갖고 있어야 한다. 딜러는 압축 돌풍을 밟거나 파쇄의 바람을 일부러 맞아 상흔을 만든다. 넉백, 사냥 중 이동 감속, 실드 딜 구간, 격노, 18~20단 수식어는 없다. 전투장 반경과 나무 자리는 추정",
+ "noCurtain": true,
+ "arena": {
+  "radius": 28,
+  "model": "arena_direhowl.glb",
+  "src": "estimate(반경) + measured(씬 dng_branch_6541_beast 보스 자리 둘레)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   4,
+   13
+  ],
+  "src": "레이드 시나리오와 같은 값"
+ },
+ "boss": {
+  "pos": [
+   0,
+   0
+  ],
+  "height": 5,
+  "scale": 2.5,
+  "model": "boss_direhowl.glb",
+  "src": "table(몬스터 33801 碎夜之牙, 프리팹 ch_mon_direhowl_01, 모델 배율 2.5)",
+  "anims": {
+   "idle": "as_mon_dihu_fidle",
+   "shatter": "as_mon_dihu_atk_around",
+   "tornado": "as_mon_dihu_atk_fireorder_start",
+   "bite": "as_mon_dihu_atk_bite_start",
+   "pounce": "as_mon_dihu_atk_jumpsmash",
+   "call": "as_mon_dihu_atk_order",
+   "hunt": "as_mon_dihu_dash",
+   "combo": "as_mon_dihu_atk_scratchtwice"
+  },
+  "animSrc": "클립은 클라 실측(땅여우 계열 공용 동작), 기믹과의 대응은 추정"
+ },
+ "partySpots": [
+  [
+   0,
+   6
+  ],
+  [
+   -6,
+   12
+  ],
+  [
+   8,
+   10
+  ],
+  [
+   -10,
+   8
+  ]
+ ],
+ "partyRoles": {
+  "dps": [
+   "탱",
+   "힐",
+   "딜",
+   "딜"
+  ],
+  "heal": [
+   "탱",
+   "딜",
+   "딜",
+   "딜"
+  ],
+  "tank": [
+   "힐",
+   "딜",
+   "딜",
+   "딜"
+  ]
+ },
+ "partySrc": "던전은 5인 파티(탱 1, 힐 1~2, 딜 2~3). 나를 뺀 4명",
+ "events": [
+  {
+   "t": 0,
+   "type": "trees",
+   "pos": [
+    [
+     19.1,
+     -11.0
+    ],
+    [
+     -0.0,
+     -22.0
+    ],
+    [
+     -19.1,
+     -11.0
+    ],
+    [
+     -19.1,
+     11.0
+    ],
+    [
+     0.0,
+     22.0
+    ],
+    [
+     19.1,
+     11.0
+    ]
+   ],
+   "recharge": 60,
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 가장자리의 치유의 나무, 흔들면 범위 안 상흔을 지우고 60초 재충전 + estimate(나무 6그루 자리, 범위 3.5m)"
+  },
+  {
+   "t": 6,
+   "type": "scarHit",
+   "name": "파쇄의 바람(푸른 상흔)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 0.0,
+      "z": 24.0
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": -12.0,
+      "z": 20.78
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 12.0,
+      "z": 20.78
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": -20.78,
+      "z": 12.0
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 20.78,
+      "z": 12.0
+     },
+     "w": 3
+    }
+   ],
+   "cast": 2.5,
+   "scar": [
+    "푸른"
+   ],
+   "want": {
+    "tank": "out",
+    "heal": "in",
+    "dps": "any"
+   },
+   "anim": "shatter",
+   "failMsg": null,
+   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)"
+  },
+  {
+   "t": 15,
+   "type": "scarHit",
+   "name": "팽창 회오리(녹색 상흔)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 0.0,
+      "z": 45.0
+     },
+     "w": 10
+    }
+   ],
+   "cast": 2.5,
+   "scar": [
+    "녹색"
+   ],
+   "want": {
+    "tank": "out",
+    "heal": "out",
+    "dps": "out"
+   },
+   "color": "yellow",
+   "anim": "tornado",
+   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)"
+  },
+  {
+   "t": 24,
+   "type": "scarHit",
+   "name": "압축 돌풍(녹색 상흔)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": -6,
+     "z": 12,
+     "r": 2.5
+    },
+    {
+     "shape": "circle",
+     "x": -10,
+     "z": 15,
+     "r": 2.5
+    },
+    {
+     "shape": "circle",
+     "x": -2,
+     "z": 16,
+     "r": 2.5
+    }
+   ],
+   "cast": 7,
+   "scar": [
+    "녹색"
+   ],
+   "want": {
+    "tank": "out",
+    "heal": "out",
+    "dps": "in"
+   },
+   "color": "yellow",
+   "okMsg": null,
+   "src": "table(龙卷: 원 반경 2.5m) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러 발밑에 장판 3개 → 회오리, 딜러가 하나씩 밟아 녹색 상흔을 받는다. 안 밟으면 전장 폭발 + estimate(자리, 제한 7초)"
+  },
+  {
+   "t": 35,
+   "type": "scarHit",
+   "name": "강력한 물어뜯기(푸른 상흔)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 1
+     },
+     "b": {
+      "x": 0,
+      "z": 6
+     },
+     "w": 3
+    }
+   ],
+   "cast": 3,
+   "scar": [
+    "푸른"
+   ],
+   "want": {
+    "tank": "any",
+    "heal": "in",
+    "dps": "any"
+   },
+   "color": "blue",
+   "anim": "bite",
+   "src": "table(咬: 후퇴 3.4m 뒤 전방 타격) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 탱커를 묶고 가장 가까운 사람을 문다. 힐러가 보스와 탱커 사이를 막는다 + estimate(예고 3초, 막는 자리 폭)"
+  },
+  {
+   "t": 43,
+   "type": "pounce",
+   "name": "틈을 노린 급습",
+   "r": 3.2,
+   "cast": 2,
+   "anim": "pounce",
+   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가"
+  },
+  {
+   "t": 50,
+   "type": "lineup",
+   "name": "바람 칼날의 부름",
+   "from": [
+    0,
+    0
+   ],
+   "to": [
+    0,
+    -26
+   ],
+   "width": 3,
+   "gap": 5,
+   "cast": 8,
+   "bots": [
+    [
+     0,
+     -3
+    ],
+    [
+     0,
+     -8.5
+    ],
+    [
+     0,
+     -19.5
+    ],
+    [
+     0,
+     -25
+    ]
+   ],
+   "bossTo": [
+    0,
+    0
+   ],
+   "anim": "call",
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 보스가 중앙으로, 가장자리 구체와 보스 사이 직사각형 위에 전원이 간격을 두고 선다. 구체가 보스에 닿으면 격노 + estimate(폭 3m, 간격 5m, 8초, 방향)"
+  },
+  {
+   "t": 62,
+   "type": "hunt",
+   "name": "사냥(내가 대상)",
+   "tree": 0,
+   "cast": 8,
+   "anim": "hunt",
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 지정 대상이 충전된 나무의 풀 위에 서면 보스가 나무에 부딪힌다. 미리 흔들면 무효. 사냥 직전 나무 전부 재충전 + estimate(나무 순서 첫 그루, 8초, 이동 감속은 넣지 않음)"
+  },
+  {
+   "t": 74,
+   "type": "scarHit",
+   "name": "혼합 콤보(상흔 3종)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": -19.1,
+     "z": 11.0,
+     "r": 5
+    }
+   ],
+   "cast": 6,
+   "scar": [
+    "붉은",
+    "푸른",
+    "녹색"
+   ],
+   "want": {
+    "tank": "in",
+    "heal": "in",
+    "dps": "in"
+   },
+   "color": "pink",
+   "okMsg": "나무 곁에 모여 5연타를 받음",
+   "failMsg": "나무에서 떨어져 맞음 — 정화 못 함",
+   "anim": "combo",
+   "src": "table(五连击: 원 반경 1.6m 돌진 5회) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 충전된 나무 하나에 전원 모여 다 맞은 뒤 흔들어 정화 + estimate(모이는 나무, 6초)"
+  },
+  {
+   "t": 80.5,
+   "type": "cleanseCheck",
+   "name": "콤보 뒤 정화",
+   "at": [
+    -19.1,
+    11.0
+   ],
+   "cast": 5,
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md)"
+  },
+  {
+   "t": 88,
+   "type": "scarHit",
+   "name": "파쇄의 바람(푸른 상흔)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 0.0,
+      "z": 24.0
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": -12.0,
+      "z": 20.78
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 12.0,
+      "z": 20.78
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": -20.78,
+      "z": 12.0
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 20.78,
+      "z": 12.0
+     },
+     "w": 3
+    }
+   ],
+   "cast": 2.5,
+   "scar": [
+    "푸른"
+   ],
+   "want": {
+    "tank": "out",
+    "heal": "in",
+    "dps": "any"
+   },
+   "anim": "shatter",
+   "failMsg": null,
+   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)"
+  },
+  {
+   "t": 96,
+   "type": "pounce",
+   "name": "틈을 노린 급습",
+   "r": 3.2,
+   "cast": 2,
+   "anim": "pounce",
+   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가"
+  },
+  {
+   "t": 104,
+   "type": "scarHit",
+   "name": "팽창 회오리(녹색 상흔)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 0.0,
+      "z": 45.0
+     },
+     "w": 10
+    }
+   ],
+   "cast": 2.5,
+   "scar": [
+    "녹색"
+   ],
+   "want": {
+    "tank": "out",
+    "heal": "out",
+    "dps": "out"
+   },
+   "color": "yellow",
+   "anim": "tornado",
+   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)"
+  }
+ ],
+ "duration": 112
+}

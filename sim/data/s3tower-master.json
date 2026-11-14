@@ -1,0 +1,504 @@
+{
+ "id": "s3tower-master",
+ "title": "카트그리프 · 마스터",
+ "notes": "침식・거탑 유적 막보스. 기믹은 data/master-s3-mech-s3tower.md, 판정 수치는 클라 스킬 데이터(모델 배율 1.6 적용 여부 미확정). 꽃을 부술 때마다 레이저 막기 → 추방 → 진짜 포털 순으로 특수 기믹이 나오는 구조를 시간순으로 늘어놓았다. 침식 수치, 꽃 체력, 흡인, 환각 스택은 없고 시각은 전부 추정. 레이저 막기는 2개 중 내 몫 1개, 포털은 정답을 표시해 준다",
+ "noCurtain": true,
+ "arena": {
+  "radius": 26,
+  "model": "arena_kart.glb",
+  "src": "estimate(반경) + measured(씬 dng_hero_1121_tower_s3 보스 자리 둘레)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   6,
+   12
+  ],
+  "src": "레이드 시나리오와 같은 값"
+ },
+ "boss": {
+  "pos": [
+   0,
+   0
+  ],
+  "height": 8,
+  "scale": 1.6,
+  "model": "boss_kart.glb",
+  "src": "table(몬스터 1152 卡特格里夫, 프리팹 ch_mon_typeochaozai_02, 모델 배율 1.6)",
+  "anims": {
+   "idle": "as_mon_typeochaozai_fidle_sp",
+   "laser": "as_mon_typeochaozai_huimiejiguang_start",
+   "bomb": "as_mon_typeochaozai_daodanduan",
+   "shock": "as_mon_typeochaozai_chaodaobodong_start",
+   "rift": "as_mon_typeochaozai_cangqiongbenglie_start",
+   "exile": "as_mon_typeochaozai_diancifengbao_start",
+   "dash": "as_mon_typeochaozai_chongfeng_start"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름(병음)으로 본 추정"
+ },
+ "partySpots": [
+  [
+   0,
+   6
+  ],
+  [
+   -6,
+   12
+  ],
+  [
+   8,
+   10
+  ],
+  [
+   -10,
+   8
+  ]
+ ],
+ "partyRoles": {
+  "dps": [
+   "탱",
+   "힐",
+   "딜",
+   "딜"
+  ],
+  "heal": [
+   "탱",
+   "딜",
+   "딜",
+   "딜"
+  ],
+  "tank": [
+   "힐",
+   "딜",
+   "딜",
+   "딜"
+  ]
+ },
+ "events": [
+  {
+   "t": 1,
+   "type": "marks",
+   "pos": [
+    [
+     0,
+     18
+    ],
+    [
+     16,
+     -9
+    ],
+    [
+     -16,
+     -9
+    ]
+   ],
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 환상꽃 3개: 아래·오른쪽 위·왼쪽 위 + estimate(좌표)"
+  },
+  {
+   "t": 2,
+   "type": "hazards",
+   "name": "꽃잎(속박)",
+   "spots": [
+    [
+     -4,
+     20,
+     2
+    ],
+    [
+     4,
+     20,
+     2
+    ],
+    [
+     13,
+     -12,
+     2
+    ],
+    [
+     19,
+     -6,
+     2
+    ],
+    [
+     -13,
+     -12,
+     2
+    ],
+    [
+     -19,
+     -6,
+     2
+    ]
+   ],
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 꽃 주위 꽃잎을 밟으면 속박과 지속 피해 + estimate(자리·반경, 꽃마다 2장만)"
+  },
+  {
+   "t": 6,
+   "type": "scarHit",
+   "name": "파멸 레이저(탱버)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 0,
+      "z": 30
+     },
+     "w": 5
+    }
+   ],
+   "cast": 2.5,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "anim": "laser",
+   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)"
+  },
+  {
+   "t": 12,
+   "type": "press",
+   "name": "꽃 연결 차단",
+   "at": [
+    0,
+    18
+   ],
+   "cast": 5,
+   "okMsg": null,
+   "failMsg": "차단 실패 — 침식 수치 상승",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 약 25~30초마다 꽃이 보스와 연결돼 침식이 오른다. 꽃에 차단 입력 + estimate(허용 5초)"
+  },
+  {
+   "t": 20,
+   "type": "spread",
+   "name": "점착탄",
+   "r": 4,
+   "cast": 5,
+   "anim": "bomb",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m)"
+  },
+  {
+   "t": 28,
+   "type": "stack",
+   "name": "쉐어",
+   "at": [
+    -6,
+    8
+   ],
+   "r": 4,
+   "cast": 4,
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 인원 수로 분담 + estimate(반경 4m, 자리)"
+  },
+  {
+   "t": 34,
+   "type": "sweep",
+   "name": "하늘 균열·역(레이저 막기)",
+   "warn": 3,
+   "from": 90,
+   "vel": 20,
+   "dur": 9,
+   "len": 28,
+   "width": 3,
+   "block": 0.6,
+   "anim": "rift",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 1번째 꽃 파괴 뒤: 도는 레이저 2개를 몸으로 막아 꽃잎에 닿지 않게 한다(내 몫 1개만) + estimate(회전 속도·길이)"
+  },
+  {
+   "t": 50,
+   "type": "shapes",
+   "name": "초전도 파동(흡인 뒤 내려찍기)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 0,
+     "r": 9.6
+    }
+   ],
+   "cast": 4,
+   "bossTo": [
+    0,
+    0
+   ],
+   "anim": "shock",
+   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음"
+  },
+  {
+   "t": 58,
+   "type": "shapes",
+   "name": "차원 추방·역(붉은 로봇 내려찍기)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": -10,
+     "z": -6,
+     "r": 12
+    },
+    {
+     "shape": "circle",
+     "x": 10,
+     "z": -6,
+     "r": 12
+    }
+   ],
+   "cast": 5,
+   "anim": "exile",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 2번째 꽃 파괴 뒤: 붉은 로봇의 내려찍기 범위 밖 + estimate(반경 12m, 자리)"
+  },
+  {
+   "t": 63,
+   "type": "press",
+   "name": "침식 오브 줍기",
+   "at": [
+    0,
+    12
+   ],
+   "cast": 6,
+   "okMsg": "오브를 주워 침식 감소",
+   "failMsg": "오브를 놓침",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 작은 로봇을 치유하면 오브가 생기고 주우면 침식 감소 + estimate(자리·시간)"
+  },
+  {
+   "t": 72,
+   "type": "shapes",
+   "name": "피자(안전 60°)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 15,
+     "dir": 4.71238898038469,
+     "half": 2.6179938779914944
+    }
+   ],
+   "cast": 3,
+   "src": "table(보스 중심 반경 15m의 300° 부채꼴, 1.87초) + estimate(방향·예고)"
+  },
+  {
+   "t": 78,
+   "type": "safe",
+   "name": "순간 균열(진짜 포털)",
+   "spots": [
+    [
+     20,
+     0
+    ]
+   ],
+   "r": 3,
+   "cast": 8,
+   "color": "pink",
+   "okMsg": "진짜 포털로 탈출",
+   "failMsg": "가짜 포털 또는 시간 초과 — 전멸",
+   "anim": "rift",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 3번째 꽃 파괴 뒤: 포털 4개 중 다수가 분홍으로 보는 것이 진짜(연습기는 정답을 분홍 원으로 보여 줌) + estimate(제한 8초)"
+  },
+  {
+   "t": 78,
+   "type": "shapes",
+   "kind": "show",
+   "name": "가짜 포털",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": -20,
+     "z": 0,
+     "r": 3
+    },
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": -20,
+     "r": 3
+    },
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 20,
+     "r": 3
+    }
+   ],
+   "cast": 8,
+   "color": "gray",
+   "src": "estimate"
+  },
+  {
+   "t": 90,
+   "type": "shapes",
+   "name": "돌진·환",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": -20,
+      "z": -10
+     },
+     "b": {
+      "x": 20,
+      "z": 10
+     },
+     "w": 5
+    }
+   ],
+   "cast": 3.4,
+   "anim": "dash",
+   "src": "table(몸 원 반경 2.5에 배율 1.6 → 폭 약 5~8m, 3.37초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 직선 예고를 따라 돌진"
+  },
+  {
+   "t": 96,
+   "type": "scarHit",
+   "name": "파멸 레이저(탱버)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 0,
+      "z": 30
+     },
+     "w": 5
+    }
+   ],
+   "cast": 2.5,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "anim": "laser",
+   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)"
+  },
+  {
+   "t": 102,
+   "type": "spread",
+   "name": "점착탄",
+   "r": 4,
+   "cast": 5,
+   "anim": "bomb",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m)"
+  },
+  {
+   "t": 110,
+   "type": "shapes",
+   "name": "초전도 파동(흡인 뒤 내려찍기)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 0,
+     "r": 9.6
+    }
+   ],
+   "cast": 4,
+   "bossTo": [
+    0,
+    0
+   ],
+   "anim": "shock",
+   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음"
+  }
+ ],
+ "variants": {
+  "18": {
+   "label": "18단 서프라이즈",
+   "events": [
+    {
+     "t": 14,
+     "type": "spread",
+     "name": "서프라이즈(폭탄)",
+     "r": 5,
+     "cast": 5,
+     "color": "yellow",
+     "src": "table(수식어 설명문) + estimate"
+    },
+    {
+     "t": 66,
+     "type": "spread",
+     "name": "서프라이즈(폭탄)",
+     "r": 5,
+     "cast": 5,
+     "color": "yellow",
+     "src": "table(수식어 설명문) + estimate"
+    }
+   ]
+  },
+  "19": {
+   "label": "19단 집결",
+   "events": [
+    {
+     "t": 14,
+     "type": "stack",
+     "name": "집결(보호막 안으로)",
+     "at": [
+      6,
+      6
+     ],
+     "r": 4,
+     "cast": 5,
+     "src": "table(수식어 설명문: 5초 뒤 낙뢰, 보호막 밖은 최대 체력 50% 피해와 기절) + estimate(자리·반경)"
+    },
+    {
+     "t": 66,
+     "type": "stack",
+     "name": "집결(보호막 안으로)",
+     "at": [
+      -6,
+      10
+     ],
+     "r": 4,
+     "cast": 5,
+     "src": "table(수식어 설명문: 5초 뒤 낙뢰, 보호막 밖은 최대 체력 50% 피해와 기절) + estimate(자리·반경)"
+    }
+   ]
+  },
+  "20": {
+   "label": "20단 작열의 수정",
+   "events": [
+    {
+     "t": 14,
+     "type": "puddle",
+     "name": "작열의 수정",
+     "r": 4,
+     "cast": 3,
+     "color": "yellow",
+     "src": "table(수식어 설명문: 3명에게 부착, 2회 연속 폭발) + estimate(반경; 1회로 줄임)"
+    },
+    {
+     "t": 66,
+     "type": "puddle",
+     "name": "작열의 수정",
+     "r": 4,
+     "cast": 3,
+     "color": "yellow",
+     "src": "table(수식어 설명문: 3명에게 부착, 2회 연속 폭발) + estimate(반경; 1회로 줄임)"
+    },
+    {
+     "t": 104,
+     "type": "puddle",
+     "name": "작열의 수정",
+     "r": 4,
+     "cast": 3,
+     "color": "yellow",
+     "src": "table(수식어 설명문: 3명에게 부착, 2회 연속 폭발) + estimate(반경; 1회로 줄임)"
+    }
+   ]
+  }
+ },
+ "duration": 116
+}
