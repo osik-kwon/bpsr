@@ -87,7 +87,7 @@
  },
  "events": [
   {
-   "t": 1.5,
+   "t": 3,
    "type": "spread",
    "name": "추적 미사일(광차 전)",
    "r": 3,
@@ -95,7 +95,7 @@
    "src": "video(Layla 공략 자막, raw/raidvid/guides/txt/factory-m6plus.txt: 6단 이상은 조준 원이 광차 기믹 전에도 나오고 세 번째 원이 추가된다)"
   },
   {
-   "t": 3,
+   "t": 5,
    "type": "shapes",
    "kind": "show",
    "name": "폭주 포효(전체 피해)",
@@ -110,11 +110,11 @@
    "cast": 1.5,
    "color": "pink",
    "anim": "roar",
-   "src": "table(전체 공격 3350010) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "src": "table(전체 공격 3350010) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "roar"
   },
   {
-   "t": 4,
+   "t": 8,
    "type": "carry",
    "name": "증기 분출구 봉쇄",
    "pick": [
@@ -128,18 +128,18 @@
    "cast": 20,
    "pickMsg": "광차에서 E로 수정 들기",
    "dropMsg": "분출구에서 E로 설치",
-   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 광차에서 수정을 들어 분출구에 설치하면 봉쇄. 마스터는 분출구 3개(내 몫 1개만 넣음), 첫 분출구는 오른쪽 아래 + estimate(자리, 제한 20초)"
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 광차에서 수정을 들어 분출구에 설치하면 봉쇄. 마스터는 분출구 3개(내 몫 1개만 넣음), 첫 분출구는 오른쪽 아래 + estimate(자리, 제한 20초) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)"
   },
   {
-   "t": 12,
+   "t": 36,
    "type": "spread",
    "name": "추적 미사일",
    "r": 3,
    "cast": 2.3,
-   "src": "table(원 반경 3m, 2.23초) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 파티원과 겹치지 않게"
+   "src": "table(원 반경 3m, 2.23초) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 파티원과 겹치지 않게 + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)"
   },
   {
-   "t": 25,
+   "t": 60,
    "type": "shapes",
    "name": "화염 회오리 고리 1",
    "spots": [
@@ -154,11 +154,11 @@
    "cast": 3,
    "color": "yellow",
    "anim": "tornado",
-   "src": "guide(고리 5~9m 3초, 9~13m 5초, 13~17m 8초) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "src": "guide(고리 5~9m 3초, 9~13m 5초, 13~17m 8초) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "ring1"
   },
   {
-   "t": 25,
+   "t": 60,
    "type": "shapes",
    "name": "화염 회오리 고리 2",
    "spots": [
@@ -172,11 +172,11 @@
    ],
    "cast": 5,
    "color": "yellow",
-   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "ring2"
   },
   {
-   "t": 25,
+   "t": 60,
    "type": "shapes",
    "name": "화염 회오리 고리 3",
    "spots": [
@@ -190,11 +190,11 @@
    ],
    "cast": 8,
    "color": "yellow",
-   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "ring3"
   },
   {
-   "t": 26,
+   "t": 62,
    "type": "intercept",
    "name": "화염구 막기",
    "from": [
@@ -216,7 +216,7 @@
    "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 회오리에서 분출구 쪽으로 초속 3m로 굴러가는 화염구를 몸으로 막는다. 6단 이상은 탱커·힐러가 닿으면 즉사 + estimate(판정 반경) + video(Layla 공략 자막, raw/raidvid/guides/txt/factory-m6plus.txt: 광차 기믹 중 두 명(보통 힐러·탱커)이 작열 연옥 디버프를 받아 몸에 불이 붙고, 이 상태로 화염구를 막으면 즉사)"
   },
   {
-   "t": 37,
+   "t": 92,
    "type": "shapes",
    "name": "대형 폭격",
    "spots": [
@@ -241,11 +241,11 @@
    ],
    "cast": 6.2,
    "anim": "bomb",
-   "src": "table(6.2초 예고) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 마스터는 큰 범위 3개, 없는 쪽으로 피한다 + estimate(자리·반경: 원자료 반경 50m는 전장보다 커서 줄임)",
+   "src": "table(6.2초 예고) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 마스터는 큰 범위 3개, 없는 쪽으로 피한다 + estimate(자리·반경: 원자료 반경 50m는 전장보다 커서 줄임) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "bomb"
   },
   {
-   "t": 46,
+   "t": 106,
    "type": "shapes",
    "kind": "show",
    "name": "포효 종료(전체 피해)",
@@ -259,11 +259,11 @@
    ],
    "cast": 1.5,
    "color": "pink",
-   "src": "table(3350011) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "src": "table(3350011) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "roar"
   },
   {
-   "t": 50,
+   "t": 130,
    "type": "stack",
    "name": "포식 2형: 분담",
    "at": [
@@ -273,7 +273,7 @@
    "r": 3,
    "cast": 3.5,
    "anim": "jump",
-   "src": "table(점프 31m, 분담 원 반경 3m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + estimate(분담 자리)",
+   "src": "table(점프 31m, 분담 원 반경 3m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + estimate(분담 자리) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "move": {
     "to": [
      0,
@@ -285,7 +285,7 @@
    "hold": 9
   },
   {
-   "t": 50,
+   "t": 130,
    "type": "shapes",
    "name": "포식 2형: 전방 부채꼴",
    "spots": [
@@ -299,11 +299,11 @@
     }
    ],
    "cast": 3.5,
-   "src": "table(부채꼴 반경 49m·120°, 1.53초) + estimate(예고 시간)",
+   "src": "table(부채꼴 반경 49m·120°, 1.53초) + estimate(예고 시간) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "fan"
   },
   {
-   "t": 54,
+   "t": 134,
    "type": "shapes",
    "name": "포식 2형: 직선",
    "spots": [
@@ -321,14 +321,14 @@
     }
    ],
    "cast": 2,
-   "src": "table(폭 7m 직선, 1.97초)",
+   "src": "table(폭 7m 직선, 1.97초) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "beam"
   },
   {
-   "t": 58,
+   "t": 140,
    "type": "marks",
    "pos": [],
-   "src": "estimate",
+   "src": "estimate + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "move": {
     "to": "home",
     "mode": "jump",
@@ -336,7 +336,7 @@
    }
   },
   {
-   "t": 60,
+   "t": 146,
    "type": "shapes",
    "name": "열충격(앞뒤 베기)",
    "spots": [
@@ -359,12 +359,12 @@
    ],
    "cast": 2.95,
    "anim": "slash",
-   "src": "table(앞·뒤 부채꼴 반경 15m·90°, 2.95초, 뒤쪽 원점 4m 뒤)",
+   "src": "table(앞·뒤 부채꼴 반경 15m·90°, 2.95초, 뒤쪽 원점 4m 뒤) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "slash",
    "rel": true
   },
   {
-   "t": 68,
+   "t": 166,
    "type": "shapes",
    "name": "포탑 등장",
    "spots": [
@@ -383,7 +383,7 @@
    ],
    "cast": 1.5,
    "anim": "fly",
-   "src": "table(포탑 등장 원 반경 6m, 1초) + estimate(자리)",
+   "src": "table(포탑 등장 원 반경 6m, 1초) + estimate(자리) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "turret",
    "move": {
     "to": [
@@ -393,10 +393,10 @@
     "mode": "jump",
     "dur": 1.5
    },
-   "hold": 16
+   "hold": 46
   },
   {
-   "t": 70,
+   "t": 170,
    "type": "safe",
    "name": "과부하 포격: 빛 원에서 충전",
    "spots": [
@@ -406,13 +406,13 @@
     ]
    ],
    "r": 4,
-   "cast": 12,
+   "cast": 40,
    "okMsg": "빛 원 안에서 버팀",
    "failMsg": "빛 원 밖 — 포격에 전멸",
-   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 체력 25~30%에 포탑 단계, 포탑을 부순 뒤 빛 원 안에서 구슬을 충전해 상호작용. 100초 제한 + estimate(포탑 처치·충전은 줄여서 빛 원에 서 있기로 대신)"
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 체력 25~30%에 포탑 단계, 포탑을 부순 뒤 빛 원 안에서 구슬을 충전해 상호작용. 100초 제한 + estimate(포탑 처치·충전은 줄여서 빛 원에 서 있기로 대신) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)"
   },
   {
-   "t": 84,
+   "t": 216,
    "type": "shapes",
    "name": "회오리 피자(2명 지목)",
    "spots": [
@@ -435,7 +435,7 @@
    ],
    "cast": 4,
    "anim": "tornado",
-   "src": "guide(마스터 포효 2: 2명 방향 부채꼴 반경 30m·60°, 4초) + estimate(방향)",
+   "src": "guide(마스터 포효 2: 2명 방향 부채꼴 반경 30m·60°, 4초) + estimate(방향) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "pizza",
    "move": {
     "to": "home",
@@ -444,7 +444,7 @@
    }
   },
   {
-   "t": 92,
+   "t": 262,
    "type": "shapes",
    "name": "포식 1형: 원 표식",
    "spots": [
@@ -457,12 +457,12 @@
    ],
    "cast": 3,
    "anim": "jump",
-   "src": "table(보스 중심 원 반경 6m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "src": "table(보스 중심 원 반경 6m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "devour",
    "rel": true
   },
   {
-   "t": 97,
+   "t": 276,
    "type": "shapes",
    "name": "포식 1형: 고리 표식",
    "spots": [
@@ -483,12 +483,12 @@
     }
    ],
    "cast": 3,
-   "src": "table(고리 8~18m, 마스터는 대상 방향 부채꼴 반경 25m·60° 추가) + estimate(방향)",
+   "src": "table(고리 8~18m, 마스터는 대상 방향 부채꼴 반경 25m·60° 추가) + estimate(방향) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "ring2",
    "rel": true
   },
   {
-   "t": 104,
+   "t": 290,
    "type": "shapes",
    "name": "파괴 광선",
    "spots": [
@@ -503,12 +503,12 @@
    ],
    "cast": 1.5,
    "anim": "laser",
-   "src": "table(부채꼴 반경 49m·120°, 1.5초 예고, 180° 돌아 한 번 더)",
+   "src": "table(부채꼴 반경 49m·120°, 1.5초 예고, 180° 돌아 한 번 더) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "laser",
    "rel": true
   },
   {
-   "t": 107,
+   "t": 294,
    "type": "shapes",
    "name": "파괴 광선(반대쪽)",
    "spots": [
@@ -522,17 +522,17 @@
     }
    ],
    "cast": 1.5,
-   "src": "table",
+   "src": "table + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)",
    "fx": "laser",
    "rel": true
   },
   {
-   "t": 113,
+   "t": 304,
    "type": "spread",
    "name": "추적 미사일",
    "r": 3,
    "cast": 2.3,
-   "src": "table + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+   "src": "table + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초)"
   }
  ],
  "variants": {
@@ -540,7 +540,7 @@
    "label": "18단 진동",
    "events": [
     {
-     "t": 16,
+     "t": 40,
      "type": "spread",
      "name": "진동(발밑 구역)",
      "r": 5,
@@ -550,7 +550,7 @@
      "fx": "quake"
     },
     {
-     "t": 64,
+     "t": 150,
      "type": "spread",
      "name": "진동(발밑 구역)",
      "r": 5,
@@ -560,7 +560,7 @@
      "fx": "quake"
     },
     {
-     "t": 100,
+     "t": 240,
      "type": "spread",
      "name": "진동(발밑 구역)",
      "r": 5,
@@ -575,7 +575,7 @@
    "label": "20단 침식의 운석",
    "events": [
     {
-     "t": 16,
+     "t": 40,
      "type": "stack",
      "name": "침식의 운석(쉐어)",
      "at": [
@@ -588,7 +588,7 @@
      "fx": "meteor"
     },
     {
-     "t": 76,
+     "t": 150,
      "type": "stack",
      "name": "침식의 운석(쉐어)",
      "at": [
@@ -606,7 +606,7 @@
    "label": "19단 장난 소동",
    "events": [
     {
-     "t": 16,
+     "t": 40,
      "type": "safe",
      "name": "장난 소동(폭탄 시전 끊기)",
      "spots": [
@@ -623,7 +623,7 @@
      "src": "table(수식어 설명문: 시전을 3회 끊으면 소멸) + estimate(곁에 서 있기로 대신)"
     },
     {
-     "t": 76,
+     "t": 150,
      "type": "safe",
      "name": "장난 소동(폭탄 시전 끊기)",
      "spots": [
@@ -642,7 +642,7 @@
    ]
   }
  },
- "duration": 120,
+ "duration": 314,
  "fxBase": "./assets/fx-shouren_duogeerman_fb/",
  "fx": {
   "roar": {
@@ -752,5 +752,6 @@
  "fxSrc": "이펙트는 클라 실측(effect/boss). 기믹과의 대응은 이펙트 이름·크기로 고른 추정이라 인게임과 다를 수 있다",
  "botsMove": true,
  "tankBot": 0,
- "partySrc": "던전은 5인 파티(탱 1, 힐 1~2, 딜 2~3). 파티원은 역할별 대형(탱커 보스 앞, 근딜 보스 뒤, 원딜·힐러 뒤쪽 양옆)을 잡고, 장판을 피하고, 기믹 자리로 걸어간다. 움직임 규칙은 연습기에서 정한 것"
+ "partySrc": "던전은 5인 파티(탱 1, 힐 1~2, 딜 2~3). 파티원은 역할별 대형(탱커 보스 앞, 근딜 보스 뒤, 원딜·힐러 뒤쪽 양옆)을 잡고, 장판을 피하고, 기믹 자리로 걸어간다. 움직임 규칙은 연습기에서 정한 것",
+ "timingSrc": "video(M20 클리어 영상 4초 간격 프레임: SH-hgkYQJ50, 화염 회오리 약 60~92초·직선 예고 약 132초·광선 약 152초·포탑 단계 약 168~215초·두 번째 회오리 약 216초·큰 고리 약 276초). 기믹이 나오는 순서와 간격을 영상에 맞췄다. 프레임이 작아 기믹 이름은 모양으로 추정했고, 영상에 안 보인 기믹은 사이에 끼워 넣었다"
 }

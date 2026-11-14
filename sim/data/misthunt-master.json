@@ -120,7 +120,7 @@
    "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 가장자리의 치유의 나무, 흔들면 범위 안 상흔을 지우고 60초 재충전 + estimate(나무 6그루 자리, 범위 3.5m) + video(Layla 공략 자막, raw/raidvid/guides/txt/misthunt-indepth.txt: 재사용 1분 30초, 사냥 전 전부 초기화)"
   },
   {
-   "t": 6,
+   "t": 10,
    "type": "scarHit",
    "name": "파쇄의 바람(푸른 상흔)",
    "spots": [
@@ -196,12 +196,12 @@
    },
    "anim": "shatter",
    "failMsg": null,
-   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)",
+   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "fx": "shatter",
    "rel": true
   },
   {
-   "t": 15,
+   "t": 26,
    "type": "scarHit",
    "name": "팽창 회오리(녹색 상흔)",
    "spots": [
@@ -229,12 +229,12 @@
    },
    "color": "yellow",
    "anim": "tornado",
-   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)",
+   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "fx": "tornado",
    "rel": true
   },
   {
-   "t": 24,
+   "t": 42,
    "type": "scarHit",
    "name": "압축 돌풍(녹색 상흔)",
    "spots": [
@@ -268,11 +268,11 @@
    },
    "color": "yellow",
    "okMsg": null,
-   "src": "table(龙卷: 원 반경 2.5m) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러 발밑에 장판 3개 → 회오리, 딜러가 하나씩 밟아 녹색 상흔을 받는다. 안 밟으면 전장 폭발 + estimate(자리, 제한 7초)",
+   "src": "table(龙卷: 원 반경 2.5m) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러 발밑에 장판 3개 → 회오리, 딜러가 하나씩 밟아 녹색 상흔을 받는다. 안 밟으면 전장 폭발 + estimate(자리, 제한 7초) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "fx": "gust"
   },
   {
-   "t": 35,
+   "t": 58,
    "type": "scarHit",
    "name": "강력한 물어뜯기(푸른 상흔)",
    "spots": [
@@ -300,18 +300,18 @@
    },
    "color": "blue",
    "anim": "bite",
-   "src": "table(咬: 후퇴 3.4m 뒤 전방 타격) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 탱커를 묶고 가장 가까운 사람을 문다. 힐러가 보스와 탱커 사이를 막는다 + estimate(예고 3초, 막는 자리 폭)",
+   "src": "table(咬: 후퇴 3.4m 뒤 전방 타격) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 탱커를 묶고 가장 가까운 사람을 문다. 힐러가 보스와 탱커 사이를 막는다 + estimate(예고 3초, 막는 자리 폭) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "fx": "bite",
    "rel": true
   },
   {
-   "t": 43,
+   "t": 70,
    "type": "pounce",
    "name": "틈을 노린 급습",
    "r": 3.2,
    "cast": 2,
    "anim": "pounce",
-   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가",
+   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가 + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "move": {
     "to": "me",
     "mode": "jump",
@@ -327,7 +327,7 @@
    }
   },
   {
-   "t": 50,
+   "t": 82,
    "type": "lineup",
    "name": "바람 칼날의 부름",
    "from": [
@@ -360,7 +360,7 @@
     ]
    ],
    "anim": "call",
-   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 보스가 중앙으로, 가장자리 구체와 보스 사이 직사각형 위에 전원이 간격을 두고 선다. 구체가 보스에 닿으면 격노 + estimate(폭 3m, 간격 5m, 8초, 방향)",
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 보스가 중앙으로, 가장자리 구체와 보스 사이 직사각형 위에 전원이 간격을 두고 선다. 구체가 보스에 닿으면 격노 + estimate(폭 3m, 간격 5m, 8초, 방향) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "move": {
     "to": [
      0,
@@ -372,13 +372,13 @@
    "hold": 9
   },
   {
-   "t": 62,
+   "t": 96,
    "type": "hunt",
    "name": "사냥(내가 대상)",
    "tree": 0,
    "cast": 8,
    "anim": "hunt",
-   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 지정 대상이 충전된 나무의 풀 위에 서면 보스가 나무에 부딪힌다. 미리 흔들면 무효. 사냥 직전 나무 전부 재충전 + estimate(나무 순서 첫 그루, 8초, 이동 감속은 넣지 않음)",
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 지정 대상이 충전된 나무의 풀 위에 서면 보스가 나무에 부딪힌다. 미리 흔들면 무효. 사냥 직전 나무 전부 재충전 + estimate(나무 순서 첫 그루, 8초, 이동 감속은 넣지 않음) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "move": {
     "to": {
      "tree": 0
@@ -397,7 +397,7 @@
    "hold": 13
   },
   {
-   "t": 74,
+   "t": 150,
    "type": "scarHit",
    "name": "혼합 콤보(상흔 3종)",
    "spots": [
@@ -423,7 +423,7 @@
    "okMsg": "나무 곁에 모여 5연타를 받음",
    "failMsg": "나무에서 떨어져 맞음 — 정화 못 함",
    "anim": "combo",
-   "src": "table(五连击: 원 반경 1.6m 돌진 5회) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 충전된 나무 하나에 전원 모여 다 맞은 뒤 흔들어 정화 + estimate(모이는 나무, 6초)",
+   "src": "table(五连击: 원 반경 1.6m 돌진 5회) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 충전된 나무 하나에 전원 모여 다 맞은 뒤 흔들어 정화 + estimate(모이는 나무, 6초) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "fx": "combo",
    "move": {
     "to": [
@@ -444,7 +444,7 @@
    "hold": 11
   },
   {
-   "t": 80.5,
+   "t": 156.5,
    "type": "cleanseCheck",
    "name": "콤보 뒤 정화",
    "at": [
@@ -452,10 +452,10 @@
     11.0
    ],
    "cast": 5,
-   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md)"
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)"
   },
   {
-   "t": 88,
+   "t": 169,
    "type": "scarHit",
    "name": "파쇄의 바람(푸른 상흔)",
    "spots": [
@@ -531,18 +531,18 @@
    },
    "anim": "shatter",
    "failMsg": null,
-   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)",
+   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "fx": "shatter",
    "rel": true
   },
   {
-   "t": 96,
+   "t": 182,
    "type": "pounce",
    "name": "틈을 노린 급습",
    "r": 3.2,
    "cast": 2,
    "anim": "pounce",
-   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가",
+   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가 + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "move": {
     "to": "me",
     "mode": "jump",
@@ -558,7 +558,7 @@
    }
   },
   {
-   "t": 104,
+   "t": 196,
    "type": "scarHit",
    "name": "팽창 회오리(녹색 상흔)",
    "spots": [
@@ -586,12 +586,12 @@
    },
    "color": "yellow",
    "anim": "tornado",
-   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)",
+   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향) + video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초)",
    "fx": "tornado",
    "rel": true
   }
  ],
- "duration": 112,
+ "duration": 206,
  "fxBase": "./assets/fx-suiyezhiya/",
  "fx": {
   "shatter": {
@@ -659,5 +659,6 @@
  },
  "fxSrc": "이펙트는 클라 실측(effect/boss). 기믹과의 대응은 이펙트 이름·크기로 고른 추정이라 인게임과 다를 수 있다",
  "botsMove": true,
- "tankBot": 0
+ "tankBot": 0,
+ "timingSrc": "video(M20 클리어 영상 4초 간격 프레임: 3h68zMUBjgE, 바람 칼날 약 89초·사냥 93~109초·두 번째 파쇄 약 169초). 기믹이 나오는 순서와 간격을 영상에 맞췄다. 프레임이 작아 기믹 이름은 모양으로 추정했고, 영상에 안 보인 기믹은 사이에 끼워 넣었다"
 }

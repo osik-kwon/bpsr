@@ -148,17 +148,31 @@ console.log('PASS');
   console.log(L.ok ? 'PASS' : 'FAIL', '탱커가 탱버를 끝으로 가져가면 성공', L.msg ?? '');
 }
 
-// 마스터 던전 티나(시즌3 16단+): 가만히 있으면 실패가 쌓이고, 모범 동선이면 전부 성공
+// 마스터 던전 공용 실행기: 정해 둔 동선대로 걷되, 곧 터질 장판(피하기·역할상 피해야 하는 상흔 공격) 안이면 가까운 안전한 자리로 먼저 피한다
+const { Combat: CombatM } = await import('./combat.js');
+function runMaster(file, { role = 'dps', plan = [], acts = [], hook = null, variant = null } = {}) {
+  const d = JSON.parse(fs.readFileSync(new URL(`./data/${file}.json`, import.meta.url)));
+  const t = new Sim(d, new CombatM({ role, tank: role === 'tank', skills: {} })), A = [...acts], R = (d.arena.radius ?? 30) - 2;
+  const bad = q => t.tele.some(x => (x.kind === 'avoid' || (x.kind === 'scar' && x.want === 'out')) && !x.follow && (x.showFrom ?? x.start) <= t.t && x.hitAt - t.t <= 2.5 && inside(x, q));
+  while (!t.done) {
+    let g = plan.filter(([at]) => at <= t.t).pop()?.[1]; const h = hook?.(t); if (h) g = h;
+    if (bad(t.player)) { let best = null; for (let k = 0; k < 24; k++) for (const r of [2, 4, 6, 9, 12, 16, 20]) { const q = { x: t.player.x + Math.cos(k * Math.PI / 12) * r, z: t.player.z + Math.sin(k * Math.PI / 12) * r }; if (Math.hypot(q.x, q.z) < R && !bad(q) && (!best || r < best.r)) best = { ...q, r }; } if (best) g = [best.x, best.z]; }
+    else if (g && bad({ x: g[0], z: g[1] })) g = null;
+    const dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz), interact = A.length && t.t >= A[0] ? (A.shift(), true) : false;
+    t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact });
+  }
+  return t;
+}
+const report = (name, t, extra = true) => console.log(t.log.every(r => r.ok) && extra ? 'PASS' : 'FAIL', name, t.log.length, t.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, null]], hook: () => null }); const t2 = new Sim(JSON.parse(fs.readFileSync(new URL(`./data/${file}.json`, import.meta.url))), new CombatM({ role: 'dps', skills: {} })); while (!t2.done) t2.step(0.05, { mx: 0, mz: 0 }); console.log(t2.log.filter(r => !r.ok).length >= n ? 'PASS' : 'FAIL', `${name}: 가만히 있으면 실패`, t2.log.filter(r => r.ok).length, '/', t2.log.length); };
+
+// 티나(시즌3 16단+, 영상 순서): 저주 → 위압 → 쉐어 → 창날 난무 → 거대화 → 침공 → 저주 2회차 → 분신 해일 → 창날 난무 2회차 → 번호 순 강타
 {
-  const d = JSON.parse(fs.readFileSync(new URL('./data/tina-master.json', import.meta.url)));
-  const run = (plan, acts) => { const t = new Sim(d); const A = [...acts]; while (!t.done) { const g = plan.filter(([at]) => at <= t.t).pop()?.[1], dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t.log; };
-  const idle = run([], []);
-  console.log(idle.filter(r => !r.ok).length >= 8 ? 'PASS' : 'FAIL', '티나: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
+  idleFails('티나', 'tina-master', 8);
   const P = a => [Math.cos(a * Math.PI / 180) * 10, Math.sin(a * Math.PI / 180) * 10];
-  const plan = [[0, [0, 18]], [6.1, [13, -20]], [16.1, [0, 8]], [22.1, [-17, 1]], [30.1, P(157.5)], [34.45, P(202.5)], [36.55, P(247.5)], [38.65, P(292.5)], [41, [14, 14]], [53.25, [11.5, 23]],
-    [58, [0, 18]], [74.1, [19, 0]], [92, [0, 19]], [103.1, [12, -12]], [116, [18, 0]], [131.1, [-14, 10]]];
-  const ok = run(plan, [6, 74, 91, 103, 131]);
-  console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '티나: 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  const pizza = t0 => [[t0 - 10, P(157.5)], [t0 + 3.45, P(202.5)], [t0 + 5.55, P(247.5)], [t0 + 7.65, P(292.5)]];
+  const t = runMaster('tina-master', { plan: [[0, [0, 18]], [6.1, [13, -20]], [16.1, [-17, 1]], [30, [0, 8]], ...pizza(62), [72, [19, 0]], [93.1, [0, 19]], [105.1, [12, -14]], [122, [18, 0]], [138.1, [-14, 12]], [150, [0, 18]], [166.1, [13, -20]], [176.1, [0, 18]], [200.1, [19, 0]], ...pizza(224), [234, [14, 14]], [252.25, [11.5, 23]]], acts: [6, 93, 105, 138, 166, 200] });
+  report('티나: 모범 동선', t);
 }
 
 // 티나 단계별 수식어: 18단 폭탄은 본대에서 빠져야 하고, 19단 연결은 이어진 파티원에게 다가가야 풀린다
@@ -170,9 +184,9 @@ console.log('PASS');
   t = new Sim(load('18')); while (t.t < 20) t.step(0.05, t.t > 10 ? { mx: 0, mz: 1 } : { mx: 0, mz: 0 });
   const b = t.log.find(r => r.name.includes('서프라이즈'));
   console.log(a && !a.ok && b && b.ok ? 'PASS' : 'FAIL', '티나 18단 폭탄', a?.msg, '/', b?.msg);
-  t = new Sim(load('19')); while (t.t < 31) t.step(0.05, { mx: 0, mz: 0 });
+  t = new Sim(load('19')); while (t.t < 46) t.step(0.05, { mx: 0, mz: 0 });
   const c = t.log.find(r => r.name === '약화 연결');
-  t = new Sim(load('19')); while (t.t < 31) { const k = t.links[0], g = k && t.bots[k.bot], dx = g ? g.x - t.player.x : 0, dz = g ? g.z - t.player.z : 0, l = Math.hypot(dx, dz) || 1; t.step(0.05, g ? { mx: dx / l, mz: dz / l } : { mx: 0, mz: 0 }); }
+  t = new Sim(load('19')); while (t.t < 46) { const k = t.links[0], g = k && t.bots[k.bot], dx = g ? g.x - t.player.x : 0, dz = g ? g.z - t.player.z : 0, l = Math.hypot(dx, dz) || 1; t.step(0.05, g ? { mx: dx / l, mz: dz / l } : { mx: 0, mz: 0 }); }
   const e = t.log.find(r => r.name === '약화 연결');
   console.log(c && e && e.ok ? 'PASS' : 'FAIL', '티나 19단 연결', c?.msg, '/', e?.msg);
   console.log(load('20').title.includes('20단') && load('20').events.length === load('0').events.length + 2 ? 'PASS' : 'FAIL', '티나 20단 변형 적용');
@@ -180,47 +194,35 @@ console.log('PASS');
 
 // 안개 송곳니: 딜러는 압축 돌풍을 밟아 상흔을 만들어야 급습에서 산다
 {
-  const { Combat } = await import('./combat.js');
-  const d = JSON.parse(fs.readFileSync(new URL('./data/misthunt-master.json', import.meta.url)));
-  const run = (role, plan, acts) => { const t = new Sim(d, new Combat({ role, tank: role === 'tank', skills: {} })); const A = [...acts]; while (!t.done) { let g = plan.filter(([at]) => at <= t.t).pop()?.[1]; const sh = t.t > 86 && t.tele.find(x => x.name.includes('파쇄')); if (sh) { const q = sh.spots[0]; g = [q.a.x + (q.b.x - q.a.x) * 0.4, q.a.z + (q.b.z - q.a.z) * 0.4]; } const dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t.log; };
-  const idle = run('dps', [], []);
-  console.log(idle.filter(r => !r.ok).length >= 5 ? 'PASS' : 'FAIL', '안개 송곳니: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
-  const T = d.events[0].pos;
-  const ok = run('dps', [[0, [12, 6]], [18, [-6, 12]], [32, [10, 8]], [46, [0, -14]], [59, T[0]], [71, T[3]], [84, [0, 10]], [92, [12, 4]]], [82]);
-  console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '안개 송곳니: 딜러 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  idleFails('안개 송곳니', 'misthunt-master', 5);
+  const T = JSON.parse(fs.readFileSync(new URL('./data/misthunt-master.json', import.meta.url))).events[0].pos;
+  const shatter = t => { const sh = t.t > 160 && t.tele.find(x => x.name.includes('파쇄')); if (!sh) return null; const q = sh.spots[0]; return [q.a.x + (q.b.x - q.a.x) * 0.4, q.a.z + (q.b.z - q.a.z) * 0.4]; };
+  const t = runMaster('misthunt-master', { plan: [[0, [14, 10]], [30, [-6, 12]], [50, [12, 10]], [74, [0, -14]], [91, T[0]], [140, T[3]], [160, [0, 10]], [173, [14, 8]]], acts: [158], hook: shatter });
+  report('안개 송곳니: 딜러 모범 동선', t);
 }
 
-// 타나트로스: 딜러 모범 동선(수정 운반 → 화염구 막기 → 분담 → 빛 원 → 광선 회피)
+// 타나트로스: 딜러 모범 동선(수정 운반 → 화염구 막기 → 분담 → 빛 원)
 {
-  const { Combat } = await import('./combat.js');
-  const d = JSON.parse(fs.readFileSync(new URL('./data/factory-master.json', import.meta.url)));
-  const run = (role, plan, acts) => { const t = new Sim(d, new Combat({ role, tank: role === 'tank', skills: {} })); const A = [...acts]; while (!t.done) { let g = plan.filter(([at]) => at <= t.t).pop()?.[1]; if (t.t > 103 && t.t < 110) { const bad = q => t.tele.some(x => x.kind === 'avoid' && inside(x, q)); if (bad(t.player)) { let best = null; for (let k = 0; k < 16; k++) for (const r of [4, 8, 12, 16]) { const q = { x: t.player.x + Math.cos(k * Math.PI / 8) * r, z: t.player.z + Math.sin(k * Math.PI / 8) * r }; if (Math.hypot(q.x, q.z) < 24 && !bad(q) && (!best || r < best.r)) best = { ...q, r }; } if (best) g = [best.x, best.z]; } else g = [t.player.x, t.player.z]; } const dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t.log; };
-  const idle = run('dps', [], []);
-  console.log(idle.filter(r => !r.ok).length >= 6 ? 'PASS' : 'FAIL', '타나트로스: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
-  const ok = run('dps', [[0, [-22, 0]], [6.1, [16, 14]], [44, [15, -19]], [70, [-10, 8]], [95.2, [1, 4.5]], [100.2, [-8, -3]], [105.7, [-9, 2]]], [6, 13.5]);
-  console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '타나트로스: 딜러 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  idleFails('타나트로스', 'factory-master', 6);
+  const t = runMaster('factory-master', { plan: [[0, [-22, 0]], [10.1, [16, 14]], [120, [15, -19]], [172, [-10, 8]]], acts: [10, 17.5] });
+  report('타나트로스: 딜러 모범 동선', t);
 }
 
-// 신벌의 대행자: 탑을 4 → 2 → 6번 칸 순으로 빼앗아 금색 대각선을 만든다. 엉뚱한 탑을 빼앗으면 파란 줄이 생겨 전멸
+// 신벌의 대행자: 탑을 4 → 2 → 6번 칸 순으로 빼앗아 금색 대각선을 만든다. 안 빼앗으면 파란 줄로 전멸
 {
-  const { Combat } = await import('./combat.js');
   const d = JSON.parse(fs.readFileSync(new URL('./data/cursedtomb-master.json', import.meta.url)));
-  const run = (plan) => { const t = new Sim(d, new Combat({ role: 'dps', skills: {} })); while (!t.done) { const g = plan.filter(([at]) => at <= t.t).pop()?.[1], dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); t.step(0.05, l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }); } return t.log; };
-  const idle = run([]);
-  console.log(idle.some(r => r.name === '신벌 프로토콜' && !r.ok) ? 'PASS' : 'FAIL', '신벌의 대행자: 탑을 안 빼앗으면 파란 줄로 전멸', idle.filter(r => r.ok).length, '/', idle.length);
-  const ok = run([[0, [4, 2]], [10.1, [9, 7]], [13.2, [3, 3]], [24.1, [8, -8]], [36.1, [16, -10]], [42, [1, -1]], [46.1, [0, 21]], [54.1, [-10, 16]], [63.4, [0, 0]], [80.1, [13, 13]], [94.1, [18, 9]]]);
-  console.log(ok.every(r => r.ok) && ok.some(r => r.name === '프로토콜 붕괴') ? 'PASS' : 'FAIL', '신벌의 대행자: 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  const i = new Sim(d, new CombatM({ role: 'dps', skills: {} })); while (!i.done) i.step(0.05, { mx: 0, mz: 0 });
+  console.log(i.log.some(r => r.name === '신벌 프로토콜' && !r.ok) ? 'PASS' : 'FAIL', '신벌의 대행자: 탑을 안 빼앗으면 파란 줄로 전멸', i.log.filter(r => r.ok).length, '/', i.log.length);
+  const t = runMaster('cursedtomb-master', { plan: [[0, [4, 2]], [40, [3, 3]], [58.1, [8, -8]], [76, [16, -10]], [96, [1, -1]], [102.1, [0, 21]], [134, [0, 0]], [170, [-10, 16]], [194, [0, 0]], [230.1, [13, 13]]] });
+  report('신벌의 대행자: 모범 동선', t, t.log.some(r => r.name === '프로토콜 붕괴' && r.ok));
 }
 
 // 카트그리프: 딜러 모범 동선(연결 차단 → 쉐어 → 레이저 따라 돌며 막기 → 오브 → 진짜 포털)
 {
-  const { Combat } = await import('./combat.js');
-  const d = JSON.parse(fs.readFileSync(new URL('./data/s3tower-master.json', import.meta.url)));
-  const run = (plan, acts) => { const t = new Sim(d, new Combat({ role: 'dps', skills: {} })); const A = [...acts]; while (!t.done) { let g = plan.filter(([at]) => at <= t.t).pop()?.[1]; if (t.t >= 36 && t.t < 46.5) { const a = (90 + 20 * Math.max(0, t.t - 37)) * Math.PI / 180; g = [Math.cos(a) * 8, Math.sin(a) * 8]; } const dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t.log; };
-  const idle = run([], []);
-  console.log(idle.filter(r => !r.ok).length >= 6 ? 'PASS' : 'FAIL', '카트그리프: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
-  const ok = run([[0, [6, 12]], [8.6, [0, 16]], [25.1, [-6, 8]], [32.1, [0, 8]], [46.5, [0, 14]], [75.1, [20, 0]]], [13, 64]);
-  console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '카트그리프: 딜러 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  idleFails('카트그리프', 's3tower-master', 6);
+  const beam = t => { if (t.t < 76 || t.t > 105.5) return null; const a = (90 + 10 * Math.max(0, t.t - 77)) * Math.PI / 180; return [t.boss.x + Math.cos(a) * 8, t.boss.z + Math.sin(a) * 8]; };
+  const t = runMaster('s3tower-master', { plan: [[0, [6, 12]], [12, [0, 16]], [38, [-6, 8]], [52, [0, 8]], [118, [0, 14]], [241.1, [0, -14]], [256, [20, 0]]], acts: [21, 221, 247], hook: beam });
+  report('카트그리프: 딜러 모범 동선', t);
 }
 
 // 심해 나뽀: 얼음 음표를 끝까지 지키는 모범 동선, 그리고 다른 색에 닿으면 음표가 바뀌는지

@@ -142,7 +142,7 @@
    "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 꽃 주위 꽃잎을 밟으면 속박과 지속 피해 + estimate(자리·반경, 꽃마다 2장만) + video(Layla 공략 자막, raw/raidvid/guides/txt/tower-m6plus.txt: 6단 이상은 꽃잎이 사라진 자리에 중첩 피해 웅덩이가 남고, 새 꽃잎이 생기면 옛 웅덩이는 사라진다)"
   },
   {
-   "t": 6,
+   "t": 8,
    "type": "scarHit",
    "name": "파멸 레이저(탱버)",
    "spots": [
@@ -169,12 +169,12 @@
    "okMsg": null,
    "failMsg": null,
    "anim": "laser",
-   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)",
+   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
    "fx": "tank",
    "rel": true
   },
   {
-   "t": 12,
+   "t": 20,
    "type": "press",
    "name": "꽃 연결 차단",
    "at": [
@@ -184,20 +184,20 @@
    "cast": 5,
    "okMsg": null,
    "failMsg": "차단 실패 — 침식 수치 상승",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 약 25~30초마다 꽃이 보스와 연결돼 침식이 오른다. 꽃에 차단 입력 + estimate(허용 5초)"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 약 25~30초마다 꽃이 보스와 연결돼 침식이 오른다. 꽃에 차단 입력 + estimate(허용 5초) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)"
   },
   {
-   "t": 20,
+   "t": 32,
    "type": "spread",
    "name": "점착탄",
    "r": 4,
    "cast": 5,
    "anim": "bomb",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m)",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
    "fx": "bomb"
   },
   {
-   "t": 28,
+   "t": 46,
    "type": "stack",
    "name": "쉐어",
    "at": [
@@ -206,24 +206,25 @@
    ],
    "r": 4,
    "cast": 4,
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 인원 수로 분담 + estimate(반경 4m, 자리)"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 인원 수로 분담 + estimate(반경 4m, 자리) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)"
   },
   {
-   "t": 34,
+   "t": 74,
    "type": "sweep",
    "name": "하늘 균열·역(레이저 막기)",
    "warn": 3,
    "from": 90,
-   "vel": 20,
-   "dur": 9,
+   "vel": 10,
+   "dur": 28,
    "len": 28,
    "width": 3,
    "block": 0.6,
    "anim": "rift",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 1번째 꽃 파괴 뒤: 도는 레이저 2개를 몸으로 막아 꽃잎에 닿지 않게 한다(내 몫 1개만) + estimate(회전 속도·길이)"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 1번째 꽃 파괴 뒤: 도는 레이저 2개를 몸으로 막아 꽃잎에 닿지 않게 한다(내 몫 1개만) + estimate(회전 속도·길이) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
+   "hold": 34
   },
   {
-   "t": 50,
+   "t": 112,
    "type": "shapes",
    "name": "초전도 파동(흡인 뒤 내려찍기)",
    "spots": [
@@ -236,7 +237,7 @@
    ],
    "cast": 4,
    "anim": "shock",
-   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음",
+   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음 + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
    "fx": "shock",
    "move": {
     "to": [
@@ -249,7 +250,7 @@
    "hold": 6
   },
   {
-   "t": 55,
+   "t": 206,
    "type": "spread",
    "name": "로봇 등장 원(흩어지기)",
    "r": 4,
@@ -258,7 +259,7 @@
    "src": "video(Layla 공략 자막, raw/raidvid/guides/txt/tower-lifebind.txt: 2번째 꽃 파괴 뒤 로봇 등장 장판을 서로 흩어서 받는다) + estimate(반경·시각)"
   },
   {
-   "t": 58,
+   "t": 212,
    "type": "shapes",
    "name": "차원 추방·역(붉은 로봇 내려찍기)",
    "spots": [
@@ -277,11 +278,12 @@
    ],
    "cast": 5,
    "anim": "exile",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 2번째 꽃 파괴 뒤: 붉은 로봇의 내려찍기 범위 밖 + estimate(반경 12m, 자리)",
-   "fx": "exile"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 2번째 꽃 파괴 뒤: 붉은 로봇의 내려찍기 범위 밖 + estimate(반경 12m, 자리) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
+   "fx": "exile",
+   "hold": 40
   },
   {
-   "t": 63,
+   "t": 220,
    "type": "press",
    "name": "침식 오브 줍기",
    "at": [
@@ -291,10 +293,67 @@
    "cast": 6,
    "okMsg": "오브를 주워 침식 감소",
    "failMsg": "오브를 놓침",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 작은 로봇을 치유하면 오브가 생기고 주우면 침식 감소 + estimate(자리·시간)"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 작은 로봇을 치유하면 오브가 생기고 주우면 침식 감소 + estimate(자리·시간) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)"
   },
   {
-   "t": 72,
+   "t": 224,
+   "type": "shapes",
+   "name": "차원 추방·역(붉은 로봇 내려찍기)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": -6,
+     "z": 10,
+     "r": 12
+    },
+    {
+     "shape": "circle",
+     "x": 12,
+     "z": 4,
+     "r": 12
+    }
+   ],
+   "cast": 5,
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 2번째 꽃 파괴 뒤: 붉은 로봇의 내려찍기 범위 밖 + estimate(반경 12m, 자리) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
+   "fx": "exile"
+  },
+  {
+   "t": 236,
+   "type": "shapes",
+   "name": "차원 추방·역(붉은 로봇 내려찍기)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 8,
+     "z": -10,
+     "r": 12
+    },
+    {
+     "shape": "circle",
+     "x": -12,
+     "z": -2,
+     "r": 12
+    }
+   ],
+   "cast": 5,
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 2번째 꽃 파괴 뒤: 붉은 로봇의 내려찍기 범위 밖 + estimate(반경 12m, 자리) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
+   "fx": "exile"
+  },
+  {
+   "t": 242,
+   "type": "press",
+   "name": "침식 오브 줍기",
+   "at": [
+    0,
+    -14
+   ],
+   "cast": 6,
+   "okMsg": "오브를 주워 침식 감소",
+   "failMsg": "오브를 놓침",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 작은 로봇을 치유하면 오브가 생기고 주우면 침식 감소 + estimate(자리·시간) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)"
+  },
+  {
+   "t": 252,
    "type": "shapes",
    "name": "피자(안전 60°)",
    "spots": [
@@ -308,12 +367,12 @@
     }
    ],
    "cast": 3,
-   "src": "table(보스 중심 반경 15m의 300° 부채꼴, 1.87초) + estimate(방향·예고)",
+   "src": "table(보스 중심 반경 15m의 300° 부채꼴, 1.87초) + estimate(방향·예고) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
    "fx": "pizza",
    "rel": true
   },
   {
-   "t": 78,
+   "t": 262,
    "type": "safe",
    "name": "순간 균열(진짜 포털)",
    "spots": [
@@ -328,11 +387,11 @@
    "okMsg": "진짜 포털로 탈출",
    "failMsg": "가짜 포털 또는 시간 초과 — 전멸",
    "anim": "rift",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 3번째 꽃 파괴 뒤: 포털 4개 중 다수가 분홍으로 보는 것이 진짜(연습기는 정답을 분홍 원으로 보여 줌) + estimate(제한 8초)",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 3번째 꽃 파괴 뒤: 포털 4개 중 다수가 분홍으로 보는 것이 진짜(연습기는 정답을 분홍 원으로 보여 줌) + estimate(제한 8초) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
    "fx": "portal"
   },
   {
-   "t": 78,
+   "t": 262,
    "type": "shapes",
    "kind": "show",
    "name": "가짜 포털",
@@ -358,10 +417,10 @@
    ],
    "cast": 8,
    "color": "gray",
-   "src": "estimate"
+   "src": "estimate + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)"
   },
   {
-   "t": 90,
+   "t": 280,
    "type": "shapes",
    "name": "돌진·환",
    "spots": [
@@ -380,7 +439,7 @@
    ],
    "cast": 3.4,
    "anim": "dash",
-   "src": "table(몸 원 반경 2.5에 배율 1.6 → 폭 약 5~8m, 3.37초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 직선 예고를 따라 돌진",
+   "src": "table(몸 원 반경 2.5에 배율 1.6 → 폭 약 5~8m, 3.37초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 직선 예고를 따라 돌진 + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
    "fx": "dash",
    "move": {
     "to": [
@@ -402,17 +461,17 @@
    "hold": 6
   },
   {
-   "t": 94.5,
+   "t": 285,
    "type": "bossWalk",
    "move": {
     "to": "home",
     "mode": "jump",
     "dur": 1.0
    },
-   "src": "estimate"
+   "src": "estimate + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)"
   },
   {
-   "t": 96,
+   "t": 290,
    "type": "scarHit",
    "name": "파멸 레이저(탱버)",
    "spots": [
@@ -439,22 +498,22 @@
    "okMsg": null,
    "failMsg": null,
    "anim": "laser",
-   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)",
+   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
    "fx": "tank",
    "rel": true
   },
   {
-   "t": 102,
+   "t": 298,
    "type": "spread",
    "name": "점착탄",
    "r": 4,
    "cast": 5,
    "anim": "bomb",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m)",
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m) + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
    "fx": "bomb"
   },
   {
-   "t": 110,
+   "t": 308,
    "type": "shapes",
    "name": "초전도 파동(흡인 뒤 내려찍기)",
    "spots": [
@@ -467,7 +526,7 @@
    ],
    "cast": 4,
    "anim": "shock",
-   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음",
+   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음 + video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초)",
    "fx": "shock",
    "move": {
     "to": [
@@ -485,7 +544,7 @@
    "label": "18단 서프라이즈",
    "events": [
     {
-     "t": 14,
+     "t": 40,
      "type": "spread",
      "name": "서프라이즈(폭탄)",
      "r": 5,
@@ -495,7 +554,7 @@
      "fx": "bomb"
     },
     {
-     "t": 66,
+     "t": 170,
      "type": "spread",
      "name": "서프라이즈(폭탄)",
      "r": 5,
@@ -510,7 +569,7 @@
    "label": "19단 집결",
    "events": [
     {
-     "t": 14,
+     "t": 40,
      "type": "stack",
      "name": "집결(보호막 안으로)",
      "at": [
@@ -522,7 +581,7 @@
      "src": "table(수식어 설명문: 5초 뒤 낙뢰, 보호막 밖은 최대 체력 50% 피해와 기절) + estimate(자리·반경)"
     },
     {
-     "t": 66,
+     "t": 170,
      "type": "stack",
      "name": "집결(보호막 안으로)",
      "at": [
@@ -539,7 +598,7 @@
    "label": "20단 작열의 수정",
    "events": [
     {
-     "t": 14,
+     "t": 40,
      "type": "puddle",
      "name": "작열의 수정",
      "r": 4,
@@ -549,7 +608,7 @@
      "fx": "bomb"
     },
     {
-     "t": 66,
+     "t": 170,
      "type": "puddle",
      "name": "작열의 수정",
      "r": 4,
@@ -559,7 +618,7 @@
      "fx": "bomb"
     },
     {
-     "t": 104,
+     "t": 270,
      "type": "puddle",
      "name": "작열의 수정",
      "r": 4,
@@ -571,7 +630,7 @@
    ]
   }
  },
- "duration": 116,
+ "duration": 316,
  "fxBase": "./assets/fx-typeochaozai/",
  "fx": {
   "tank": {
@@ -646,5 +705,6 @@
  "fxSrc": "이펙트는 클라 실측(effect/boss). 기믹과의 대응은 이펙트 이름·크기로 고른 추정이라 인게임과 다를 수 있다",
  "botsMove": true,
  "tankBot": 0,
- "partySrc": "던전은 5인 파티(탱 1, 힐 1~2, 딜 2~3). 파티원은 역할별 대형(탱커 보스 앞, 근딜 보스 뒤, 원딜·힐러 뒤쪽 양옆)을 잡고, 장판을 피하고, 기믹 자리로 걸어간다. 움직임 규칙은 연습기에서 정한 것"
+ "partySrc": "던전은 5인 파티(탱 1, 힐 1~2, 딜 2~3). 파티원은 역할별 대형(탱커 보스 앞, 근딜 보스 뒤, 원딜·힐러 뒤쪽 양옆)을 잡고, 장판을 피하고, 기믹 자리로 걸어간다. 움직임 규칙은 연습기에서 정한 것",
+ "timingSrc": "video(M20 클리어 영상 4초 간격 프레임: lm1lc8dHkjs, 레이저 막기 약 76~112초, 차원 추방 약 216~256초). 기믹이 나오는 순서와 간격을 영상에 맞췄다. 프레임이 작아 기믹 이름은 모양으로 추정했고, 영상에 안 보인 기믹은 사이에 끼워 넣었다"
 }

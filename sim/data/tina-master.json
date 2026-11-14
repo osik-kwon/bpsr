@@ -226,7 +226,7 @@
      }
     }
    ],
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 옷장 4개는 전투 내내 있고 상호작용하면 맞은편으로 이동 + estimate(옷장 자리)"
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 옷장 4개는 전투 내내 있고 상호작용하면 맞은편으로 이동 + estimate(옷장 자리) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
   },
   {
    "t": 3,
@@ -243,7 +243,7 @@
    "cast": 1.4,
    "color": "pink",
    "anim": "curse",
-   "src": "table(诅咒柜子: 원 반경 25m, 1.37초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md)",
+   "src": "table(诅咒柜子: 원 반경 25m, 1.37초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)",
    "move": {
     "to": "home",
     "mode": "jump",
@@ -286,7 +286,7 @@
     ]
    ],
    "cast": 2,
-   "src": "table(虚蚀缠绕 가상체: 원 반경 4.5m, 2.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 대상은 못 움직이고 다른 사람은 범위 밖 + estimate(대상 자리)",
+   "src": "table(虚蚀缠绕 가상체: 원 반경 4.5m, 2.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 대상은 못 움직이고 다른 사람은 범위 밖 + estimate(대상 자리) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)",
    "move": {
     "to": [
      -9,
@@ -305,7 +305,24 @@
    }
   },
   {
-   "t": 18,
+   "t": 24,
+   "type": "safe",
+   "name": "허식의 위압",
+   "r": 5,
+   "cast": 5,
+   "anim": "oppress",
+   "okMsg": "축복받은 옷장 곁에서 버팀",
+   "failMsg": "안전지대 밖 — 전장 전체 즉사급 공격",
+   "spots": [
+    [
+     -20,
+     0
+    ]
+   ],
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 예고 약 5초, 축복받은 옷장 근처만 안전, 대시·스킬 봉인(봉인은 넣지 않음) + estimate(안전 반경 5m, 어느 옷장인지) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 44,
    "type": "stack",
    "name": "쉐어(지목 분담)",
    "at": [
@@ -315,7 +332,7 @@
    "r": 3,
    "cast": 4,
    "anim": "share",
-   "src": "table(锁定点名分摊: 원 반경 2.5m) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + estimate(시전 4초, 판정 반경 3m)",
+   "src": "table(锁定点名分摊: 원 반경 2.5m) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + estimate(시전 4초, 판정 반경 3m) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)",
    "move": {
     "to": [
      0,
@@ -333,24 +350,7 @@
    }
   },
   {
-   "t": 25,
-   "type": "safe",
-   "name": "허식의 위압",
-   "r": 5,
-   "cast": 5,
-   "anim": "oppress",
-   "okMsg": "축복받은 옷장 곁에서 버팀",
-   "failMsg": "안전지대 밖 — 전장 전체 즉사급 공격",
-   "spots": [
-    [
-     -20,
-     0
-    ]
-   ],
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 예고 약 5초, 축복받은 옷장 근처만 안전, 대시·스킬 봉인(봉인은 넣지 않음) + estimate(안전 반경 5m, 어느 옷장인지)"
-  },
-  {
-   "t": 31,
+   "t": 62,
    "type": "sectors",
    "fx": "slash",
    "name": "창날 난무 1타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
@@ -379,7 +379,7 @@
    }
   },
   {
-   "t": 34.5,
+   "t": 65.5,
    "type": "sectors",
    "fx": "slash",
    "name": "창날 난무 2타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
@@ -402,7 +402,7 @@
    "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)"
   },
   {
-   "t": 36.6,
+   "t": 67.6,
    "type": "sectors",
    "fx": "slash",
    "name": "창날 난무 3타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
@@ -425,7 +425,7 @@
    "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)"
   },
   {
-   "t": 38.7,
+   "t": 69.7,
    "type": "sectors",
    "fx": "slash",
    "name": "창날 난무 4타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
@@ -448,7 +448,575 @@
    "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)"
   },
   {
-   "t": 45,
+   "t": 84,
+   "type": "marks",
+   "pos": [],
+   "bossTo": [
+    0,
+    -50
+   ],
+   "bossY": -31,
+   "bossScale": 17.5,
+   "anim": "big",
+   "fxList": [
+    {
+     "name": "dina_dark_knife_changqiang",
+     "at": [
+      0,
+      0
+     ],
+     "t": 0.5
+    },
+    {
+     "name": "dina_dark_knife_changqiang",
+     "at": [
+      0,
+      0
+     ],
+     "t": 13.5
+    }
+   ],
+   "src": "table(거대체 33707 배치 (0, 79, -50), 모델 배율 35) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)",
+   "hold": 30
+  },
+  {
+   "t": 86,
+   "type": "sweep",
+   "name": "거대화 창 휩쓸기 1",
+   "warn": 3,
+   "origin": [
+    0,
+    -50
+   ],
+   "from": 150,
+   "vel": -15,
+   "dur": 8,
+   "len": 90,
+   "width": 7,
+   "noDodge": true,
+   "fxList": [
+    {
+     "name": "dina_dark_endskill_boom",
+     "at": [
+      0,
+      0
+     ],
+     "t": 11,
+     "opt": {
+      "alpha": 0.8
+     }
+    }
+   ],
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 느린 즉사 휩쓸기, 창이 중앙에 왔을 때 옷장으로 넘어간다 + estimate(속도·폭) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 90,
+   "type": "aoe",
+   "fx": "puddle",
+   "name": "바닥 함정(구속)",
+   "spots": [
+    [
+     8,
+     8,
+     4.5
+    ],
+    [
+     -8,
+     8,
+     4.5
+    ],
+    [
+     8,
+     -8,
+     4.5
+    ],
+    [
+     -8,
+     -8,
+     4.5
+    ],
+    [
+     0,
+     0,
+     4.5
+    ]
+   ],
+   "cast": 4,
+   "color": "yellow",
+   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 94,
+   "type": "aoe",
+   "fx": "puddle",
+   "name": "바닥 함정(구속)",
+   "spots": [
+    [
+     12,
+     -2,
+     4.5
+    ],
+    [
+     -10,
+     -2,
+     4.5
+    ],
+    [
+     0,
+     -10,
+     4.5
+    ],
+    [
+     4,
+     8,
+     4.5
+    ],
+    [
+     -2,
+     0,
+     4.5
+    ]
+   ],
+   "cast": 4,
+   "color": "yellow",
+   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 97.5,
+   "type": "marks",
+   "pos": [],
+   "bossTo": [
+    50,
+    0
+   ],
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 자리를 옮겨 한 번 더 + estimate(자리) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 98,
+   "type": "aoe",
+   "fx": "puddle",
+   "name": "바닥 함정(구속)",
+   "spots": [
+    [
+     8,
+     8,
+     4.5
+    ],
+    [
+     -8,
+     8,
+     4.5
+    ],
+    [
+     8,
+     -8,
+     4.5
+    ],
+    [
+     -8,
+     -8,
+     4.5
+    ],
+    [
+     0,
+     0,
+     4.5
+    ]
+   ],
+   "cast": 4,
+   "color": "yellow",
+   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 98,
+   "type": "sweep",
+   "name": "거대화 창 휩쓸기 2",
+   "warn": 3,
+   "origin": [
+    50,
+    0
+   ],
+   "from": 240,
+   "vel": -15,
+   "dur": 8,
+   "len": 90,
+   "width": 7,
+   "noDodge": true,
+   "fxList": [
+    {
+     "name": "dina_dark_endskill_boom",
+     "at": [
+      0,
+      0
+     ],
+     "t": 11,
+     "opt": {
+      "alpha": 0.8
+     }
+    }
+   ],
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + estimate + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 102,
+   "type": "aoe",
+   "fx": "puddle",
+   "name": "바닥 함정(구속)",
+   "spots": [
+    [
+     12,
+     -2,
+     4.5
+    ],
+    [
+     -10,
+     -2,
+     4.5
+    ],
+    [
+     0,
+     -10,
+     4.5
+    ],
+    [
+     4,
+     8,
+     4.5
+    ],
+    [
+     -2,
+     0,
+     4.5
+    ]
+   ],
+   "cast": 4,
+   "color": "yellow",
+   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 106,
+   "type": "aoe",
+   "fx": "puddle",
+   "name": "바닥 함정(구속)",
+   "spots": [
+    [
+     8,
+     8,
+     4.5
+    ],
+    [
+     -8,
+     8,
+     4.5
+    ],
+    [
+     8,
+     -8,
+     4.5
+    ],
+    [
+     -8,
+     -8,
+     4.5
+    ],
+    [
+     0,
+     0,
+     4.5
+    ]
+   ],
+   "cast": 4,
+   "color": "yellow",
+   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 116,
+   "type": "clearHazards",
+   "bossTo": [
+    0,
+    0
+   ],
+   "bossY": 0,
+   "bossScale": 1,
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 침공 시작 때 독 장판 초기화 + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 116.1,
+   "type": "hazards",
+   "name": "바닥 함정(침공까지 남음)",
+   "spots": [
+    [
+     8,
+     8,
+     4.5
+    ],
+    [
+     -8,
+     8,
+     4.5
+    ],
+    [
+     8,
+     -8,
+     4.5
+    ],
+    [
+     -8,
+     -8,
+     4.5
+    ],
+    [
+     0,
+     0,
+     4.5
+    ]
+   ],
+   "src": "video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 6단 이상은 거대화의 원형 장판이 번하르트 침공까지 남는다) + estimate(남는 자리)"
+  },
+  {
+   "t": 118,
+   "type": "rects",
+   "name": "침공: 십자 사격",
+   "rects": [
+    [
+     0,
+     0,
+     60,
+     7
+    ],
+    [
+     0,
+     0,
+     7,
+     60
+    ]
+   ],
+   "cast": 3,
+   "color": "blue",
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 번하르트 침공: 소총병의 십자 범위, 탱크의 다가오는 벽(옷장으로 넘어가 회피), 병사 처치 딜 체크와 NPC 보호는 넣지 않음 + estimate(모양·크기·시각 전부) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 126,
+   "type": "tide",
+   "name": "침공: 다가오는 벽",
+   "from": [
+    -30,
+    0
+   ],
+   "to": [
+    30,
+    0
+   ],
+   "warn": 3,
+   "dur": 14,
+   "thick": 5,
+   "span": 70,
+   "noDodge": true,
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 번하르트 침공: 소총병의 십자 범위, 탱크의 다가오는 벽(옷장으로 넘어가 회피), 병사 처치 딜 체크와 NPC 보호는 넣지 않음 + estimate(모양·크기·시각 전부) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 142,
+   "type": "rects",
+   "name": "침공: 십자 사격",
+   "rects": [
+    [
+     0,
+     0,
+     60,
+     7
+    ],
+    [
+     0,
+     0,
+     7,
+     60
+    ]
+   ],
+   "cast": 3,
+   "color": "blue",
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 번하르트 침공: 소총병의 십자 범위, 탱크의 다가오는 벽(옷장으로 넘어가 회피), 병사 처치 딜 체크와 NPC 보호는 넣지 않음 + estimate(모양·크기·시각 전부) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 156,
+   "type": "clearHazards",
+   "src": "estimate(침공이 끝나면 바닥 함정이 사라지는 시점)"
+  },
+  {
+   "t": 163,
+   "type": "aoe",
+   "kind": "show",
+   "name": "저주 충격파(회피 불가, 중상)",
+   "spots": [
+    [
+     0,
+     0,
+     25
+    ]
+   ],
+   "cast": 1.4,
+   "color": "pink",
+   "anim": "curse",
+   "src": "table(诅咒柜子: 원 반경 25m, 1.37초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 164,
+   "type": "curse",
+   "name": "허식의 저주(2회차)",
+   "pos": [
+    0,
+    20
+   ],
+   "charge": 12,
+   "edge": 22,
+   "away": 8,
+   "poison": 4,
+   "others": [
+    [
+     -17,
+     -15
+    ],
+    [
+     22,
+     -8
+    ]
+   ],
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 16단 이상은 저주 옷장 3개, 상호작용으로 받아 와 가장자리에서 터뜨리면 독 장판이 남는다 + estimate(충전 12초, 독 장판 반경 4m, 판정 거리) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 6단 이상 옷장 웅덩이 3개, 붉은 원이 생길 때 치유 불가 15초, 옷장끼리 서로 순간이동)"
+  },
+  {
+   "t": 188,
+   "type": "tide",
+   "name": "허식 분신 해일",
+   "from": [
+    0,
+    -30
+   ],
+   "to": [
+    0,
+    30
+   ],
+   "warn": 3,
+   "dur": 15,
+   "thick": 5,
+   "span": 70,
+   "noDodge": true,
+   "anim": "clone",
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 옷장 뒤 분신이 맞은편으로 느린 즉사 해일을 보낸다, 분신 쪽 옷장으로 넘어가 회피 + estimate(속도 4m/s, 두께, 방향) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
+  },
+  {
+   "t": 204,
+   "type": "shapes",
+   "name": "분신 소멸 폭발",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": -24,
+     "r": 15
+    }
+   ],
+   "cast": 2.1,
+   "src": "table(S3 分身斩: 원 반경 15m, 2.10초) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 분신이 사라질 때 범위 피해) + estimate(시점)"
+  },
+  {
+   "t": 224,
+   "type": "sectors",
+   "fx": "slash",
+   "name": "창날 난무 1타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    22.5,
+    67.5,
+    112.5,
+    202.5,
+    247.5,
+    292.5
+   ],
+   "cast": 3.4,
+   "noDodge": true,
+   "anim": "slash",
+   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)",
+   "move": {
+    "to": "home",
+    "mode": "jump",
+    "dur": 0.6
+   }
+  },
+  {
+   "t": 227.5,
+   "type": "sectors",
+   "fx": "slash",
+   "name": "창날 난무 2타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    67.5,
+    112.5,
+    157.5,
+    247.5,
+    292.5,
+    337.5
+   ],
+   "cast": 2.0,
+   "noDodge": true,
+   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)"
+  },
+  {
+   "t": 229.6,
+   "type": "sectors",
+   "fx": "slash",
+   "name": "창날 난무 3타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    22.5,
+    112.5,
+    157.5,
+    202.5,
+    292.5,
+    337.5
+   ],
+   "cast": 2.0,
+   "noDodge": true,
+   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)"
+  },
+  {
+   "t": 231.7,
+   "type": "sectors",
+   "fx": "slash",
+   "name": "창날 난무 4타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
+   "center": [
+    0,
+    0
+   ],
+   "r": 21,
+   "half": 22.5,
+   "dirs": [
+    22.5,
+    67.5,
+    157.5,
+    202.5,
+    247.5,
+    337.5
+   ],
+   "cast": 2.0,
+   "noDodge": true,
+   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)"
+  },
+  {
+   "t": 244,
    "type": "strikes",
    "name": "허식 강타",
    "order": [
@@ -482,434 +1050,10 @@
     ]
    ],
    "anim": "strike",
-   "src": "table(S3 无敌斩: 원 반경 4.5m 뒤 0.90초에 부채꼴 반경 15m·180°, 중심이 정면에서 120° 옆) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 번호 1~5 순, 1번 힐러·5번 탱커 설, 16단 이상 두 번 맞으면 즉사 + estimate(번호 간격 2.4초, 내 번호 3)"
-  },
-  {
-   "t": 62,
-   "type": "tide",
-   "name": "허식 분신 해일",
-   "from": [
-    0,
-    -30
-   ],
-   "to": [
-    0,
-    30
-   ],
-   "warn": 3,
-   "dur": 15,
-   "thick": 5,
-   "span": 70,
-   "noDodge": true,
-   "anim": "clone",
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 옷장 뒤 분신이 맞은편으로 느린 즉사 해일을 보낸다, 분신 쪽 옷장으로 넘어가 회피 + estimate(속도 4m/s, 두께, 방향)"
-  },
-  {
-   "t": 78,
-   "type": "shapes",
-   "name": "분신 소멸 폭발",
-   "spots": [
-    {
-     "shape": "circle",
-     "x": 0,
-     "z": -24,
-     "r": 15
-    }
-   ],
-   "cast": 2.1,
-   "src": "table(S3 分身斩: 원 반경 15m, 2.10초) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 분신이 사라질 때 범위 피해) + estimate(시점)"
-  },
-  {
-   "t": 82,
-   "type": "marks",
-   "pos": [],
-   "bossTo": [
-    0,
-    -50
-   ],
-   "bossY": -31,
-   "bossScale": 17.5,
-   "anim": "big",
-   "fxList": [
-    {
-     "name": "dina_dark_knife_changqiang",
-     "at": [
-      0,
-      0
-     ],
-     "t": 0.5
-    },
-    {
-     "name": "dina_dark_knife_changqiang",
-     "at": [
-      0,
-      0
-     ],
-     "t": 13.5
-    }
-   ],
-   "src": "table(거대체 33707 배치 (0, 79, -50), 모델 배율 35) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md)",
-   "hold": 30
-  },
-  {
-   "t": 84,
-   "type": "sweep",
-   "name": "거대화 창 휩쓸기 1",
-   "warn": 3,
-   "origin": [
-    0,
-    -50
-   ],
-   "from": 150,
-   "vel": -15,
-   "dur": 8,
-   "len": 90,
-   "width": 7,
-   "noDodge": true,
-   "fxList": [
-    {
-     "name": "dina_dark_endskill_boom",
-     "at": [
-      0,
-      0
-     ],
-     "t": 11,
-     "opt": {
-      "alpha": 0.8
-     }
-    }
-   ],
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 느린 즉사 휩쓸기, 창이 중앙에 왔을 때 옷장으로 넘어간다 + estimate(속도·폭)"
-  },
-  {
-   "t": 88,
-   "type": "aoe",
-   "fx": "puddle",
-   "name": "바닥 함정(구속)",
-   "spots": [
-    [
-     8,
-     8,
-     4.5
-    ],
-    [
-     -8,
-     8,
-     4.5
-    ],
-    [
-     8,
-     -8,
-     4.5
-    ],
-    [
-     -8,
-     -8,
-     4.5
-    ],
-    [
-     0,
-     0,
-     4.5
-    ]
-   ],
-   "cast": 4,
-   "color": "yellow",
-   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격)"
-  },
-  {
-   "t": 92,
-   "type": "aoe",
-   "fx": "puddle",
-   "name": "바닥 함정(구속)",
-   "spots": [
-    [
-     12,
-     -2,
-     4.5
-    ],
-    [
-     -10,
-     -2,
-     4.5
-    ],
-    [
-     0,
-     -10,
-     4.5
-    ],
-    [
-     4,
-     8,
-     4.5
-    ],
-    [
-     -2,
-     0,
-     4.5
-    ]
-   ],
-   "cast": 4,
-   "color": "yellow",
-   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격)"
-  },
-  {
-   "t": 95.5,
-   "type": "marks",
-   "pos": [],
-   "bossTo": [
-    50,
-    0
-   ],
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 자리를 옮겨 한 번 더 + estimate(자리)"
-  },
-  {
-   "t": 96,
-   "type": "sweep",
-   "name": "거대화 창 휩쓸기 2",
-   "warn": 3,
-   "origin": [
-    50,
-    0
-   ],
-   "from": 240,
-   "vel": -15,
-   "dur": 8,
-   "len": 90,
-   "width": 7,
-   "noDodge": true,
-   "fxList": [
-    {
-     "name": "dina_dark_endskill_boom",
-     "at": [
-      0,
-      0
-     ],
-     "t": 11,
-     "opt": {
-      "alpha": 0.8
-     }
-    }
-   ],
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + estimate"
-  },
-  {
-   "t": 96,
-   "type": "aoe",
-   "fx": "puddle",
-   "name": "바닥 함정(구속)",
-   "spots": [
-    [
-     8,
-     8,
-     4.5
-    ],
-    [
-     -8,
-     8,
-     4.5
-    ],
-    [
-     8,
-     -8,
-     4.5
-    ],
-    [
-     -8,
-     -8,
-     4.5
-    ],
-    [
-     0,
-     0,
-     4.5
-    ]
-   ],
-   "cast": 4,
-   "color": "yellow",
-   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격)"
-  },
-  {
-   "t": 100,
-   "type": "aoe",
-   "fx": "puddle",
-   "name": "바닥 함정(구속)",
-   "spots": [
-    [
-     12,
-     -2,
-     4.5
-    ],
-    [
-     -10,
-     -2,
-     4.5
-    ],
-    [
-     0,
-     -10,
-     4.5
-    ],
-    [
-     4,
-     8,
-     4.5
-    ],
-    [
-     -2,
-     0,
-     4.5
-    ]
-   ],
-   "cast": 4,
-   "color": "yellow",
-   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격)"
-  },
-  {
-   "t": 104,
-   "type": "aoe",
-   "fx": "puddle",
-   "name": "바닥 함정(구속)",
-   "spots": [
-    [
-     8,
-     8,
-     4.5
-    ],
-    [
-     -8,
-     8,
-     4.5
-    ],
-    [
-     8,
-     -8,
-     4.5
-    ],
-    [
-     -8,
-     -8,
-     4.5
-    ],
-    [
-     0,
-     0,
-     4.5
-    ]
-   ],
-   "cast": 4,
-   "color": "yellow",
-   "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격)"
-  },
-  {
-   "t": 110,
-   "type": "clearHazards",
-   "bossTo": [
-    0,
-    0
-   ],
-   "bossY": 0,
-   "bossScale": 1,
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 침공 시작 때 독 장판 초기화"
-  },
-  {
-   "t": 110.1,
-   "type": "hazards",
-   "name": "바닥 함정(침공까지 남음)",
-   "spots": [
-    [
-     8,
-     8,
-     4.5
-    ],
-    [
-     -8,
-     8,
-     4.5
-    ],
-    [
-     8,
-     -8,
-     4.5
-    ],
-    [
-     -8,
-     -8,
-     4.5
-    ],
-    [
-     0,
-     0,
-     4.5
-    ]
-   ],
-   "src": "video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 6단 이상은 거대화의 원형 장판이 번하르트 침공까지 남는다) + estimate(남는 자리)"
-  },
-  {
-   "t": 112,
-   "type": "rects",
-   "name": "침공: 십자 사격",
-   "rects": [
-    [
-     0,
-     0,
-     60,
-     7
-    ],
-    [
-     0,
-     0,
-     7,
-     60
-    ]
-   ],
-   "cast": 3,
-   "color": "blue",
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 번하르트 침공: 소총병의 십자 범위, 탱크의 다가오는 벽(옷장으로 넘어가 회피), 병사 처치 딜 체크와 NPC 보호는 넣지 않음 + estimate(모양·크기·시각 전부)"
-  },
-  {
-   "t": 120,
-   "type": "tide",
-   "name": "침공: 다가오는 벽",
-   "from": [
-    -30,
-    0
-   ],
-   "to": [
-    30,
-    0
-   ],
-   "warn": 3,
-   "dur": 14,
-   "thick": 5,
-   "span": 70,
-   "noDodge": true,
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 번하르트 침공: 소총병의 십자 범위, 탱크의 다가오는 벽(옷장으로 넘어가 회피), 병사 처치 딜 체크와 NPC 보호는 넣지 않음 + estimate(모양·크기·시각 전부)"
-  },
-  {
-   "t": 136,
-   "type": "rects",
-   "name": "침공: 십자 사격",
-   "rects": [
-    [
-     0,
-     0,
-     60,
-     7
-    ],
-    [
-     0,
-     0,
-     7,
-     60
-    ]
-   ],
-   "cast": 3,
-   "color": "blue",
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 번하르트 침공: 소총병의 십자 범위, 탱크의 다가오는 벽(옷장으로 넘어가 회피), 병사 처치 딜 체크와 NPC 보호는 넣지 않음 + estimate(모양·크기·시각 전부)"
+   "src": "table(S3 无敌斩: 원 반경 4.5m 뒤 0.90초에 부채꼴 반경 15m·180°, 중심이 정면에서 120° 옆) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 번호 1~5 순, 1번 힐러·5번 탱커 설, 16단 이상 두 번 맞으면 즉사 + estimate(번호 간격 2.4초, 내 번호 3) + video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임)"
   }
  ],
- "duration": 142,
+ "duration": 262,
  "variants": {
   "17": {
    "label": "17단",
@@ -929,7 +1073,7 @@
      "fx": "bomb"
     },
     {
-     "t": 58,
+     "t": 56,
      "type": "spread",
      "name": "서프라이즈(폭탄)",
      "r": 5,
@@ -939,7 +1083,7 @@
      "fx": "bomb"
     },
     {
-     "t": 114,
+     "t": 180,
      "type": "spread",
      "name": "서프라이즈(폭탄)",
      "r": 5,
@@ -954,7 +1098,7 @@
    "label": "19단 약화 연결",
    "events": [
     {
-     "t": 20,
+     "t": 34,
      "type": "link",
      "name": "약화 연결",
      "r": 4,
@@ -962,7 +1106,7 @@
      "src": "table(수식어 설명문) + estimate(주기·시각·해제 거리 4m). 원문: 가장 멀리 있는 플레이어와 10초간 연결, 연결 중 두 사람의 대미지 감소, 가까워지면 해제"
     },
     {
-     "t": 58,
+     "t": 150,
      "type": "link",
      "name": "약화 연결",
      "r": 4,
@@ -970,7 +1114,7 @@
      "src": "table(수식어 설명문) + estimate(주기·시각·해제 거리 4m). 원문: 가장 멀리 있는 플레이어와 10초간 연결, 연결 중 두 사람의 대미지 감소, 가까워지면 해제"
     },
     {
-     "t": 116,
+     "t": 212,
      "type": "link",
      "name": "약화 연결",
      "r": 4,
@@ -983,7 +1127,7 @@
    "label": "20단 환영의 속박",
    "events": [
     {
-     "t": 20,
+     "t": 34,
      "type": "aoe",
      "kind": "show",
      "name": "환영의 속박(환영 3개 처치)",
@@ -1009,7 +1153,7 @@
      "src": "table(수식어 설명문) + estimate(주기·시각·환영 자리). 원문: 환영 3개가 플레이어를 연결해 공격력을 점차 낮춘다. 환영 주위에 다른 몬스터가 없으면 대미지 감면이 커진다. 처치 판정은 없고 자리 표시만 한다"
     },
     {
-     "t": 112,
+     "t": 152,
      "type": "aoe",
      "kind": "show",
      "name": "환영의 속박(환영 3개 처치)",
@@ -1038,5 +1182,6 @@
   }
  },
  "botsMove": true,
- "tankBot": 0
+ "tankBot": 0,
+ "timingSrc": "video(M20 클리어 영상 GkShqx3hf2M 4초 간격 프레임). 영상 순서: 저주(약 4초) → 위압(약 20~40초) → 창날 난무(약 64~76초) → 거대화(약 88~112초) → 침공(약 120~156초) → 저주 2회차(약 168초) → 분신 해일(약 192~216초) → 창날 난무 2회차(약 264초) → 번호 순 강타(약 288초). 뒷부분은 조금 당겨 넣었다"
 }
