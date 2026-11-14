@@ -33,9 +33,14 @@
    "idle": "as_mon_tripod_fidle",
    "beam": "as_mon_tripod_atk_beamcanon_start",
    "matrix": "as_mon_tripod_atk_satellitefall_start",
-   "phase": "as_mon_tripod_atk_phasechange"
+   "phase": "as_mon_tripod_atk_phasechange",
+   "walk": "as_mon_tripod_walk"
   },
-  "animSrc": "클립은 클라 실측, 기믹과의 대응은 추정"
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 추정",
+  "reach": 7,
+  "speed": 2.0,
+  "turn": 120,
+  "moveSrc": "table(스킬 데이터의 돌진·도약 값과 모델 표의 이동 속도) + estimate(이동 시점과 도착 자리). 평상시 걸어 다니는 구간(산책)은 공략 기준"
  },
  "partySpots": [
   [
@@ -105,7 +110,8 @@
    "failMsg": null,
    "anim": "beam",
    "src": "table(직사각형 길이 36.4·폭 6.9에 모델 배율 0.55 → 20×3.8m, 2.5초 추적) + guide(data/master-s3-mech-cursedtomb.md: 클라 공략 문구·bilibili 영상 자막·일본어 위키) 탱커 외에 맞으면 사망",
-   "fx": "tank"
+   "fx": "tank",
+   "rel": true
   },
   {
    "t": 10,
@@ -237,6 +243,19 @@
    "fx": "ball"
   },
   {
+   "t": 30,
+   "type": "bossWalk",
+   "move": {
+    "to": [
+     -9,
+     -18
+    ],
+    "mode": "walk",
+    "dur": 5
+   },
+   "src": "guide(평상시 걸어 다님) + estimate(경로)"
+  },
+  {
    "t": 38,
    "type": "towers",
    "name": "매트릭스 프로토콜 2차",
@@ -358,6 +377,19 @@
    ],
    "src": "guide(data/master-s3-mech-cursedtomb.md: 클라 공략 문구·bilibili 영상 자막·일본어 위키) 대상 위치에서 한 방향으로 전장 끝까지 덮는 장판이 오래 남는다. 벽 가까이일수록 작다 + estimate(가장자리 기준 20m)",
    "fx": "plasma"
+  },
+  {
+   "t": 52,
+   "type": "bossWalk",
+   "move": {
+    "to": [
+     9,
+     -18
+    ],
+    "mode": "walk",
+    "dur": 7
+   },
+   "src": "estimate"
   },
   {
    "t": 60,
@@ -518,6 +550,16 @@
    "fx": "lasers"
   },
   {
+   "t": 76,
+   "type": "bossWalk",
+   "move": {
+    "to": "home",
+    "mode": "walk",
+    "dur": 5
+   },
+   "src": "estimate"
+  },
+  {
    "t": 84,
    "type": "shapes",
    "name": "편광의 심판(로봇 돌진)",
@@ -582,7 +624,8 @@
    "failMsg": null,
    "anim": "beam",
    "src": "table(직사각형 길이 36.4·폭 6.9에 모델 배율 0.55 → 20×3.8m, 2.5초 추적) + guide(data/master-s3-mech-cursedtomb.md: 클라 공략 문구·bilibili 영상 자막·일본어 위키) 탱커 외에 맞으면 사망",
-   "fx": "tank"
+   "fx": "tank",
+   "rel": true
   }
  ],
  "variants": {

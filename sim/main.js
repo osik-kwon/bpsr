@@ -113,6 +113,7 @@ function bossAnim(g) {
     const e = data.events[i], name = A[e.anim ?? e.type], c = g.clips[name];
     if (c && t >= e.t && t < e.t + c.duration) return setPose(g, name, t - e.t);
   }
+  const walk = g === boss && sim.bossWalking && g.clips[A.walk]; if (walk) return setPose(g, A.walk, t % walk.duration);
   const idle = g.clips[A.idle]; if (idle) setPose(g, A.idle, t % idle.duration);
 }
 const boss = actor(0x4a4f5c, data.boss.model), clone = actor(0xe26fa8, data.boss.model, 0xff7eb6);
@@ -427,7 +428,7 @@ function tick(now) {
   const p = sim.player;
   animPlayer(player, p, adt); drainCombat(); drawShots();
   player.ring.material.color.set(p.iframe > 0 ? 0xffffff : sim.combat.recast ? 0xffd24a : sim.combat.act ? 0xd29922 : 0x3fb950);   // 발밑 고리: 흰색 회피 무적, 금색 라이트 리캐스트, 주황 스킬 동작 중
-  boss.position.set(sim.boss.x, sim.bossY ?? data.boss.y ?? 0, sim.boss.z); boss.scale.setScalar(sim.bossScale ?? 1); if (GRID) { boss.rotation.y = Math.atan2(Math.cos(sim.bossDir), Math.sin(sim.bossDir)); drawTiles(); } else face(boss, p); bossAnim(boss); if (sim.clone) bossAnim(clone);
+  boss.position.set(sim.boss.x, sim.bossY ?? data.boss.y ?? 0, sim.boss.z); boss.scale.setScalar(sim.bossScale ?? 1); if (GRID) { boss.rotation.y = Math.atan2(Math.cos(sim.bossDir), Math.sin(sim.bossDir)); drawTiles(); } else if (data.noCurtain) { boss.rotation.y = Math.atan2(Math.cos(sim.bossFace), Math.sin(sim.bossFace)); boss.position.y += sim.bossAir * (data.boss.jumpH ?? 4); } else face(boss, p); bossAnim(boss); if (sim.clone) bossAnim(clone);
   clone.visible = !!sim.clone; if (sim.clone) { clone.position.set(sim.clone.x, 0, sim.clone.z); face(clone, p); }
   sim.bots.forEach((b, i) => movePerson(bots[i], b, adt, sim.boss));
   drawFx(); scheduleFx(); realFx.update(sim.t); pcFx.update(sim.t);

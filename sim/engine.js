@@ -43,7 +43,7 @@ export class Sim {
     this.t = 0; this.done = false; this.log = []; this.tele = []; this.cores = []; this.markers = [];
     this.room = d.boss.room; this.energy = 0; this.crossedEarly = false; this.spin = null; this.curtain = null; this.tether = null; this.lasers = [];
     // 격자 전투장(2·3넴): 타일 상태 0 멀쩡, 1 금 감, 2 무너짐(없는 칸도 2)
-    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.links = []; this.bossY = null; this.curse = null; this.scars = new Set(); this.trees = null; this.carry = null; this.runners = []; this.ttt = null; this.presses = []; this.note = null; this.hazards = []; this.strikes = null; this.waves = []; this.bossScale = 1;
+    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.links = []; this.bossY = null; this.curse = null; this.scars = new Set(); this.trees = null; this.carry = null; this.runners = []; this.ttt = null; this.presses = []; this.note = null; this.bossFace = Math.PI / 2; this.bq = []; this.bmove = null; this.bossHoldUntil = 0; this.bossAir = 0; this.bossWalking = false; this.hazards = []; this.strikes = null; this.waves = []; this.bossScale = 1;
     if (this.grid) { this.tiles = Array.from({ length: A.cols * A.rows }, (_, i) => (A.missing ?? []).some(([c, r]) => c + r * A.cols === i) ? 2 : 0); }
     this.boss = d.boss.pos ? { x: d.boss.pos[0], z: d.boss.pos[1] } : polar(roomAngle(this.room), d.boss.dist);
     this.bossDir = (d.boss.dir ?? 90) * Math.PI / 180;
@@ -76,9 +76,13 @@ export class Sim {
     return { A, B, M, cores: [at(A, B, 1 / 3), at(A, B, 2 / 3), at(B, M, 0.5), at(M, A, 0.5)] };
   }
   spawn(e) {
-    if (e.byNote) e = { ...e, ...(e.byNote[this.note] ?? {}) };   // 내 음표(원소)에 따라 달라지는 이벤트
+    if (e.byNote) e = { ...e, ...(e.byNote[this.note] ?? {}) };
+    if (e.move) this.bq.push({ ...e.move, at: e.t + (e.move.at ?? 0) });
+    if (e.back) this.bq.push({ ...e.back, at: e.t + e.back.at });
+    if (e.hold) this.bossHoldUntil = e.t + e.hold;
+    if (e.rel) e = this.relEvent(e);   // 내 음표(원소)에 따라 달라지는 이벤트
     this.curType = e.fx ?? e.type; this.curNoDodge = !!e.noDodge;
-    if (e.bossTo) this.boss = { x: e.bossTo[0], z: e.bossTo[1] };
+    if (e.bossTo) { this.boss = { x: e.bossTo[0], z: e.bossTo[1] }; this.bmove = null; }
     if (e.bossScale) this.bossScale = e.bossScale;
     if (e.bossY != null) this.bossY = e.bossY;
     const front = polar(roomAngle(this.room), this.data.boss.dist - 8);
@@ -326,6 +330,7 @@ export class Sim {
     }
     }
     while (this.pending.length && this.pending[0].t <= this.t) this.spawn(this.pending.shift());
+    this.moveBoss(dt);
     // 넉백 구슬
     for (const o of this.orbs.filter(o => o.hitAt <= this.t)) {
       const dd = dist(o, p);
@@ -396,12 +401,13 @@ export class Sim {
       if (this.t >= sk.t0 - sk.lock && k < sk.order.length && sk.cur?.k !== k && !(sk.cur && !sk.cur.swept)) {
         const who = sk.order[k], tp = who === 'me' ? p : this.bots[who];
         sk.cur = { k, me: who === 'me', x: tp.x, z: tp.z, face: Math.atan2(tp.z - this.boss.z, tp.x - this.boss.x), T: sk.t0 + k * sk.gap };
+        this.bq.push({ to: [tp.x, tp.z], mode: 'dash', at: sk.cur.T - 0.15, dur: 0.15, stop: 2 });
       }
       const c = sk.cur;
       if (c) {
         if (!c.hit && this.t >= c.T) { c.hit = true; if (dist(c, p) <= sk.r && !(p.iframe > 0 && !c.me)) sk.hits++; }
         if (!c.swept && this.t >= c.T + sk.sd) { c.swept = true; if (inside(this.strikeSweep(c), p) && !(p.iframe > 0)) sk.hits++;
-          if (c.k === sk.order.length - 1) { this.result(sk.name, sk.hits <= 1, sk.hits <= 1 ? `${sk.hits}번 맞음(내 차례 강타만)` : `${sk.hits}번 맞음 — 두 번 이상이면 즉사`); if (sk.reset) this.bots = this.partySpots(this.room); this.strikes = null; } }
+          if (c.k === sk.order.length - 1) { this.result(sk.name, sk.hits <= 1, sk.hits <= 1 ? `${sk.hits}번 맞음(내 차례 강타만)` : `${sk.hits}번 맞음 — 두 번 이상이면 즉사`); if (sk.reset) this.bots = this.partySpots(this.room); this.strikes = null; this.bq.push({ to: 'home', mode: 'jump', at: this.t + 1, dur: 0.8 }); } }
       }
     }
     // 해일·벽
@@ -539,6 +545,49 @@ export class Sim {
   }
   tttCell(c) { const sp = this.ttt.sp; return { x: (c % 3 - 1) * sp, z: (Math.floor(c / 3) - 1) * sp }; }
   tttSpot(c) { const o = this.tttCell(c); return { x: o.x + 3, z: o.z + 3 }; }
+  // 보스가 노리는 대상: 내가 탱커면 나, 아니면 탱커 파티원
+  // 보스 이동: 예약된 돌진·도약·순간이동을 처리하고, 한가할 때 탱커(나)를 따라온다
+  moveBoss(dt) {
+    const B = this.data.boss, b = this.boss;
+    const i = this.bq.findIndex(m => m.at <= this.t);
+    if (i >= 0) { const m = this.bq.splice(i, 1)[0], to = this.bossTarget(m.to), d = dist(to, b) || 1, k = Math.max(0, d - (m.stop ?? 0)) / d;
+      this.bmove = { from: { ...b }, to: { x: b.x + (to.x - b.x) * k, z: b.z + (to.z - b.z) * k }, t0: this.t, dur: m.dur ?? 0.5, mode: m.mode ?? 'dash' }; }
+    let look = this.aggro(); this.bossWalking = false; this.bossAir = 0;
+    const mv = this.bmove;
+    if (mv) {
+      const u = Math.min(1, (this.t - mv.t0) / mv.dur);
+      if (mv.mode !== 'blink' || u >= 1) { this.boss = { x: mv.from.x + (mv.to.x - mv.from.x) * u, z: mv.from.z + (mv.to.z - mv.from.z) * u }; }
+      if (mv.mode === 'jump') this.bossAir = Math.sin(Math.PI * u);
+      if (mv.mode === 'walk') this.bossWalking = true;
+      if (dist(mv.to, mv.from) > 0.5) look = mv.to;
+      if (u >= 1) this.bmove = null;
+    } else if (this.tank && B.chase !== false && this.t >= this.bossHoldUntil && this.bossScale === 1 && this.data.noCurtain) {
+      const g = this.player, d = dist(g, b), reach = B.reach ?? 5;
+      if (d > reach + 0.5) { const st = Math.min((B.speed ?? 3) * dt, d - reach); this.boss = { x: b.x + (g.x - b.x) / d * st, z: b.z + (g.z - b.z) / d * st }; this.bossWalking = true; }
+    }
+    if (dist(look, this.boss) > 0.3 && this.bossScale === 1) {
+      const want = Math.atan2(look.z - this.boss.z, look.x - this.boss.x); let da = (want - this.bossFace) % TAU; if (da > Math.PI) da -= TAU; if (da < -Math.PI) da += TAU;
+      const mx = (B.turn ?? 240) * Math.PI / 180 * dt; this.bossFace += Math.max(-mx, Math.min(mx, da));
+    }
+  }
+  aggro() { return this.tank ? this.player : this.bots[this.data.tankBot ?? 0]; }
+  bossTarget(to) {
+    if (Array.isArray(to)) return { x: to[0], z: to[1] };
+    if (to === 'me') return { ...this.player }; if (to === 'aggro') return { ...this.aggro() };
+    if (to === 'home') { const h = this.data.boss.pos ?? [0, 0]; return { x: h[0], z: h[1] }; }
+    if (to?.bot != null) return { ...this.bots[to.bot] }; if (to?.tree != null) return { ...this.trees.pos[to.tree] };
+    return { x: 0, z: 0 };
+  }
+  // rel 이벤트: 보스가 기본 자리에서 아래(+z)를 보고 있다고 치고 적은 도형을, 지금 보스 자리와 대상 방향에 맞춰 옮긴다
+  relEvent(e) {
+    const h = this.data.boss.pos ?? [0, 0], g = this.aggro(), a = Math.atan2(g.z - this.boss.z, g.x - this.boss.x), rot = a - Math.PI / 2, c = Math.cos(rot), s = Math.sin(rot);
+    const P = q => { const dx = q.x - h[0], dz = q.z - h[1]; return { x: this.boss.x + dx * c - dz * s, z: this.boss.z + dx * s + dz * c }; };
+    const S = q => q.shape === 'line' ? { ...q, a: P(q.a), b: P(q.b) } : q.shape === 'sector' ? { ...q, ...P(q), dir: q.dir + rot } : { ...q, ...P(q) };
+    const out = { ...e };
+    if (Array.isArray(e.spots) && e.spots[0]?.shape) out.spots = e.spots.map(S);
+    if (e.type === 'sectors') { const o = P({ x: (e.center ?? h)[0], z: (e.center ?? h)[1] }); out.center = [o.x, o.z]; out.dirs = e.dirs.map(d => d + rot * 180 / Math.PI); }
+    return out;
+  }
   runnerPos(r) { const u = Math.max(0, Math.min(1, (this.t - r.t0) / r.dur)); return { x: r.a.x + (r.b.x - r.a.x) * u, z: r.a.z + (r.b.z - r.a.z) * u }; }
   strikeSweep(c) { return { shape: 'sector', x: c.x, z: c.z, r: this.strikes.sr, dir: c.face - Math.PI * 2 / 3, half: Math.PI / 2 }; }
   waveShape(w, t) {

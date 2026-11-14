@@ -36,9 +36,15 @@
    "slash": "as_wpnpc_f_base_tinaboss_atk_ex_berserk_start",
    "strike": "as_wpnpc_f_base_tinaboss_atk_b_thump_start",
    "clone": "as_wpnpc_f_base_tinaboss_atk_ex_phantom_start",
-   "big": "as_wpnpc_f_base_tinaboss_big_atk_gas"
+   "big": "as_wpnpc_f_base_tinaboss_big_atk_gas",
+   "walk": "as_wpnpc_f_base_tinaboss_aim_walk_f"
   },
-  "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름으로 본 추정"
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름으로 본 추정",
+  "reach": 4,
+  "speed": 3.0,
+  "turn": 360,
+  "jumpH": 3,
+  "moveSrc": "table(스킬 데이터의 돌진·도약 값과 모델 표의 이동 속도) + estimate(이동 시점과 도착 자리). 걷기 1.5·달리기 3.0m/s"
  },
  "partySpots": [
   [
@@ -223,7 +229,12 @@
    "cast": 1.4,
    "color": "pink",
    "anim": "curse",
-   "src": "table(诅咒柜子: 원 반경 25m, 1.37초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md)"
+   "src": "table(诅咒柜子: 원 반경 25m, 1.37초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md)",
+   "move": {
+    "to": "home",
+    "mode": "jump",
+    "dur": 0.8
+   }
   },
   {
    "t": 4,
@@ -261,7 +272,23 @@
     ]
    ],
    "cast": 2,
-   "src": "table(虚蚀缠绕 가상체: 원 반경 4.5m, 2.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 대상은 못 움직이고 다른 사람은 범위 밖 + estimate(대상 자리)"
+   "src": "table(虚蚀缠绕 가상체: 원 반경 4.5m, 2.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 대상은 못 움직이고 다른 사람은 범위 밖 + estimate(대상 자리)",
+   "move": {
+    "to": [
+     -9,
+     10
+    ],
+    "mode": "dash",
+    "at": 1.5,
+    "dur": 0.3,
+    "stop": 3
+   },
+   "back": {
+    "to": "home",
+    "mode": "jump",
+    "at": 3,
+    "dur": 0.8
+   }
   },
   {
    "t": 18,
@@ -274,7 +301,22 @@
    "r": 3,
    "cast": 4,
    "anim": "share",
-   "src": "table(锁定点名分摊: 원 반경 2.5m) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + estimate(시전 4초, 판정 반경 3m)"
+   "src": "table(锁定点名分摊: 원 반경 2.5m) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + estimate(시전 4초, 판정 반경 3m)",
+   "move": {
+    "to": [
+     0,
+     8
+    ],
+    "mode": "jump",
+    "at": 3.3,
+    "dur": 0.7
+   },
+   "back": {
+    "to": "home",
+    "mode": "jump",
+    "at": 5.2,
+    "dur": 0.8
+   }
   },
   {
    "t": 25,
@@ -315,11 +357,12 @@
    "cast": 3.4,
    "noDodge": true,
    "anim": "slash",
-   "bossTo": [
-    0,
-    0
-   ],
-   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향)"
+   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향)",
+   "move": {
+    "to": "home",
+    "mode": "jump",
+    "dur": 0.6
+   }
   },
   {
    "t": 34.5,
@@ -476,7 +519,8 @@
      "t": 13.5
     }
    ],
-   "src": "table(거대체 33707 배치 (0, 79, -50), 모델 배율 35) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md)"
+   "src": "table(거대체 33707 배치 (0, 79, -50), 모델 배율 35) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md)",
+   "hold": 30
   },
   {
    "t": 84,

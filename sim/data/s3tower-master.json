@@ -38,7 +38,12 @@
    "exile": "as_mon_typeochaozai_diancifengbao_start",
    "dash": "as_mon_typeochaozai_chongfeng_start"
   },
-  "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름(병음)으로 본 추정"
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름(병음)으로 본 추정",
+  "reach": 7,
+  "speed": 3.0,
+  "turn": 180,
+  "jumpH": 4,
+  "moveSrc": "table(스킬 데이터의 돌진·도약 값과 모델 표의 이동 속도) + estimate(이동 시점과 도착 자리)"
  },
  "partySpots": [
   [
@@ -165,7 +170,8 @@
    "failMsg": null,
    "anim": "laser",
    "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)",
-   "fx": "tank"
+   "fx": "tank",
+   "rel": true
   },
   {
    "t": 12,
@@ -229,13 +235,18 @@
     }
    ],
    "cast": 4,
-   "bossTo": [
-    0,
-    0
-   ],
    "anim": "shock",
    "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음",
-   "fx": "shock"
+   "fx": "shock",
+   "move": {
+    "to": [
+     0,
+     0
+    ],
+    "mode": "blink",
+    "dur": 0.3
+   },
+   "hold": 6
   },
   {
    "t": 58,
@@ -289,7 +300,8 @@
    ],
    "cast": 3,
    "src": "table(보스 중심 반경 15m의 300° 부채꼴, 1.87초) + estimate(방향·예고)",
-   "fx": "pizza"
+   "fx": "pizza",
+   "rel": true
   },
   {
    "t": 78,
@@ -360,7 +372,35 @@
    "cast": 3.4,
    "anim": "dash",
    "src": "table(몸 원 반경 2.5에 배율 1.6 → 폭 약 5~8m, 3.37초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 직선 예고를 따라 돌진",
-   "fx": "dash"
+   "fx": "dash",
+   "move": {
+    "to": [
+     -20,
+     -10
+    ],
+    "mode": "blink",
+    "dur": 0.3
+   },
+   "back": {
+    "to": [
+     20,
+     10
+    ],
+    "mode": "dash",
+    "at": 2.6,
+    "dur": 0.8
+   },
+   "hold": 6
+  },
+  {
+   "t": 94.5,
+   "type": "bossWalk",
+   "move": {
+    "to": "home",
+    "mode": "jump",
+    "dur": 1.0
+   },
+   "src": "estimate"
   },
   {
    "t": 96,
@@ -391,7 +431,8 @@
    "failMsg": null,
    "anim": "laser",
    "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)",
-   "fx": "tank"
+   "fx": "tank",
+   "rel": true
   },
   {
    "t": 102,
@@ -416,13 +457,18 @@
     }
    ],
    "cast": 4,
-   "bossTo": [
-    0,
-    0
-   ],
    "anim": "shock",
    "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음",
-   "fx": "shock"
+   "fx": "shock",
+   "move": {
+    "to": [
+     0,
+     0
+    ],
+    "mode": "blink",
+    "dur": 0.3
+   },
+   "hold": 6
   }
  ],
  "variants": {

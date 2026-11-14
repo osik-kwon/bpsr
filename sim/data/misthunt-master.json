@@ -37,9 +37,15 @@
    "pounce": "as_mon_dihu_atk_jumpsmash",
    "call": "as_mon_dihu_atk_order",
    "hunt": "as_mon_dihu_dash",
-   "combo": "as_mon_dihu_atk_scratchtwice"
+   "combo": "as_mon_dihu_atk_scratchtwice",
+   "walk": "as_mon_dihu_run"
   },
-  "animSrc": "클립은 클라 실측(땅여우 계열 공용 동작), 기믹과의 대응은 추정"
+  "animSrc": "클립은 클라 실측(땅여우 계열 공용 동작), 기믹과의 대응은 추정",
+  "reach": 6,
+  "speed": 6.0,
+  "turn": 300,
+  "jumpH": 5,
+  "moveSrc": "table(스킬 데이터의 돌진·도약 값과 모델 표의 이동 속도) + estimate(이동 시점과 도착 자리). 걷기 1.2·달리기 6.0m/s, 급습 도약 36m"
  },
  "partySpots": [
   [
@@ -191,7 +197,8 @@
    "anim": "shatter",
    "failMsg": null,
    "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)",
-   "fx": "shatter"
+   "fx": "shatter",
+   "rel": true
   },
   {
    "t": 15,
@@ -223,7 +230,8 @@
    "color": "yellow",
    "anim": "tornado",
    "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)",
-   "fx": "tornado"
+   "fx": "tornado",
+   "rel": true
   },
   {
    "t": 24,
@@ -293,7 +301,8 @@
    "color": "blue",
    "anim": "bite",
    "src": "table(咬: 후퇴 3.4m 뒤 전방 타격) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 탱커를 묶고 가장 가까운 사람을 문다. 힐러가 보스와 탱커 사이를 막는다 + estimate(예고 3초, 막는 자리 폭)",
-   "fx": "bite"
+   "fx": "bite",
+   "rel": true
   },
   {
    "t": 43,
@@ -302,7 +311,20 @@
    "r": 3.2,
    "cast": 2,
    "anim": "pounce",
-   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가"
+   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가",
+   "move": {
+    "to": "me",
+    "mode": "jump",
+    "at": 1.4,
+    "dur": 0.6,
+    "stop": 2
+   },
+   "back": {
+    "to": "home",
+    "mode": "walk",
+    "at": 3,
+    "dur": 1.5
+   }
   },
   {
    "t": 50,
@@ -337,12 +359,17 @@
      -25
     ]
    ],
-   "bossTo": [
-    0,
-    0
-   ],
    "anim": "call",
-   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 보스가 중앙으로, 가장자리 구체와 보스 사이 직사각형 위에 전원이 간격을 두고 선다. 구체가 보스에 닿으면 격노 + estimate(폭 3m, 간격 5m, 8초, 방향)"
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 보스가 중앙으로, 가장자리 구체와 보스 사이 직사각형 위에 전원이 간격을 두고 선다. 구체가 보스에 닿으면 격노 + estimate(폭 3m, 간격 5m, 8초, 방향)",
+   "move": {
+    "to": [
+     0,
+     0
+    ],
+    "mode": "blink",
+    "dur": 0.2
+   },
+   "hold": 9
   },
   {
    "t": 62,
@@ -351,7 +378,23 @@
    "tree": 0,
    "cast": 8,
    "anim": "hunt",
-   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 지정 대상이 충전된 나무의 풀 위에 서면 보스가 나무에 부딪힌다. 미리 흔들면 무효. 사냥 직전 나무 전부 재충전 + estimate(나무 순서 첫 그루, 8초, 이동 감속은 넣지 않음)"
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 지정 대상이 충전된 나무의 풀 위에 서면 보스가 나무에 부딪힌다. 미리 흔들면 무효. 사냥 직전 나무 전부 재충전 + estimate(나무 순서 첫 그루, 8초, 이동 감속은 넣지 않음)",
+   "move": {
+    "to": {
+     "tree": 0
+    },
+    "mode": "dash",
+    "at": 7.6,
+    "dur": 0.4,
+    "stop": 3
+   },
+   "back": {
+    "to": "home",
+    "mode": "walk",
+    "at": 10,
+    "dur": 3
+   },
+   "hold": 13
   },
   {
    "t": 74,
@@ -381,7 +424,24 @@
    "failMsg": "나무에서 떨어져 맞음 — 정화 못 함",
    "anim": "combo",
    "src": "table(五连击: 원 반경 1.6m 돌진 5회) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 충전된 나무 하나에 전원 모여 다 맞은 뒤 흔들어 정화 + estimate(모이는 나무, 6초)",
-   "fx": "combo"
+   "fx": "combo",
+   "move": {
+    "to": [
+     -19.1,
+     11.0
+    ],
+    "mode": "dash",
+    "at": 1,
+    "dur": 0.4,
+    "stop": 4
+   },
+   "back": {
+    "to": "home",
+    "mode": "walk",
+    "at": 7.5,
+    "dur": 3
+   },
+   "hold": 11
   },
   {
    "t": 80.5,
@@ -472,7 +532,8 @@
    "anim": "shatter",
    "failMsg": null,
    "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)",
-   "fx": "shatter"
+   "fx": "shatter",
+   "rel": true
   },
   {
    "t": 96,
@@ -481,7 +542,20 @@
    "r": 3.2,
    "cast": 2,
    "anim": "pounce",
-   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가"
+   "src": "table(扑杀: 착지 원 반경 3.2m, 1.82초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 상흔 없는 사람 1명을 노리며 탱커 외 즉사, 무적 회피 불가",
+   "move": {
+    "to": "me",
+    "mode": "jump",
+    "at": 1.4,
+    "dur": 0.6,
+    "stop": 2
+   },
+   "back": {
+    "to": "home",
+    "mode": "walk",
+    "at": 3,
+    "dur": 1.5
+   }
   },
   {
    "t": 104,
@@ -513,7 +587,8 @@
    "color": "yellow",
    "anim": "tornado",
    "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)",
-   "fx": "tornado"
+   "fx": "tornado",
+   "rel": true
   }
  ],
  "duration": 112,

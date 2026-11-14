@@ -37,7 +37,10 @@
    "sing": "as_mon_battlenappo_atk_phantom_sing",
    "dance": "as_mon_battlenappo_backpackdance_loop"
   },
-  "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름으로 본 추정"
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 클립 이름으로 본 추정",
+  "chase": false,
+  "turn": 120,
+  "moveSrc": "보스가 커서(모델 배율 7.0) 제자리에서 방향만 돈다고 가정"
  },
  "partySpots": [
   [
@@ -139,7 +142,8 @@
    "cast": 2,
    "anim": "slash",
    "src": "table(정면 120°·반경 20m, 0.78초) + estimate(예고·방향)",
-   "fx": "slash"
+   "fx": "slash",
+   "rel": true
   },
   {
    "t": 14,

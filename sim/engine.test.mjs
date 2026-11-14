@@ -233,3 +233,15 @@ console.log('PASS');
   const t = run([[0, [18, 6]], [10.1, [8, 8]], [19.1, [-12, 10]], [27.1, [-10, 10]], [38.1, [0, -12]], [52, [0, -8]], [57.1, [-12, 0]], [69.2, [10, -4]], [76.1, [-6, 8]], [85.6, [-10, 17.3]], [92, [-18, 6]]], [85.2, 90.5]);
   console.log(t.log.every(r => r.ok) && t.note === '물' ? 'PASS' : 'FAIL', '심해 나뽀: 물 음표 모범 동선', t.log.length, t.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
 }
+
+// 보스 이동: 내가 탱커면 보스가 나를 따라오고, 딜러면 스킬에 맞춰 움직였다가 제자리로 돌아온다
+{
+  const { Combat } = await import('./combat.js');
+  for (const f of ['tina', 'misthunt', 'factory', 'cursedtomb', 's3tower', 'searocks']) {
+    const d = JSON.parse(fs.readFileSync(new URL(`./data/${f}-master.json`, import.meta.url)));
+    const t = new Sim(d, new Combat({ role: 'tank', tank: true, skills: {} })); let far = 0, moved = 0; const h = d.boss.pos;
+    while (!t.done) { t.step(0.05, { mx: 0, mz: 0 }); if (Math.hypot(t.boss.x - h[0], t.boss.z - h[1]) > 1) moved++; if (t.t > 7.5 && t.t < 8.5) far = Math.max(far, Math.hypot(t.boss.x - t.player.x, t.boss.z - t.player.z)); }
+    const chase = d.boss.chase === false || far <= (d.boss.reach ?? 5) + 1;
+    console.log(chase && (moved > 0 || d.boss.chase === false) && [t.boss.x, t.boss.z].every(Number.isFinite) ? 'PASS' : 'FAIL', `보스 이동(${f}, 탱커)`, far.toFixed(1), moved);
+  }
+}

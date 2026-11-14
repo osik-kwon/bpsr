@@ -37,9 +37,15 @@
    "jump": "as_mon_shouren-duogeerman_common_jump_start",
    "slash": "as_mon_shouren-duogeerman_atk_fight01",
    "fly": "as_mon_shouren-duogeerman_atk_fly_start",
-   "laser": "as_mon_shouren-duogeerman_atk_laser_shoulder_start"
+   "laser": "as_mon_shouren-duogeerman_atk_laser_shoulder_start",
+   "walk": "as_mon_shouren_run"
   },
-  "animSrc": "클립은 클라 실측, 기믹과의 대응은 추정"
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 추정",
+  "reach": 6,
+  "speed": 4.0,
+  "turn": 240,
+  "jumpH": 6,
+  "moveSrc": "table(스킬 데이터의 돌진·도약 값과 모델 표의 이동 속도) + estimate(이동 시점과 도착 자리). 포식 2형 점프 31m"
  },
  "partySpots": [
   [
@@ -258,12 +264,17 @@
    ],
    "r": 3,
    "cast": 3.5,
-   "bossTo": [
-    0,
-    -20
-   ],
    "anim": "jump",
-   "src": "table(점프 31m, 분담 원 반경 3m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + estimate(분담 자리)"
+   "src": "table(점프 31m, 분담 원 반경 3m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) + estimate(분담 자리)",
+   "move": {
+    "to": [
+     0,
+     -20
+    ],
+    "mode": "jump",
+    "dur": 1.0
+   },
+   "hold": 9
   },
   {
    "t": 50,
@@ -309,11 +320,12 @@
    "t": 58,
    "type": "marks",
    "pos": [],
-   "bossTo": [
-    0,
-    0
-   ],
-   "src": "estimate"
+   "src": "estimate",
+   "move": {
+    "to": "home",
+    "mode": "jump",
+    "dur": 1.0
+   }
   },
   {
    "t": 60,
@@ -340,7 +352,8 @@
    "cast": 2.95,
    "anim": "slash",
    "src": "table(앞·뒤 부채꼴 반경 15m·90°, 2.95초, 뒤쪽 원점 4m 뒤)",
-   "fx": "slash"
+   "fx": "slash",
+   "rel": true
   },
   {
    "t": 68,
@@ -361,13 +374,18 @@
     }
    ],
    "cast": 1.5,
-   "bossTo": [
-    0,
-    -23
-   ],
    "anim": "fly",
    "src": "table(포탑 등장 원 반경 6m, 1초) + estimate(자리)",
-   "fx": "turret"
+   "fx": "turret",
+   "move": {
+    "to": [
+     0,
+     -23
+    ],
+    "mode": "jump",
+    "dur": 1.5
+   },
+   "hold": 16
   },
   {
    "t": 70,
@@ -408,13 +426,14 @@
     }
    ],
    "cast": 4,
-   "bossTo": [
-    0,
-    0
-   ],
    "anim": "tornado",
    "src": "guide(마스터 포효 2: 2명 방향 부채꼴 반경 30m·60°, 4초) + estimate(방향)",
-   "fx": "pizza"
+   "fx": "pizza",
+   "move": {
+    "to": "home",
+    "mode": "jump",
+    "dur": 1.0
+   }
   },
   {
    "t": 92,
@@ -431,7 +450,8 @@
    "cast": 3,
    "anim": "jump",
    "src": "table(보스 중심 원 반경 6m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
-   "fx": "devour"
+   "fx": "devour",
+   "rel": true
   },
   {
    "t": 97,
@@ -456,7 +476,8 @@
    ],
    "cast": 3,
    "src": "table(고리 8~18m, 마스터는 대상 방향 부채꼴 반경 25m·60° 추가) + estimate(방향)",
-   "fx": "ring2"
+   "fx": "ring2",
+   "rel": true
   },
   {
    "t": 104,
@@ -475,7 +496,8 @@
    "cast": 1.5,
    "anim": "laser",
    "src": "table(부채꼴 반경 49m·120°, 1.5초 예고, 180° 돌아 한 번 더)",
-   "fx": "laser"
+   "fx": "laser",
+   "rel": true
   },
   {
    "t": 107,
@@ -493,7 +515,8 @@
    ],
    "cast": 1.5,
    "src": "table",
-   "fx": "laser"
+   "fx": "laser",
+   "rel": true
   },
   {
    "t": 113,
