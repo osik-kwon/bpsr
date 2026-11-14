@@ -51,7 +51,7 @@ export class Sim {
     this.player = { ...(d.player.start ? { x: d.player.start[0], z: d.player.start[1] } : polar(roomAngle(this.room), 12)), dashCd: 0, iframe: 0, lock: 0, lockN: 0, attackTime: 0 };
     this.lockTimes = d.player.lockTimes ?? [0.6, 0.9, 1.3];
     // 파티원 7명은 보스 뒤쪽 근처에 모여 있는 고정 표식
-    this.roomStart = 0; this.bots = this.partySpots(this.room);
+    this.roomStart = 0; this._botInit = true; this.bots = this.partySpots(this.room);
     this.pending = d.events.map(e => ({ ...e })).sort((a, b) => a.t - b.t);
     this.combat?.reset();
   }
@@ -61,7 +61,7 @@ export class Sim {
 
   // 파티원 7명의 기본 자리(보스 앞에 모여 있음)
   partySpots(room) {
-    if (this.data.partySpots) return this.data.partySpots.map(([x, z]) => ({ x, z }));
+    if (this.data.partySpots) { const v = this.data.partySpots.map(([x, z]) => ({ x, z })); v.home = true; return v; }
     if (this.data.party === 'ring') return Array.from({ length: 7 }, (_, i) => polar(i * TAU / 7 + 0.3, 18));   // 전투장에 흩어진 배치
     // 보스 앞 탱버 원(반경 5m) 밖, 내 시작 자리 양옆
     return Array.from({ length: 7 }, (_, i) => polar(roomAngle(room) + (i < 4 ? i - 4 : i - 3) * 0.2, 11 + (i % 2))); }
@@ -137,7 +137,8 @@ export class Sim {
       this.add({ name: e.name, kind: 'far', shape: 'circle', ...this.boss, r: e.safeDist, hitAt: e.t + e.cast, color: 'red', tileOp: 'collapse' });
     } else if (e.type === 'stack') {
       // 쉐어: 파티원들이 모인 원 안에 같이 선다
-      [0, 1, 2].forEach((i, k) => { this.bots[i] = { x: e.at[0] + (k - 1) * 1.5, z: e.at[1] + (k % 2) * 1.2 }; });
+      if (this.data.botsMove) this.bots = this.bots.map((_, k) => ({ x: e.at[0] + (k % 2 ? 1 : -1) * (0.8 + (k >> 1)), z: e.at[1] + (k % 3 - 1) * 1.2 }));
+      else [0, 1, 2].forEach((i, k) => { this.bots[i] = { x: e.at[0] + (k - 1) * 1.5, z: e.at[1] + (k % 2) * 1.2 }; });
       this.add({ name: e.name, kind: 'in', shape: 'circle', x: e.at[0], z: e.at[1], r: e.r, hitAt: e.t + e.cast, color: 'pink', reset: true });
     } else if (e.type === 'spread') {
       // 산개·폭탄·개인: 터질 때 모든 파티원과 r 이상 떨어져 있어야 한다. 원은 나를 따라다닌다
@@ -342,7 +343,7 @@ export class Sim {
     }
     }
     while (this.pending.length && this.pending[0].t <= this.t) this.spawn(this.pending.shift());
-    this.moveBoss(dt);
+    this.moveBoss(dt); this.moveBots(dt);
     // 넉백 구슬
     for (const o of this.orbs.filter(o => o.hitAt <= this.t)) {
       const dd = dist(o, p);
@@ -560,6 +561,38 @@ export class Sim {
   tttCell(c) { const sp = this.ttt.sp; return { x: (c % 3 - 1) * sp, z: (Math.floor(c / 3) - 1) * sp }; }
   tttSpot(c) { const o = this.tttCell(c); return { x: o.x + 3, z: o.z + 3 }; }
   // 보스가 노리는 대상: 내가 탱커면 나, 아니면 탱커 파티원
+  // 파티원 위치: botsMove 시나리오에서는 값을 넣으면 순간이동하지 않고 그 자리로 걸어간다(기본 배치를 넣으면 역할별 대형으로 돌아간다)
+  get bots() { return this._bots; }
+  set bots(v) {
+    if (!this.data.botsMove || !this._bots || this._botInit) { this._bots = v; this._goal = null; this._botInit = false; }
+    else this._goal = v.home ? null : v.map(q => ({ ...q }));
+  }
+  botRoles() { const r = this.data.partyRoles; return (Array.isArray(r) ? r : r?.[this.role]) ?? []; }
+  // 역할별 대형: 탱커는 보스 앞, 근딜은 보스 뒤, 원딜·힐러는 뒤쪽 양옆 멀찍이
+  formation(i, role) {
+    const b = this.boss, f = this.bossFace, R = this.data.boss.reach ?? 5, sg = i % 2 ? 1 : -1, at = (a, d) => ({ x: b.x + Math.cos(a) * d, z: b.z + Math.sin(a) * d });
+    if (this.bossScale !== 1) { const h = this.data.partySpots[i]; return { x: h[0], z: h[1] }; }
+    if (role === '탱') return at(f, R);
+    if (role === '근딜') return at(f + Math.PI + sg * 0.5, R);
+    if (role === '힐') return at(f + Math.PI + sg * 1.0, 11);
+    return at(f + Math.PI - sg * 1.2, 13);
+  }
+  moveBots(dt) {
+    if (!this.data.botsMove) return;
+    const roles = this.botRoles(), Rr = (this.data.arena.radius ?? 30) - 1.5, sp = (this.data.player.speed ?? 6) * dt;
+    const soon = this.tele.filter(s => s.kind === 'avoid' && (s.showFrom ?? s.start) <= this.t && s.hitAt - this.t <= 3 && !s.follow);
+    const bad = q => soon.some(s => inside(s, q));
+    this._bots.forEach((b, i) => {
+      let g = this._goal?.[i] ?? this.formation(i, roles[i]);
+      if (bad(b) || bad(g)) {   // 장판 안이면 가장 가까운 안전한 자리로
+        let best = null;
+        for (let k = 0; k < 16; k++) for (const d of [3, 6, 9, 13, 18]) { const q = { x: b.x + Math.cos(k * TAU / 16) * d, z: b.z + Math.sin(k * TAU / 16) * d }; if (Math.hypot(q.x, q.z) > Rr || bad(q)) continue; if (!best || d < best.d) best = { ...q, d }; }
+        if (best && bad(b)) g = best; else if (bad(g)) g = b;
+      }
+      const dx = g.x - b.x, dz = g.z - b.z, l = Math.hypot(dx, dz);
+      if (l > 0.3) { const st = Math.min(sp, l); b.x += dx / l * st; b.z += dz / l * st; const r = Math.hypot(b.x, b.z); if (r > Rr) { b.x *= Rr / r; b.z *= Rr / r; } }
+    });
+  }
   // 보스 이동: 예약된 돌진·도약·순간이동을 처리하고, 한가할 때 탱커(나)를 따라온다
   moveBoss(dt) {
     const B = this.data.boss, b = this.boss;

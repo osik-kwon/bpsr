@@ -220,7 +220,7 @@ const NOTE_COL = { '얼음': '#e6f7ff', '물': '#58a6ff' }, myNotes = {};
 if (data.partyNotes) { for (const k of Object.keys(NOTE_COL)) { const l = label('♪' + k, 2.2, NOTE_COL[k]); l.position.y = 3.3; l.visible = false; player.add(l); myNotes[k] = l; }
   data.partyNotes.forEach((k, i) => { if (!bots[i]) return; const l = label('♪' + k, 1.8, NOTE_COL[k]); l.position.y = 3.6; bots[i].add(l); }); }
 // 파티원 역할 표시(던전 5인 파티: 탱·힐·딜)
-(Array.isArray(data.partyRoles) ? data.partyRoles : data.partyRoles?.[sim.role] ?? []).forEach((r, i) => { if (!bots[i]) return; const l = label(r, 1.6, r === '탱' ? '#58a6ff' : r === '힐' ? '#3fb950' : '#f0883e'); l.position.y = 2.6; bots[i].add(l); });
+(Array.isArray(data.partyRoles) ? data.partyRoles : data.partyRoles?.[sim.role] ?? []).forEach((r, i) => { if (!bots[i]) return; const l = label(r, r.length > 1 ? 2.4 : 1.6, r === '탱' ? '#58a6ff' : r === '힐' ? '#3fb950' : '#f0883e'); l.position.y = 2.6; bots[i].add(l); });
 
 // 실제 이펙트: 새로 생긴 예고·코어를 보고 시전·타격 시각에 재생을 걸어 둔다
 const realFx = new Fx(scene, data.fxBase ?? './assets/fx/'); let seen = new WeakSet(), evFx = 0;
