@@ -190,7 +190,8 @@
    },
    "anim": "shatter",
    "failMsg": null,
-   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)"
+   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)",
+   "fx": "shatter"
   },
   {
    "t": 15,
@@ -221,7 +222,8 @@
    },
    "color": "yellow",
    "anim": "tornado",
-   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)"
+   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)",
+   "fx": "tornado"
   },
   {
    "t": 24,
@@ -258,7 +260,8 @@
    },
    "color": "yellow",
    "okMsg": null,
-   "src": "table(龙卷: 원 반경 2.5m) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러 발밑에 장판 3개 → 회오리, 딜러가 하나씩 밟아 녹색 상흔을 받는다. 안 밟으면 전장 폭발 + estimate(자리, 제한 7초)"
+   "src": "table(龙卷: 원 반경 2.5m) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러 발밑에 장판 3개 → 회오리, 딜러가 하나씩 밟아 녹색 상흔을 받는다. 안 밟으면 전장 폭발 + estimate(자리, 제한 7초)",
+   "fx": "gust"
   },
   {
    "t": 35,
@@ -289,7 +292,8 @@
    },
    "color": "blue",
    "anim": "bite",
-   "src": "table(咬: 후퇴 3.4m 뒤 전방 타격) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 탱커를 묶고 가장 가까운 사람을 문다. 힐러가 보스와 탱커 사이를 막는다 + estimate(예고 3초, 막는 자리 폭)"
+   "src": "table(咬: 후퇴 3.4m 뒤 전방 타격) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 탱커를 묶고 가장 가까운 사람을 문다. 힐러가 보스와 탱커 사이를 막는다 + estimate(예고 3초, 막는 자리 폭)",
+   "fx": "bite"
   },
   {
    "t": 43,
@@ -376,7 +380,8 @@
    "okMsg": "나무 곁에 모여 5연타를 받음",
    "failMsg": "나무에서 떨어져 맞음 — 정화 못 함",
    "anim": "combo",
-   "src": "table(五连击: 원 반경 1.6m 돌진 5회) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 충전된 나무 하나에 전원 모여 다 맞은 뒤 흔들어 정화 + estimate(모이는 나무, 6초)"
+   "src": "table(五连击: 원 반경 1.6m 돌진 5회) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 충전된 나무 하나에 전원 모여 다 맞은 뒤 흔들어 정화 + estimate(모이는 나무, 6초)",
+   "fx": "combo"
   },
   {
    "t": 80.5,
@@ -466,7 +471,8 @@
    },
    "anim": "shatter",
    "failMsg": null,
-   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)"
+   "src": "table(甩尾: 길이 24m 직사각형 5갈래 0·±30·±60°, 0.47초) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 힐러가 맞아 푸른 상흔을 받고 탱커는 피한다 + estimate(폭 3m, 예고 2.5초, 방향)",
+   "fx": "shatter"
   },
   {
    "t": 96,
@@ -506,8 +512,75 @@
    },
    "color": "yellow",
    "anim": "tornado",
-   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)"
+   "src": "table(大玉螺旋丸: 폭 10m 직사각형이 전방 45m까지 밀고 나감) + guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 전원 회피 + estimate(예고 2.5초, 방향)",
+   "fx": "tornado"
   }
  ],
- "duration": 112
+ "duration": 112,
+ "fxBase": "./assets/fx-suiyezhiya/",
+ "fx": {
+  "shatter": {
+   "at": "boss",
+   "hit": "mon_direhowl_impact",
+   "hitOpt": {
+    "scale": 1.3,
+    "alpha": 1.4
+   }
+  },
+  "tornado": {
+   "at": "boss",
+   "hit": "mon_direhowl_blast_end",
+   "hitOpt": {
+    "scale": 1.6,
+    "alpha": 1.4
+   }
+  },
+  "gust": {
+   "cast": "mon_direhowl_windball_loop",
+   "castLoop": true,
+   "castOpt": {
+    "alpha": 1.4
+   },
+   "hit": "mon_direhowl_windball_end",
+   "hitOpt": {
+    "scale": 0.3,
+    "alpha": 1.4
+   }
+  },
+  "bite": {
+   "hit": "mon_direhowl_bite_hit",
+   "hitOpt": {
+    "scale": 2.5,
+    "alpha": 1.5
+   }
+  },
+  "pounce": {
+   "hit": "mon_direhowl_boom01",
+   "hitOpt": {
+    "alpha": 1.5
+   }
+  },
+  "combo": {
+   "hit": "mon_direhowl_boom01",
+   "hitOpt": {
+    "alpha": 1.5
+   }
+  },
+  "hunt": {
+   "cast": "mon_direhowl_treeblock_loop",
+   "castLoop": true,
+   "hit": "mon_direhowl_treeblock_break",
+   "hitOpt": {
+    "alpha": 1.4
+   }
+  },
+  "lineup": {
+   "at": "boss",
+   "hit": "mon_direhowl_windball_end",
+   "hitOpt": {
+    "alpha": 1.3
+   }
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss). 기믹과의 대응은 이펙트 이름·크기로 고른 추정이라 인게임과 다를 수 있다"
 }

@@ -231,7 +231,8 @@ function scheduleFx() {
     const m = F[s.type]; if (!m) continue;
     const spots = m.at === 'boss' ? [sim.boss] : s.shape === 'multi' ? s.spots : s.shape === 'line' ? [{ x: (s.a.x + s.b.x) / 2, z: (s.a.z + s.b.z) / 2 }] : [s];
     const yaw = m.at === 'boss' ? boss.rotation.y : 0, done = new Set();
-    for (const p of spots) {
+    for (const q of spots) {
+      const p = q.shape === 'line' ? { x: (q.a.x + q.b.x) / 2, z: (q.a.z + q.b.z) / 2 } : q;   // 직선은 가운데에 놓는다
       const key = p.x.toFixed(1) + ',' + p.z.toFixed(1); if (done.has(key)) continue; done.add(key);
       // castOpt·hitOpt: 크기·투명도 등, hitDur: 긴 이펙트를 잘라 쓸 길이, castLoop: 예고 이펙트를 터질 때까지 반복. 나를 따라다니는 원은 터지는 순간의 내 자리에 놓는다
       const fol = s.follow ? { follow: () => ({ x: sim.player.x, z: sim.player.z, yaw: 0 }) } : null;

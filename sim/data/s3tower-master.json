@@ -164,7 +164,8 @@
    "okMsg": null,
    "failMsg": null,
    "anim": "laser",
-   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)"
+   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)",
+   "fx": "tank"
   },
   {
    "t": 12,
@@ -186,7 +187,8 @@
    "r": 4,
    "cast": 5,
    "anim": "bomb",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m)"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m)",
+   "fx": "bomb"
   },
   {
    "t": 28,
@@ -232,7 +234,8 @@
     0
    ],
    "anim": "shock",
-   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음"
+   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음",
+   "fx": "shock"
   },
   {
    "t": 58,
@@ -254,7 +257,8 @@
    ],
    "cast": 5,
    "anim": "exile",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 2번째 꽃 파괴 뒤: 붉은 로봇의 내려찍기 범위 밖 + estimate(반경 12m, 자리)"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 2번째 꽃 파괴 뒤: 붉은 로봇의 내려찍기 범위 밖 + estimate(반경 12m, 자리)",
+   "fx": "exile"
   },
   {
    "t": 63,
@@ -284,7 +288,8 @@
     }
    ],
    "cast": 3,
-   "src": "table(보스 중심 반경 15m의 300° 부채꼴, 1.87초) + estimate(방향·예고)"
+   "src": "table(보스 중심 반경 15m의 300° 부채꼴, 1.87초) + estimate(방향·예고)",
+   "fx": "pizza"
   },
   {
    "t": 78,
@@ -302,7 +307,8 @@
    "okMsg": "진짜 포털로 탈출",
    "failMsg": "가짜 포털 또는 시간 초과 — 전멸",
    "anim": "rift",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 3번째 꽃 파괴 뒤: 포털 4개 중 다수가 분홍으로 보는 것이 진짜(연습기는 정답을 분홍 원으로 보여 줌) + estimate(제한 8초)"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 3번째 꽃 파괴 뒤: 포털 4개 중 다수가 분홍으로 보는 것이 진짜(연습기는 정답을 분홍 원으로 보여 줌) + estimate(제한 8초)",
+   "fx": "portal"
   },
   {
    "t": 78,
@@ -353,7 +359,8 @@
    ],
    "cast": 3.4,
    "anim": "dash",
-   "src": "table(몸 원 반경 2.5에 배율 1.6 → 폭 약 5~8m, 3.37초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 직선 예고를 따라 돌진"
+   "src": "table(몸 원 반경 2.5에 배율 1.6 → 폭 약 5~8m, 3.37초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 직선 예고를 따라 돌진",
+   "fx": "dash"
   },
   {
    "t": 96,
@@ -383,7 +390,8 @@
    "okMsg": null,
    "failMsg": null,
    "anim": "laser",
-   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)"
+   "src": "table(띠 길이 62.5·폭 3.13에 모델 배율 1.6 → 폭 5m, 회전 0.67초·판정 0.82초) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막)",
+   "fx": "tank"
   },
   {
    "t": 102,
@@ -392,7 +400,8 @@
    "r": 4,
    "cast": 5,
    "anim": "bomb",
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m)"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 발밑 원이 5초 뒤 폭발, 원끼리 겹치면 중복 피해 + estimate(반경 4m)",
+   "fx": "bomb"
   },
   {
    "t": 110,
@@ -412,7 +421,8 @@
     0
    ],
    "anim": "shock",
-   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음"
+   "src": "table(안쪽 원 반경 6에 배율 1.6 → 9.6m 치명) + guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 중앙 이동 → 끌어당김 → 손을 든 1초 뒤 찍기. 끌려가는 힘은 넣지 않음",
+   "fx": "shock"
   }
  ],
  "variants": {
@@ -426,7 +436,8 @@
      "r": 5,
      "cast": 5,
      "color": "yellow",
-     "src": "table(수식어 설명문) + estimate"
+     "src": "table(수식어 설명문) + estimate",
+     "fx": "bomb"
     },
     {
      "t": 66,
@@ -435,7 +446,8 @@
      "r": 5,
      "cast": 5,
      "color": "yellow",
-     "src": "table(수식어 설명문) + estimate"
+     "src": "table(수식어 설명문) + estimate",
+     "fx": "bomb"
     }
    ]
   },
@@ -478,7 +490,8 @@
      "r": 4,
      "cast": 3,
      "color": "yellow",
-     "src": "table(수식어 설명문: 3명에게 부착, 2회 연속 폭발) + estimate(반경; 1회로 줄임)"
+     "src": "table(수식어 설명문: 3명에게 부착, 2회 연속 폭발) + estimate(반경; 1회로 줄임)",
+     "fx": "bomb"
     },
     {
      "t": 66,
@@ -487,7 +500,8 @@
      "r": 4,
      "cast": 3,
      "color": "yellow",
-     "src": "table(수식어 설명문: 3명에게 부착, 2회 연속 폭발) + estimate(반경; 1회로 줄임)"
+     "src": "table(수식어 설명문: 3명에게 부착, 2회 연속 폭발) + estimate(반경; 1회로 줄임)",
+     "fx": "bomb"
     },
     {
      "t": 104,
@@ -496,10 +510,83 @@
      "r": 4,
      "cast": 3,
      "color": "yellow",
-     "src": "table(수식어 설명문: 3명에게 부착, 2회 연속 폭발) + estimate(반경; 1회로 줄임)"
+     "src": "table(수식어 설명문: 3명에게 부착, 2회 연속 폭발) + estimate(반경; 1회로 줄임)",
+     "fx": "bomb"
     }
    ]
   }
  },
- "duration": 116
+ "duration": 116,
+ "fxBase": "./assets/fx-typeochaozai/",
+ "fx": {
+  "tank": {
+   "at": "boss",
+   "cast": "typeochaozai_huimiejiguang_xuli1",
+   "hit": "typeochaozai_huimiejiguang",
+   "hitOpt": {
+    "alpha": 1.4
+   }
+  },
+  "bomb": {
+   "cast": "typeochaozai_nianzhuodan_s3",
+   "castLoop": true,
+   "castOpt": {
+    "scale": 2
+   },
+   "hit": "typeochaozai_nianzhuodan_end_s3",
+   "hitOpt": {
+    "scale": 0.3,
+    "alpha": 1.4
+   }
+  },
+  "stack": {
+   "hit": "typeochaozai_gaobaodan_04_new",
+   "hitOpt": {
+    "scale": 0.3,
+    "alpha": 1.4
+   }
+  },
+  "shock": {
+   "at": "boss",
+   "cast": "typeochaozai_chaodaobodong_absorb_new",
+   "castLoop": true,
+   "castOpt": {
+    "scale": 1.5
+   },
+   "hit": "typeochaozai_chaodaobodong_burst_new",
+   "hitOpt": {
+    "scale": 0.35,
+    "alpha": 1.4
+   }
+  },
+  "exile": {
+   "hit": "typeochaozai_diancifengbao_boom",
+   "hitOpt": {
+    "scale": 0.35,
+    "alpha": 1.3
+   }
+  },
+  "pizza": {
+   "at": "boss",
+   "hit": "typeochaozai_erlianji_d",
+   "hitOpt": {
+    "scale": 0.6,
+    "alpha": 1.4
+   }
+  },
+  "portal": {
+   "cast": "typeochaozai_diancifengbao_absorb_portal",
+   "castLoop": true,
+   "castOpt": {
+    "alpha": 1.5
+   }
+  },
+  "dash": {
+   "hit": "typeochaozai_tuiji_03",
+   "hitOpt": {
+    "alpha": 1.4
+   }
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss). 기믹과의 대응은 이펙트 이름·크기로 고른 추정이라 인게임과 다를 수 있다"
 }

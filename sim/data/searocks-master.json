@@ -119,7 +119,8 @@
    "cast": 1.5,
    "color": "pink",
    "anim": "chant",
-   "src": "table(3340210 원 반경 25m)"
+   "src": "table(3340210 원 반경 25m)",
+   "fx": "open"
   },
   {
    "t": 8,
@@ -137,7 +138,8 @@
    ],
    "cast": 2,
    "anim": "slash",
-   "src": "table(정면 120°·반경 20m, 0.78초) + estimate(예고·방향)"
+   "src": "table(정면 120°·반경 20m, 0.78초) + estimate(예고·방향)",
+   "fx": "slash"
   },
   {
    "t": 14,
@@ -189,7 +191,8 @@
     }
    },
    "spots": [],
-   "src": "table(길이 60·폭 30 띠 두 개, 좌우 17m 치우침) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 자기 음표 원소의 파도만 보이고 그 띠를 피한다. 마스터는 두 원소 동시 + estimate(원소별 배치)"
+   "src": "table(길이 60·폭 30 띠 두 개, 좌우 17m 치우침) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 자기 음표 원소의 파도만 보이고 그 띠를 피한다. 마스터는 두 원소 동시 + estimate(원소별 배치)",
+   "fx": "wave"
   },
   {
    "t": 32,
@@ -233,7 +236,8 @@
      ]
     }
    },
-   "src": "table(물방울 반경 3m) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) + estimate(물방울 자리·개수, 6초)"
+   "src": "table(물방울 반경 3m) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) + estimate(물방울 자리·개수, 6초)",
+   "fx": "bubble"
   },
   {
    "t": 44,
@@ -251,7 +255,8 @@
    "cast": 2,
    "color": "pink",
    "anim": "dance",
-   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 체력이 일정 이하면 스피커를 부수고 전원을 중앙으로 끌어당긴 뒤 춤 단계"
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 체력이 일정 이하면 스피커를 부수고 전원을 중앙으로 끌어당긴 뒤 춤 단계",
+   "fx": "open"
   },
   {
    "t": 48,
@@ -278,7 +283,8 @@
    "cast": 3.84,
    "color": "yellow",
    "anim": "dance",
-   "src": "table(조각 반경 15m) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 두 색 90° 조각 중 한 색을 친다. 안 맞은 사람은 반대 색 보호막 + estimate(8박 = 3.84초)"
+   "src": "table(조각 반경 15m) + guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 두 색 90° 조각 중 한 색을 친다. 안 맞은 사람은 반대 색 보호막 + estimate(8박 = 3.84초)",
+   "fx": "orange"
   },
   {
    "t": 53,
@@ -349,7 +355,8 @@
    "cast": 3.84,
    "color": "pink",
    "anim": "dance",
-   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고)"
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고)",
+   "fx": "purple"
   },
   {
    "t": 65,
@@ -439,7 +446,8 @@
    ],
    "cast": 4,
    "anim": "dance",
-   "src": "table(길이 18·14·10, 폭 2 선분이 2.4초 회전 뒤 타격) + estimate(멈춘 방향)"
+   "src": "table(길이 18·14·10, 폭 2 선분이 2.4초 회전 뒤 타격) + estimate(멈춘 방향)",
+   "fx": "machine"
   },
   {
    "t": 80,
@@ -475,7 +483,8 @@
      ]
     }
    },
-   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 스피커가 원소 광선을 조준하고 절찬 연주 시전. 같은 색 물방울에 들어간다 + estimate(자리)"
+   "src": "guide(data/master-s3-mech-searocks.md: maxroll·중국어 공략 글·공식 예고) 스피커가 원소 광선을 조준하고 절찬 연주 시전. 같은 색 물방울에 들어간다 + estimate(자리)",
+   "fx": "bubble"
   },
   {
    "t": 85,
@@ -546,7 +555,8 @@
     }
    ],
    "cast": 3,
-   "src": "table(3340240 반경 15m)"
+   "src": "table(3340240 반경 15m)",
+   "fx": "push"
   }
  ],
  "variants": {
@@ -577,5 +587,87 @@
    ]
   }
  },
- "duration": 108
+ "duration": 108,
+ "fxBase": "./assets/fx-divernappo/",
+ "fx": {
+  "open": {
+   "at": "boss",
+   "hit": "divernappo_aoe_mix",
+   "hitOpt": {
+    "alpha": 1.2
+   }
+  },
+  "slash": {
+   "at": "boss",
+   "hit": "divernappo_atk_sound",
+   "hitOpt": {
+    "scale": 1.6,
+    "alpha": 1.4
+   }
+  },
+  "noteShare": {
+   "cast": "divernappo_doublenote_waterball_loop",
+   "castLoop": true,
+   "castOpt": {
+    "scale": 2
+   },
+   "hit": "divernappo_doublenote_waterball_end",
+   "hitOpt": {
+    "scale": 0.5,
+    "alpha": 1.4
+   }
+  },
+  "wave": {
+   "hit": "divernappo_rect_water",
+   "hitOpt": {
+    "scale": 0.7,
+    "alpha": 1.3
+   }
+  },
+  "bubble": {
+   "cast": "divernappo_doublenote_iceball_loop",
+   "castLoop": true,
+   "castOpt": {
+    "alpha": 1.5
+   },
+   "hit": "divernappo_soundwave",
+   "hitOpt": {
+    "scale": 0.25,
+    "alpha": 1.3
+   }
+  },
+  "orange": {
+   "at": "boss",
+   "hit": "divernappo_dance_aoe_cheng",
+   "hitOpt": {
+    "scale": 1.3,
+    "alpha": 0.8
+   }
+  },
+  "purple": {
+   "at": "boss",
+   "hit": "divernappo_dance_aoe_zi",
+   "hitOpt": {
+    "scale": 1.3,
+    "alpha": 0.8
+   }
+  },
+  "machine": {
+   "at": "boss",
+   "hit": "divernappo_dance_aoe02",
+   "hitOpt": {
+    "scale": 0.7,
+    "alpha": 1.3
+   }
+  },
+  "push": {
+   "at": "boss",
+   "hit": "divernappo_rock_waterpull",
+   "hitOpt": {
+    "scale": 0.55,
+    "alpha": 1.3
+   }
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss). 기믹과의 대응은 이펙트 이름·크기로 고른 추정이라 인게임과 다를 수 있다"
 }

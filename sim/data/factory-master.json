@@ -96,7 +96,8 @@
    "cast": 1.5,
    "color": "pink",
    "anim": "roar",
-   "src": "table(전체 공격 3350010) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+   "src": "table(전체 공격 3350010) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "fx": "roar"
   },
   {
    "t": 4,
@@ -139,7 +140,8 @@
    "cast": 3,
    "color": "yellow",
    "anim": "tornado",
-   "src": "guide(고리 5~9m 3초, 9~13m 5초, 13~17m 8초) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+   "src": "guide(고리 5~9m 3초, 9~13m 5초, 13~17m 8초) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "fx": "ring1"
   },
   {
    "t": 25,
@@ -156,7 +158,8 @@
    ],
    "cast": 5,
    "color": "yellow",
-   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "fx": "ring2"
   },
   {
    "t": 25,
@@ -173,7 +176,8 @@
    ],
    "cast": 8,
    "color": "yellow",
-   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+   "src": "guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "fx": "ring3"
   },
   {
    "t": 26,
@@ -223,7 +227,8 @@
    ],
    "cast": 6.2,
    "anim": "bomb",
-   "src": "table(6.2초 예고) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 마스터는 큰 범위 3개, 없는 쪽으로 피한다 + estimate(자리·반경: 원자료 반경 50m는 전장보다 커서 줄임)"
+   "src": "table(6.2초 예고) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그) 마스터는 큰 범위 3개, 없는 쪽으로 피한다 + estimate(자리·반경: 원자료 반경 50m는 전장보다 커서 줄임)",
+   "fx": "bomb"
   },
   {
    "t": 46,
@@ -240,7 +245,8 @@
    ],
    "cast": 1.5,
    "color": "pink",
-   "src": "table(3350011) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+   "src": "table(3350011) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "fx": "roar"
   },
   {
    "t": 50,
@@ -274,7 +280,8 @@
     }
    ],
    "cast": 3.5,
-   "src": "table(부채꼴 반경 49m·120°, 1.53초) + estimate(예고 시간)"
+   "src": "table(부채꼴 반경 49m·120°, 1.53초) + estimate(예고 시간)",
+   "fx": "fan"
   },
   {
    "t": 54,
@@ -295,7 +302,8 @@
     }
    ],
    "cast": 2,
-   "src": "table(폭 7m 직선, 1.97초)"
+   "src": "table(폭 7m 직선, 1.97초)",
+   "fx": "beam"
   },
   {
    "t": 58,
@@ -331,7 +339,8 @@
    ],
    "cast": 2.95,
    "anim": "slash",
-   "src": "table(앞·뒤 부채꼴 반경 15m·90°, 2.95초, 뒤쪽 원점 4m 뒤)"
+   "src": "table(앞·뒤 부채꼴 반경 15m·90°, 2.95초, 뒤쪽 원점 4m 뒤)",
+   "fx": "slash"
   },
   {
    "t": 68,
@@ -357,7 +366,8 @@
     -23
    ],
    "anim": "fly",
-   "src": "table(포탑 등장 원 반경 6m, 1초) + estimate(자리)"
+   "src": "table(포탑 등장 원 반경 6m, 1초) + estimate(자리)",
+   "fx": "turret"
   },
   {
    "t": 70,
@@ -403,7 +413,8 @@
     0
    ],
    "anim": "tornado",
-   "src": "guide(마스터 포효 2: 2명 방향 부채꼴 반경 30m·60°, 4초) + estimate(방향)"
+   "src": "guide(마스터 포효 2: 2명 방향 부채꼴 반경 30m·60°, 4초) + estimate(방향)",
+   "fx": "pizza"
   },
   {
    "t": 92,
@@ -419,7 +430,8 @@
    ],
    "cast": 3,
    "anim": "jump",
-   "src": "table(보스 중심 원 반경 6m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)"
+   "src": "table(보스 중심 원 반경 6m) + guide(data/master-s3-mech-factory.md: 클라 공략 문구·maxroll·일본어 블로그)",
+   "fx": "devour"
   },
   {
    "t": 97,
@@ -443,7 +455,8 @@
     }
    ],
    "cast": 3,
-   "src": "table(고리 8~18m, 마스터는 대상 방향 부채꼴 반경 25m·60° 추가) + estimate(방향)"
+   "src": "table(고리 8~18m, 마스터는 대상 방향 부채꼴 반경 25m·60° 추가) + estimate(방향)",
+   "fx": "ring2"
   },
   {
    "t": 104,
@@ -461,7 +474,8 @@
    ],
    "cast": 1.5,
    "anim": "laser",
-   "src": "table(부채꼴 반경 49m·120°, 1.5초 예고, 180° 돌아 한 번 더)"
+   "src": "table(부채꼴 반경 49m·120°, 1.5초 예고, 180° 돌아 한 번 더)",
+   "fx": "laser"
   },
   {
    "t": 107,
@@ -478,7 +492,8 @@
     }
    ],
    "cast": 1.5,
-   "src": "table"
+   "src": "table",
+   "fx": "laser"
   },
   {
    "t": 113,
@@ -500,7 +515,8 @@
      "r": 5,
      "cast": 4,
      "color": "yellow",
-     "src": "table(수식어 설명문) + estimate(반경·주기)"
+     "src": "table(수식어 설명문) + estimate(반경·주기)",
+     "fx": "quake"
     },
     {
      "t": 64,
@@ -509,7 +525,8 @@
      "r": 5,
      "cast": 4,
      "color": "yellow",
-     "src": "table(수식어 설명문) + estimate(반경·주기)"
+     "src": "table(수식어 설명문) + estimate(반경·주기)",
+     "fx": "quake"
     },
     {
      "t": 100,
@@ -518,7 +535,8 @@
      "r": 5,
      "cast": 4,
      "color": "yellow",
-     "src": "table(수식어 설명문) + estimate(반경·주기)"
+     "src": "table(수식어 설명문) + estimate(반경·주기)",
+     "fx": "quake"
     }
    ]
   },
@@ -535,7 +553,8 @@
      ],
      "r": 4,
      "cast": 5,
-     "src": "table(수식어 설명문: 아무도 분담하지 않으면 전멸급) + estimate(반경·주기·자리)"
+     "src": "table(수식어 설명문: 아무도 분담하지 않으면 전멸급) + estimate(반경·주기·자리)",
+     "fx": "meteor"
     },
     {
      "t": 76,
@@ -547,7 +566,8 @@
      ],
      "r": 4,
      "cast": 5,
-     "src": "table(수식어 설명문: 아무도 분담하지 않으면 전멸급) + estimate(반경·주기·자리)"
+     "src": "table(수식어 설명문: 아무도 분담하지 않으면 전멸급) + estimate(반경·주기·자리)",
+     "fx": "meteor"
     }
    ]
   },
@@ -591,5 +611,112 @@
    ]
   }
  },
- "duration": 120
+ "duration": 120,
+ "fxBase": "./assets/fx-shouren_duogeerman_fb/",
+ "fx": {
+  "roar": {
+   "at": "boss",
+   "hit": "shouren-duogeerman_fb_atk_earthquake",
+   "hitOpt": {
+    "alpha": 1.2
+   }
+  },
+  "ring1": {
+   "hit": "shouren-duogeerman_fb_scene_storm_yuehuan_small"
+  },
+  "ring2": {
+   "hit": "shouren-duogeerman_fb_scene_storm_yuehuan_middle"
+  },
+  "ring3": {
+   "hit": "shouren-duogeerman_fb_scene_storm_yuehuan_large"
+  },
+  "bomb": {
+   "cast": "shouren-duogeerman_fb_atk_common_bomb_dihuo",
+   "castLoop": true,
+   "castOpt": {
+    "scale": 2
+   },
+   "hit": "shouren-duogeerman_fb_atk_common_bomb_hongzha",
+   "hitOpt": {
+    "scale": 1.5,
+    "alpha": 1.3
+   }
+  },
+  "fan": {
+   "at": "boss",
+   "hit": "shouren-duogeerman_fb_atk_huoyankuosan",
+   "hitOpt": {
+    "alpha": 1.3
+   }
+  },
+  "beam": {
+   "at": "boss",
+   "hit": "shouren-duogeerman_fb_atk_laser_shoulder_effect_comb_burn",
+   "hitOpt": {
+    "alpha": 1.3
+   }
+  },
+  "slash": {
+   "at": "boss",
+   "hit": "shouren-duogeerman_fb_atk_fight1_attack",
+   "hitOpt": {
+    "scale": 2.5,
+    "alpha": 1.5
+   }
+  },
+  "turret": {
+   "hit": "shouren-duogeerman_fb_atk_yuanli_boom",
+   "hitOpt": {
+    "alpha": 1.4
+   }
+  },
+  "pizza": {
+   "at": "boss",
+   "hit": "shouren-duogeerman_fb_atk_huoyanpenshe_common_large",
+   "hitOpt": {
+    "scale": 1.4,
+    "alpha": 1.3
+   }
+  },
+  "devour": {
+   "at": "boss",
+   "hit": "shouren-duogeerman_fb_common_jump_end_atk",
+   "hitOpt": {
+    "alpha": 1.5
+   }
+  },
+  "laser": {
+   "at": "boss",
+   "hit": "shouren-duogeerman_fb_atk_laser_shoulder_effect_comb_burn",
+   "hitOpt": {
+    "alpha": 1.3
+   }
+  },
+  "spread": {
+   "hit": "shouren-duogeerman_fb_atk_steam_boom",
+   "hitOpt": {
+    "alpha": 1.5
+   }
+  },
+  "stack": {
+   "hit": "shouren-duogeerman_fb_atk_yuanli_boom",
+   "hitOpt": {
+    "alpha": 1.4
+   }
+  },
+  "quake": {
+   "hit": "shouren-duogeerman_fb_atk_steam_boom",
+   "hitOpt": {
+    "alpha": 1.5
+   }
+  },
+  "meteor": {
+   "hit": "shouren-duogeerman_fb_atk_common_bomb_hongzha",
+   "hitOpt": {
+    "scale": 0.5,
+    "alpha": 1.3
+   }
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss). 기믹과의 대응은 이펙트 이름·크기로 고른 추정이라 인게임과 다를 수 있다"
 }
