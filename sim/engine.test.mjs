@@ -223,15 +223,15 @@ console.log('PASS');
   console.log(ok.every(r => r.ok) ? 'PASS' : 'FAIL', '카트그리프: 딜러 모범 동선', ok.length, ok.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
 }
 
-// 심해 나뽀: 분담에서 물 원에 서면 음표가 물로 바뀌고, 이후 파도·물방울·스피커는 물 쪽을 써야 한다
+// 심해 나뽀: 얼음 음표를 끝까지 지키는 모범 동선, 그리고 다른 색에 닿으면 음표가 바뀌는지
 {
   const { Combat } = await import('./combat.js');
   const d = JSON.parse(fs.readFileSync(new URL('./data/searocks-master.json', import.meta.url)));
   const run = (plan, acts) => { const t = new Sim(d, new Combat({ role: 'dps', skills: {} })); const A = [...acts]; while (!t.done) { const g = plan.filter(([at]) => at <= t.t).pop()?.[1], dx = g ? g[0] - t.player.x : 0, dz = g ? g[1] - t.player.z : 0, l = Math.hypot(dx, dz); const interact = A.length && t.t >= A[0] ? (A.shift(), true) : false; t.step(0.05, { ...(l < 0.2 ? { mx: 0, mz: 0 } : { mx: dx / l, mz: dz / l }), interact }); } return t; };
-  const idle = run([], []).log;
-  console.log(idle.filter(r => !r.ok).length >= 6 ? 'PASS' : 'FAIL', '심해 나뽀: 가만히 있으면 실패', idle.filter(r => r.ok).length, '/', idle.length);
-  const t = run([[0, [18, 6]], [10.1, [8, 8]], [19.1, [-12, 10]], [27.1, [-10, 10]], [38.1, [0, -12]], [52, [0, -8]], [57.1, [-12, 0]], [69.2, [10, -4]], [76.1, [-6, 8]], [85.6, [-10, 17.3]], [92, [-18, 6]]], [85.2, 90.5]);
-  console.log(t.log.every(r => r.ok) && t.note === '물' ? 'PASS' : 'FAIL', '심해 나뽀: 물 음표 모범 동선', t.log.length, t.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  const idle = run([], []);
+  console.log(idle.log.filter(r => !r.ok).length >= 6 && idle.note === '물' ? 'PASS' : 'FAIL', '심해 나뽀: 가만히 있으면 실패하고 물 띠에 맞아 음표가 물로 바뀜', idle.log.filter(r => r.ok).length, '/', idle.log.length);
+  const t = run([[0, [18, 6]], [12.1, [0, 12]], [40.1, [10, 8]], [55.1, [-6, 8]], [107.1, [-14, 2]], [137.9, [0, -8]], [143.1, [-6, -6]], [149.9, [-8, 0]], [155.1, [-8, -5]], [162.1, [6, -6]], [173.2, [20, 0]]], [173, 177.5]);
+  console.log(t.log.every(r => r.ok) && t.note === '얼음' ? 'PASS' : 'FAIL', '심해 나뽀: 얼음 음표 모범 동선', t.log.length, t.note, t.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
 }
 
 // 보스 이동: 내가 탱커면 보스가 나를 따라오고, 딜러면 스킬에 맞춰 움직였다가 제자리로 돌아온다

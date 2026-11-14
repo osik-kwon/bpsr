@@ -43,7 +43,7 @@ export class Sim {
     this.t = 0; this.done = false; this.log = []; this.tele = []; this.cores = []; this.markers = [];
     this.room = d.boss.room; this.energy = 0; this.crossedEarly = false; this.spin = null; this.curtain = null; this.tether = null; this.lasers = [];
     // 격자 전투장(2·3넴): 타일 상태 0 멀쩡, 1 금 감, 2 무너짐(없는 칸도 2)
-    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.links = []; this.bossY = null; this.curse = null; this.scars = new Set(); this.trees = null; this.carry = null; this.runners = []; this.ttt = null; this.presses = []; this.note = null; this.bossFace = Math.PI / 2; this.bq = []; this.bmove = null; this.bossHoldUntil = 0; this.bossAir = 0; this.bossWalking = false; this.hazards = []; this.strikes = null; this.waves = []; this.bossScale = 1;
+    const A = d.arena; this.grid = A.type === 'grid' ? A : null; this.cannons = []; this.sweeps = []; this.crystal = null; this.mines = []; this.freezeUntil = 0; this.freezeText = ''; this.orbs = []; this.sigil = null; this.closets = null; this.links = []; this.bossY = null; this.curse = null; this.scars = new Set(); this.trees = null; this.carry = null; this.runners = []; this.ttt = null; this.presses = []; this.note = null; this.bubbles = []; this.bossFace = Math.PI / 2; this.bq = []; this.bmove = null; this.bossHoldUntil = 0; this.bossAir = 0; this.bossWalking = false; this.hazards = []; this.strikes = null; this.waves = []; this.bossScale = 1;
     if (this.grid) { this.tiles = Array.from({ length: A.cols * A.rows }, (_, i) => (A.missing ?? []).some(([c, r]) => c + r * A.cols === i) ? 2 : 0); }
     this.boss = d.boss.pos ? { x: d.boss.pos[0], z: d.boss.pos[1] } : polar(roomAngle(this.room), d.boss.dist);
     this.bossDir = (d.boss.dir ?? 90) * Math.PI / 180;
@@ -172,6 +172,14 @@ export class Sim {
       // 부채꼴 여러 장: center에서 dirs(도) 방향으로 반각 half(도)인 부채꼴이 동시에 터진다
       const [x, z] = e.center ?? [this.boss.x, this.boss.z];
       this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots: e.dirs.map(d => ({ shape: 'sector', x, z, r: e.r, dir: d * Math.PI / 180, half: e.half * Math.PI / 180 })), hitAt: e.t + e.cast, showFrom: e.showFrom, color: e.color ?? 'red' });
+    } else if (e.type === 'bubbles') {
+      this.bubbles = e.spots.map(([x, z, note]) => ({ x, z, note }));
+    } else if (e.type === 'noteDrop') {
+      // 흩어지기: 발밑 원이 터지며 각자 자기 음표 색 물방울을 그 자리에 떨군다
+      if (e.bots) this.bots = e.bots.map(([x, z]) => ({ x, z }));
+      this.add({ name: e.name, kind: 'noteDrop', shape: 'circle', follow: true, x: 0, z: 0, r: e.r, hitAt: e.t + e.cast, color: 'yellow' });
+    } else if (e.type === 'bubbleCheck') {
+      this.add({ name: e.name, kind: 'bubble', shape: 'circle', follow: true, x: 0, z: 0, r: e.r ?? 3, hitAt: e.t + e.cast, color: 'pink', quietShape: true });
     } else if (e.type === 'note') {
       this.note = e.value;
     } else if (e.type === 'noteShare') {
@@ -190,7 +198,7 @@ export class Sim {
       this.ttt.round = { name: e.name, cells: e.cells, start: e.t, until: e.t + e.steal, hitAt: e.t + e.cast, hold: e.hold, r: e.r, last: !!e.last, holdT: 0, holdCell: null, stolen: null };
     } else if (e.type === 'shapes') {
       // 임의 도형 묶음: spots에 도형을 그대로 적는다(circle·ring·sector·line·rect). kind 기본은 피하기
-      this.add({ name: e.name, kind: e.kind ?? 'avoid', shape: 'multi', spots: e.spots, hitAt: e.t + e.cast, showFrom: e.showFrom, color: e.color ?? 'red', okMsg: e.okMsg, failMsg: e.failMsg });
+      this.add({ name: e.name, kind: e.kind ?? 'avoid', shape: 'multi', spots: e.spots, hitAt: e.t + e.cast, showFrom: e.showFrom, color: e.color ?? 'red', okMsg: e.okMsg, failMsg: e.failMsg, setNote: e.setNote });
     } else if (e.type === 'carry') {
       // 운반: pick에서 상호작용해 들고 drop에서 상호작용해 놓는다. cast초 안에 못 하면 실패
       this.carry = { name: e.name, pick: { x: e.pick[0], z: e.pick[1] }, drop: { x: e.drop[0], z: e.drop[1] }, have: false, start: e.t, hitAt: e.t + e.cast, pickMsg: e.pickMsg, dropMsg: e.dropMsg };
@@ -283,7 +291,11 @@ export class Sim {
 
   resolve(s) {
     const p = this.player, safe = p.iframe > 0 && !s.noDodge;
-    if (s.kind === 'avoid') { const hit = inside(s, p) && !safe; if (!s.quiet || hit) this.result(s.name, !hit, hit ? '범위 안에서 맞음' : '회피'); }
+    if (s.kind === 'avoid') { const hit = inside(s, p) && !safe; if (hit && s.setNote) this.note = s.setNote; if (!s.quiet || hit) this.result(s.name, !hit, hit ? (s.setNote ? `맞아서 내 음표가 ${s.setNote}(으)로 바뀜` : '범위 안에서 맞음') : '회피'); }
+    else if (s.kind === 'noteDrop') { const dmin = Math.min(...this.bots.map(b => dist(b, p))), ok = dmin >= s.r, N = this.data.partyNotes ?? [];
+      this.result(s.name, ok, ok ? `흩어져서 내 물방울을 따로 떨굼(가장 가까운 팀원 ${dmin.toFixed(0)}m)` : `팀원과 너무 가까움 ${dmin.toFixed(0)}m — 물방울이 겹침`);
+      this.bubbles = [{ x: p.x, z: p.z, note: this.note, mine: true }, ...this.bots.map((b, i) => ({ x: b.x, z: b.z, note: N[i] }))]; this.bots = this.partySpots(this.room); }
+    else if (s.kind === 'bubble') { const b = this.bubbles.find(b => dist(b, p) <= s.r), ok = !!b && b.note === this.note; this.result(s.name, ok, ok ? `${this.note} 물방울 안에서 버팀` : b ? `다른 색(${b.note}) 물방울에 들어감 — 즉사` : '물방울 밖 — 치사'); this.bubbles = []; }
     else if (s.kind === 'noteShare') { const c = s.spots.find(c => inside(c, p)); if (c) this.note = c.note; this.result(s.name, !!c, c ? `${c.note} 원에서 분담 — 내 음표가 ${c.note}(으)로` : '어느 원에도 없음 — 전체 피해'); }
     else if (s.kind === 'scar') { const hit = inside(s, p); if (hit) for (const c of s.scar) this.scars.add(c);
       if (s.want !== 'any') { const ok = hit === (s.want === 'in'); this.result(s.name, ok, ok ? (s.okMsg ?? (hit ? '맞아서 상흔을 받음' : '회피')) : (s.failMsg ?? (hit ? '맞으면 안 되는 역할인데 맞음' : '내 역할이 받아야 하는데 피함'))); } }
@@ -343,6 +355,8 @@ export class Sim {
       }
     }
     this.orbs = this.orbs.filter(o => o.hitAt > this.t);
+    // 물방울: 다른 색 물방울의 범위에 닿으면 내 음표가 그 색으로 바뀐다
+    for (const b of this.bubbles) { const i = dist(b, p) <= 3; if (i && !b.in && this.note && b.note !== this.note) this.note = b.note; b.in = i; }
     // 상호작용 과제
     for (const pr of this.presses) {
       if (input.interact && dist(pr, p) <= 3.5) { this.result(pr.name, true, pr.okMsg ?? `${(this.t - pr.start).toFixed(1)}초 만에 처리`); pr.done = true; }
@@ -613,6 +627,7 @@ export class Sim {
     for (const o of this.orbs) out.push({ shape: 'circle', x: o.x, z: o.z, r: o.r, name: o.name, kind: 'avoid', color: 'pink', start: o.start, hitAt: o.hitAt, orb: true });
     for (const m of this.mines) out.push({ shape: 'circle', x: this.player.x, z: this.player.z, r: m.r, name: m.name, kind: 'show', color: 'blue', start: this.t, hitAt: m.lockAt });
     for (const sw of this.sweeps) out.push({ ...this.sweepShape(sw, this.t), name: sw.name, kind: 'avoid', color: 'red', start: sw.start, hitAt: this.t < sw.t0 ? sw.t0 : sw.t0 + sw.dur, live: this.t >= sw.t0 });
+    for (const b of this.bubbles) out.push({ shape: 'circle', x: b.x, z: b.z, r: 3, name: `${b.note} 물방울`, kind: 'show', color: b.note === '물' ? 'blue' : 'white', start: 0, hitAt: 9999 });
     for (const pr of this.presses) out.push({ shape: 'circle', x: pr.x, z: pr.z, r: 3.5, name: `${pr.name} (여기서 E)`, kind: 'show', color: 'green', start: pr.start, hitAt: pr.hitAt });
     if (this.ttt) { const tt = this.ttt, rd = tt.round;
       tt.grid.forEach((v, c) => { if (v) out.push({ shape: 'circle', ...this.tttCell(c), r: 2, name: v === 2 ? '금색 탑' : '파란 탑', kind: 'show', color: v === 2 ? 'yellow' : 'blue', start: 0, hitAt: 9999 }); });
