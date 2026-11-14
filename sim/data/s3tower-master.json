@@ -106,7 +106,7 @@
   {
    "t": 2,
    "type": "hazards",
-   "name": "꽃잎(속박)",
+   "name": "꽃잎(속박)·웅덩이",
    "spots": [
     [
      -4,
@@ -139,7 +139,7 @@
      2
     ]
    ],
-   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 꽃 주위 꽃잎을 밟으면 속박과 지속 피해 + estimate(자리·반경, 꽃마다 2장만)"
+   "src": "guide(data/master-s3-mech-s3tower.md: maxroll 시즌3판·GameWith·디시 글·영상 자막) 꽃 주위 꽃잎을 밟으면 속박과 지속 피해 + estimate(자리·반경, 꽃마다 2장만) + video(Layla 공략 자막, raw/raidvid/guides/txt/tower-m6plus.txt: 6단 이상은 꽃잎이 사라진 자리에 중첩 피해 웅덩이가 남고, 새 꽃잎이 생기면 옛 웅덩이는 사라진다)"
   },
   {
    "t": 6,
@@ -247,6 +247,15 @@
     "dur": 0.3
    },
    "hold": 6
+  },
+  {
+   "t": 55,
+   "type": "spread",
+   "name": "로봇 등장 원(흩어지기)",
+   "r": 4,
+   "cast": 2.5,
+   "fx": "bomb",
+   "src": "video(Layla 공략 자막, raw/raidvid/guides/txt/tower-lifebind.txt: 2번째 꽃 파괴 뒤 로봇 등장 장판을 서로 흩어서 받는다) + estimate(반경·시각)"
   },
   {
    "t": 58,

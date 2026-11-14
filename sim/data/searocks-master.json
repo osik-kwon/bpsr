@@ -437,7 +437,7 @@
    "cast": 3.84,
    "color": "yellow",
    "anim": "dance",
-   "src": "table(조각 반경 15m) + guide(data/master-s3-mech-searocks.md) + video(Layla 음표 공략 ocS5NgXIkQM·마스터 6+ wJSi_NPNWUc 자막, M20 영상 kZMosLRZDHs 프레임) + estimate(8박 = 3.84초)"
+   "src": "table(조각 반경 15m) + guide(data/master-s3-mech-searocks.md) + video(Layla 음표 공략 ocS5NgXIkQM·마스터 6+ wJSi_NPNWUc 자막, M20 영상 kZMosLRZDHs 프레임) + estimate(8박 = 3.84초) + video(Layla 공략 자막, raw/raidvid/guides/txt/nappo-dance.txt: 처음 깜빡임은 속임수, 한 색만 남아 깜빡이는 순서대로 터진다. 마스터는 두 번 연속. 맞은 뒤 보호막을 받고, 반대 색 나뽀를 기절시키고 같은 색 음파구를 모은다 — 연습기는 한 번만 넣음)"
   },
   {
    "t": 139,
@@ -572,7 +572,7 @@
    "cast": 3.84,
    "color": "pink",
    "anim": "dance",
-   "src": "guide(data/master-s3-mech-searocks.md) + video(Layla 음표 공략 ocS5NgXIkQM·마스터 6+ wJSi_NPNWUc 자막, M20 영상 kZMosLRZDHs 프레임)"
+   "src": "guide(data/master-s3-mech-searocks.md) + video(Layla 음표 공략 ocS5NgXIkQM·마스터 6+ wJSi_NPNWUc 자막, M20 영상 kZMosLRZDHs 프레임) + video(Layla 공략 자막, raw/raidvid/guides/txt/nappo-dance.txt: 처음 깜빡임은 속임수, 한 색만 남아 깜빡이는 순서대로 터진다. 마스터는 두 번 연속. 맞은 뒤 보호막을 받고, 반대 색 나뽀를 기절시키고 같은 색 음파구를 모은다 — 연습기는 한 번만 넣음)"
   },
   {
    "t": 151,

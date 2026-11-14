@@ -272,7 +272,7 @@
      -8
     ]
    ],
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 16단 이상은 저주 옷장 3개, 상호작용으로 받아 와 가장자리에서 터뜨리면 독 장판이 남는다 + estimate(충전 12초, 독 장판 반경 4m, 판정 거리)"
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 16단 이상은 저주 옷장 3개, 상호작용으로 받아 와 가장자리에서 터뜨리면 독 장판이 남는다 + estimate(충전 12초, 독 장판 반경 4m, 판정 거리) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 6단 이상 옷장 웅덩이 3개, 붉은 원이 생길 때 치유 불가 15초, 옷장끼리 서로 순간이동)"
   },
   {
    "t": 9,
@@ -353,7 +353,7 @@
    "t": 31,
    "type": "sectors",
    "fx": "slash",
-   "name": "창날 난무 1타",
+   "name": "창날 난무 1타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
    "center": [
     0,
     0
@@ -371,7 +371,7 @@
    "cast": 3.4,
    "noDodge": true,
    "anim": "slash",
-   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향)",
+   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)",
    "move": {
     "to": "home",
     "mode": "jump",
@@ -382,7 +382,7 @@
    "t": 34.5,
    "type": "sectors",
    "fx": "slash",
-   "name": "창날 난무 2타",
+   "name": "창날 난무 2타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
    "center": [
     0,
     0
@@ -399,13 +399,13 @@
    ],
    "cast": 2.0,
    "noDodge": true,
-   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향)"
+   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)"
   },
   {
    "t": 36.6,
    "type": "sectors",
    "fx": "slash",
-   "name": "창날 난무 3타",
+   "name": "창날 난무 3타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
    "center": [
     0,
     0
@@ -422,13 +422,13 @@
    ],
    "cast": 2.0,
    "noDodge": true,
-   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향)"
+   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)"
   },
   {
    "t": 38.7,
    "type": "sectors",
    "fx": "slash",
-   "name": "창날 난무 4타",
+   "name": "창날 난무 4타 (창을 오른쪽으로 → 안전 조각이 시계 방향)",
    "center": [
     0,
     0
@@ -445,7 +445,7 @@
    ],
    "cast": 2.0,
    "noDodge": true,
-   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향)"
+   "src": "table(枪刃狂袭 개정판: 부채꼴 반경 21m·45°, 첫 타 3.40초, 이후 1.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 위압 직후, 8조각 중 2조각 안전, 16단 이상 회피 불가 + estimate(타 간격, 도는 방향) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 보라 선이 파랗게 바뀐 곳이 안전, 창을 휘두른 쪽으로 안전 조각이 돈다(오른쪽 = 시계 방향). 6단 이상은 대시가 봉인된다)"
   },
   {
    "t": 45,
@@ -503,6 +503,21 @@
    "noDodge": true,
    "anim": "clone",
    "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 옷장 뒤 분신이 맞은편으로 느린 즉사 해일을 보낸다, 분신 쪽 옷장으로 넘어가 회피 + estimate(속도 4m/s, 두께, 방향)"
+  },
+  {
+   "t": 78,
+   "type": "shapes",
+   "name": "분신 소멸 폭발",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": -24,
+     "r": 15
+    }
+   ],
+   "cast": 2.1,
+   "src": "table(S3 分身斩: 원 반경 15m, 2.10초) + video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 분신이 사라질 때 범위 피해) + estimate(시점)"
   },
   {
    "t": 82,
@@ -565,46 +580,6 @@
     }
    ],
    "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 느린 즉사 휩쓸기, 창이 중앙에 왔을 때 옷장으로 넘어간다 + estimate(속도·폭)"
-  },
-  {
-   "t": 95.5,
-   "type": "marks",
-   "pos": [],
-   "bossTo": [
-    50,
-    0
-   ],
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 자리를 옮겨 한 번 더 + estimate(자리)"
-  },
-  {
-   "t": 96,
-   "type": "sweep",
-   "name": "거대화 창 휩쓸기 2",
-   "warn": 3,
-   "origin": [
-    50,
-    0
-   ],
-   "from": 240,
-   "vel": -15,
-   "dur": 8,
-   "len": 90,
-   "width": 7,
-   "noDodge": true,
-   "fxList": [
-    {
-     "name": "dina_dark_endskill_boom",
-     "at": [
-      0,
-      0
-     ],
-     "t": 11,
-     "opt": {
-      "alpha": 0.8
-     }
-    }
-   ],
-   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + estimate"
   },
   {
    "t": 88,
@@ -677,6 +652,46 @@
    "cast": 4,
    "color": "yellow",
    "src": "table(转阶段地面陷阱: 원 반경 4.5m, 4.00초) + guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 휩쓰는 내내 마스터는 5개씩 계속 생긴다, 밟으면 구속 + estimate(자리·간격)"
+  },
+  {
+   "t": 95.5,
+   "type": "marks",
+   "pos": [],
+   "bossTo": [
+    50,
+    0
+   ],
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 자리를 옮겨 한 번 더 + estimate(자리)"
+  },
+  {
+   "t": 96,
+   "type": "sweep",
+   "name": "거대화 창 휩쓸기 2",
+   "warn": 3,
+   "origin": [
+    50,
+    0
+   ],
+   "from": 240,
+   "vel": -15,
+   "dur": 8,
+   "len": 90,
+   "width": 7,
+   "noDodge": true,
+   "fxList": [
+    {
+     "name": "dina_dark_endskill_boom",
+     "at": [
+      0,
+      0
+     ],
+     "t": 11,
+     "opt": {
+      "alpha": 0.8
+     }
+    }
+   ],
+   "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) + estimate"
   },
   {
    "t": 96,
@@ -796,6 +811,39 @@
    "bossY": 0,
    "bossScale": 1,
    "src": "guide(시즌3 공략: maxroll·GameWith·일본어 블로그·디시 번역글, data/master-s3-mech-s3dina.md) 침공 시작 때 독 장판 초기화"
+  },
+  {
+   "t": 110.1,
+   "type": "hazards",
+   "name": "바닥 함정(침공까지 남음)",
+   "spots": [
+    [
+     8,
+     8,
+     4.5
+    ],
+    [
+     -8,
+     8,
+     4.5
+    ],
+    [
+     8,
+     -8,
+     4.5
+    ],
+    [
+     -8,
+     -8,
+     4.5
+    ],
+    [
+     0,
+     0,
+     4.5
+    ]
+   ],
+   "src": "video(Layla 공략 자막, raw/raidvid/guides/txt/tina-m6plus-pizza.txt: 6단 이상은 거대화의 원형 장판이 번하르트 침공까지 남는다) + estimate(남는 자리)"
   },
   {
    "t": 112,

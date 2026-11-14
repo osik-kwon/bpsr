@@ -116,8 +116,8 @@
      11.0
     ]
    ],
-   "recharge": 60,
-   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 가장자리의 치유의 나무, 흔들면 범위 안 상흔을 지우고 60초 재충전 + estimate(나무 6그루 자리, 범위 3.5m)"
+   "recharge": 90,
+   "src": "guide(클라 공략 도감 문구·maxroll·영상 자막, data/master-s3-mech-misthunt.md) 가장자리의 치유의 나무, 흔들면 범위 안 상흔을 지우고 60초 재충전 + estimate(나무 6그루 자리, 범위 3.5m) + video(Layla 공략 자막, raw/raidvid/guides/txt/misthunt-indepth.txt: 재사용 1분 30초, 사냥 전 전부 초기화)"
   },
   {
    "t": 6,
