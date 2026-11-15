@@ -5,15 +5,25 @@ export class Combat {
   reset() {
     const S = this.cls.skills;
     this.act = null; this.cd = {}; this.ch = {}; this.light = 0; this.recast = false; this.focus = 0;
+    this.energy = this.cls.ice?.max ?? 0; this.mystic = 0; this.perma = 0; this.extreme = 0; this.iggy = 0; this.boyce = 0; this.boyceN = 0; this.orbs = []; this.seed = 12345;
     this.dmg = 0; this.by = {}; this.busy = 0; this.combo = 0; this.comboT = 0; this.zones = []; this.fxq = []; this.buf = null; this.face = null; this.whiff = 0;
     for (const [id, s] of Object.entries(S)) { this.cd[id] = 0; if (s.charges) this.ch[id] = { n: s.charges, t: s.recharge }; }
   }
-  def(id) { const s = this.cls.skills[id]; return id === 'sp' && this.recast && s.recast ? { ...s, ...s.recast, charges: s.charges } : s; }
-  ready(id) { return this.ch[id] ? this.ch[id].n > 0 : !(this.cd[id] > 0); }
+  def(id) {
+    const s = this.cls.skills[id];
+    if (id === 'sp' && this.recast && s.recast) return { ...s, ...s.recast, charges: s.charges };
+    if (s.quick && this.mystic >= (s.quick.mystic ?? 1)) return { ...s, ...s.quick };   // 미스틱 아이스를 써서 캐스팅 생략
+    return s;
+  }
+  rand() { let t = this.seed += 0x6D2B79F5; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+  addMystic(n) { const I = this.cls.ice; if (I) this.mystic = Math.min(I.mysticMax, this.mystic + n); }
+  // 지금 걸려 있는 버프의 피해 배율과 가속
+  dmgMul() { const I = this.cls.ice; if (!I) return 1; return (this.iggy > 0 ? I.iggy.dmg : 1) * (this.boyce > 0 ? 1 + I.boyce.perStack * this.boyceN : 1) * (this.perma > 0 ? I.perma.dmg ?? 1 : 1); }
+  ready(id) { const s = this.def(id); if (this.cls.ice && (s.cost ?? 0) > this.energy) return false; return this.ch[id] ? this.ch[id].n > 0 : !(this.cd[id] > 0); }
   // 화면용: 슬롯 상태(남은 쿨 비율, 충전 수)
   slot(id) {
     const s = this.def(id), c = this.ch[id];
-    return { id, name: s.name, icon: s.icon, key: s.key, n: c ? c.n : null, left: c ? (c.n < s.charges ? c.t : 0) : this.cd[id], total: c ? s.recharge : s.cd, ready: this.ready(id), active: this.act?.id === id };
+    return { id, name: s.name, icon: s.icon, key: s.key, lack: !!this.cls.ice && (s.cost ?? 0) > this.energy, n: c ? c.n : null, left: c ? (c.n < s.charges ? c.t : 0) : this.cd[id], total: c ? s.recharge : s.cd, ready: this.ready(id), active: this.act?.id === id };
   }
   start(id, sim, input) {
     if (id === 'sp' && this.cls.light && !this.recast && this.light >= this.cls.light.max) this.recast = true;   // 가득 찬 상태로 특수 공격을 쓰면 리캐스트 진입
@@ -25,7 +35,19 @@ export class Combat {
     if (this.ch[id]) this.ch[id].n--; else if (s.cd) this.cd[id] = s.cd;
     if (s.lightOnCast && !this.recast) this.gain(s.lightOnCast);
     if (s.buff === 'focus') this.focus = this.cls.focus.dur;
-    this.act = { id, s, t: 0, dir, back: id === 'dodge' && !inp, mul: s.recastMul && this.recast ? s.recastMul : 1, step: id === 'atk' ? this.combo : 0 };
+    const I = this.cls.ice;
+    if (I) {
+      this.energy -= s.cost ?? 0;
+      if (s.mystic) this.mystic -= s.mystic;
+      if (s.gainMystic) this.addMystic(s.gainMystic);
+      if (s.orb) this.orbs.push({ next: sim.t + s.orb.every, until: sim.t + s.orb.dur, every: s.orb.every });
+      if (s.buff === 'perma') this.perma = I.perma.dur;
+      if (s.buff === 'extreme') this.extreme = I.extreme.dur;
+      if (s.buff === 'iggy') this.iggy = I.iggy.dur;
+      if (s.buff === 'boyce') { this.boyce = I.boyce.dur; this.boyceN = 0; }
+      if (id === 'sp' && this.boyce > 0) { this.boyceN = Math.min(I.boyce.max, this.boyceN + 1); this.boyce = I.boyce.dur; }
+    }
+    this.act = { id, s, t: 0, dir, back: id === 'dodge' && !inp, mul: (s.recastMul && this.recast ? s.recastMul : 1) * (s.permaMul && this.perma > 0 ? s.permaMul : 1), step: id === 'atk' ? this.combo : 0 };
     if (id === 'atk') this.combo = (this.combo + 1) % this.cls.skills.atk.combo.length;
     if (s.iframe?.[0] === 0) p.iframe = Math.max(p.iframe, s.iframe[1]);
     this.buf = null; this.fxq.push({ kind: 'cast', id, t: sim.t, s, x: p.x, z: p.z });
@@ -33,13 +55,19 @@ export class Combat {
   gain(n) { if (this.cls.light && !this.recast) this.light = Math.min(this.cls.light.max, this.light + n); }
   hit(sim, id, h, at, mul = 1) {
     const p = sim.player, b = sim.boss, ok = Math.hypot(b.x - at.x, b.z - at.z) <= (at.r ?? this.cls.range);
-    if (ok) { const v = h.dmg * mul * (this.cls.dmgScale ?? 1); this.dmg += v; this.by[id] = (this.by[id] ?? 0) + v; if (h.light) this.gain(h.light); } else this.whiff++;
+    if (ok) { const v = h.dmg * mul * (this.cls.dmgScale ?? 1) * this.dmgMul(); if (this.cls.ice && this.rand() < this.cls.ice.proc) this.addMystic(1); this.dmg += v; this.by[id] = (this.by[id] ?? 0) + v; if (h.light) this.gain(h.light); } else this.whiff++;
     return ok;
   }
   // 한 스텝 진행. 반환: free(이동 입력 허용), dx·dz(동작이 강제로 옮기는 거리)
   step(dt, input, sim) {
     const C = this.cls, p = sim.player, l = Math.hypot(input.mx, input.mz), out = { free: true, dx: 0, dz: 0 };
-    const haste = this.focus > 0 ? C.focus.haste : 1;
+    const I = C.ice, haste = (this.focus > 0 ? C.focus.haste : 1) * (I && this.perma > 0 ? I.perma.haste : 1) * (I && this.boyce > 0 && this.boyceN >= I.boyce.max ? I.boyce.haste : 1);
+    if (I) {
+      this.energy = Math.min(I.max, this.energy + (I.regen + (this.perma > 0 ? I.perma.regen : 0) + (this.extreme > 0 ? I.extreme.regen : 0)) * dt);
+      for (const k of ['perma', 'extreme', 'iggy', 'boyce']) this[k] = Math.max(0, this[k] - dt);
+      for (const o of this.orbs) for (; o.next <= sim.t && o.next <= o.until; o.next += o.every) this.addMystic(1 + (this.extreme > 0 ? I.extreme.orbBonus ?? 0 : 0));
+      this.orbs = this.orbs.filter(o => o.until > sim.t);
+    }
     this.focus = Math.max(0, this.focus - dt);
     for (const id in this.cd) this.cd[id] = Math.max(0, this.cd[id] - dt);
     for (const [id, c] of Object.entries(this.ch)) {
@@ -64,9 +92,9 @@ export class Combat {
       const m = a.s.move;
       if (m && a.dir) { const u = (Math.min(a.t, m.t1) - Math.max(t0, m.t0)) / (m.t1 - m.t0); if (u > 0) { out.dx = a.dir.x * m.dist * u; out.dz = a.dir.z * m.dist * u; } }
       const iv = a.s.iframe; if (iv && a.t >= iv[0] && a.t < iv[1]) p.iframe = Math.max(p.iframe, iv[1] - a.t);
-      out.free = a.t >= (a.s.root ?? a.s.dur);
+      out.free = a.s.mobile || a.t >= (a.s.root ?? a.s.dur);   // mobile: 움직이면서 쓰는 즉시 시전(이동·평타 입력으로 끊기지 않는다)
       const next = this.buf && this.ready(this.buf.id) ? this.buf.id : null;
-      if (a.t >= a.s.dur || (out.free && (l > 0 || next || input.atk)) || (next === 'dodge' && a.id !== 'dodge')) { if (a.id === 'atk') this.comboT = 0.7; this.act = a = null; }
+      if (a.t >= a.s.dur || (out.free && !a.s.mobile && (l > 0 || next || input.atk)) || (next === 'dodge' && a.id !== 'dodge')) { if (a.id === 'atk') this.comboT = 0.7; this.act = a = null; }
     }
     if (!a) {
       if (this.comboT > 0 && (this.comboT -= dt) <= 0) this.combo = 0;

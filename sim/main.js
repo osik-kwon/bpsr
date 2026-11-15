@@ -171,7 +171,7 @@ function animPlayer(g, p, dt) {
   else if (moving) g.rotation.y = Math.atan2(dx, dz);
   if (!g.mixer) return;
   let name = moving ? cls.run : cls.idle, time = null;
-  if (a) { const segs = (a.back && a.s.animBack) || a.s.anim; let seg = segs[0]; for (const sg of segs) if (a.t >= sg.t) seg = sg; name = seg.clip; time = a.t - seg.t; }
+  if (a && ((a.back && a.s.animBack) || a.s.anim)?.length) { const segs = (a.back && a.s.animBack) || a.s.anim; let seg = segs[0]; for (const sg of segs) if (a.t >= sg.t) seg = sg; name = seg.clip; time = a.t - seg.t; }
   const act = g.acts[name] ?? g.acts[cls.idle] ?? g.acts.as_f_base_idle ?? g.acts.idle;   // 클립이 없는 동작은 대기 자세로 둔다 if (!act) return; name = act.getClip().name;
   if (name !== g.cur || (time !== null && time < g.curT)) {
     const prev = g.acts[g.cur]; act.reset(); act.setLoop(time === null ? THREE.LoopRepeat : THREE.LoopOnce, Infinity); act.clampWhenFinished = true; act.play();
@@ -297,12 +297,13 @@ function drawFx() {
 
 // 입력: 키보드·마우스, 터치 기기는 아래 터치 조작을 함께 쓴다
 const keys = new Set(); let yaw = GRID ? -Math.PI / 2 : data.boss.pos && data.player.start ? Math.atan2(data.player.start[1] - data.boss.pos[1], data.player.start[0] - data.boss.pos[0]) : roomAngle(1) + Math.PI, pitch = 0.5, zoom = 16, paused = true, dashQueued = false, interactQueued = false, speedMul = 1, atkHeld = false, skillQueued = null;
-const SKILL_KEYS = { Digit1: 's1', Digit2: 's2', Digit3: 's3', Digit4: 's4', KeyQ: 'ult', KeyK: 'sp' };
+// 인게임 PC 기본 키(클라 입력 설정): 특수 공격 1, 마스터리 스킬 2~5, 궁극 스킬 R, 배틀 이매진 Z·X
+const SKILL_KEYS = { Digit1: 'sp', Digit2: 's1', Digit3: 's2', Digit4: 's3', Digit5: 's4', KeyR: 'ult', KeyZ: 'im1', KeyX: 'im2' };
 addEventListener('keydown', e => {
   keys.add(e.code);
-  if (e.code === 'ShiftLeft' || e.code === 'Space') { dashQueued = true; e.preventDefault(); }
+  if (e.code === 'ShiftLeft') { dashQueued = true; e.preventDefault(); }
   if (e.code === 'KeyE' || e.code === 'KeyF') interactQueued = true;
-  if (e.code === 'KeyR') restart();
+  if (e.code === 'Backspace') restart();
   if (e.code === 'KeyP' && !sim.done) paused = !paused;
   if (SKILL_KEYS[e.code] && !e.repeat) skillQueued = SKILL_KEYS[e.code];
   if (e.code === 'KeyJ') atkHeld = true;
@@ -315,7 +316,7 @@ renderer.domElement.addEventListener('click', lock);
 let dragging = false;
 // 마우스가 시점 조작에 잠겨 있을 때는 좌클릭(누르고 있기) 평타, 우클릭 특수 공격
 const locked = () => document.pointerLockElement === renderer.domElement;
-renderer.domElement.addEventListener('mousedown', e => { if (locked()) { if (e.button === 0) atkHeld = true; else if (e.button === 2) skillQueued = 'sp'; } else if (e.button === 0) dragging = true; });
+renderer.domElement.addEventListener('mousedown', e => { if (locked()) { if (e.button === 0) atkHeld = true; else if (e.button === 2) dashQueued = true; } else if (e.button === 0) dragging = true; });
 addEventListener('mouseup', e => { if (e.button === 0) { dragging = false; atkHeld = false; } });
 addEventListener('contextmenu', e => e.preventDefault());
 addEventListener('mousemove', e => {
@@ -391,7 +392,13 @@ function drawSkills() {
     o.el.classList.toggle('off', !s.ready); o.el.classList.toggle('act', s.active);
     o.n.textContent = s.n ?? ''; o.cdt.textContent = wait ? Math.ceil(s.left) : s.icon ? '' : s.name;
   }
-  const L = $('light'); L.style.display = cls.light ? '' : 'none'; if (!cls.light) return;
+  const L = $('light'), I = cls.ice; L.style.display = cls.light || I ? '' : 'none';
+  if (I) {   // 아이스 에너지 막대 + 미스틱 아이스 개수와 버프 남은 시간
+    L.firstElementChild.style.width = C.energy / I.max * 100 + '%'; L.classList.toggle('focus', C.perma > 0); L.classList.toggle('recast', C.extreme > 0);
+    const b = [C.perma > 0 && `퍼마프로스트 ${C.perma.toFixed(0)}초`, C.extreme > 0 && `극한 ${C.extreme.toFixed(0)}초`, C.iggy > 0 && `이그레우스 ${C.iggy.toFixed(0)}초`, C.boyce > 0 && `보이스 ${C.boyceN}중첩 ${C.boyce.toFixed(0)}초`].filter(Boolean);
+    $('resinfo').textContent = `아이스 에너지 ${Math.floor(C.energy)} · 미스틱 아이스 ${'◆'.repeat(C.mystic)}${'◇'.repeat(I.mysticMax - C.mystic)}${b.length ? ' · ' + b.join(' · ') : ''}`; return;
+  }
+  if (!cls.light) return;
   L.firstElementChild.style.width = C.light / cls.light.max * 100 + '%'; L.classList.toggle('recast', C.recast); L.classList.toggle('focus', C.focus > 0);
 }
 const BENCH = cls.benchmark?.dps ?? 3450000;

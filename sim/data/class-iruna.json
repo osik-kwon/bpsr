@@ -23,7 +23,7 @@
  "skills": {
   "dodge": {
    "name": "회피",
-   "key": "Shift",
+   "key": "우클릭",
    "icon": null,
    "charges": 3,
    "recharge": 2.5,
@@ -226,7 +226,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값) + estimate(쿨타임: 실제로는 직업 자원을 쓰는 스킬이라 임의로 둠)",
    "name": "생명의 꽃",
-   "key": "우클릭",
+   "key": "1",
    "icon": "iruna_weapon_fh_skill_passive.png",
    "skillId": 1507,
    "cd": 6
@@ -258,7 +258,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "자유의 씨앗",
-   "key": "1",
+   "key": "2",
    "icon": "iruna_weapon_fh-01_kx09.png",
    "skillId": 1519,
    "charges": 2,
@@ -296,7 +296,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "인퓨전",
-   "key": "2",
+   "key": "3",
    "icon": "iruna_weapon_fh-01_kx01.png",
    "skillId": 1520,
    "cd": 22
@@ -328,7 +328,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "숲의 기도",
-   "key": "3",
+   "key": "4",
    "icon": "iruna_weapon_fh-01_kx02.png",
    "skillId": 1521,
    "cd": 20
@@ -356,7 +356,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "양분 주기",
-   "key": "4",
+   "key": "5",
    "icon": "iruna_weapon_fh-01_kx04.png",
    "skillId": 1522,
    "cd": 15
@@ -393,7 +393,7 @@
    ],
    "src": "table(타격 시각·피해 계수)",
    "name": "만개・희망의 결계",
-   "key": "Q",
+   "key": "R",
    "icon": "iruna_weapon_fh-01_ult.png",
    "skillId": 1509,
    "cd": 60

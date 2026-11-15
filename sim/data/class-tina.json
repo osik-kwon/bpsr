@@ -22,7 +22,7 @@
  "skills": {
   "dodge": {
    "name": "회피",
-   "key": "Shift",
+   "key": "우클릭",
    "icon": null,
    "charges": 3,
    "recharge": 2.5,
@@ -242,7 +242,7 @@
    "src": "table(타격 시각·피해 계수) + estimate(쿨타임: 실제로는 직업 자원을 쓰는 스킬이라 임의로 둠)",
    "hitFx": "qq_skill01_01_02_1_hit",
    "name": "질풍 찌르기",
-   "key": "우클릭",
+   "key": "1",
    "icon": "tina_weapon_cq-01_tg01.png",
    "skillId": 1418,
    "cd": 6
@@ -279,7 +279,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "qq_attack02_hit",
    "name": "비범한 풍모",
-   "key": "1",
+   "key": "2",
    "icon": "tina_weapon_cq-01_kx01.png",
    "skillId": 1420,
    "charges": 2,
@@ -342,7 +342,7 @@
    "src": "table(타격 시각·피해 계수)",
    "hitFx": "qq_attack02_hit",
    "name": "나선 찌르기",
-   "key": "2",
+   "key": "3",
    "icon": "tina_weapon_cq-01_kx02.png",
    "skillId": 1421,
    "cd": 20
@@ -382,7 +382,7 @@
     "fallback": "forward"
    },
    "name": "체이싱",
-   "key": "3",
+   "key": "4",
    "icon": "tina_weapon_cq-01_kx03.png",
    "skillId": 1422,
    "cd": 12
@@ -423,7 +423,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "qq_attack02_hit",
    "name": "윈드 프로텍션",
-   "key": "4",
+   "key": "5",
    "icon": "tina_weapon_cq-01_kx04.png",
    "skillId": 1423,
    "cd": 30
@@ -461,7 +461,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "common_hit_test_round_badian_02",
    "name": "풍신・파괴의 바람",
-   "key": "Q",
+   "key": "R",
    "icon": "tina_weapon_cq-01_ult_01.png",
    "skillId": 1426,
    "cd": 60

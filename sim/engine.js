@@ -617,7 +617,7 @@ export class Sim {
       const mx = (B.turn ?? 240) * Math.PI / 180 * dt; this.bossFace += Math.max(-mx, Math.min(mx, da));
     }
   }
-  aggro() { return this.tank ? this.player : this.bots[this.data.tankBot ?? 0]; }
+  aggro() { return (this.tank ? null : this.bots[this.data.tankBot ?? 0]) ?? this.player; }
   bossTarget(to) {
     if (Array.isArray(to)) return { x: to[0], z: to[1] };
     if (to === 'me') return { ...this.player }; if (to === 'aggro') return { ...this.aggro() };

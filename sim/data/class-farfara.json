@@ -23,7 +23,7 @@
  "skills": {
   "dodge": {
    "name": "회피",
-   "key": "Shift",
+   "key": "우클릭",
    "icon": null,
    "charges": 3,
    "recharge": 2.5,
@@ -199,7 +199,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값) + estimate(쿨타임: 실제로는 직업 자원을 쓰는 스킬이라 임의로 둠)",
    "hitFx": "skill_farfara-01_hit02",
    "name": "용맹의 방패",
-   "key": "우클릭",
+   "key": "1",
    "icon": "farfara_weapon_jd-01_tg01.png",
    "skillId": 2405,
    "cd": 6
@@ -227,7 +227,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "방패 투척",
-   "key": "1",
+   "key": "2",
    "icon": "farfara_weapon_jd-01_kx01.png",
    "skillId": 2408,
    "cd": 12
@@ -255,7 +255,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "디바인 서클",
-   "key": "2",
+   "key": "3",
    "icon": "farfara_weapon_jd-01_kx02.png",
    "skillId": 2409,
    "cd": 30
@@ -292,7 +292,7 @@
    "src": "table(타격 시각·피해 계수) + estimate(쿨타임: 실제로는 직업 자원을 쓰는 스킬이라 임의로 둠)",
    "hitFx": "common_hit_test_round_badian_03",
    "name": "심판",
-   "key": "3",
+   "key": "4",
    "icon": "farfara_weapon_jd-01_kx03.png",
    "skillId": 2410,
    "cd": 12
@@ -337,7 +337,7 @@
    "src": "table(타격 시각·피해 계수) + estimate(쿨타임: 실제로는 직업 자원을 쓰는 스킬이라 임의로 둠)",
    "hitFx": "skill_farfara-01_spattack02_hit",
    "name": "숙청",
-   "key": "4",
+   "key": "5",
    "icon": "farfara_weapon_jd-01_kx04.png",
    "skillId": 2412,
    "cd": 12
@@ -375,7 +375,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "common_hit_test_round_badian_03",
    "name": "빛의 권위・라이트 인퓨전",
-   "key": "Q",
+   "key": "R",
    "icon": "farfara_weapon_jd-01_ult_01.png",
    "skillId": 2407,
    "cd": 60

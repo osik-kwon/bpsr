@@ -22,7 +22,7 @@
  "skills": {
   "dodge": {
    "name": "회피",
-   "key": "Shift",
+   "key": "우클릭",
    "icon": null,
    "charges": 3,
    "recharge": 2.5,
@@ -206,7 +206,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값) + estimate(쿨타임: 실제로는 직업 자원을 쓰는 스킬이라 임의로 둠)",
    "hitFx": "tdl_attack_hit",
    "name": "발도",
-   "key": "우클릭",
+   "key": "1",
    "icon": "olvera_weapon_tdl-01_tg01.png",
    "skillId": 1714,
    "cd": 6
@@ -250,7 +250,7 @@
     "fallback": "forward"
    },
    "name": "초고출력",
-   "key": "1",
+   "key": "2",
    "icon": "olvera_weapon_tdl-01_kx01_01.png",
    "skillId": 1705,
    "charges": 5,
@@ -288,7 +288,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "초고출력",
-   "key": "2",
+   "key": "3",
    "icon": "olvera_weapon_tdl-01_kx01_01.png",
    "skillId": 1716,
    "charges": 2,
@@ -338,7 +338,7 @@
     "fallback": "back"
    },
    "name": "일섬",
-   "key": "3",
+   "key": "4",
    "icon": "olvera_weapon_tdl-01_kx02.png",
    "skillId": 1717,
    "cd": 15
@@ -375,7 +375,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "tdl_attack_hit",
    "name": "비뢰신",
-   "key": "4",
+   "key": "5",
    "icon": "olvera_weapon_tdl-01_kx03.png",
    "skillId": 1718,
    "cd": 25
@@ -413,7 +413,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "tdl-01_ult01_knife_01_hit",
    "name": "극의・대파멸연참",
-   "key": "Q",
+   "key": "R",
    "icon": "olvera_weapon_tdl-01_ult.png",
    "skillId": 1713,
    "cd": 60

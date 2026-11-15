@@ -30,7 +30,7 @@
  "skills": {
   "dodge": {
    "name": "회피",
-   "key": "Shift",
+   "key": "우클릭",
    "icon": null,
    "charges": 3,
    "recharge": 2.5,
@@ -164,7 +164,7 @@
   },
   "sp": {
    "name": "더블 애로우",
-   "key": "우클릭",
+   "key": "1",
    "icon": "tg02.png",
    "charges": 3,
    "recharge": 7,
@@ -257,7 +257,7 @@
   },
   "s1": {
    "name": "화살비",
-   "key": "1",
+   "key": "2",
    "icon": "kx03.png",
    "cd": 20,
    "dur": 0.9,
@@ -289,7 +289,7 @@
   },
   "s2": {
    "name": "위협 사격",
-   "key": "2",
+   "key": "3",
    "icon": "kx06.png",
    "charges": 2,
    "recharge": 25,
@@ -332,7 +332,7 @@
   },
   "s3": {
    "name": "라이트 봄버",
-   "key": "3",
+   "key": "4",
    "icon": "kx04.png",
    "cd": 30,
    "dur": 2.0,
@@ -372,7 +372,7 @@
   },
   "s4": {
    "name": "정신 집중",
-   "key": "4",
+   "key": "5",
    "icon": "kx02.png",
    "cd": 45,
    "dur": 0.6,
@@ -398,7 +398,7 @@
   },
   "ult": {
    "name": "샤이닝 애로우",
-   "key": "Q",
+   "key": "R",
    "icon": "ult.png",
    "cd": 60,
    "dur": 2.6,

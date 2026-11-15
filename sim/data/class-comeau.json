@@ -23,7 +23,7 @@
  "skills": {
   "dodge": {
    "name": "회피",
-   "key": "Shift",
+   "key": "우클릭",
    "icon": null,
    "charges": 3,
    "recharge": 2.5,
@@ -211,7 +211,7 @@
    "src": "table(타격 시각·피해 계수) + estimate(쿨타임: 실제로는 직업 자원을 쓰는 스킬이라 임의로 둠)",
    "hitFx": "base_comeau-01_hit_slash",
    "name": "실드 배쉬",
-   "key": "우클릭",
+   "key": "1",
    "icon": "comeau_weapon_wr-01_tg02.png",
    "skillId": 1922,
    "cd": 6
@@ -252,7 +252,7 @@
    "src": "table(타격 시각·피해 계수)",
    "hitFx": "base_comeau-01_hit_stick",
    "name": "사암의 수호",
-   "key": "1",
+   "key": "2",
    "icon": "comeau_weapon_wr-01_kx06.png",
    "skillId": 1923,
    "cd": 45
@@ -300,7 +300,7 @@
     "fallback": "forward"
    },
    "name": "별 쪼개기",
-   "key": "2",
+   "key": "3",
    "icon": "comeau_weapon_wr-01_kx01.png",
    "skillId": 1924,
    "charges": 2,
@@ -339,7 +339,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "base_comeau-01_hit_slash",
    "name": "분노 폭발",
-   "key": "3",
+   "key": "4",
    "icon": "comeau_weapon_wr-01_kx03.png",
    "skillId": 1925,
    "cd": 15
@@ -375,7 +375,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "움켜쥐는 사암",
-   "key": "4",
+   "key": "5",
    "icon": "comeau_weapon_wr-01_kx05.png",
    "skillId": 1926,
    "charges": 1,
@@ -415,7 +415,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "base_comeau-01_hit_slash",
    "name": "바위 수호・붕괴의 고리",
-   "key": "Q",
+   "key": "R",
    "icon": "comeau_weapon_wr-01_ult.png",
    "skillId": 1907,
    "cd": 60

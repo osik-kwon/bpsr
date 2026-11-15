@@ -22,7 +22,7 @@
  "skills": {
   "dodge": {
    "name": "회피",
-   "key": "Shift",
+   "key": "우클릭",
    "icon": null,
    "charges": 3,
    "recharge": 2.5,
@@ -210,7 +210,7 @@
    "src": "table(타격 시각·피해 계수)",
    "hitFx": "skill_tata_hit01",
    "name": "작열 승천",
-   "key": "우클릭",
+   "key": "1",
    "icon": "tata_weapon_sf-01_tg01_1.png",
    "skillId": 1605,
    "cd": 3
@@ -251,7 +251,7 @@
    "src": "table(타격 시각·피해 계수)",
    "hitFx": "skill_tata_hit01",
    "name": "열화의 습격",
-   "key": "1",
+   "key": "2",
    "icon": "tata_weapon_sf-01_kx01.png",
    "skillId": 1607,
    "charges": 2,
@@ -290,7 +290,7 @@
    "src": "table(타격 시각·피해 계수)",
    "hitFx": "skill_tata_hit01",
    "name": "격노 강타",
-   "key": "2",
+   "key": "3",
    "icon": "tata_weapon_sf-01_kx02_1.png",
    "skillId": 1608,
    "cd": 20
@@ -327,7 +327,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "skill_tata_hit01",
    "name": "도끼 폭풍",
-   "key": "3",
+   "key": "4",
    "icon": "tata_weapon_sf-01_kx03.png",
    "skillId": 1612,
    "cd": 5
@@ -371,7 +371,7 @@
     "fallback": "forward"
    },
    "name": "광염난무",
-   "key": "4",
+   "key": "5",
    "icon": "tata_weapon_sf-01_kx04.png",
    "skillId": 1613,
    "cd": 12
@@ -409,7 +409,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "skill_tata_hit01",
    "name": "진멸! 옥염부지화",
-   "key": "Q",
+   "key": "R",
    "icon": "tata_weapon_sf-01_ult_01.png",
    "skillId": 1618,
    "cd": 60

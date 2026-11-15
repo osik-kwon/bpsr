@@ -23,7 +23,7 @@
  "skills": {
   "dodge": {
    "name": "회피",
-   "key": "Shift",
+   "key": "우클릭",
    "icon": null,
    "charges": 3,
    "recharge": 2.5,
@@ -207,7 +207,7 @@
    "src": "table(타격 시각·피해 계수) + estimate(쿨타임: 실제로는 직업 자원을 쓰는 스킬이라 임의로 둠)",
    "hitFx": "skill_guitar_attack_hit02",
    "name": "증폭하는 비트",
-   "key": "우클릭",
+   "key": "1",
    "icon": "guitar_weapon_jt-01_tg01.png",
    "skillId": 2306,
    "cd": 6
@@ -254,7 +254,7 @@
     "fallback": "forward"
    },
    "name": "결집의 악장",
-   "key": "1",
+   "key": "2",
    "icon": "guitar_weapon_jt-01_kx01.png",
    "skillId": 2308,
    "charges": 2,
@@ -288,7 +288,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "불꽃의 랩소디",
-   "key": "2",
+   "key": "3",
    "icon": "guitar_weapon_jt-01_kx02.png",
    "skillId": 2309,
    "cd": 15
@@ -320,7 +320,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "울림・용맹의 악장",
-   "key": "3",
+   "key": "4",
    "icon": "guitar_weapon_jt-01_kx03.png",
    "skillId": 2310,
    "cd": 5
@@ -352,7 +352,7 @@
    ],
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "name": "울림・치유의 악장",
-   "key": "4",
+   "key": "5",
    "icon": "guitar_weapon_jt-01_kx04.png",
    "skillId": 2311,
    "cd": 5
@@ -390,7 +390,7 @@
    "src": "estimate(타격 정보가 클라에 없어 가정값)",
    "hitFx": "skill_guitar_attack_hit01",
    "name": "승격・열광의 스테이지",
-   "key": "Q",
+   "key": "R",
    "icon": "guitar_weapon_jt-01_ult.png",
    "skillId": 2314,
    "cd": 60

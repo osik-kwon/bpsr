@@ -1,0 +1,39 @@
+{
+ "id": "dummy",
+ "title": "허수아비 연습(3분)",
+ "notes": "기믹 없이 목각 인형을 3분 동안 치는 딜 연습장. 추정 딜은 직업 데이터의 기준치(얼창: S4 테섭 허수아비 5.60M)에 맞춘 환산값이라, 내 사이클이 이상적인 사이클 대비 몇 %인지 보는 용도다. 실제 장비·스탯은 반영되지 않는다",
+ "noCurtain": true,
+ "arena": {
+  "radius": 22,
+  "src": "estimate"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   0,
+   10
+  ],
+  "src": "레이드 시나리오와 같은 값"
+ },
+ "boss": {
+  "pos": [
+   0,
+   0
+  ],
+  "height": 3,
+  "scale": 1.0,
+  "model": "boss_dummy.glb",
+  "chase": false,
+  "src": "table(몬스터 2000117 목각 인형, 프리팹 ch_mon_muzhuang02_01)",
+  "anims": {
+   "idle": "as_mon_muzhuang_idle"
+  },
+  "animSrc": "클라 실측"
+ },
+ "partySpots": [],
+ "events": [],
+ "duration": 180
+}
