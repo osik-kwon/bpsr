@@ -98,6 +98,7 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
   .s4-sec { display: flex; flex-direction: column; gap: var(--cds-gap-md); min-width: 0; }
   .s4-sec h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
   .s4-sec h3 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: 8px 0 0; }
+  .s4-bar { height: 10px; border-radius: 3px; background: var(--cds-chart-muted, #8892a6); min-width: 2px; }
   .s4-sec > p { margin: 0; line-height: 1.6; max-width: 72ch; }
   .s4-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--cds-gap-md); }
   .s4-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
@@ -206,6 +207,50 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
     <p class="s4-muted s4-small">티어는 기준값(3건 이상인 계열들의 환산 중앙값의 중앙값) 대비 +7% 이상이면 상위, −7% 이하면 하위, 그 사이는 중위입니다. 같은 계열 안에서도 환산값이 표준편차 10% 안팎으로 흩어지므로, 중위 안의 순서와 ±7% 경계 근처 계열은 뒤바뀔 수 있습니다. 3건 미만은 표본 부족으로 표시했습니다. 능력 점수를 읽지 못한 기록과 70k 미만 기록은 뺐습니다. 허수아비는 단일 대상이라 광역 강점은 반영되지 않습니다.</p>
   </section>
 
+  <section class="s4-sec" id="sources">
+    <h2>출처별 교차 비교와 검증</h2>
+    <p>서로 다른 출처가 같은 순위를 말하는지 봅니다. 출처마다 단위가 달라(허수아비 5M대, 보스 1:1 10M대, 글섭 1.5M대) 그대로는 못 겹치므로, <b>출처마다 계열들의 중앙값을 100으로 놓은 상대값</b>으로 바꿔 한 그림에 올렸습니다. 여러 출처의 점이 모두 100보다 오른쪽이면 강한 계열, 출처마다 좌우로 갈리면 조건에 따라 달라지는 계열입니다.</p>
+    <div class="s4-legend" data-draw="src-legend"></div>
+    <div class="s4-chart dash-skeleton" data-draw="src-compare" data-source="cn_dummy boss_1v1" role="img" aria-label="출처별 계열 상대 DPS 비교 점 그림"></div>
+    <p class="s4-muted s4-small">읽는 법: 무상·난무는 다섯 출처 모두에서 100 이상이라 상위가 확실합니다. 얼빔은 허수아비에서는 아래쪽이지만 보스 1:1과 글섭 레이드에서는 위쪽입니다. 얼창은 허수아비·보스 1:1에서 100 안팎, 글섭 레이드 한 전투에서는 낮았습니다. 매활은 허수아비에서 100 안팎이고 보스 1:1(1건)에서는 낮습니다. 출처당 계열 표본이 1~12건이라 점 하나의 위치는 ±10% 넘게 흔들릴 수 있습니다. ①의 두 점과 ②는 모두 bilibili 영상에서 나와 서로 독립이 아니고, 독립적인 출처는 사실상 ①·②(허수아비), ③(보스 1:1), ④(글섭 레이드) 세 갈래입니다.</p>
+
+    <h3>출처 목록과 검증 결과</h3>
+    <div class="s4-tablewrap">
+      <table class="s4-table">
+        <thead><tr><th>출처</th><th>무엇을, 어디서</th><th>읽은 방법</th><th>검증</th><th>신뢰도</th></tr></thead>
+        <tbody>
+          <tr><td><b>① 중섭 허수아비 영상</b></td><td>bilibili 영상, 2026-09-03 이후. 계열 중국명 + 木桩/打桩 검색. 기록마다 영상 링크는 아래 「중섭 기록 전체」 표</td><td>DPS는 영상 제목. 능력 점수·기원 강도는 1080p 영상 속 측정기를 프레임으로 판독(판독 시각 기록)</td><td>②의 목록과 3개 계열(월광 6.42M, 매활 6.27M, 질풍 6.01M) 값이 완전히 일치. 수집 누락 2건 확인(음파 7.12M, 늑활 6.05M)</td><td>중간. 표본 가장 많음, 조건 제각각</td></tr>
+          <tr><td><b>② 글섭 공식 디스코드 집계 목록</b></td><td>discord.gg/starresonance <code>#classes-general</code>, 「S3 Master Mentor」 역할 이용자 ☆Festive★의 2026-10-21 글. bilibili 기록을 계열당 1건씩 모은 것</td><td>2026-11-17 로그인해 화면에서 읽음. 10-10판과 10-21판 두 번 확인</td><td>①과 독립적으로 같은 bilibili를 본 자료라 교차 확인에 씀. 영상 링크·능력 점수 없음</td><td>중간. 계열당 1건, 「최고 기록이 아니라 올라온 것」이라는 작성자 단서</td></tr>
+          <tr><td><b>③ 보스 1:1 시트</b></td><td>디스코드 「1vs1 Stream DPS」 구글 시트(Dados normalizados 탭). 같은 호스트와 같은 보스를 1:1로 친 기록</td><td>시트 값 그대로</td><td>서버·시즌 표기가 없어 게시일(9-12)로 중섭 시즌4라고 추정. 호스트 DPS가 10.2~12.0M로 고른지 확인함</td><td>중간. 조건 통제 좋음, 계열당 1~4명</td></tr>
+          <tr><td><b>④ 글섭 디스코드 측정기 화면</b></td><td>같은 서버 <code>#marksman-forum</code> 스레드 「S4 Falc/Wildpack」. ZDPS 측정기 스크린샷 3건(허수아비 2, 레이드 1전투)</td><td>2026-11-17 화면 확대해 판독. 능력 점수·기원 강도·DPS가 측정기에 함께 표시됨</td><td>측정기 원본 화면이라 수치 자체는 확실. 글섭은 능력 점수 60k대라 중섭(80k)과 단위가 다름(아래)</td><td>수치는 높음, 표본은 매우 적음</td></tr>
+          <tr><td><b>⑤ 글섭 Parse 영상</b></td><td>YouTube, 320~340 장비</td><td>영상 제목</td><td>4건뿐이라 그림에는 넣지 않음</td><td>낮음</td></tr>
+          <tr><td><b>⑥ 클라이언트 데이터</b></td><td>중국판 1.3.43057과 한섭 1.0.43142의 표 비교. <a href="../s4-cn/">시즌4 클라 데이터 실측</a></td><td>표 파일 직접 해독</td><td>피해 계수·쿨타임은 두 번 독립 계산해 일치. DPS 수치는 주지 않고 「무엇이 바뀌었나」만 줌</td><td>수치는 높음, 딜 순위에는 간접 근거</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="s4-muted s4-small">찾아봤지만 자료가 없던 곳: 측정기 개발자 디스코드(bpsr devs, 「dummy」 37건·「parse」 56건 모두 개발 이야기), blueprotocol.fr 리더보드(2025년 11월 글섭 시즌1 기록, 현재 점검 중). 글섭 공식 디스코드에서는 「dummy parse」 184건을 모두 훑었고 2026-09-01 이후 수치나 그림이 있는 글은 9건이었습니다. 직업 채널은 매활 쪽만 열람 권한이 있어 다른 직업 채널은 보지 못했습니다.</p>
+
+    <h3>④ 글섭 측정기 화면에서 읽은 기록</h3>
+    <div class="s4-tablewrap">
+      <table class="s4-table">
+        <thead><tr><th>계열</th><th>종류</th><th class="n">능력 점수</th><th class="n">기원 강도</th><th class="n">DPS(M)</th><th>조건·출처</th></tr></thead>
+        <tbody>
+          <tr><td>매활</td><td>허수아비 3분</td><td class="n">66,114</td><td class="n">1,672</td><td class="n">1.48</td><td>라이프 웨이브 없음. Wooody(Leah), 2026-10-17</td></tr>
+          <tr><td>늑활</td><td>허수아비 3분</td><td class="n">64,055</td><td class="n">2,110</td><td class="n">1.71</td><td>220 해무기, 라이프 웨이브 켬. Seihai, 2026-10-29</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="s4-muted s4-small"><b>환산의 한계가 여기서 드러납니다.</b> 위 티어 절의 환산식(능력 점수 1,000당 +4.7%)을 66k까지 내려 적용하면 매활은 2.6M, 늑활은 2.3M이 나와야 하는데 실제는 1.48M, 1.71M입니다. 환산은 자료가 있는 73k~84k 범위 안에서만 쓸 수 있고, 한섭 시즌 초(능력 점수가 훨씬 낮을 때)의 절대 수치를 예측하는 데는 쓸 수 없습니다. 글섭은 기원 강도도 2,000 안팎으로 중섭(4,675)의 절반 이하입니다.</p>
+    <p>글섭 레이드 한 전투(20인, 1분, 2026-10-27 「Clash! Field of Forgotten Illusions」, Seihai가 올린 ZDPS 화면)의 딜러 순위입니다. 같은 전투 안이라 조건은 같지만 <b>1분짜리 한 번</b>입니다.</p>
+    <div class="s4-tablewrap">
+      <table class="s4-table">
+        <thead><tr><th>계열</th><th>측정기 표기</th><th class="n">능력 점수</th><th class="n">기원 강도</th><th class="n">전투 DPS(M)</th><th style="width:30%"></th></tr></thead>
+        <tbody><tr><td>얼빔</td><td>Frostbeam</td><td class="n">59,759</td><td class="n">2,110</td><td class="n">8.36</td><td><div class="s4-bar" style="width:100%"></div></td></tr><tr><td>늑활</td><td>Wildpack</td><td class="n">64,055</td><td class="n">2,110</td><td class="n">8.14</td><td><div class="s4-bar" style="width:97%"></div></td></tr><tr><td>무상</td><td>Formless</td><td class="n">61,895</td><td class="n">2,080</td><td class="n">8.13</td><td><div class="s4-bar" style="width:97%"></div></td></tr><tr><td>난무</td><td>Skyward</td><td class="n">59,904</td><td class="n">2,060</td><td class="n">6.63</td><td><div class="s4-bar" style="width:79%"></div></td></tr><tr><td>무상</td><td>Formless</td><td class="n">61,802</td><td class="n">2,100</td><td class="n">6.33</td><td><div class="s4-bar" style="width:76%"></div></td></tr><tr><td>얼창</td><td>Icicle</td><td class="n">62,381</td><td class="n">2,352</td><td class="n">4.23</td><td><div class="s4-bar" style="width:51%"></div></td></tr><tr><td>무상</td><td>Formless</td><td class="n">59,415</td><td class="n">2,110</td><td class="n">3.94</td><td><div class="s4-bar" style="width:47%"></div></td></tr><tr><td>월광</td><td>Moonstrike</td><td class="n">61,917</td><td class="n">1,870</td><td class="n">3.46</td><td><div class="s4-bar" style="width:41%"></div></td></tr><tr><td>월광</td><td>Moonstrike</td><td class="n">64,073</td><td class="n">2,200</td><td class="n">2.90</td><td><div class="s4-bar" style="width:35%"></div></td></tr><tr><td>발도</td><td>Iaido</td><td class="n">57,632</td><td class="n">2,142</td><td class="n">2.63</td><td><div class="s4-bar" style="width:31%"></div></td></tr><tr><td>암석 방패</td><td>Earthfort</td><td class="n">58,694</td><td class="n">2,080</td><td class="n">2.21</td><td><div class="s4-bar" style="width:26%"></div></td></tr><tr><td>월광</td><td>Moonstrike</td><td class="n">55,632</td><td class="n">2,040</td><td class="n">2.10</td><td><div class="s4-bar" style="width:25%"></div></td></tr><tr><td>음파</td><td>Dissonance</td><td class="n">62,947</td><td class="n">2,200</td><td class="n">2.02</td><td><div class="s4-bar" style="width:24%"></div></td></tr><tr><td>협주</td><td>Concerto</td><td class="n">65,096</td><td class="n">2,100</td><td class="n">0.31</td><td><div class="s4-bar" style="width:4%"></div></td></tr></tbody>
+      </table>
+    </div>
+    <p class="s4-muted s4-small">같은 무상이 8.13M, 6.33M, 3.94M으로 두 배 넘게 갈립니다. 한 전투 안에서도 사람 차이가 계열 차이보다 큽니다. 얼창(4.23M)은 기원 강도가 가장 높은데도 중간이었고, 얼빔이 1위였습니다. 이 전투에 매활은 없었습니다.</p>
+  </section>
+
   <section class="s4-sec" id="cn-chart">
     <h2>중섭 시즌4 허수아비 DPS, 기록 하나가 점 하나</h2>
     <div class="s4-filters" id="cn-filters">
@@ -307,19 +352,6 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
       <li>시즌4를 모아서 집계한 로그 사이트는 중섭·글섭 모두 찾지 못했습니다. 레딧은 접근이 막혀 확인하지 못했습니다.</li>
     </ul>
   </details>
-
-  <section class="s4-sec" id="discord-list">
-    <h2>글섭 공식 디스코드의 집계 목록 (교차 확인용)</h2>
-    <p>글섭 공식 디스코드 <code>#classes-general</code>에서 「S3 Master Mentor」 역할의 이용자(☆Festive★)가 bilibili에 올라온 허수아비 기록을 계열별로 하나씩 모아 올린 목록입니다. 2026-10-21 게시분(본문은 9월 4일 작성 후 수정)을 2026-11-17에 읽었습니다. 작성자는 「최고 기록이 아니라 bilibili에 있는 것」이라고 적었습니다.</p>
-    <div class="s4-tablewrap">
-      <table class="s4-table">
-        <thead><tr><th>계열</th><th>목록 표기</th><th class="n">목록 DPS(M)</th><th>목록의 조건 메모</th><th class="n">이 페이지 최고 기록(M)</th></tr></thead>
-        <tbody><tr><td>무상</td><td>formless</td><td class="n">7.42 → 너프 뒤 7.13</td><td>360 장비</td><td class="n">7.88</td></tr><tr><td>난무</td><td>skyward</td><td class="n">7.29</td><td></td><td class="n">7.66</td></tr><tr><td>음파</td><td>disso</td><td class="n">7.12</td><td>360 장비</td><td class="n">5.82</td></tr><tr><td>적홍</td><td>crimson</td><td class="n">6.87</td><td></td><td class="n">7.79</td></tr><tr><td>월광</td><td>moon</td><td class="n">6.42</td><td></td><td class="n">6.42</td></tr><tr><td>매활</td><td>falcon</td><td class="n">6.27</td><td>전 옵션 최상급</td><td class="n">6.27</td></tr><tr><td>늑활</td><td>wp</td><td class="n">6.05</td><td>360 장비</td><td class="n">4.46</td></tr><tr><td>질풍</td><td>vg</td><td class="n">6.01</td><td>340 장비</td><td class="n">6.01</td></tr><tr><td>심판</td><td>smite</td><td class="n">5.78</td><td>풀 투자</td><td class="n">기록 없음</td></tr><tr><td>발도</td><td>iaido</td><td class="n">5.45</td><td>360 장비</td><td class="n">6.25</td></tr><tr><td>얼창</td><td>icicle</td><td class="n">5.40</td><td>340 장비. 초반 버스트는 8~9M이라 실전은 그쯤 기대된다는 메모</td><td class="n">5.60</td></tr><tr><td>얼빔</td><td>beam</td><td class="n">4.92 (다른 기록 5.12)</td><td>레이드 무기</td><td class="n">5.70</td></tr><tr><td>실드 나이트</td><td>shield</td><td class="n">2.91</td><td>360 장비</td><td class="n">기록 없음</td></tr><tr><td>암석 방패</td><td>ef</td><td class="n">2.51</td><td>340 장비</td><td class="n">기록 없음</td></tr></tbody>
-      </table>
-    </div>
-    <p class="s4-muted s4-small">월광·매활·질풍은 이 페이지의 최고 기록과 값이 같아 같은 영상으로 보입니다. <b>음파 7.12M과 늑활 6.05M은 이 페이지에 없는 기록</b>이라, 두 계열은 위 티어 표에서 실제보다 낮게 나왔을 가능성이 있습니다(음파 3건, 늑활 1건). 10월 10일판 목록에서는 난무 6.76M, 음파 6.55M, 매활 5.5M, 월광 5.19M, 적홍 5.17M이었고 11일 사이에 여러 계열이 올랐습니다. 목록에는 영상 링크가 없어 원본은 확인하지 못했습니다.</p>
-    <p class="s4-muted s4-small">같은 채널의 다른 글에서 읽은 주의점: 허수아비 수치는 파티 버프를 반영하지 않는다는 지적, 허수아비 수치는 계열 간 비슷하고 던전에서 차이가 벌어진다는 의견, 11월 초 기준 무상의 허수아비 기록이 가장 높다는 언급, 8M 기록을 봤다는 언급(11월 6일)이 있었습니다. 측정기 개발자 서버(bpsr devs)에는 DPS 기록 글이 없었고, 허수아비는 실제 적과 능력치가 다르며 적홍의 일부 효과는 길드 허수아비에 피해가 들어가지 않는다는 개발자 글이 있었습니다.</p>
-  </section>
 
   <section class="s4-sec" id="hawk-vs-icicle">
     <h2>매활 vs 얼창: 무기 조건을 맞춘 비교</h2>
@@ -821,6 +853,85 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
       s4Cell(tr, String(s.n), 'n'); s4Cell(tr, String(s.uploaders), 'n'); s4Cell(tr, S4.fmt(s.raw), 'n');
       tb.appendChild(tr);
     });
+  });
+
+
+  // 출처별 교차 비교: 출처마다 계열 중앙값 = 100으로 맞춘 상대값
+  S4.srcStatic = {
+    discord: { 무상: 7.13, 난무: 7.29, 음파: 7.12, 적홍: 6.87, 월광: 6.42, 매활: 6.27, 늑활: 6.05, 질풍: 6.01, 발도: 5.45, 얼창: 5.40, 얼빔: 4.92 },
+    raid: { 얼빔: 8.36, 늑활: 8.14, 무상: 8.13, 난무: 6.63, 얼창: 4.23, 월광: 3.46, 발도: 2.63, 음파: 2.02 },
+  };
+  S4.srcDefs = [
+    { key: 'cnAdj', label: '① 중섭 허수아비 80k 환산 중앙값', color: '#2F7FBF', shape: d3.symbolCircle },
+    { key: 'cnMax', label: '① 중섭 허수아비 최고 기록', color: '#7A5FC2', shape: d3.symbolDiamond },
+    { key: 'discord', label: '② 글섭 디스코드 집계 목록', color: '#C98A1B', shape: d3.symbolTriangle },
+    { key: 'boss', label: '③ 보스 1:1 중앙값', color: '#B8306F', shape: d3.symbolSquare },
+    { key: 'raid', label: '④ 글섭 레이드 1전투 최고', color: '#2E9E6B', shape: d3.symbolCross },
+  ];
+  S4.srcData = function () {
+    const mode = S4.tierMode; S4.tierMode = 'all'; const t = S4.tier(); S4.tierMode = mode;
+    const cn = dash.data('cn_dummy').data.filter((r) => r.status === '포함' && r.dps_m != null);
+    const raw = {
+      cnAdj: Object.fromEntries(t.specs.filter((s) => s.n >= 2).map((s) => [s.spec, s.median])),
+      cnMax: Object.fromEntries(Array.from(d3.rollup(cn, (v) => d3.max(v, (r) => +r.dps_m), (r) => r.spec))),
+      discord: S4.srcStatic.discord,
+      boss: Object.fromEntries(Array.from(d3.rollup(dash.data('boss_1v1').data, (v) => d3.median(v, (r) => +r.boss_dps_m), (r) => r.spec))),
+      raid: S4.srcStatic.raid,
+    };
+    const pts = [];
+    S4.srcDefs.forEach((d) => {
+      const vals = Object.values(raw[d.key]); const base = d3.median(vals);
+      Object.entries(raw[d.key]).forEach(([spec, v]) => pts.push({ spec, src: d, value: v, rel: (v / base) * 100 }));
+    });
+    const specs = Array.from(d3.rollup(pts, (v) => ({ mean: d3.mean(v, (p) => p.rel), n: v.length }), (p) => p.spec), ([spec, o]) => ({ spec, ...o }))
+      .filter((s) => s.n >= 2).sort((a, b) => b.mean - a.mean);
+    return { pts: pts.filter((p) => specs.some((s) => s.spec === p.spec)), specs };
+  };
+  dash.draw('src-legend', (el) => {
+    el.replaceChildren();
+    S4.srcDefs.forEach((d) => {
+      const span = document.createElement('span');
+      const svg = d3.create('svg').attr('width', 14).attr('height', 14).style('vertical-align', '-2px').style('margin-right', '5px');
+      svg.append('path').attr('transform', 'translate(7,7)').attr('d', d3.symbol(d.shape, 70)()).style('fill', d.color);
+      span.append(svg.node(), d.label); el.appendChild(span);
+    });
+  });
+  dash.draw('src-compare', (el) => {
+    if (!S4.ready(el, ['cn_dummy', 'boss_1v1'])) return;
+    const { pts, specs } = S4.srcData();
+    el.replaceChildren();
+    const W = el.clientWidth || 600, rowH = 32, top = 8, bottom = 30;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
+    const order = specs.map((s) => s.spec);
+    const left = S4.textWidth(svg, order, 's4-lab') + 14, right = S4.textWidth(svg, ['평균 100 · 5개']) + 14;
+    const H = top + order.length * rowH + bottom;
+    svg.attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const lo = Math.min(40, Math.floor(d3.min(pts, (p) => p.rel) / 10) * 10), hi = Math.max(160, Math.ceil(d3.max(pts, (p) => p.rel) / 10) * 10);
+    const x = d3.scaleLinear().domain([lo, hi]).range([left, Math.max(left + 40, W - right)]);
+    const y = (spec) => top + order.indexOf(spec) * rowH + rowH / 2;
+    x.ticks(Math.max(3, Math.floor((x.range()[1] - left) / 70))).forEach((t) => {
+      svg.append('line').attr('x1', x(t)).attr('x2', x(t)).attr('y1', top).attr('y2', H - bottom).style('stroke', 'var(--cds-chart-grid)');
+      svg.append('text').attr('x', x(t)).attr('y', H - bottom + 18).attr('text-anchor', 'middle').text(t);
+    });
+    svg.append('line').attr('x1', x(100)).attr('x2', x(100)).attr('y1', top).attr('y2', H - bottom).style('stroke', 'var(--color-fg)').style('stroke-width', 1.5).style('stroke-dasharray', '4 3');
+    specs.forEach((s, i) => {
+      if (i % 2 === 0) svg.append('rect').attr('x', 0).attr('width', W).attr('y', top + i * rowH).attr('height', rowH).style('fill', 'var(--color-fg)').style('opacity', 0.03);
+      svg.append('text').attr('class', 's4-lab' + (S4.sel.includes(s.spec) ? ' is-focus' : '')).attr('x', left - 10).attr('y', y(s.spec) + 5).attr('text-anchor', 'end').text(s.spec);
+      svg.append('text').attr('x', W - right + 10).attr('y', y(s.spec) + 4).text(`평균 ${d3.format('.0f')(s.mean)} · ${s.n}개`);
+      const ext = d3.extent(pts.filter((p) => p.spec === s.spec), (p) => p.rel);
+      svg.append('line').attr('x1', x(ext[0])).attr('x2', x(ext[1])).attr('y1', y(s.spec)).attr('y2', y(s.spec)).style('stroke', 'var(--color-fg-muted)').style('stroke-width', 1.5).style('opacity', 0.5);
+    });
+    const tip = S4.tooltip(el);
+    const lines = (p) => [['', `${p.spec} · 상대값 ${d3.format('.0f')(p.rel)}`], ['출처', p.src.label], ['원래 값', `${S4.fmt(p.value)}M`]];
+    svg.append('g').selectAll('path').data(pts).join('path')
+      .attr('class', 's4-dot')
+      .attr('transform', (p) => `translate(${x(p.rel)},${y(p.spec)})`)
+      .attr('d', (p) => d3.symbol(p.src.shape, 95)())
+      .style('fill', (p) => p.src.color).style('stroke', 'var(--color-bg)').style('stroke-width', 1)
+      .on('pointerenter pointermove', (ev, p) => tip.show(ev, lines(p)))
+      .on('pointerleave', () => tip.hide())
+      .on('click', (ev, p) => { ev.stopPropagation(); tip.pin(ev, lines(p)); });
+    svg.on('click', () => tip.unpin());
   });
 
   function s4Scatter(el, cfg) {
