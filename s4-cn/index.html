@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>시즌4 클라 데이터 실측</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root {
+  --bg: #ECEEF2; --surface: #FFFFFF; --ink: #1C2130; --muted: #586074; --line: #CBD1DC;
+  --accent: #B8306F; --cyan: #17839B; --chip: #E1E5ED; --up: #1E7F4F; --down: #B3402E; --flat: #6B7285;
+  --f-display: "Do Hyeon", "IBM Plex Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #131722; --surface: #1B2030; --ink: #E5E8F0; --muted: #9AA2B6; --line: #2D3446;
+    --accent: #EC5C9F; --cyan: #4BC0D6; --chip: #252B3D; --up: #5FCB93; --down: #F08A78; --flat: #9AA2B6; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.65; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 40px max(16px, env(safe-area-inset-right, 0px)) 64px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 36px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+.eyebrow a { color: inherit; }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(30px, 6.5vw, 44px); line-height: 1.15; margin: 6px 0 8px; }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 24px; margin: 0 0 10px; padding-top: 12px; border-top: 3px solid var(--ink); }
+h3 { font-size: 16px; margin: 18px 0 6px; }
+p { margin: 0 0 8px; }
+.lede { color: var(--muted); }
+.cards { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.card b { display: block; font-size: 16px; margin-bottom: 2px; }
+.card span { color: var(--muted); font-size: 13.5px; }
+.note { background: var(--chip); border-left: 4px solid var(--accent); border-radius: 6px; padding: 10px 14px; font-size: 14px; }
+.scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 620px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; color: var(--muted); font-weight: 700; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+code, .src { font-family: var(--f-mono); font-size: 12px; color: var(--cyan); word-break: break-all; }
+.src { display: block; color: var(--muted); }
+.up { color: var(--up); font-weight: 700; } .down { color: var(--down); font-weight: 700; } .flat { color: var(--flat); font-weight: 700; }
+.tag { display: inline-block; font-size: 11.5px; padding: 1px 7px; border-radius: 99px; background: var(--chip); color: var(--muted); white-space: nowrap; }
+.tag.ok { color: var(--up); } .tag.cn { color: var(--accent); }
+ul { margin: 0 0 8px; padding-left: 20px; }
+li { margin-bottom: 4px; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 0; font-size: 14px; }
+dt { color: var(--muted); } dd { margin: 0; word-break: break-all; }
+footer { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><a href="../">BPSR 노트</a> · 시즌4 데이터</div>
+    <h1>시즌4 클라 데이터 실측</h1>
+    <p class="lede">중국 서버 클라이언트에 들어 있는 시즌4 수치를 한섭 시즌3 클라이언트와 표 단위로 비교한 결과입니다. 모든 항목에 어느 APK의 어느 표, 어느 행에서 읽었는지 적었습니다. 2026-11-17 기준.</p>
+  </header>
+
+  <section>
+    <h2>한눈에</h2>
+    <div class="cards">
+      <div class="card"><b>스킬 피해 계수는 거의 그대로</b><span>값이 바뀐 직업 스킬은 스톰블레이드 3종과 늑활 꼬리 휩쓸기뿐입니다. 얼창·매활은 한 행도 안 바뀌었습니다.</span></div>
+      <div class="card"><b>변화의 본체는 어빌리티</b><span>직업 어빌리티 설명 66건이 바뀌었고, 한섭 공지에 있는 항목은 같은 값으로 확인됩니다.</span></div>
+      <div class="card"><b>시즌4 신규 3종</b><span>계열별 세트 효과, 직업별 시즌 인자, 스킬별 「기원 대미지」 옵션. 한섭 공지에는 아직 없습니다.</span></div>
+      <div class="card"><b>쿨타임·자원은 2건</b><span>타이드풀 위치 조정 쿨 0.5초 신설, 광염난무의 적홍 25% 소모 삭제.</span></div>
+    </div>
+    <p class="note" style="margin-top:12px">읽을 때 주의: 이 수치는 <b>중국 서버 시즌4 후반(출시 약 4개월 뒤)</b> 값입니다. 한섭 시즌4(11월 19일)에 그대로 온다는 보장은 없습니다. <span class="tag ok">공지 일치</span>는 한섭 공식 공지와 같은 값, <span class="tag cn">중국판만</span>은 중국판 클라에만 있는 값입니다.</p>
+  </section>
+
+  <section>
+    <h2>출처</h2>
+    <h3>비교한 두 클라이언트</h3>
+    <div class="scroll"><table>
+      <tr><th></th><th>중국판 (새 값)</th><th>한섭 (이전 값)</th></tr>
+      <tr><td>APK</td><td><code>com.tencent.wlfz_194.apk</code><br>星痕共鸣, 텐센트 应用宝 배포</td><td><code>asia.xdg.game.gp.bpsr</code><br>Google Play 배포</td></tr>
+      <tr><td>버전</td><td>1.3.43057 (versionCode 194)<br>빌드 <code>1.3.43057.144_C46830_R46830</code>, 2026-11-13</td><td>1.0.43142<br>빌드 <code>1.0.43142.15</code>, 2026-10-28</td></tr>
+      <tr><td>APK 검증</td><td>md5 <code>6dee6b620657452c9844b0da3240c885</code> (스토어 표기와 일치), 205,487,944바이트</td><td>2026-11-13 추출본</td></tr>
+      <tr><td>시즌</td><td>시즌4 「빛을 되짚는 기원」 진행 중, 시즌5 미개시</td><td>시즌3</td></tr>
+      <tr><td>데이터 위치</td><td colspan="2">APK 자체에는 수치가 없습니다. 게임이 실행 후 내려받는 리소스 폴더<br><code>/sdcard/Android/data/&lt;패키지&gt;/files/Resources/</code> 안의 <code>meta.pkg</code>(색인), <code>m0.pkg</code>(기본 표 묶음), <code>Patch/&lt;표 번호&gt;.bytes</code>(패치된 표)에서 읽었습니다. 같은 번호가 둘 다 있으면 Patch 쪽을 씁니다.</td></tr>
+    </table></div>
+
+    <h3>근거로 쓴 표</h3>
+    <p>표 이름은 클라에 평문으로 없어 파일 번호로 부릅니다. 번호는 두 클라에서 같습니다. 아래 본문의 <code>표 번호 · 행 ID</code> 표기는 이 표를 가리킵니다.</p>
+    <div class="scroll"><table>
+      <tr><th>표</th><th>파일 번호</th><th>읽은 열</th></tr>
+      <tr><td>한국어 문자열</td><td><code>1850826906</code></td><td>문자열 ID → 문장. 중국판에도 한국어가 통째로 들어 있음</td></tr>
+      <tr><td>피해 계수 (DamageAttrTable)</td><td><code>1708172942</code></td><td>+28 단계별 계수(1/10000), +32 고정 가산, +36 타수, +68 분류 태그</td></tr>
+      <tr><td>스킬 레벨 (SkillFightLevelTable)</td><td><code>2264782525</code></td><td>행 = 스킬 ID×100+레벨, +24 소모 항목, +29 쿨타임</td></tr>
+      <tr><td>스킬 (SkillTable)</td><td><code>3004324915</code></td><td>스킬 ID, 이름·설명 문자열</td></tr>
+      <tr><td>버프·어빌리티 (BuffTable)</td><td><code>983121143</code></td><td>+16 설명 문자열, 어빌리티 ID = 버프 ID</td></tr>
+      <tr><td>어빌리티 설명 대응</td><td><code>4192598123</code></td><td>어빌리티 ID → 문자열 ID</td></tr>
+      <tr><td>인자</td><td><code>2553675475</code></td><td>+12 효과 배열 (버프 ID, 레벨)</td></tr>
+      <tr><td>기원 대미지 옵션</td><td><code>2500308054</code></td><td>행 = 그룹×100+단계, +4 효과, +8 값(1/100 %). 중국판 신규 표</td></tr>
+    </table></div>
+    <p style="margin-top:8px">한섭 공지 대조는 공식 시즌4 직업 변경 공지를 정리한 자료를 기준으로 했습니다.</p>
+  </section>
+
+  <section>
+    <h2>피해 계수가 바뀐 스킬</h2>
+    <p>피해 계수 표 <code>1708172942</code>의 +28 열을 두 클라에서 행 ID로 맞춰 비교했습니다. 계수가 달라진 행은 185개인데, 직업 스킬은 아래뿐이고 나머지는 몬스터·던전·시즌 공용 효과입니다.</p>
+    <div class="scroll"><table>
+      <tr><th>직업</th><th>스킬</th><th>시즌3 → 시즌4</th><th>근거 행</th><th>대조</th></tr>
+      <tr><td>스톰블레이드</td><td>월영</td><td>50% → <b class="up">300%</b></td><td><code>117150102</code> 등 8행 (5000 → 30000)</td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>스톰블레이드</td><td>용섬</td><td>510% → <b class="up">700%</b><br>(1타 102% → 140%, 5타)</td><td><code>117350103</code> (10200 → 14000), <code>117350105</code>·<code>106</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>스톰블레이드</td><td>그림자 베기</td><td>450% → <b class="up">600%</b><br>(1타 105% → 140%)</td><td><code>117360102</code> (10500 → 14000)</td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>디바인 아처 (늑활)</td><td>꼬리 휩쓸기</td><td>80% → <b class="down">72%</b></td><td><code>1044123110</code> (8000 → 7200), 문구 <code>3401139</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>프로스트 메이지</td><td>전 스킬</td><td class="flat">변화 없음</td><td>112·312 대역 전체. 변경 0, 추가 0, 삭제 0</td><td>표 확인</td></tr>
+      <tr><td>디바인 아처 (매활)</td><td>전 스킬</td><td class="flat">변화 없음</td><td>122·322 대역 전체. 변경 0, 추가 0, 삭제 0</td><td>표 확인</td></tr>
+    </table></div>
+
+    <h3>쿨타임·자원</h3>
+    <div class="scroll"><table>
+      <tr><th>스킬</th><th>변경</th><th>근거</th></tr>
+      <tr><td>타이드풀 위치 조정 (프로스트 메이지)</td><td>쿨타임 0 → 0.5초</td><td>표 <code>2264782525</code> 행 <code>123701</code> +29</td></tr>
+      <tr><td>광염난무 (트윈 스트라이커)</td><td>적홍 25% 소모 삭제</td><td>표 <code>2264782525</code> 행 <code>161301</code>~<code>161330</code> +24, 항목 <code>(4, 13021, 2500)</code> 삭제</td></tr>
+    </table></div>
+    <p style="margin-top:8px">스킬 레벨 표는 단순 비교하면 1,473행이 달라 보이지만, 배열 위치가 밀려 생긴 거짓 변경입니다. 배열 내용을 풀어 비교하면 위 두 건만 남습니다.</p>
+  </section>
+
+  <section>
+    <h2>전 직업 요약</h2>
+    <p>어빌리티 문구는 한국어 문자열 표 <code>1850826906</code>, 계수는 피해 계수 표 <code>1708172942</code> 기준입니다. 방향은 수치로 판단한 것이고, 구조가 바뀌어 판단할 수 없는 것은 ◇로 적었습니다.</p>
+    <div class="scroll"><table>
+      <tr><th>직업</th><th>계열</th><th>핵심 변화</th><th>방향</th></tr>
+      <tr><td>스톰블레이드</td><td>발도</td><td>용섬 510→700%, 그림자 베기 450→600%, 비뢰신 광역 2배 / 뇌절 다중 타격 제한</td><td class="up">상향</td></tr>
+      <tr><td>스톰블레이드</td><td>월광</td><td>월영 50→300%, 번개의 힘 22→28, 뇌격이 행운 발동</td><td class="up">상향</td></tr>
+      <tr><td>프로스트 메이지</td><td>얼창</td><td>지력 버프 55→71, 치명 지속 6→10초, 자신 치명 +5%, 코멧 행운 연동 / 날카로운 추위 265→345</td><td class="up">상향</td></tr>
+      <tr><td>프로스트 메이지</td><td>얼빔</td><td>속공 +10000, 파이널 레이 확정, 숙련 전환 3.5% / 콜드 펄스 상한 300%</td><td class="up">상향</td></tr>
+      <tr><td>윈드 나이트</td><td>질풍</td><td>나선 선풍 상한 제거·광역, 용포 확정 / 숙련 전환 3→2.55%</td><td class="flat">중립~소폭 상향</td></tr>
+      <tr><td>윈드 나이트</td><td>난무</td><td>시작 에너지 가득, 자신 속공 +15% / 파티 속공 삭제</td><td class="up">소폭 상향</td></tr>
+      <tr><td>버던트 오라클</td><td>심판</td><td>행운의 일격 +30%, 가시 전파</td><td class="up">상향(본인)</td></tr>
+      <tr><td>버던트 오라클</td><td>치유</td><td>고무 135→175, 꽃말 고무 2배, 편의 개선</td><td class="up">상향(파티)</td></tr>
+      <tr><td>디바인 아처</td><td>매활</td><td>속공 전환 3배, 치피 +20%, 봄버 타수 속공 연동 / 꿰뚫는 눈 자신 전용, 발동 조건 빛 원소 한정</td><td class="up">상향(본인)</td></tr>
+      <tr><td>디바인 아처</td><td>늑활</td><td>꼬리 휩쓸기 80→72%, 환영 늑대 주기화 / 속공 전환 3배</td><td class="flat">중립~소폭 하향</td></tr>
+      <tr><td>헤비 가디언</td><td>가드</td><td>숙련 +25000, 방어 전환 상향</td><td class="up">상향</td></tr>
+      <tr><td>헤비 가디언</td><td>암석 방패</td><td>방어 전환 상향, 분노의 바위 650→800% (문구만 확인)</td><td class="up">상향</td></tr>
+      <tr><td>실드 나이트</td><td>두 계열</td><td>막기 2배, 광명의 방패 치명, 편의 개선</td><td class="up">상향</td></tr>
+      <tr><td>비트 퍼포머</td><td>음파</td><td>어텐션 쿨 감소, 행운 배율 1.3배</td><td class="up">상향</td></tr>
+      <tr><td>비트 퍼포머</td><td>협주</td><td>버프 20명 / 앵콜 연발 0.3초 제한</td><td class="flat">중립~상향</td></tr>
+      <tr><td>트윈 스트라이커</td><td>무상</td><td>숙련 0.2→0.26%, 무상화참 방어 무시</td><td class="up">상향</td></tr>
+      <tr><td>트윈 스트라이커</td><td>적홍</td><td>게이지 구조 전면 개편, 광염난무 적홍 소모 제거</td><td class="flat">◇ 전면 개편</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>얼창 (프로스트 메이지 · 스피어)</h2>
+    <h3>어빌리티 변경</h3>
+    <div class="scroll"><table>
+      <tr><th>어빌리티</th><th>시즌3 → 시즌4</th><th>근거 (문자열 표 1850826906)</th><th>대조</th></tr>
+      <tr><td>미스틱 아이스 능력 부여</td><td>소모당 지력 +55 → <b class="up">+71</b></td><td>어빌리티 <code>2204500</code> · 문자열 <code>1614099555</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>얼음 창 치명타</td><td>치피 +1.5% 지속 6초 → <b class="up">10초</b></td><td><code>2204440</code> · <code>1614098598</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>냉기 치명타</td><td>파티원 치명 +3% → <b class="up">자신 치명 +5%</b></td><td><code>2204470</code> · <code>1614098697</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>프로스트 코멧</td><td>21% 고정 → <b class="up">행운% (최소 21%)</b>, 추가 목표당 최종 피해 +30% (최대 300%)</td><td><code>2204140</code> · <code>1614095331</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>끝없는 혹한</td><td>메테오 스톰 피해 증가 상한 <b class="up">삭제</b></td><td><code>2204370</code> · <code>1614097608</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>폭설</td><td>워터 볼 시전마다 5초간 에너지 80 회복 <b class="up">추가</b></td><td><code>2204130</code> · <code>1614095298</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>날카로운 추위</td><td>지력 265당 치피 0.5% → <b class="down">345당</b></td><td><code>2204480</code> · <code>1614098730</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+    </table></div>
+
+    <h3>시즌4 세트 효과 <span class="tag cn">중국판만</span></h3>
+    <div class="scroll"><table>
+      <tr><th>세트</th><th>효과</th><th>근거</th></tr>
+      <tr><td>2세트</td><td>프로스트 스피어와 메테오 스톰의 치명타 대미지 +15%</td><td>어빌리티 <code>2402160</code> · 문자열 <code>1692294309</code></td></tr>
+      <tr><td>4세트</td><td>행운의 일격 80회마다 다음 공격이 블리자드 발동 (10초에 1회). 블리자드마다 지력 +2.5%, 15초, 최대 3스택</td><td><code>2402170</code> · <code>1692294342</code></td></tr>
+    </table></div>
+
+    <h3>시즌 인자 중 얼창 관련 <span class="tag cn">중국판만</span></h3>
+    <p>인자 표 <code>2553675475</code>의 프로스트 메이지 14개 중 얼창 스킬에 걸리는 것입니다. 장착해서 고르는 효과입니다.</p>
+    <div class="scroll"><table>
+      <tr><th>효과</th><th>근거 (버프 ID · 문자열 ID)</th></tr>
+      <tr><td>퍼마프로스트 동안 치명타 −5%, 행운 +8%, 행운의 일격 기원 대미지 +35%</td><td><code>3052460</code> · <code>685669930</code></td></tr>
+      <tr><td>끝없는 혹한 동안 퍼마프로스트 쿨타임 회복 속도 +30%</td><td><code>3052470</code> · <code>685669963</code></td></tr>
+      <tr><td>프로스트 스피어가 치명타와 행운을 동시에 발동하면 환빙 1스택, 15스택에 워터 볼 시전</td><td><code>3052480</code> · <code>685669996</code></td></tr>
+      <tr><td>퍼마프로스트 동안 미스틱 아이스 최대치 +2, 프로스트 스피어 기원 대미지 +10%</td><td><code>3052490</code> · <code>685670029</code></td></tr>
+      <tr><td>끝없는 혹한 동안 공격 속도 +50%, 대신 프로스트 스피어 시전 불가. 퍼마프로스트 중 혹한 카운트 획득 2배</td><td><code>3052500</code> · <code>685670821</code></td></tr>
+      <tr><td>끝없는 혹한 중에도 메테오 스톰의 아이스 애로우로 미스틱 아이스 획득. 퍼마프로스트·혹한 중 프로스트 스피어 최종 대미지 +(행운%×치명타%)</td><td><code>3052510</code> · <code>685670854</code></td></tr>
+      <tr><td>프로즌 게일 명중 시 퍼마프로스트 획득 (2초 + 명중 대상 수, 최대 10초)</td><td><code>3052540</code> · <code>685670953</code></td></tr>
+      <tr><td>아이스 애로우가 행운의 일격 발동 가능. 퍼마프로스트 동안 행운의 일격 최종 대미지 +30%</td><td><code>3052560</code> · <code>685671019</code></td></tr>
+      <tr><td>(방어) 퍼마프로스트 동안 기원 대미지 감면 +20%</td><td><code>3052580</code> · <code>685671085</code></td></tr>
+      <tr><td>(방어) 미스틱 아이스·아이스 에너지 소모 시 기원 대미지 감면 +1%, 최대 10스택, 5초</td><td><code>3052590</code> · <code>685671118</code></td></tr>
+    </table></div>
+
+    <h3>기원 대미지 옵션 <span class="tag cn">중국판만</span></h3>
+    <p>「[스킬] 기원 대미지 +X%」 옵션의 값입니다. 표 <code>2500308054</code>에서 직접 읽었습니다.</p>
+    <div class="scroll"><table>
+      <tr><th>스킬</th><th>1단계</th><th>11단계</th><th>근거 행</th></tr>
+      <tr><td>프로스트 스피어</td><td>0.96%</td><td><b>7.2%</b></td><td><code>20301</code>, <code>20311</code> (버프 <code>3052602</code>)</td></tr>
+      <tr><td>메테오 스톰</td><td>1.49%</td><td><b>11.2%</b></td><td><code>20601</code>, <code>20611</code> (버프 <code>3052605</code>)</td></tr>
+      <tr><td>프로스트 코멧</td><td>2.67%</td><td><b>20%</b></td><td><code>21501</code>, <code>21511</code> (버프 <code>3052614</code>)</td></tr>
+    </table></div>
+    <p style="margin-top:8px">기본값은 11단계 20%이고 일부 스킬만 낮습니다. 자주 쓰는 주력 스킬일수록 낮게 매긴 것으로 보이지만 이는 해석이며, 이 옵션이 어떤 장비에 붙는지는 확인하지 못했습니다.</p>
+  </section>
+
+  <section>
+    <h2>매활 (디바인 아처 · 맹금 조련사)</h2>
+    <h3>어빌리티 변경</h3>
+    <div class="scroll"><table>
+      <tr><th>항목</th><th>시즌3 → 시즌4</th><th>근거 (문자열 표 1850826906)</th><th>대조</th></tr>
+      <tr><td>민첩 전환 (공통)</td><td>민첩 10당 속공 7 → <b class="up">21</b></td><td>문자열 <code>1165359226</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>떨어지는 빛</td><td>치명 1%당 치피 0.5% → <b class="up">치피 +20%, 치명 1%당 0.4%</b></td><td>어빌리티 <code>2203220</code> · <code>1614060417</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>속공 폭격</td><td>강철 부리 자연 감소 없음 → <b class="up">속공 4%당 라이트 봄버 타수 +1</b></td><td><code>2203660</code> · <code>1614064905</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>하늘에서 떨어지는 별</td><td>팔콘 출격 시 30% → <b class="up">출격 피해 3회마다</b> 약점 조준</td><td><code>2203190</code> · <code>1614059559</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>환영 팔콘</td><td>내폭 5회마다 → 2초마다 다음 내폭 때 소환, 내폭당 다음 팔콘 원소 피해 +20%</td><td><code>2203530</code> · <code>1614063717</code></td><td><span class="tag ok">공지 일치</span> ◇</td></tr>
+      <tr><td>꿰뚫는 눈・샤이닝 애로우</td><td>취약 → <b class="down">취약 (자신에게만)</b></td><td>문자열 <code>1505374838</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>팔콘 출격·익스플로전 샷 발동 조건</td><td>클래스 스킬 → <b class="down">자신의 빛 원소 클래스 스킬</b></td><td>문자열 <code>1165359300</code>, <code>1505374936</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+      <tr><td>강철 부리</td><td>치명타 때 → 메인 타겟에게 치명타 때 부여</td><td><code>2203520</code> · <code>1614063684</code></td><td><span class="tag ok">공지 일치</span></td></tr>
+    </table></div>
+
+    <h3>시즌4 세트 효과 <span class="tag cn">중국판만</span></h3>
+    <div class="scroll"><table>
+      <tr><th>세트</th><th>효과</th><th>근거</th></tr>
+      <tr><td>2세트</td><td>빛의 의지・쿼드러플 애로우 시전 시 치명타 대미지 +3%, 10초, 최대 4스택</td><td>어빌리티 <code>2405270</code> · 문자열 <code>1692403242</code></td></tr>
+      <tr><td>4세트</td><td>정신 집중 동안 폭발 화살이 터질 때마다 터뜨린 스택 수만큼 라이트 봄버 쿨타임 감소 (스택당 0.5초, 최대 10초)</td><td><code>2405280</code> · <code>1692403275</code></td></tr>
+    </table></div>
+    <p style="margin-top:8px">기원 대미지 옵션 11단계: 팔콘 출격 5.6%, 내폭 9.6%, 스톰 애로우·차지 샷·샤이닝 애로우 17.3%, 나머지 20% (표 <code>2500308054</code>, 직업 코드 11).</p>
+  </section>
+
+  <section>
+    <h2>시즌4에서 새로 생기는 것</h2>
+    <div class="scroll"><table>
+      <tr><th>종류</th><th>내용</th><th>근거</th></tr>
+      <tr><td>기원 대미지</td><td>시즌4의 시즌 속성 피해. 「기원 대미지 감면」은 그에 대한 방어. 관련 문구 207건</td><td>문자열 표 <code>1850826906</code>, 시즌 이름 <code>930449946</code>, 시즌 강도 <code>319993356</code></td></tr>
+      <tr><td>세트 효과</td><td>계열마다 2세트·4세트. 18계열 36건</td><td>버프 표 <code>983121143</code>, 어빌리티 ID 2401xxx~2409xxx</td></tr>
+      <tr><td>시즌 인자</td><td>직업마다 14개 (공격·운용 12 + 방어 2), 버던트 오라클만 13개. 공통 방어 인자 4개</td><td>인자 표 <code>2553675475</code>, 버프 ID 3050xxx~3060xxx</td></tr>
+      <tr><td>스킬별 기원 옵션</td><td>「[스킬] 기원 대미지 +X%」, 1~11단계. 178개</td><td>표 <code>2500308054</code> (중국판 신규, 2,332행)</td></tr>
+      <tr><td>행운 효과 분류</td><td>무기별 행운의 일격, 프로스트 코멧 등이 새 분류로 바뀜 (태그 88 → 107, 해석은 추정)</td><td>피해 계수 표 <code>1708172942</code> +68, 행 <code>112590101</code> 등</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>믿을 수 있는 정도</h2>
+    <h3>확인된 것</h3>
+    <ul>
+      <li>피해 계수·쿨타임·자원 변경은 표 값을 직접 비교했고, 서로 다른 두 번의 분석에서 같은 결과가 나왔습니다.</li>
+      <li>한섭 공지에 있는 어빌리티 변경은 중국판 문구에서 같은 값으로 확인됩니다.</li>
+    </ul>
+    <h3>한계</h3>
+    <ul>
+      <li><b>어빌리티 수치는 설명 문구로만 확인했습니다.</b> 문구의 숫자가 들어 있는 실제 효과 데이터는 찾지 못했습니다.</li>
+      <li><b>피해 공식은 클라에 없습니다.</b> 세트·인자·기원 옵션이 실제 딜을 얼마나 올리는지는 이 자료로 계산할 수 없습니다. 계열 간 강약은 실측 기록(<a href="../s4-dps/">시즌4 계열별 DPS</a>)을 함께 보셔야 합니다.</li>
+      <li>세트·인자·기원 옵션은 한섭 공지에 없는 중국판 값입니다. 한섭에 다른 값으로 오거나 늦게 올 수 있습니다.</li>
+      <li>어빌리티 트리에서 어느 노드가 기본 적용이고 어느 것이 선택형인지는 풀지 못했습니다.</li>
+      <li>기원 옵션이 어떤 장비·아이템에 붙는지 모릅니다.</li>
+    </ul>
+    <p class="note">한섭 시즌4 패치(11월 19일) 뒤 한섭 클라를 다시 뽑아 비교하면 「중국판만」 항목의 한섭 적용 여부가 확정됩니다.</p>
+  </section>
+
+  <footer>비교 방법: 두 클라의 표를 행 ID로 맞추고, 배열을 가리키는 열은 내용으로 풀어서 비교했습니다. 게임 데이터의 권리는 각 권리자에게 있으며, 이 페이지는 개인 플레이 참고용 정리입니다.</footer>
+</div>
+</body>
+</html>
