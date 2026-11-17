@@ -183,6 +183,29 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
     </div>
   </section>
 
+  <section class="s4-sec" id="tier">
+    <h2>계열 티어: 능력 점수 80k로 맞춘 허수아비 DPS</h2>
+    <p>기록마다 능력 점수가 달라 그대로 비교하면 장비 좋은 기록이 많은 계열이 높게 나옵니다. 그래서 모든 기록을 <b>능력 점수 80,000 기준으로 환산</b>했습니다. 같은 계열 안에서 능력 점수가 오를 때 DPS가 얼마나 오르는지(<span data-draw="tier-slope">—</span>)를 전 계열 공통으로 구해 적용한 값입니다.</p>
+    <div class="s4-pick">
+      <label class="s4-pickrow" for="tier-weapon"><span class="s4-muted s4-small">무기 조건</span>
+        <select id="tier-weapon" onchange="S4.tierMode = this.value; ['tier-strip', 'tier-rows'].forEach((n) => dash.draw(n));">
+          <option value="all">전체</option>
+          <option value="nohae">먼바다 무기(해무기) 제외</option>
+          <option value="raid">레이드 무기만</option>
+        </select>
+      </label>
+      <span class="s4-legend"><span>세로선 = 계열 중앙값</span><span>회색 띠 = 전체 기준값 ±7%</span><span>빈 점 = 자동 전투 기록</span></span>
+    </div>
+    <div class="s4-chart dash-skeleton" data-draw="tier-strip" data-source="cn_dummy" role="img" aria-label="능력 점수 80k 기준으로 환산한 계열별 허수아비 DPS 점 그림"></div>
+    <div class="s4-tablewrap">
+      <table class="s4-table">
+        <thead><tr><th>계열</th><th>티어</th><th class="n">환산 중앙값(M)</th><th class="n">환산 범위(M)</th><th class="n">건수</th><th class="n">업로더</th><th class="n">원 중앙값(M)</th></tr></thead>
+        <tbody data-draw="tier-rows" data-source="cn_dummy"></tbody>
+      </table>
+    </div>
+    <p class="s4-muted s4-small">티어는 기준값(3건 이상인 계열들의 환산 중앙값의 중앙값) 대비 +7% 이상이면 상위, −7% 이하면 하위, 그 사이는 중위입니다. 같은 계열 안에서도 환산값이 표준편차 10% 안팎으로 흩어지므로, 중위 안의 순서와 ±7% 경계 근처 계열은 뒤바뀔 수 있습니다. 3건 미만은 표본 부족으로 표시했습니다. 능력 점수를 읽지 못한 기록과 70k 미만 기록은 뺐습니다. 허수아비는 단일 대상이라 광역 강점은 반영되지 않습니다.</p>
+  </section>
+
   <section class="s4-sec" id="cn-chart">
     <h2>중섭 시즌4 허수아비 DPS, 기록 하나가 점 하나</h2>
     <div class="s4-filters" id="cn-filters">
@@ -732,6 +755,58 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
       rows, order, valueKey: 'dps_m', medians: sum, hollow: (r) => r.early, tag: S4.gearTag,
       rightLabel: (spec) => { const s = bySpec.get(spec); return s.median != null ? `중앙 ${S4.fmt(s.median)}M · ${s.n}건` : `${s.n}건(중앙값 없음)`; },
       tipLines: S4.tipLines,
+    });
+  });
+
+
+  // 티어: 계열 고정효과를 뺀 공통 기울기(log DPS ~ 능력 점수)로 80k 기준 환산
+  S4.tierMode = 'all';
+  S4.tier = function () {
+    const REF = 80000;
+    const base = dash.data('cn_dummy').data.filter((r) => r.status === '포함' && r.dps_m != null && r.ability != null && +r.ability >= 70000)
+      .map((r) => ({ ...r, dps_m: +r.dps_m, ability: +r.ability, auto: /자동/.test((r.note || '') + (r.stats_note || '')) }));
+    let num = 0, den = 0;
+    d3.group(base, (r) => r.spec).forEach((v) => {
+      if (v.length < 2) return;
+      const mx = d3.mean(v, (r) => r.ability), my = d3.mean(v, (r) => Math.log(r.dps_m));
+      v.forEach((r) => { num += (r.ability - mx) * (Math.log(r.dps_m) - my); den += (r.ability - mx) ** 2; });
+    });
+    const b = den ? num / den : 0;
+    const keep = { all: () => true, nohae: (r) => r.weapon !== '해무기', raid: (r) => r.weapon === '레이드 무기' }[S4.tierMode];
+    const rows = base.filter(keep).map((r) => ({ ...r, adj: r.dps_m * Math.exp(b * (REF - r.ability)) }));
+    const specs = Array.from(d3.group(rows, (r) => r.spec), ([spec, v]) => ({
+      spec, n: v.length, median: d3.median(v, (r) => r.adj), min: d3.min(v, (r) => r.adj), max: d3.max(v, (r) => r.adj),
+      raw: d3.median(v, (r) => r.dps_m), uploaders: new Set(v.map((r) => r.uploader)).size,
+    })).sort((x, y) => y.median - x.median);
+    const ref = d3.median(specs.filter((s) => s.n >= 3), (s) => s.median) ?? d3.median(specs, (s) => s.median);
+    specs.forEach((s) => { s.tier = s.n < 3 ? '표본 부족' : s.median >= ref * 1.07 ? '상위' : s.median <= ref * 0.93 ? '하위' : '중위'; });
+    return { rows, specs, ref, per1k: Math.exp(b * 1000) - 1 };
+  };
+  dash.draw('tier-slope', (el) => {
+    if (dash.data('cn_dummy').status !== 'ok') return;
+    el.textContent = `능력 점수 1,000당 약 +${d3.format('.1f')(S4.tier().per1k * 100)}%`;
+  });
+  dash.draw('tier-strip', (el) => {
+    if (!S4.ready(el, ['cn_dummy'])) return;
+    const t = S4.tier();
+    if (!t.rows.length) { el.replaceChildren(); el.textContent = '조건에 맞는 기록이 없습니다.'; return; }
+    const by = new Map(t.specs.map((s) => [s.spec, s]));
+    s4Strip(el, {
+      rows: t.rows, order: t.specs.map((s) => s.spec), valueKey: 'adj', medians: t.specs, hollow: (r) => r.auto,
+      band: [t.ref * 0.93, t.ref * 1.07],
+      rightLabel: (spec) => { const s = by.get(spec); return `${s.tier} · ${S4.fmt(s.median)}M · ${s.n}건`; },
+      tipLines: (r) => [['80k 환산', `${S4.fmt(r.adj)}M (원 기록 ${S4.fmt(r.dps_m)}M)`], ...S4.tipLines(r).slice(1)],
+    });
+  });
+  dash.draw('tier-rows', (tb) => {
+    if (dash.data('cn_dummy').status !== 'ok') return;
+    tb.replaceChildren();
+    S4.tier().specs.forEach((s) => {
+      const tr = document.createElement('tr');
+      s4Cell(tr, s.spec); s4Cell(tr, s.tier);
+      s4Cell(tr, S4.fmt(s.median), 'n'); s4Cell(tr, `${S4.fmt(s.min)}~${S4.fmt(s.max)}`, 'n');
+      s4Cell(tr, String(s.n), 'n'); s4Cell(tr, String(s.uploaders), 'n'); s4Cell(tr, S4.fmt(s.raw), 'n');
+      tb.appendChild(tr);
     });
   });
 
