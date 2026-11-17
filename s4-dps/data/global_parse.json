@@ -1,0 +1,62 @@
+{
+ "rows": [
+  {
+   "id": "g-1",
+   "spec": "난무",
+   "date": "2026-10-28",
+   "uploader": "whoisaqua BPSR",
+   "video": "zlLrcDCI_H4",
+   "dps_m": 3.02,
+   "gear": 320,
+   "title": "Skyward 3.02M DPS Parse at Lv320 Gear (Season 4)",
+   "note": "",
+   "url": "https://www.youtube.com/watch?v=zlLrcDCI_H4"
+  },
+  {
+   "id": "g-2",
+   "spec": "적홍",
+   "date": "2026-11-16",
+   "uploader": "takumi",
+   "video": "fCoYeQjUNk8",
+   "dps_m": 4.44,
+   "gear": 340,
+   "title": "Crimson Spec Twin Axe 3min DPS Parse 340 gear 4.44mil - Blue Protocol Star Resonance SEASON 4",
+   "note": "",
+   "url": "https://www.youtube.com/watch?v=fCoYeQjUNk8"
+  },
+  {
+   "id": "g-3",
+   "spec": "무상",
+   "date": "2026-10-28",
+   "uploader": "takumi",
+   "video": "zskFAjlxOOQ",
+   "dps_m": 2.51,
+   "gear": 320,
+   "title": "Formless Spec Twin Axe 3min DPS Parse - End of 320 gear 2.51mil - Blue Protocol Star Resonance S4",
+   "note": "같은 업로더의 10/14 1.6M(J0QAtz7ThzI) 갱신본",
+   "url": "https://www.youtube.com/watch?v=zskFAjlxOOQ"
+  },
+  {
+   "id": "g-4",
+   "spec": "음파",
+   "date": "2026-10-26",
+   "uploader": "leafmelon",
+   "video": "B09hUpQit3Y",
+   "dps_m": 2.06,
+   "gear": 320,
+   "title": "Blue Protocol Star Resonance - Dissonance 320 Gear 2.06M",
+   "note": "제목에 시즌 표기 없음. 320 장비는 S4 장비",
+   "url": "https://www.youtube.com/watch?v=B09hUpQit3Y"
+  }
+ ],
+ "meta": [
+  {
+   "label": "수집 경로",
+   "value": "YouTube 검색(「bpsr season 4 dps parse」 등), 2026-11-16~17 조회. 날짜·업로더는 영상 페이지 publishDate·채널명"
+  },
+  {
+   "label": "서버",
+   "value": "글로벌 서버 시즌4(2026-10-08 시작). 매활·얼창 등 나머지 계열 시즌4 Parse 영상은 찾지 못함"
+  }
+ ]
+}

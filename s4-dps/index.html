@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BPSR 시즌4 계열별 DPS</title>
+<meta name="description" content="중섭·글섭 시즌4 허수아비 Parse와 보스 1:1 기록을 기록별 출처와 함께 정리">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* 레이아웃: BPSR 노트와 같은 팔레트, 넓은 한 칼럼 */
+:root {
+  --color-bg: #ECEEF2; --color-panel: #FFFFFF; --color-fg: #1C2130; --color-fg-muted: #586074; --color-border-line: #CBD1DC;
+  --color-ok: #1F7A4D; --color-warn: #9A6200; --color-bad: #B42318;
+  --s1: #B8306F; --s2: #17839B;
+  --font-anthropic-sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-anthropic-serif: "Do Hyeon", "IBM Plex Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --cds-font-size-caption: 13px; --cds-font-size-body: 15px; --cds-font-size-heading: 22px; --cds-font-size-title: clamp(30px, 6vw, 44px);
+  --cds-font-weight-medium: 700;
+  --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 14px; --cds-gap-lg: 20px; --cds-gap-xl: 40px;
+  --cds-pad-xs: 4px; --cds-pad-sm: 8px; --cds-pad-md: 12px; --cds-pad-lg: 18px; --cds-pad-xl: 28px;
+  --cds-radius: 10px;
+  --cds-chart-muted: #9AA2B6; --cds-chart-grid: #DDE1E8; --cds-chart-axis: #B5BCC9; --cds-chart-reference: #9AA2B6;
+  --cds-text-secondary: #586074;
+  --cds-surface-popover: #FFFFFF; --cds-border: #CBD1DC; --cds-shadow-popover: 0 6px 24px rgba(28, 33, 48, .18);
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #131722; --color-panel: #1B2030; --color-fg: #E5E8F0; --color-fg-muted: #9AA2B6; --color-border-line: #2D3446;
+    --color-ok: #4CC38A; --color-warn: #E0A43B; --color-bad: #F07167;
+    --s1: #EC5C9F; --s2: #4BC0D6;
+    --cds-chart-muted: #5C6478; --cds-chart-grid: #262C3C; --cds-chart-axis: #3A4256; --cds-chart-reference: #7A839A;
+    --cds-text-secondary: #9AA2B6;
+    --cds-surface-popover: #222839; --cds-border: #3A4256; --cds-shadow-popover: 0 6px 24px rgba(0, 0, 0, .5);
+    color-scheme: dark;
+  }
+}
+body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); font-size: 15px; line-height: 1.6; }
+.site { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; display: flex; flex-direction: column; gap: 20px; }
+.site-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; font-size: 13px; color: var(--color-fg-muted); }
+.site-nav a { color: inherit; }
+.dash-select { font: inherit; font-size: 14px; color: var(--color-fg); background-color: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: 8px; padding: 4px 8px; }
+.dash-select:focus-visible, .s4 a:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="site">
+  <nav class="site-nav"><a href="../">← BPSR 노트</a><span>원자료: <a href="data/cn_dummy.json">cn_dummy.json</a> · <a href="data/boss_1v1.json">boss_1v1.json</a> · <a href="data/global_parse.json">global_parse.json</a></span></nav>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spec_cn": "鹰弓", "date": "2026-10-16", "dps_m": 5.9, "status": "포함", "note": "", "title": "【星痕共鸣】鹰弓无波动590w秒伤打桩", "uploader": "湛澜的星空", "video": "BV1RBJX6dEM8", "url": "https://www.bilibili.com/video/BV1RBJX6dEM8"}, {"id": "cn-002", "spec": "매활", "spec_cn": "鹰弓", "date": "2026-10-12", "dps_m": 6.27, "status": "포함", "note": "", "title": "【星痕共鸣】鹰弓380海武全红词条木桩627w秒伤", "uploader": "湛澜的星空", "video": "BV1rdpd6QEGZ", "url": "https://www.bilibili.com/video/BV1rdpd6QEGZ"}, {"id": "cn-003", "spec": "매활", "spec_cn": "鹰弓", "date": "2026-10-10", "dps_m": 5.5, "status": "포함", "note": "", "title": "【星痕共鸣】鹰弓380海武全红词条无波动木桩550w秒伤", "uploader": "湛澜的星空", "video": "BV1x2pY68Exy", "url": "https://www.bilibili.com/video/BV1x2pY68Exy"}, {"id": "cn-004", "spec": "매활", "spec_cn": "鹰弓", "date": "2026-10-10", "dps_m": 5.48, "status": "포함", "note": "", "title": "【星痕共鸣】全红词条380海武鹰弓无波动秒伤548万", "uploader": "湛澜的星空", "video": "BV1N8pe6cEBq", "url": "https://www.bilibili.com/video/BV1N8pe6cEBq"}, {"id": "cn-005", "spec": "매활", "spec_cn": "鹰弓", "date": "2026-10-09", "dps_m": 3.75, "status": "포함", "note": "", "title": "[星痕共鸣]水武鹰弓 打桩无波375wdps", "uploader": "海盐味甜筒冰淇淋", "video": "BV1iZpb6iEuw", "url": "https://www.bilibili.com/video/BV1iZpb6iEuw"}, {"id": "cn-006", "spec": "매활", "spec_cn": "鹰弓", "date": "2026-09-28", "dps_m": 3.75, "status": "포함", "note": "", "title": "红武鹰弓无波打桩375W断手轴记录", "uploader": "lst4", "video": "BV1jxaL6WEjz", "url": "https://www.bilibili.com/video/BV1jxaL6WEjz"}, {"id": "cn-007", "spec": "매활", "spec_cn": "鹰弓", "date": "2026-09-12", "dps_m": 3.68, "status": "포함", "note": "제목에 단위 없음. 같은 업로더 연재(7/21 93.4 등)가 만 단위라 368만으로 읽음", "title": "星痕共鸣9.12鹰弓河武龙母满金木桩368（全自动）", "uploader": "抱歉oi", "video": "BV1nQYQ6KEhz", "url": "https://www.bilibili.com/video/BV1nQYQ6KEhz"}, {"id": "cn-008", "spec": "늑활", "spec_cn": "狼弓", "date": "2026-09-29", "dps_m": 4.46, "status": "포함", "note": "", "title": "星痕共鸣0930红狼5飞5石打桩4.46M", "uploader": "所間", "video": "BV13HaX6DEiQ", "url": "https://www.bilibili.com/video/BV13HaX6DEiQ"}, {"id": "cn-009", "spec": "얼창", "spec_cn": "冰矛", "date": "2026-10-29", "dps_m": 5.13, "status": "포함", "note": "", "title": "【星痕共鸣】S4末期冰矛打桩记录红武513w", "uploader": "losecoco", "video": "BV1Q4sR6zEUx", "url": "https://www.bilibili.com/video/BV1Q4sR6zEUx"}, {"id": "cn-010", "spec": "얼창", "spec_cn": "冰矛", "date": "2026-10-20", "dps_m": 5.6, "status": "포함", "note": "", "title": "星痕共鸣 S4赛季冰矛360天武毕业装备5龙5博打桩560w", "uploader": "艾米尔No7", "video": "BV1jRnA6REVP", "url": "https://www.bilibili.com/video/BV1jRnA6REVP"}, {"id": "cn-011", "spec": "얼창", "spec_cn": "冰矛", "date": "2026-09-26", "dps_m": 4.75, "status": "포함", "note": "", "title": "白嫖金词条第一周，冰矛打桩475w记录", "uploader": "风滚的草", "video": "BV1RPhQ6JEeA", "url": "https://www.bilibili.com/video/BV1RPhQ6JEeA"}, {"id": "cn-012", "spec": "얼창", "spec_cn": "冰矛", "date": "2026-09-22", "dps_m": 4.46, "status": "포함", "note": "", "title": "刚转冰矛不熟练，240水武耄耋打桩446w", "uploader": "寻烟逐梦", "video": "BV1GehE6DENj", "url": "https://www.bilibili.com/video/BV1GehE6DENj"}, {"id": "cn-013", "spec": "얼창", "spec_cn": "冰矛", "date": "2026-09-10", "dps_m": null, "status": "제외", "note": "교습 영상, 제목에 수치 없음", "title": "星痕共鸣冰矛耄耋简单打桩教程", "uploader": "皆川黒子", "video": "BV1E2Y36jEPo", "url": "https://www.bilibili.com/video/BV1E2Y36jEPo"}, {"id": "cn-014", "spec": "얼창", "spec_cn": "冰矛", "date": "2026-09-09", "dps_m": 4.29, "status": "포함", "note": "", "title": "星痕共鸣 S4赛季冰矛技改后340天武5龙5博打桩429w", "uploader": "艾米尔No7", "video": "BV1mLYt6rEHL", "url": "https://www.bilibili.com/video/BV1mLYt6rEHL"}, {"id": "cn-015", "spec": "얼창", "spec_cn": "冰矛", "date": "2026-09-08", "dps_m": 4.12, "status": "포함", "note": "", "title": "220水武全金冰矛打桩刚转不熟练412w", "uploader": "乌鸦坐飞机qq", "video": "BV1qWYJ6PEcq", "url": "https://www.bilibili.com/video/BV1qWYJ6PEcq"}, {"id": "cn-016", "spec": "얼창", "spec_cn": "冰矛", "date": "2026-09-07", "dps_m": 4.0, "status": "포함", "note": "", "title": "【星痕共鸣】9月7日7.4w平民冰矛打桩400w，武器240海，幻想五龙五博，词条全金满", "uploader": "铜眠", "video": "BV1Q9bN6kEMv", "url": "https://www.bilibili.com/video/BV1Q9bN6kEMv"}, {"id": "cn-017", "spec": "얼창", "spec_cn": "冰矛", "date": "2026-09-04", "dps_m": 5.4, "status": "포함", "note": "", "title": "【星痕共鸣】S4赛季冰矛流技改后打桩540W（9.14更新）", "uploader": "阿诚丶BP", "video": "BV1xwtr6cEyz", "url": "https://www.bilibili.com/video/BV1xwtr6cEyz"}, {"id": "cn-018", "spec": "얼빔", "spec_cn": "射线", "date": "2026-11-16", "dps_m": 5.7, "status": "포함", "note": "", "title": "星痕共鸣 S4 380 金映痕 射线 协会桩570万", "uploader": "烧饼君", "video": "BV1rKsF6vEyf", "url": "https://www.bilibili.com/video/BV1rKsF6vEyf"}, {"id": "cn-019", "spec": "얼빔", "spec_cn": "射线", "date": "2026-11-02", "dps_m": 5.6, "status": "포함", "note": "", "title": "S4最后一舞！金印痕380天武射线560w打桩", "uploader": "沧诺因", "video": "BV1eG4K6kExW", "url": "https://www.bilibili.com/video/BV1eG4K6kExW"}, {"id": "cn-020", "spec": "얼빔", "spec_cn": "射线", "date": "2026-10-20", "dps_m": 4.79, "status": "포함", "note": "", "title": "【星痕共鸣】S4赛季末10.20 红武姆毛三风射线打桩479w记录", "uploader": "Nekozillo", "video": "BV1FnnF6HEvx", "url": "https://www.bilibili.com/video/BV1FnnF6HEvx"}, {"id": "cn-021", "spec": "얼빔", "spec_cn": "射线", "date": "2026-10-20", "dps_m": 5.16, "status": "포함", "note": "", "title": "【星痕共鸣S4】红武三风射线全金词条打桩516w（S4完结）", "uploader": "奥塔维娅", "video": "BV1HrnA6eEj4", "url": "https://www.bilibili.com/video/BV1HrnA6eEj4"}, {"id": "cn-022", "spec": "얼빔", "spec_cn": "射线", "date": "2026-10-14", "dps_m": 4.68, "status": "포함", "note": "", "title": "星痕共鸣_平民红武幸运流射线打桩 7灌468w （无猴/4477强度）", "uploader": "ニヴォラ", "video": "BV1zCpm6ZEWR", "url": "https://www.bilibili.com/video/BV1zCpm6ZEWR"}, {"id": "cn-023", "spec": "얼빔", "spec_cn": "射线", "date": "2026-10-13", "dps_m": 4.929, "status": "포함", "note": "", "title": "【星痕共鸣】10.14 纯幸红武射线打桩492.9w", "uploader": "海金沙x", "video": "BV1gppB6HEUH", "url": "https://www.bilibili.com/video/BV1gppB6HEUH"}, {"id": "cn-024", "spec": "얼빔", "spec_cn": "射线", "date": "2026-09-29", "dps_m": 4.616, "status": "포함", "note": "", "title": "【星痕共鸣】红武射线打桩461.6w（9.29）", "uploader": "奥塔维娅", "video": "BV1DQaW6qEqs", "url": "https://www.bilibili.com/video/BV1DQaW6qEqs"}, {"id": "cn-025", "spec": "얼빔", "spec_cn": "射线", "date": "2026-09-23", "dps_m": 4.447, "status": "포함", "note": "", "title": "【星痕共鸣】红武3风流射线打桩444.7w（5机器人5毛球）", "uploader": "奥塔维娅", "video": "BV1Dah86DE9C", "url": "https://www.bilibili.com/video/BV1Dah86DE9C"}, {"id": "cn-026", "spec": "얼빔", "spec_cn": "射线", "date": "2026-09-06", "dps_m": 4.58, "status": "포함", "note": "", "title": "【星痕共鸣】完美又不那么完美的职业-幸运射线（打桩458w）", "uploader": "奥塔维娅", "video": "BV1kqbn6zERo", "url": "https://www.bilibili.com/video/BV1kqbn6zERo"}, {"id": "cn-027", "spec": "얼빔", "spec_cn": "射线", "date": "2026-09-05", "dps_m": null, "status": "제외", "note": "제목에 수치 없음", "title": "【星痕共鸣】9.3技改后射线打桩！！！无能狂怒版！", "uploader": "可爱的囝囝", "video": "BV1CYty6iEey", "url": "https://www.bilibili.com/video/BV1CYty6iEey"}, {"id": "cn-028", "spec": "얼빔", "spec_cn": "射线", "date": "2026-09-02", "dps_m": 3.02, "status": "제외", "note": "9/3 개편 전 기록", "title": "【星痕共鸣】平民射线技改前姆毛打桩勉强302w留档，猴征服涓流（220水武）", "uploader": "seele_villerei", "video": "BV1cPtD6DEX5", "url": "https://www.bilibili.com/video/BV1cPtD6DEX5"}, {"id": "cn-029", "spec": "발도", "spec_cn": "居合", "date": "2026-11-12", "dps_m": 5.03, "status": "포함", "note": "", "title": "370红武全金居合龙鱼打桩503W纪念", "uploader": "白琳冰可", "video": "BV1hpWd6MErp", "url": "https://www.bilibili.com/video/BV1hpWd6MErp"}, {"id": "cn-030", "spec": "발도", "spec_cn": "居合", "date": "2026-10-26", "dps_m": 5.5, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음", "title": "好饱饱职业要和好女孩过一辈子！居合打桩550，龙罗河武", "uploader": "玉玉鱼鱼枕", "video": "BV1Dyno6wEWd", "url": "https://www.bilibili.com/video/BV1Dyno6wEWd"}, {"id": "cn-031", "spec": "발도", "spec_cn": "居合", "date": "2026-10-24", "dps_m": 4.96, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음", "title": "星痕共鸣红武满金居合打桩496", "uploader": "相信无声的许诺", "video": "BV1oHHP6cE31", "url": "https://www.bilibili.com/video/BV1oHHP6cE31"}, {"id": "cn-032", "spec": "발도", "spec_cn": "居合", "date": "2026-10-20", "dps_m": 5.06, "status": "포함", "note": "", "title": "370毕业红武龙罗全金居合打桩506w", "uploader": "朔影夜光", "video": "BV1jhnw6pEfH", "url": "https://www.bilibili.com/video/BV1jhnw6pEfH"}, {"id": "cn-033", "spec": "발도", "spec_cn": "居合", "date": "2026-10-19", "dps_m": 4.89, "status": "포함", "note": "", "title": "【星痕共鸣】S4技改后居合协会打桩489w", "uploader": "想昵称令人头大丶", "video": "BV1bFnn6xE48", "url": "https://www.bilibili.com/video/BV1bFnn6xE48"}, {"id": "cn-034", "spec": "발도", "spec_cn": "居合", "date": "2026-10-19", "dps_m": 6.05, "status": "포함", "note": "", "title": "s4居合打桩605w（2026.10.19）", "uploader": "路过的大姐姐", "video": "BV1BXJ96NEF1", "url": "https://www.bilibili.com/video/BV1BXJ96NEF1"}, {"id": "cn-035", "spec": "발도", "spec_cn": "居合", "date": "2026-10-07", "dps_m": 4.3, "status": "포함", "note": "", "title": "【星痕共鸣】S4技改后居合协会打桩430w", "uploader": "想昵称令人头大丶", "video": "BV1aVHU65ETV", "url": "https://www.bilibili.com/video/BV1aVHU65ETV"}, {"id": "cn-036", "spec": "발도", "spec_cn": "居合", "date": "2026-10-04", "dps_m": 4.2, "status": "포함", "note": "", "title": "【星痕共鸣】S4技改后居合协会打桩420w", "uploader": "想昵称令人头大丶", "video": "BV1QFHJ68Eoz", "url": "https://www.bilibili.com/video/BV1QFHJ68Eoz"}, {"id": "cn-037", "spec": "발도", "spec_cn": "居合", "date": "2026-09-29", "dps_m": 5.45, "status": "포함", "note": "", "title": "s4技改居合打桩545w（2026.9.29）", "uploader": "路过的大姐姐", "video": "BV11Fap6WENn", "url": "https://www.bilibili.com/video/BV11Fap6WENn"}, {"id": "cn-038", "spec": "발도", "spec_cn": "居合", "date": "2026-09-29", "dps_m": 4.5, "status": "포함", "note": "", "title": "380天武，五龙五机居合打桩450w独断万古", "uploader": "浅颜半夏ovo", "video": "BV1JMan6gETF", "url": "https://www.bilibili.com/video/BV1JMan6gETF"}, {"id": "cn-039", "spec": "발도", "spec_cn": "居合", "date": "2026-09-21", "dps_m": 5.21, "status": "포함", "note": "", "title": "s4技改居合打桩521w", "uploader": "路过的大姐姐", "video": "BV1NnhB6wEk6", "url": "https://www.bilibili.com/video/BV1NnhB6wEk6"}, {"id": "cn-040", "spec": "발도", "spec_cn": "居合", "date": "2026-09-07", "dps_m": 4.85, "status": "포함", "note": "", "title": "s4技改居合打桩485w", "uploader": "路过的大姐姐", "video": "BV1AabT6iErM", "url": "https://www.bilibili.com/video/BV1AabT6iErM"}, {"id": "cn-041", "spec": "발도", "spec_cn": "居合", "date": "2026-09-05", "dps_m": 4.52, "status": "포함", "note": "", "title": "S4技改居合打桩452w", "uploader": "路过的大姐姐", "video": "BV1ELbL6JEEx", "url": "https://www.bilibili.com/video/BV1ELbL6JEEx"}, {"id": "cn-042", "spec": "발도", "spec_cn": "居合", "date": "2026-09-03", "dps_m": 5.35, "status": "포함", "note": "", "title": "【星痕共鸣】S4赛季居合流技改后打桩535W", "uploader": "阿诚丶BP", "video": "BV1qMtZ6cEzg", "url": "https://www.bilibili.com/video/BV1qMtZ6cEzg"}, {"id": "cn-043", "spec": "발도", "spec_cn": "居合", "date": "2026-09-02", "dps_m": 6.25, "status": "제외", "note": "9/3 개편 전 기록", "title": "[星痕共鸣]s4中期技改前居合打桩625w（记录用", "uploader": "落月潮汐", "video": "BV1httD6PEi5", "url": "https://www.bilibili.com/video/BV1httD6PEi5"}, {"id": "cn-044", "spec": "발도", "spec_cn": "居合", "date": "2026-09-02", "dps_m": null, "status": "제외", "note": "9/3 개편 전, 제목에 수치 없음", "title": "【星痕共鸣】S4龙鱼居合技改前打桩留念", "uploader": "丛雨的芳乃", "video": "BV1pktD69EtZ", "url": "https://www.bilibili.com/video/BV1pktD69EtZ"}, {"id": "cn-045", "spec": "발도", "spec_cn": "居合", "date": "2026-09-02", "dps_m": null, "status": "제외", "note": "9/3 개편 전, 제목에 수치 없음", "title": "160河武居合自动打桩", "uploader": "翠永雀", "video": "BV1nYtJ68E1B", "url": "https://www.bilibili.com/video/BV1nYtJ68E1B"}, {"id": "cn-046", "spec": "월광", "spec_cn": "月刃", "date": "2026-11-13", "dps_m": 5.43, "status": "포함", "note": "", "title": "【星痕共鸣】S4末期月刃打桩记录红武543w", "uploader": "losecoco", "video": "BV1C5Wa6xEpT", "url": "https://www.bilibili.com/video/BV1C5Wa6xEpT"}, {"id": "cn-047", "spec": "월광", "spec_cn": "月刃", "date": "2026-11-10", "dps_m": 5.5, "status": "포함", "note": "", "title": "星痕共鸣 红武全金游球月刃打桩550w", "uploader": "安为", "video": "BV19VWg62Ejh", "url": "https://www.bilibili.com/video/BV19VWg62Ejh"}, {"id": "cn-048", "spec": "월광", "spec_cn": "月刃", "date": "2026-10-21", "dps_m": 6.42, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음", "title": "星痕共鸣月刃打桩642", "uploader": "香草幺幺", "video": "BV1x8nv6wEgC", "url": "https://www.bilibili.com/video/BV1x8nv6wEgC"}, {"id": "cn-049", "spec": "월광", "spec_cn": "月刃", "date": "2026-10-19", "dps_m": 5.41, "status": "포함", "note": "", "title": "星痕共鸣红武月刃全套370装备打桩541w", "uploader": "一之濑城", "video": "BV1BZJd6zEuH", "url": "https://www.bilibili.com/video/BV1BZJd6zEuH"}, {"id": "cn-050", "spec": "월광", "spec_cn": "月刃", "date": "2026-10-14", "dps_m": 5.08, "status": "포함", "note": "", "title": "星痕共鸣红武全金征服者月刃打桩508w", "uploader": "一之濑城", "video": "BV1thpS6yEYW", "url": "https://www.bilibili.com/video/BV1thpS6yEYW"}, {"id": "cn-051", "spec": "월광", "spec_cn": "月刃", "date": "2026-10-14", "dps_m": 5.67, "status": "포함", "note": "", "title": "星痕共鸣游子毛球月刃全金词条打桩567w", "uploader": "一之濑城", "video": "BV1gPpU65EFF", "url": "https://www.bilibili.com/video/BV1gPpU65EFF"}, {"id": "cn-052", "spec": "월광", "spec_cn": "月刃", "date": "2026-10-05", "dps_m": 4.92, "status": "포함", "note": "", "title": "星痕共鸣360天武金词条轮椅征服者月刃打桩492w", "uploader": "一之濑城", "video": "BV1uBH46mE62", "url": "https://www.bilibili.com/video/BV1uBH46mE62"}, {"id": "cn-053", "spec": "월광", "spec_cn": "月刃", "date": "2026-10-01", "dps_m": 4.71, "status": "포함", "note": "", "title": "S4幸运月刃370红武双紫打桩471万", "uploader": "翠永雀", "video": "BV1RVaz6UECu", "url": "https://www.bilibili.com/video/BV1RVaz6UECu"}, {"id": "cn-054", "spec": "월광", "spec_cn": "月刃", "date": "2026-09-19", "dps_m": 5.52, "status": "포함", "note": "", "title": "星痕共鸣360全红幸运月刃打桩552w记录（10.4）", "uploader": "香草幺幺", "video": "BV144eQ6LEu8", "url": "https://www.bilibili.com/video/BV144eQ6LEu8"}, {"id": "cn-055", "spec": "월광", "spec_cn": "月刃", "date": "2026-09-03", "dps_m": 2.4949, "status": "포함", "note": "개편 당일 기록", "title": "【星痕共鸣】9月3技改后月刃打桩3光龙5lll249.49wdps", "uploader": "沐璘", "video": "BV1vato6REgW", "url": "https://www.bilibili.com/video/BV1vato6REgW"}, {"id": "cn-056", "spec": "적홍", "spec_cn": "赤红", "date": "2026-10-29", "dps_m": 7.79, "status": "포함", "note": "", "title": "星痕共鸣S4赤红779W打桩", "uploader": "loveujunyu", "video": "BV1oxsf6dEHe", "url": "https://www.bilibili.com/video/BV1oxsf6dEHe"}, {"id": "cn-057", "spec": "적홍", "spec_cn": "赤红", "date": "2026-10-27", "dps_m": 5.57, "status": "포함", "note": "", "title": "刚转没几天的赤红小萌新370红武装备龙姆557w ----10.28记录", "uploader": "夜安GN", "video": "BV1K1xg6CEkZ", "url": "https://www.bilibili.com/video/BV1K1xg6CEkZ"}, {"id": "cn-058", "spec": "적홍", "spec_cn": "赤红", "date": "2026-10-20", "dps_m": 5.55, "status": "포함", "note": "", "title": "赤红龙母红武555w木桩记录", "uploader": "肚饿摸鱼真君", "video": "BV1AJnP6BEt7", "url": "https://www.bilibili.com/video/BV1AJnP6BEt7"}, {"id": "cn-059", "spec": "적홍", "spec_cn": "赤红", "date": "2026-10-20", "dps_m": 6.87, "status": "포함", "note": "", "title": "星痕共鸣S4全金360天武龙石赤红打桩687W", "uploader": "天地の星云", "video": "BV1wsnP6NEJV", "url": "https://www.bilibili.com/video/BV1wsnP6NEJV"}, {"id": "cn-060", "spec": "적홍", "spec_cn": "赤红", "date": "2026-10-19", "dps_m": 5.9, "status": "포함", "note": "", "title": "赤红龙姆红武590w木桩", "uploader": "编号型er", "video": "BV1VmJo6TE6f", "url": "https://www.bilibili.com/video/BV1VmJo6TE6f"}, {"id": "cn-061", "spec": "적홍", "spec_cn": "赤红", "date": "2026-10-19", "dps_m": 5.86, "status": "포함", "note": "", "title": "全金龙罗赤红半自动586w", "uploader": "玲玲子reiko", "video": "BV189nJ68EkB", "url": "https://www.bilibili.com/video/BV189nJ68EkB"}, {"id": "cn-062", "spec": "적홍", "spec_cn": "赤红", "date": "2026-10-02", "dps_m": null, "status": "제외", "note": "383이 DPS인지 장비 레벨인지 불명", "title": "双紫赤红383萌新向讲解 10.3", "uploader": "古月梓cz", "video": "BV13vHb6tE12", "url": "https://www.bilibili.com/video/BV13vHb6tE12"}, {"id": "cn-063", "spec": "적홍", "spec_cn": "赤红", "date": "2026-11-16", "dps_m": null, "status": "제외", "note": "던전 영상, 허수아비 아님", "title": "星痕共鸣 n20巨龙 5红 3羊狂音", "uploader": "再摸两天", "video": "BV1uTsK6FEHX", "url": "https://www.bilibili.com/video/BV1uTsK6FEHX"}, {"id": "cn-064", "spec": "적홍", "spec_cn": "赤红", "date": "2026-11-16", "dps_m": null, "status": "제외", "note": "던전 영상, 허수아비 아님", "title": "【星痕共鸣】红武胡闹N20巨龙，抓住仅有的机会", "uploader": "似区车", "video": "BV1BLsF6bEgt", "url": "https://www.bilibili.com/video/BV1BLsF6bEgt"}, {"id": "cn-065", "spec": "무상", "spec_cn": "无相", "date": "2026-10-26", "dps_m": 7.56, "status": "포함", "note": "无相 검색 결과. 제목에 계열명 대신 별칭", "title": "星痕共鸣S4五香哥终盘打桩3分钟756W", "uploader": "月と星空乆", "video": "BV1azno6vEzN", "url": "https://www.bilibili.com/video/BV1azno6vEzN"}, {"id": "cn-066", "spec": "무상", "spec_cn": "无相", "date": "2026-10-26", "dps_m": 7.88, "status": "포함", "note": "", "title": "【星痕共鸣】S4赛季无相流打桩788W（380天全红）", "uploader": "阿诚丶BP", "video": "BV1MdHc6gEHR", "url": "https://www.bilibili.com/video/BV1MdHc6gEHR"}, {"id": "cn-067", "spec": "무상", "spec_cn": "无相", "date": "2026-10-14", "dps_m": 5.49, "status": "포함", "note": "", "title": "老实丢技能，很枯燥吧！平民红武无相全自动打桩549w", "uploader": "我Look野好劲", "video": "BV1dPp162EoP", "url": "https://www.bilibili.com/video/BV1dPp162EoP"}, {"id": "cn-068", "spec": "무상", "spec_cn": "无相", "date": "2026-10-02", "dps_m": 4.96, "status": "포함", "note": "", "title": "S4红武幸运无相飞鱼游子打桩496w（2026.10.2）", "uploader": "安为", "video": "BV11fay6pERR", "url": "https://www.bilibili.com/video/BV11fay6pERR"}, {"id": "cn-069", "spec": "무상", "spec_cn": "无相", "date": "2026-09-27", "dps_m": 6.0, "status": "포함", "note": "제목 600+를 600만으로 읽음", "title": "【星痕共鸣】340版本幸运无相打桩600+", "uploader": "湛澜的星空", "video": "BV1Zeah6AEpv", "url": "https://www.bilibili.com/video/BV1Zeah6AEpv"}, {"id": "cn-070", "spec": "무상", "spec_cn": "无相", "date": "2026-09-23", "dps_m": 4.95, "status": "포함", "note": "", "title": "于哥王签订恶魔契约后的相小妹浅浅打个4.95m", "uploader": "栗栗_栗丶", "video": "BV1WMht68EKK", "url": "https://www.bilibili.com/video/BV1WMht68EKK"}, {"id": "cn-071", "spec": "무상", "spec_cn": "无相", "date": "2026-09-22", "dps_m": 5.35, "status": "포함", "note": "", "title": "【星痕共鸣】340天武全金精通无相打桩535W（仅记录）", "uploader": "Foneix_", "video": "BV1aPhs6vExg", "url": "https://www.bilibili.com/video/BV1aPhs6vExg"}, {"id": "cn-072", "spec": "무상", "spec_cn": "无相", "date": "2026-09-03", "dps_m": 3.05, "status": "포함", "note": "160 장비", "title": "【星痕共鸣】大众强势流派火斩无相技改后贫民305w(160水武蛛罗叠速精力半自动)", "uploader": "终末白夜极光", "video": "BV1uEtd61Eee", "url": "https://www.bilibili.com/video/BV1uEtd61Eee"}, {"id": "cn-073", "spec": "무상", "spec_cn": "无相", "date": "2026-09-03", "dps_m": 4.7, "status": "포함", "note": "", "title": "2026/9/3技改后水武240无相打桩470W自留档", "uploader": "和你在月球漫步", "video": "BV1EftX6DEji", "url": "https://www.bilibili.com/video/BV1EftX6DEji"}, {"id": "cn-074", "spec": "무상", "spec_cn": "无相", "date": "2026-09-02", "dps_m": 4.03, "status": "제외", "note": "9/3 개편 전 기록", "title": "2026/9/2水武240无相打桩403W自留档", "uploader": "和你在月球漫步", "video": "BV16NtU63ESF", "url": "https://www.bilibili.com/video/BV16NtU63ESF"}, {"id": "cn-075", "spec": "질풍", "spec_cn": "重装", "date": "2026-11-07", "dps_m": 4.95, "status": "포함", "note": "", "title": "【星痕共鸣】S4最终打桩红武重装495wdps", "uploader": "沐璘", "video": "BV1644n6bEDz", "url": "https://www.bilibili.com/video/BV1644n6bEDz"}, {"id": "cn-076", "spec": "질풍", "spec_cn": "重装", "date": "2026-09-09", "dps_m": 6.01, "status": "포함", "note": "", "title": "「星痕共鸣」重装打桩601w（9/9）", "uploader": "白樓", "video": "BV1XcYx6VEsA", "url": "https://www.bilibili.com/video/BV1XcYx6VEsA"}, {"id": "cn-077", "spec": "난무", "spec_cn": "空枪", "date": "2026-11-13", "dps_m": 6.9, "status": "포함", "note": "空枪 검색 결과. 제목은 별칭(奶枪)", "title": "奶枪打桩断轴690w，演员追击已无能为力", "uploader": "Sironiva", "video": "BV1YgW66wE7x", "url": "https://www.bilibili.com/video/BV1YgW66wE7x"}, {"id": "cn-078", "spec": "난무", "spec_cn": "空枪", "date": "2026-11-07", "dps_m": 7.4, "status": "포함", "note": "", "title": "星痕共鸣 空枪打桩740w （不带风姿+5）", "uploader": "綠色眼睛", "video": "BV1Pz4H6gE6k", "url": "https://www.bilibili.com/video/BV1Pz4H6gE6k"}, {"id": "cn-079", "spec": "난무", "spec_cn": "空枪", "date": "2026-10-30", "dps_m": 7.66, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음", "title": "空枪打桩766(已换源)，S4小结局之吃吃喝喝，强烈推荐游玩！", "uploader": "不古石", "video": "BV1h2xq6oEPc", "url": "https://www.bilibili.com/video/BV1h2xq6oEPc"}, {"id": "cn-080", "spec": "난무", "spec_cn": "空枪", "date": "2026-10-25", "dps_m": 6.4, "status": "포함", "note": "", "title": "370红武空枪打桩640w", "uploader": "Sironiva", "video": "BV1FbHG6tE1Q", "url": "https://www.bilibili.com/video/BV1FbHG6tE1Q"}, {"id": "cn-081", "spec": "난무", "spec_cn": "空枪", "date": "2026-10-19", "dps_m": 7.46, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음. 버프(风姿+5) 포함", "title": "10.19空枪打桩746 依旧风姿+5", "uploader": "榎本櫛", "video": "BV1Cwnj6BEK6", "url": "https://www.bilibili.com/video/BV1Cwnj6BEK6"}, {"id": "cn-082", "spec": "난무", "spec_cn": "空枪", "date": "2026-10-16", "dps_m": 7.27, "status": "포함", "note": "", "title": "【星痕共鸣】360全金双充空枪727W", "uploader": "中二少女呆唯酱", "video": "BV1waJm6xE71", "url": "https://www.bilibili.com/video/BV1waJm6xE71"}, {"id": "cn-083", "spec": "난무", "spec_cn": "空枪", "date": "2026-10-16", "dps_m": 7.08, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음. 버프 포함", "title": "10.17空枪708 风姿卓绝+5s", "uploader": "榎本櫛", "video": "BV1aAJa6FEvR", "url": "https://www.bilibili.com/video/BV1aAJa6FEvR"}, {"id": "cn-084", "spec": "난무", "spec_cn": "空枪", "date": "2026-09-28", "dps_m": 6.76, "status": "포함", "note": "", "title": "【星痕共鸣】金因子双充空枪676W", "uploader": "中二少女呆唯酱", "video": "BV1eAaG6rEVg", "url": "https://www.bilibili.com/video/BV1eAaG6rEVg"}, {"id": "cn-085", "spec": "난무", "spec_cn": "空枪", "date": "2026-09-25", "dps_m": 6.26, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음", "title": "S4空枪打桩626。哟撒西不理，你这家伙……凹追击凹的很开心么……", "uploader": "不古石", "video": "BV1QWh26wEPq", "url": "https://www.bilibili.com/video/BV1QWh26wEPq"}, {"id": "cn-086", "spec": "난무", "spec_cn": "空枪", "date": "2026-09-15", "dps_m": 5.89, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음", "title": "刹似一江春水向东流，长草期，空枪打桩589", "uploader": "不古石", "video": "BV15oeH6VE24", "url": "https://www.bilibili.com/video/BV15oeH6VE24"}, {"id": "cn-087", "spec": "난무", "spec_cn": "空枪", "date": "2026-09-08", "dps_m": 3.5, "status": "포함", "note": "", "title": "【星痕共鸣】空枪刚回归，技改后350w打桩，非满金词条。", "uploader": "湛澜的星空", "video": "BV1fgb36KEvK", "url": "https://www.bilibili.com/video/BV1fgb36KEvK"}, {"id": "cn-088", "spec": "난무", "spec_cn": "空枪", "date": "2026-09-04", "dps_m": 5.65, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음", "title": "空枪刹那流打桩565，没硬凹追击，轴相对稳定，需做好资源管理", "uploader": "不古石", "video": "BV1jhtB6CEyH", "url": "https://www.bilibili.com/video/BV1jhtB6CEyH"}, {"id": "cn-089", "spec": "난무", "spec_cn": "空枪", "date": "2026-09-03", "dps_m": 5.5, "status": "포함", "note": "제목에 단위 없음, 만 단위로 읽음", "title": "风魔导师插秧流！再见了大农卷！空枪打桩550（视角摇晃注意头晕）", "uploader": "不古石", "video": "BV1qbtf6vETk", "url": "https://www.bilibili.com/video/BV1qbtf6vETk"}, {"id": "cn-090", "spec": "난무", "spec_cn": "空枪", "date": "2026-09-03", "dps_m": 5.4, "status": "포함", "note": "", "title": "9.3技改后240全金空枪 540w桩", "uploader": "geleilate", "video": "BV1XXtd6HE4r", "url": "https://www.bilibili.com/video/BV1XXtd6HE4r"}, {"id": "cn-091", "spec": "난무", "spec_cn": "空枪", "date": "2026-09-02", "dps_m": 4.89, "status": "제외", "note": "9/3 개편 전 기록", "title": "农卷大王！空区打桩489，空枪技改前留档！", "uploader": "不古石", "video": "BV12htU6WECR", "url": "https://www.bilibili.com/video/BV12htU6WECR"}, {"id": "cn-092", "spec": "음파", "spec_cn": "狂音", "date": "2026-11-02", "dps_m": 4.46, "status": "포함", "note": "", "title": "【星痕共鸣】S4末期狂音打桩记录红武446w", "uploader": "losecoco", "video": "BV1uX4w6fEnA", "url": "https://www.bilibili.com/video/BV1uX4w6fEnA"}, {"id": "cn-093", "spec": "음파", "spec_cn": "狂音", "date": "2026-10-21", "dps_m": 5.82, "status": "포함", "note": "특화 허수아비(特化桩)라 조건 다름", "title": "【星痕共鸣】狂音s4大毕业260水武特化桩582w", "uploader": "風雷Echoes", "video": "BV1swnr61EVz", "url": "https://www.bilibili.com/video/BV1swnr61EVz"}, {"id": "cn-094", "spec": "음파", "spec_cn": "狂音", "date": "2026-09-09", "dps_m": 4.9, "status": "포함", "note": "", "title": "狂音3分钟木桩490w 5飞鱼5双羊 9月9日", "uploader": "北珂Beique", "video": "BV1QfYs6yEeF", "url": "https://www.bilibili.com/video/BV1QfYs6yEeF"}, {"id": "cn-095", "spec": "음파", "spec_cn": "狂音", "date": "2026-09-08", "dps_m": null, "status": "제외", "note": "공략 영상, 제목에 수치 없음", "title": "【星痕共鸣】S4狂音360毕业详细攻略+一图流", "uploader": "風雷Echoes", "video": "BV1gdYn6wE4A", "url": "https://www.bilibili.com/video/BV1gdYn6wE4A"}, {"id": "cn-096", "spec": "심판", "spec_cn": "惩击", "date": "2026-09-27", "dps_m": null, "status": "제외", "note": "공략 영상, 제목에 수치 없음", "title": "【星痕共鸣】S4惩击流-毕业大学习", "uploader": "血九尾狐", "video": "BV1SHat6CE9H", "url": "https://www.bilibili.com/video/BV1SHat6CE9H"}, {"id": "cn-097", "spec": "심판", "spec_cn": "惩击", "date": "2026-09-27", "dps_m": null, "status": "제외", "note": "공략 영상, 제목에 수치 없음", "title": "【星痕共鸣】S4惩击流-完美交响手法攻略", "uploader": "血九尾狐", "video": "BV1DHat6CELm", "url": "https://www.bilibili.com/video/BV1DHat6CELm"}], "meta": [{"label": "수집 경로", "value": "bilibili 영상 검색 API(api.bilibili.com/x/web-interface/search/type, search_type=video, order=pubdate), 키워드 「星痕共鸣 <계열 중국명> 木桩 / 打桩」, 2026-11-16 조회"}, {"label": "수치", "value": "영상 제목에 올린 사람이 적은 DPS. w·W·万=만(550w=5.50M). 단위 없는 숫자는 같은 맥락의 만 단위로 읽고 note에 적음"}, {"label": "포함 기준", "value": "2026-09-01 이후 게시분 중 9/3 기술 개편(技改) 이후 기록만 포함. 개편 전·수치 없음·허수아비 아님은 '제외'로 남김"}, {"label": "서버", "value": "중국 서버(星痕共鸣) 시즌4. 시즌4 시작 2026-07-16"}]}, "boss_1v1": {"rows": [{"id": "b-01", "spec": "월광", "spec_sheet": "Moon¹", "video": "Nº1", "boss_dps_m": 6.5, "mob_dps_m": 6.05, "host_boss_dps_m": 11.0, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-02", "spec": "월광", "spec_sheet": "Moon¹(Second attempt)", "video": "Nº2", "boss_dps_m": 6.5, "mob_dps_m": 8.1, "host_boss_dps_m": 10.5, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-03", "spec": "무상", "spec_sheet": "Formless¹", "video": "Nº3", "boss_dps_m": 11.3, "mob_dps_m": 12.6, "host_boss_dps_m": 11.0, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-04", "spec": "얼빔", "spec_sheet": "Frostbeam", "video": "Nº10", "boss_dps_m": 10.6, "mob_dps_m": 12.7, "host_boss_dps_m": 11.2, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-05", "spec": "매활", "spec_sheet": "Falcon", "video": "Nº11", "boss_dps_m": 8.0, "mob_dps_m": 13.0, "host_boss_dps_m": 11.1, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-06", "spec": "월광", "spec_sheet": "Moon²", "video": "Nº12", "boss_dps_m": 11.3, "mob_dps_m": 10.8, "host_boss_dps_m": 11.4, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-07", "spec": "늑활", "spec_sheet": "Wildpack(Doro)", "video": "Nº18", "boss_dps_m": 9.4, "mob_dps_m": 8.7, "host_boss_dps_m": 11.1, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-08", "spec": "늑활", "spec_sheet": "Wildpack(Elodie)", "video": "Nº19", "boss_dps_m": 10.3, "mob_dps_m": 10.6, "host_boss_dps_m": 11.2, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-09", "spec": "난무", "spec_sheet": "Skyward³(Homem)", "video": "Nº20", "boss_dps_m": 10.0, "mob_dps_m": 12.5, "host_boss_dps_m": 11.0, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-10", "spec": "무상", "spec_sheet": "Formless²", "video": "Nº4", "boss_dps_m": 10.1, "mob_dps_m": 15.9, "host_boss_dps_m": 10.7, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-11", "spec": "얼창", "spec_sheet": "Icicle¹", "video": "Nº5", "boss_dps_m": 8.13, "mob_dps_m": 11.7, "host_boss_dps_m": 11.0, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-12", "spec": "적홍", "spec_sheet": "Crismon¹", "video": "Nº6", "boss_dps_m": 10.4, "mob_dps_m": 14.6, "host_boss_dps_m": 11.3, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-13", "spec": "적홍", "spec_sheet": "Crismon³", "video": "Nº13", "boss_dps_m": 10.9, "mob_dps_m": 19.0, "host_boss_dps_m": 11.3, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-14", "spec": "난무", "spec_sheet": "Skyward", "video": "Nº14", "boss_dps_m": 9.6, "mob_dps_m": 13.5, "host_boss_dps_m": 11.4, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-15", "spec": "질풍", "spec_sheet": "Vanguard¹", "video": "Nº15", "boss_dps_m": 11.0, "mob_dps_m": 13.5, "host_boss_dps_m": 11.7, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-16", "spec": "음파", "spec_sheet": "Disso²(Skadi)", "video": "Nº21", "boss_dps_m": 8.0, "mob_dps_m": 13.0, "host_boss_dps_m": 11.0, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-17", "spec": "얼빔", "spec_sheet": "Frostbeam²(Vinifera)", "video": "Nº22", "boss_dps_m": 12.6, "mob_dps_m": 15.0, "host_boss_dps_m": 11.5, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-18", "spec": "얼창", "spec_sheet": "Icicle²", "video": "Nº23", "boss_dps_m": 11.9, "mob_dps_m": 14.6, "host_boss_dps_m": 11.4, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-19", "spec": "적홍", "spec_sheet": "Crismon¹(Second attempt)", "video": "Nº7", "boss_dps_m": 10.0, "mob_dps_m": 18.1, "host_boss_dps_m": 10.3, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-20", "spec": "음파", "spec_sheet": "Disso¹", "video": "Nº8", "boss_dps_m": 9.9, "mob_dps_m": 13.6, "host_boss_dps_m": 11.1, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-21", "spec": "적홍", "spec_sheet": "Crismon²", "video": "Nº9", "boss_dps_m": 8.2, "mob_dps_m": 14.1, "host_boss_dps_m": 10.6, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-22", "spec": "난무", "spec_sheet": "Skyward²", "video": "Nº16", "boss_dps_m": 11.2, "mob_dps_m": 21.5, "host_boss_dps_m": 10.9, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-23", "spec": "무상", "spec_sheet": "Formless³", "video": "Nº17", "boss_dps_m": 10.0, "mob_dps_m": 15.0, "host_boss_dps_m": 11.6, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-24", "spec": "무상", "spec_sheet": "Formless³(Second attempt)", "video": "Nº17", "boss_dps_m": 10.2, "mob_dps_m": 15.5, "host_boss_dps_m": 11.6, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-25", "spec": "난무", "spec_sheet": "Skyward*4", "video": "Nº24", "boss_dps_m": 9.9, "mob_dps_m": 19.5, "host_boss_dps_m": 11.5, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-26", "spec": "질풍", "spec_sheet": "Vanguard²", "video": "Nº25", "boss_dps_m": 9.9, "mob_dps_m": 11.6, "host_boss_dps_m": 10.2, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"id": "b-27", "spec": "발도", "spec_sheet": "Iaido", "video": "Nº26", "boss_dps_m": 7.7, "mob_dps_m": 11.0, "host_boss_dps_m": 10.5, "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}], "meta": [{"label": "출처 시트", "value": "디스코드 「1vs1 Stream DPS」 구글 시트, Dados normalizados 탭: https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"}, {"label": "시트를 알린 글", "value": "디시 블루프로토콜 마이너 갤러리 39246번 「s4 직업별 dps」(2026-09-12): https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39246"}, {"label": "측정 방식", "value": "같은 호스트(월광)와 도전자가 같은 보스를 1:1로 친 기록. 호스트 보스 DPS 10.2~12.0M로 조건 비교용. 능력 점수 약 75~80k"}, {"label": "서버 판단", "value": "시트에 서버·시즌 표기 없음. 9/12 게시 시점에 시즌4 서버는 중섭뿐이라 중섭 S4로 추정"}]}, "global_parse": {"rows": [{"id": "g-1", "spec": "난무", "date": "2026-10-28", "uploader": "whoisaqua BPSR", "video": "zlLrcDCI_H4", "dps_m": 3.02, "gear": 320, "title": "Skyward 3.02M DPS Parse at Lv320 Gear (Season 4)", "note": "", "url": "https://www.youtube.com/watch?v=zlLrcDCI_H4"}, {"id": "g-2", "spec": "적홍", "date": "2026-11-16", "uploader": "takumi", "video": "fCoYeQjUNk8", "dps_m": 4.44, "gear": 340, "title": "Crimson Spec Twin Axe 3min DPS Parse 340 gear 4.44mil - Blue Protocol Star Resonance SEASON 4", "note": "", "url": "https://www.youtube.com/watch?v=fCoYeQjUNk8"}, {"id": "g-3", "spec": "무상", "date": "2026-10-28", "uploader": "takumi", "video": "zskFAjlxOOQ", "dps_m": 2.51, "gear": 320, "title": "Formless Spec Twin Axe 3min DPS Parse - End of 320 gear 2.51mil - Blue Protocol Star Resonance S4", "note": "같은 업로더의 10/14 1.6M(J0QAtz7ThzI) 갱신본", "url": "https://www.youtube.com/watch?v=zskFAjlxOOQ"}, {"id": "g-4", "spec": "음파", "date": "2026-10-26", "uploader": "leafmelon", "video": "B09hUpQit3Y", "dps_m": 2.06, "gear": 320, "title": "Blue Protocol Star Resonance - Dissonance 320 Gear 2.06M", "note": "제목에 시즌 표기 없음. 320 장비는 S4 장비", "url": "https://www.youtube.com/watch?v=B09hUpQit3Y"}], "meta": [{"label": "수집 경로", "value": "YouTube 검색(「bpsr season 4 dps parse」 등), 2026-11-16~17 조회. 날짜·업로더는 영상 페이지 publishDate·채널명"}, {"label": "서버", "value": "글로벌 서버 시즌4(2026-10-08 시작). 매활·얼창 등 나머지 계열 시즌4 Parse 영상은 찾지 못함"}]}};
+(function () {
+  const calcs = {}, cache = {}, reg = {};
+  function data(id) {
+    const raw = window.__S4DATA[id];
+    if (raw) { const r = { status: 'ok', data: raw.rows, meta: raw.meta }; r.data.columns = Object.keys(raw.rows[0] || {}); return r; }
+    const c = calcs[id];
+    if (c) { if (!(id in cache)) cache[id] = c.fn(...c.inputs.map((i) => data(i).data)); return { status: 'ok', data: cache[id] }; }
+    return { status: 'missing', data: [] };
+  }
+  function run(name) { document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => reg[name](el)); }
+  window.dash = {
+    data,
+    calc(id, o) { calcs[id] = o; },
+    loader() {},
+    colors: ['var(--s1)', 'var(--s2)'],
+    draw(name, fn) { if (fn === undefined) { if (reg[name]) run(name); return; } reg[name] = typeof fn === 'function' ? fn : (el) => fn.update(el, fn.mount(el)); },
+    onData(fn) { fn(); },
+    params: () => ({}), setParams() {}, resetParams() {}, setLink() {}, refresh() {},
+    __start() {
+      Object.keys(reg).forEach(run);
+      const widths = new WeakMap();
+      const ro = new ResizeObserver((entries) => entries.forEach((e) => {
+        const el = e.target, w = Math.round(e.contentRect.width);
+        if (widths.get(el) === w) return;
+        const first = !widths.has(el); widths.set(el, w);
+        if (!first) reg[el.dataset.draw](el);
+      }));
+      document.querySelectorAll('.s4-chart[data-draw]').forEach((el) => ro.observe(el));
+    },
+  };
+})();
+</script>
+<style>
+  .s4 { display: flex; flex-direction: column; gap: var(--cds-gap-xl); max-width: 1080px; }
+  .s4-head { display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .s4-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+  .s4-lede { font-size: var(--cds-font-size-body); line-height: 1.65; margin: 0; max-width: 68ch; }
+  .s4-lede b, .s4-num { font-variant-numeric: tabular-nums; }
+  .s4-muted { color: var(--color-fg-muted); }
+  .s4-small { font-size: var(--cds-font-size-caption); }
+  .s4-sec { display: flex; flex-direction: column; gap: var(--cds-gap-md); min-width: 0; }
+  .s4-sec h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+  .s4-sec > p { margin: 0; line-height: 1.6; max-width: 72ch; }
+  .s4-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--cds-gap-md); }
+  .s4-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+  .s4-card h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+  .s4-card p { margin: 0; line-height: 1.55; }
+  .s4-tag { align-self: flex-start; font-size: var(--cds-font-size-caption); padding: 1px 8px; border-radius: 999px; border: 1px solid var(--color-border-line); color: var(--color-fg-muted); }
+  .s4-tag.is-mid { border-color: var(--color-warn); color: var(--color-warn); }
+  .s4-tag.is-low { border-color: var(--color-bad); color: var(--color-bad); }
+  .s4-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; }
+  .s4-chart { position: relative; min-height: 360px; min-width: 0; }
+  .s4-chart.is-boss { min-height: 300px; }
+  .s4-chart svg text { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); }
+  .s4-chart svg .s4-lab { fill: var(--color-fg); font-size: var(--cds-font-size-body); }
+  .s4-chart svg .s4-lab.is-focus { font-weight: var(--cds-font-weight-medium); }
+  .s4-dot { cursor: pointer; }
+  .s4-tt { position: absolute; z-index: 5; max-width: 300px; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-md); font-size: var(--cds-font-size-caption); line-height: 1.5; pointer-events: auto; }
+  .s4-tt b { font-variant-numeric: tabular-nums; }
+  .s4-tt a { color: inherit; }
+  .s4-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .s4-pick { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-md); }
+  .s4-pickrow { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+  .s4-sw { display: inline-block; width: 12px; height: 12px; border-radius: 50%; }
+  .s4-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  .s4-tablewrap { overflow-x: auto; min-width: 0; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
+  .s4-tablewrap.is-tall { max-height: 560px; overflow-y: auto; }
+  .s4-table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); }
+  .s4-table th, .s4-table td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+  .s4-table th { position: sticky; top: 0; background: var(--color-panel); font-weight: var(--cds-font-weight-medium); white-space: nowrap; }
+  .s4-table td.n, .s4-table th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .s4-table td.t { min-width: 260px; }
+  .s4-table tr.is-out td { color: var(--color-fg-muted); }
+  .s4-table a { color: inherit; }
+  .s4-pill { font-size: var(--cds-font-size-caption); padding: 0 6px; border-radius: 999px; border: 1px solid var(--color-border-line); white-space: nowrap; }
+  .s4-pill.is-in { border-color: var(--color-ok); color: var(--color-ok); }
+  .s4-src { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: var(--cds-gap-xs); line-height: 1.55; }
+  .s4-src a { color: inherit; word-break: break-all; }
+  details.s4-det { border-top: 1px solid var(--color-border-line); padding-top: var(--cds-pad-md); }
+  details.s4-det summary { cursor: pointer; font-weight: var(--cds-font-weight-medium); }
+  details.s4-det ul { line-height: 1.6; max-width: 72ch; }
+</style>
+
+<div class="s4">
+  <header class="s4-head" id="top">
+    <h1 class="s4-title">블루 프로토콜: 스타 레조넌스 시즌4 계열별 DPS</h1>
+    <p class="s4-lede" data-read lang="ko">
+      중섭 시즌4 허수아비 기록 <b data-draw="n-inc" data-source="cn_counts" data-field="n" data-where="status=포함">—</b>건을 계열별 중앙값으로 보면 1위는 <b data-draw="lead-spec" data-source="spec_summary" data-field="spec" data-row="0">—</b>(<span data-draw="lead-med" data-source="spec_summary" data-field="median" data-row="0">—</span>M)입니다.
+      매활은 <b data-draw="falc-med" data-source="spec_summary" data-field="median" data-where="spec=매활">—</b>M(<span data-draw="falc-n" data-source="spec_summary" data-field="n" data-where="spec=매활">—</span>건), 얼창은 <b data-draw="ice-med" data-source="spec_summary" data-field="median" data-where="spec=얼창">—</b>M(<span data-draw="ice-n" data-source="spec_summary" data-field="n" data-where="spec=얼창">—</span>건)로 매활이 <span data-draw="cmp-word">—</span>.
+      실제 보스를 친 1:1 기록은 매활 <span data-draw="boss-falc" data-source="boss_1v1" data-field="boss_dps_m">—</span>, 얼창 <span data-draw="boss-ice" data-source="boss_1v1" data-field="boss_dps_m">—</span>뿐이라 보스 기준 우열은 판정할 수 없습니다.
+    </p>
+    <p class="s4-muted s4-small">모든 숫자는 영상·시트 원문에서 옮긴 값입니다. 점에 마우스를 올리거나 누르면 원본 영상 링크가 나오고, 맨 아래 표에 기록 전체와 제외 사유가 있습니다. 수집일 2026-11-16~17.</p>
+  </header>
+
+  <section class="s4-sec" id="sources-overview">
+    <h2>자료 세 가지와 믿을 수 있는 정도</h2>
+    <div class="s4-cards">
+      <div class="s4-card" id="card-cn">
+        <span class="s4-tag is-mid">표본 가장 많음 · 조건 제각각</span>
+        <h3>중섭 허수아비 Parse (bilibili)</h3>
+        <div><span class="s4-big" data-draw="n-inc2" data-source="cn_counts" data-field="n" data-where="status=포함">—</span><span class="s4-muted"> 건 포함 · </span><span data-draw="n-out" data-source="cn_counts" data-field="n" data-where="status=제외">—</span><span class="s4-muted">건 제외</span></div>
+        <p class="s4-muted s4-small">중국 서버 시즌4, 9/3 기술 개편 이후 3분 허수아비. 영상 제목에 올린 사람이 적은 DPS라 장비(220~380)·버프·허수아비 종류가 기록마다 다릅니다.</p>
+      </div>
+      <div class="s4-card" id="card-boss">
+        <span class="s4-tag is-mid">조건 통제 좋음 · 표본 적음</span>
+        <h3>보스 1:1 시트 (디스코드)</h3>
+        <div><span class="s4-big" data-draw="n-boss" data-source="boss_1v1">—</span><span class="s4-muted"> 건</span></div>
+        <p class="s4-muted s4-small">같은 호스트(월광)와 도전자가 같은 실제 보스를 1:1로 친 기록. 계열당 1~4명. 시트에 서버 표기가 없어 게시일(9/12)로 중섭 시즌4라고 추정했습니다.</p>
+      </div>
+      <div class="s4-card" id="card-global">
+        <span class="s4-tag is-low">참고용 · 일부 계열만</span>
+        <h3>글섭 Parse 영상 (YouTube)</h3>
+        <div><span class="s4-big" data-draw="n-gl" data-source="global_parse">—</span><span class="s4-muted"> 건</span></div>
+        <p class="s4-muted s4-small">글로벌 서버 시즌4(10/8 시작), 320~340 장비. 매활·얼창 시즌4 Parse 영상은 찾지 못했습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s4-sec" id="cn-chart">
+    <h2>중섭 시즌4 허수아비 DPS, 기록 하나가 점 하나</h2>
+    <p class="s4-muted s4-small">세로 막대는 계열 중앙값(3건 이상일 때만). 계열은 중앙값 높은 순, 3건 미만은 최고 기록 순으로 아래에 둡니다.</p>
+    <div class="s4-pick" id="cn-pick">
+      <label class="s4-pickrow" for="pick-a"><i class="s4-sw" data-draw="sw-a"></i><span class="s4-muted s4-small">비교 1</span><select class="dash-select" id="pick-a" data-draw="pick-a" data-source="spec_summary" aria-label="비교할 첫 번째 계열"></select></label>
+      <label class="s4-pickrow" for="pick-b"><i class="s4-sw" data-draw="sw-b"></i><span class="s4-muted s4-small">비교 2</span><select class="dash-select" id="pick-b" data-draw="pick-b" data-source="spec_summary" aria-label="비교할 두 번째 계열"></select></label>
+      <span class="s4-legend"><span><i data-draw="leg-other"></i>그 밖의 계열</span></span>
+    </div>
+    <p class="s4-muted s4-small">고른 두 계열은 이 그래프와 아래 보스 1:1 그래프에서 함께 색이 바뀝니다.</p>
+    <div class="s4-chart dash-skeleton" data-draw="cn-strip" data-source="cn_dummy spec_summary" role="img" aria-label="중섭 시즌4 계열별 허수아비 DPS 점 그래프"></div>
+  </section>
+
+  <section class="s4-sec" id="summary">
+    <h2>계열별 요약</h2>
+    <div class="s4-tablewrap">
+      <table class="s4-table" data-source="spec_summary" data-row-key="spec">
+        <thead><tr><th data-field="spec">계열</th><th class="n" data-field="n">건수</th><th class="n" data-field="median">중앙값(M)</th><th class="n" data-field="min">최저(M)</th><th class="n" data-field="max">최고(M)</th><th class="n" data-field="uploaders">업로더 수</th><th>최고 기록 영상</th></tr></thead>
+        <tbody data-draw="sum-rows"></tbody>
+      </table>
+    </div>
+    <p class="s4-muted s4-small">업로더 수가 건수보다 적으면 한 사람이 여러 번 올린 기록입니다. 예를 들어 매활 상위 기록 여러 건은 같은 업로더의 380 장비 기록입니다.</p>
+  </section>
+
+  <section class="s4-sec" id="boss-chart">
+    <h2>보스 1:1 시트: 실제 보스 DPS</h2>
+    <p class="s4-muted s4-small">음영은 같은 영상들에서 호스트(월광)가 낸 보스 DPS 범위로, 측정 조건이 비슷했는지 보는 기준선입니다.</p>
+    <div class="s4-chart is-boss dash-skeleton" data-draw="boss-strip" data-source="boss_1v1" role="img" aria-label="보스 1:1 시트 계열별 보스 DPS 점 그래프"></div>
+    <div class="s4-tablewrap">
+      <table class="s4-table" data-source="boss_1v1" data-row-key="id">
+        <thead><tr><th data-field="id">번호</th><th data-field="video">시트 영상 번호</th><th data-field="spec">계열</th><th data-field="spec_sheet">시트 표기</th><th class="n" data-field="boss_dps_m">보스 DPS(M)</th><th class="n" data-field="mob_dps_m">쫄 DPS(M)</th><th class="n" data-field="host_boss_dps_m">호스트 보스 DPS(M)</th></tr></thead>
+        <tbody data-draw="boss-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="s4-sec" id="global">
+    <h2>글섭 시즌4 Parse 영상</h2>
+    <div class="s4-tablewrap">
+      <table class="s4-table" data-source="global_parse" data-row-key="id">
+        <thead><tr><th data-field="id">번호</th><th data-field="spec">계열</th><th class="n" data-field="dps_m">DPS(M)</th><th class="n" data-field="gear">장비</th><th data-field="date">날짜</th><th data-field="uploader">업로더</th><th data-field="title">영상 제목</th><th data-field="note">메모</th></tr></thead>
+        <tbody data-draw="gl-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="s4-sec" id="records">
+    <h2>중섭 기록 전체 (포함·제외 모두)</h2>
+    <p class="s4-muted s4-small">제목은 원문 그대로입니다. w·W·万은 만 단위(550w = 5.50M)이고, 단위 없는 숫자를 만 단위로 읽은 경우 메모에 적었습니다.</p>
+    <div class="s4-tablewrap is-tall">
+      <table class="s4-table" data-source="cn_dummy" data-row-key="id">
+        <thead><tr><th data-field="id">번호</th><th data-field="spec">계열</th><th data-field="spec_cn">중국명</th><th class="n" data-field="dps_m">DPS(M)</th><th data-field="status">판정</th><th data-field="date">날짜</th><th data-field="uploader">업로더</th><th data-field="title">영상 제목</th><th data-field="note">메모</th></tr></thead>
+        <tbody data-draw="cn-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="s4-sec" id="source-list">
+    <h2>출처</h2>
+    <ol class="s4-src">
+      <li>중섭 허수아비 Parse: bilibili 영상 검색 API, 키워드 「星痕共鸣 + 계열 중국명 + 木桩 / 打桩」, 게시일순. 영상마다 링크는 위 표에 있습니다. <a href="https://search.bilibili.com/all?keyword=%E6%98%9F%E7%97%95%E5%85%B1%E9%B8%A3%20%E9%B9%B0%E5%BC%93%20%E6%9C%A8%E6%A1%A9" target="_blank" rel="noopener">검색 예시(매활 鹰弓)</a></li>
+      <li>보스 1:1 시트: <a href="https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346" target="_blank" rel="noopener">디스코드 「1vs1 Stream DPS」 구글 시트, Dados normalizados 탭</a></li>
+      <li>시트를 시즌4 자료로 알린 글: <a href="https://gall.dcinside.com/mgallery/board/view/?id=bpt&amp;no=39246" target="_blank" rel="noopener">디시 블루프로토콜 갤러리 39246 「s4 직업별 dps」(2026-09-12)</a></li>
+      <li>글섭 유저가 중섭 bilibili Parse를 비교 자료로 인용한 예: <a href="https://www.youtube.com/watch?v=fCoYeQjUNk8" target="_blank" rel="noopener">takumi 「Crimson Spec 3min DPS Parse 340 gear 4.44mil」 설명란</a></li>
+      <li>글섭 시즌4 시작일(10/8)·중섭 시즌4 시작일(7/16): 스타레조팬 일정 정리 <a href="https://blueprotocol-fan.com/" target="_blank" rel="noopener">blueprotocol-fan.com</a></li>
+    </ol>
+  </section>
+
+  <details class="s4-det" id="method">
+    <summary>수집 방법과 한계</summary>
+    <ul>
+      <li>중섭 기록은 2026-09-01 이후 게시분을 모았고, 9/3 기술 개편(技改) 전 기록·제목에 수치가 없는 영상·던전 영상은 표에 남기되 계산에서 뺐습니다.</li>
+      <li>한섭 시즌4 밸런스 공지(11/16)는 중섭 개편 이후 상태와 같다고 판단해 개편 이후 기록만 썼습니다.</li>
+      <li>계열명은 한섭 표기입니다. 윈드 나이트의 질풍은 영문 Vanguard·중섭 重装·일본 烈風, 난무(별칭 날창)는 영문 Skyward·중섭 空枪·일본 乱風입니다. 한섭 시즌4 밸런스 공지(디시 39658)의 질풍 계열 '나선 선풍', 난무 계열 '하늘춤 강타' 항목으로 대응을 확인했습니다.</li>
+      <li>허수아비는 단일 대상이라 쫄몹 광역 딜(얼창의 프로스트 코멧 등)은 드러나지 않습니다.</li>
+      <li>잘 나온 기록만 올라오기 쉽고, 계열당 기록이 1~14건이라 중앙값 차이 0.3~0.5M는 조건 차이 안에 들어갈 수 있습니다.</li>
+      <li>시즌4를 모아서 집계한 로그 사이트는 중섭·글섭 모두 찾지 못했습니다. 레딧은 접근이 막혀 확인하지 못했습니다.</li>
+    </ul>
+  </details>
+</div>
+
+<script>
+  dash.calc('spec_summary', {
+    inputs: ['cn_dummy'],
+    title: '계열별 요약 (중섭 허수아비)',
+    description: '판정이 포함인 기록만 계열별로 건수·중앙값(3건 이상)·최저·최고·업로더 수를 계산',
+    fn: (records) => {
+      const ok = records.filter((r) => r.status === '포함' && r.dps_m != null);
+      const specs = [...new Set(records.map((r) => r.spec))];
+      const out = specs.map((spec) => {
+        const list = ok.filter((r) => r.spec === spec).sort((a, b) => b.dps_m - a.dps_m);
+        const vals = list.map((r) => +r.dps_m);
+        return {
+          spec,
+          n: vals.length,
+          median: vals.length >= 3 ? Math.round(d3.median(vals) * 100) / 100 : null,
+          min: vals.length ? d3.min(vals) : null,
+          max: vals.length ? d3.max(vals) : null,
+          uploaders: new Set(list.map((r) => r.uploader)).size,
+          top_id: list.length ? list[0].id : null,
+        };
+      });
+      return out.sort((a, b) => {
+        if ((a.median != null) !== (b.median != null)) return a.median != null ? -1 : 1;
+        return (b.median ?? b.max ?? -1) - (a.median ?? a.max ?? -1);
+      });
+    },
+  });
+
+  dash.calc('cn_counts', {
+    inputs: ['cn_dummy'],
+    title: '중섭 기록 포함·제외 건수',
+    description: '판정별 기록 수',
+    fn: (records) => ['포함', '제외'].map((status) => ({ status, n: records.filter((r) => r.status === status).length })),
+  });
+</script>
+
+<script>
+  window.S4 = {
+    fmt: d3.format('.2f'),
+    sel: ['매활', '얼창'],
+    colorFor(spec) {
+      const i = S4.sel.indexOf(spec);
+      if (i === 0) return dash.colors[0];
+      if (i === 1) return dash.colors[1];
+      return 'var(--cds-chart-muted)';
+    },
+    redrawPicked() {
+      ['cn-strip', 'boss-strip', 'sw-a', 'sw-b'].forEach((n) => dash.draw(n));
+    },
+    ready(el, ids) {
+      const st = ids.map((id) => dash.data(id).status);
+      if (st.every((s) => s === 'ok')) { el.classList.remove('dash-skeleton'); return true; }
+      if (st.some((s) => s === 'loading')) return false;
+      el.classList.remove('dash-skeleton');
+      return false;
+    },
+    word(el, id, pick) {
+      const d = dash.data(id);
+      if (d.status !== 'ok') { el.textContent = '—'; return; }
+      const v = pick(d.data);
+      el.textContent = v == null ? '—' : v;
+    },
+    tooltip(box) {
+      const tt = document.createElement('div');
+      tt.className = 's4-tt';
+      tt.hidden = true;
+      box.appendChild(tt);
+      let pinned = false;
+      const place = (ev) => {
+        const r = box.getBoundingClientRect();
+        let x = ev.clientX - r.left + 12, y = ev.clientY - r.top + 12;
+        tt.hidden = false;
+        const w = tt.offsetWidth, h = tt.offsetHeight;
+        if (x + w > box.clientWidth) x = Math.max(0, ev.clientX - r.left - w - 12);
+        if (y + h > box.clientHeight + 40) y = Math.max(0, ev.clientY - r.top - h - 12);
+        tt.style.left = x + 'px';
+        tt.style.top = y + 'px';
+      };
+      return {
+        show(ev, lines, link) {
+          if (pinned && ev.type !== 'click') return;
+          tt.replaceChildren();
+          lines.forEach(([label, value]) => {
+            const p = document.createElement('div');
+            if (label) { const s = document.createElement('span'); s.className = 's4-muted'; s.textContent = label + ' '; p.appendChild(s); }
+            const b = document.createElement('b'); b.textContent = value; p.appendChild(b);
+            tt.appendChild(p);
+          });
+          if (link) {
+            const a = document.createElement('a');
+            a.href = link; a.target = '_blank'; a.rel = 'noopener'; a.textContent = '원본 열기 ↗';
+            const p = document.createElement('div'); p.appendChild(a); tt.appendChild(p);
+          }
+          place(ev);
+        },
+        pin(ev, lines, link) { pinned = false; this.show(ev, lines, link); pinned = true; },
+        hide() { if (!pinned) tt.hidden = true; },
+        unpin() { pinned = false; tt.hidden = true; },
+      };
+    },
+    textWidth(svg, strings, cls) {
+      const g = svg.append('g');
+      let w = 0;
+      strings.forEach((s) => { const t = g.append('text').attr('class', cls || null).text(s); w = Math.max(w, t.node().getComputedTextLength()); });
+      g.remove();
+      return w;
+    },
+  };
+
+  dash.draw('n-inc', (el) => S4.word(el, 'cn_counts', (rows) => rows.find((r) => r.status === '포함')?.n));
+  dash.draw('n-inc2', (el) => S4.word(el, 'cn_counts', (rows) => rows.find((r) => r.status === '포함')?.n));
+  dash.draw('n-out', (el) => S4.word(el, 'cn_counts', (rows) => rows.find((r) => r.status === '제외')?.n));
+  dash.draw('n-boss', (el) => S4.word(el, 'boss_1v1', (rows) => rows.length));
+  dash.draw('n-gl', (el) => S4.word(el, 'global_parse', (rows) => rows.length));
+  dash.draw('lead-spec', (el) => S4.word(el, 'spec_summary', (rows) => rows[0]?.spec));
+  dash.draw('lead-med', (el) => S4.word(el, 'spec_summary', (rows) => rows[0]?.median != null ? S4.fmt(rows[0].median) : null));
+  const med = (spec) => (rows) => { const r = rows.find((x) => x.spec === spec); return r && r.median != null ? S4.fmt(r.median) : null; };
+  const cnt = (spec) => (rows) => rows.find((x) => x.spec === spec)?.n;
+  dash.draw('falc-med', (el) => S4.word(el, 'spec_summary', med('매활')));
+  dash.draw('ice-med', (el) => S4.word(el, 'spec_summary', med('얼창')));
+  dash.draw('falc-n', (el) => S4.word(el, 'spec_summary', cnt('매활')));
+  dash.draw('ice-n', (el) => S4.word(el, 'spec_summary', cnt('얼창')));
+  dash.draw('cmp-word', (el) => S4.word(el, 'spec_summary', (rows) => {
+    const a = rows.find((x) => x.spec === '매활')?.median, b = rows.find((x) => x.spec === '얼창')?.median;
+    if (a == null || b == null) return null;
+    return a > b ? '높습니다' : a < b ? '낮습니다' : '같습니다';
+  }));
+  const bossVals = (spec) => (rows) => {
+    const l = rows.filter((r) => r.spec === spec).map((r) => S4.fmt(r.boss_dps_m) + 'M');
+    return l.length ? `${l.join(' · ')}(${l.length}명)` : '기록 없음';
+  };
+  dash.draw('boss-falc', (el) => S4.word(el, 'boss_1v1', bossVals('매활')));
+  dash.draw('boss-ice', (el) => S4.word(el, 'boss_1v1', bossVals('얼창')));
+  dash.draw('sw-a', (el) => { el.style.background = dash.colors[0]; });
+  dash.draw('sw-b', (el) => { el.style.background = dash.colors[1]; });
+  dash.draw('leg-other', (el) => { el.style.background = 'var(--cds-chart-muted)'; });
+  [['pick-a', 0], ['pick-b', 1]].forEach(([name, idx]) => {
+    dash.draw(name, (sel) => {
+      const d = dash.data('spec_summary');
+      const specs = d.status === 'ok' ? d.data.filter((r) => r.n > 0).map((r) => r.spec) : [];
+      sel.replaceChildren(...specs.map((s) => new Option(s, s)));
+      sel.value = S4.sel[idx];
+      sel.onchange = () => { S4.sel[idx] = sel.value; S4.redrawPicked(); };
+    });
+  });
+</script>
+
+<script>
+  function s4Strip(el, opts) {
+    const { order, valueKey, rightLabel, tipLines, band } = opts;
+    const focus = S4.sel;
+    const rows = opts.rows.slice().sort((a, b) => focus.includes(a.spec) - focus.includes(b.spec));
+    el.replaceChildren();
+    const W = el.clientWidth || 600;
+    const rowH = 30, top = 8, bottom = 28;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
+    const labW = S4.textWidth(svg, order, 's4-lab');
+    const rightW = S4.textWidth(svg, order.map(rightLabel));
+    const left = labW + 14, right = rightW + 14;
+    const H = top + order.length * rowH + bottom;
+    svg.attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const maxV = d3.max(rows, (r) => r[valueKey]) || 1;
+    const x = d3.scaleLinear().domain([0, Math.ceil(maxV)]).range([left, Math.max(left + 40, W - right)]);
+    const y = (spec) => top + order.indexOf(spec) * rowH + rowH / 2;
+    const ticks = Math.max(2, Math.min(Math.ceil(maxV), Math.floor((x.range()[1] - left) / 50)));
+    const grid = svg.append('g');
+    x.ticks(ticks).forEach((t) => {
+      grid.append('line').attr('x1', x(t)).attr('x2', x(t)).attr('y1', top).attr('y2', H - bottom).style('stroke', 'var(--cds-chart-grid)');
+      grid.append('text').attr('x', x(t)).attr('y', H - bottom + 18).attr('text-anchor', 'middle').text(t + 'M');
+    });
+    if (band) {
+      svg.append('rect').attr('x', x(band[0])).attr('width', Math.max(1, x(band[1]) - x(band[0]))).attr('y', top).attr('height', H - bottom - top).style('fill', 'var(--cds-chart-reference)').style('opacity', 0.25);
+    }
+    order.forEach((spec, i) => {
+      if (i % 2 === 0) svg.append('rect').attr('x', 0).attr('width', W).attr('y', top + i * rowH).attr('height', rowH).style('fill', 'var(--color-fg)').style('opacity', 0.03);
+      svg.append('text').attr('class', 's4-lab' + (focus.includes(spec) ? ' is-focus' : '')).attr('x', left - 10).attr('y', y(spec) + 5).attr('text-anchor', 'end').text(spec);
+      svg.append('text').attr('x', W - right + 10).attr('y', y(spec) + 4).text(rightLabel(spec));
+    });
+    if (opts.medians) {
+      opts.medians.forEach((m) => {
+        if (m.median == null) return;
+        svg.append('line').attr('x1', x(m.median)).attr('x2', x(m.median)).attr('y1', y(m.spec) - 11).attr('y2', y(m.spec) + 11).style('stroke', 'var(--color-fg)').style('stroke-width', 2.5);
+      });
+    }
+    const tip = S4.tooltip(el);
+    const jitter = (r, i) => ((i * 7919) % 9 - 4) * 1.6;
+    svg.append('g').selectAll('circle').data(rows).join('circle')
+      .attr('class', 's4-dot')
+      .attr('cx', (r) => x(r[valueKey]))
+      .attr('cy', (r, i) => y(r.spec) + jitter(r, i))
+      .attr('r', (r) => (focus.includes(r.spec) ? 5.5 : 4.5))
+      .style('fill', (r) => S4.colorFor(r.spec))
+      .style('fill-opacity', (r) => (focus.includes(r.spec) ? 0.95 : 0.5))
+      .style('stroke', 'var(--color-bg)')
+      .style('stroke-width', 1)
+      .on('pointerenter pointermove', (ev, r) => tip.show(ev, tipLines(r), r.url))
+      .on('pointerleave', () => tip.hide())
+      .on('click', (ev, r) => { ev.stopPropagation(); tip.pin(ev, tipLines(r), r.url); });
+    svg.on('click', () => tip.unpin());
+  }
+
+  dash.draw('cn-strip', (el) => {
+    if (!S4.ready(el, ['cn_dummy', 'spec_summary'])) {
+      const s = dash.data('cn_dummy').status;
+      if (s !== 'loading') el.textContent = s === 'error' ? '불러오지 못했습니다' : '—';
+      return;
+    }
+    const sum = dash.data('spec_summary').data.filter((r) => r.n > 0);
+    const rows = dash.data('cn_dummy').data.filter((r) => r.status === '포함' && r.dps_m != null).map((r) => ({ ...r, dps_m: +r.dps_m }));
+    const order = sum.map((r) => r.spec);
+    const bySpec = new Map(sum.map((r) => [r.spec, r]));
+    s4Strip(el, {
+      rows, order, valueKey: 'dps_m', focus: ['매활', '얼창'], medians: sum,
+      rightLabel: (spec) => { const s = bySpec.get(spec); return s.median != null ? `중앙 ${S4.fmt(s.median)}M · ${s.n}건` : `${s.n}건(중앙값 없음)`; },
+      tipLines: (r) => [['', `${r.spec} ${S4.fmt(r.dps_m)}M`], ['날짜', r.date], ['업로더', r.uploader], ['제목', r.title], ...(r.note ? [['메모', r.note]] : []), ['번호', r.id]],
+    });
+  });
+
+  dash.draw('boss-strip', (el) => {
+    if (!S4.ready(el, ['boss_1v1'])) {
+      const s = dash.data('boss_1v1').status;
+      if (s !== 'loading') el.textContent = s === 'error' ? '불러오지 못했습니다' : '—';
+      return;
+    }
+    const rows = dash.data('boss_1v1').data.map((r) => ({ ...r, boss_dps_m: +r.boss_dps_m }));
+    const bySpec = d3.rollup(rows, (l) => ({ n: l.length, max: d3.max(l, (r) => r.boss_dps_m) }), (r) => r.spec);
+    const order = [...bySpec.keys()].sort((a, b) => bySpec.get(b).max - bySpec.get(a).max);
+    const hosts = rows.map((r) => +r.host_boss_dps_m).filter((v) => v > 0);
+    s4Strip(el, {
+      rows, order, valueKey: 'boss_dps_m', focus: ['매활', '얼창'], band: [d3.min(hosts), d3.max(hosts)],
+      rightLabel: (spec) => `최고 ${S4.fmt(bySpec.get(spec).max)}M · ${bySpec.get(spec).n}명`,
+      tipLines: (r) => [['', `${r.spec} 보스 ${S4.fmt(r.boss_dps_m)}M`], ['쫄', S4.fmt(+r.mob_dps_m) + 'M'], ['같은 영상 호스트 보스', S4.fmt(+r.host_boss_dps_m) + 'M'], ['시트', `${r.video} · ${r.spec_sheet}`], ['번호', r.id]],
+    });
+  });
+</script>
+
+<script>
+  function s4Cell(tr, text, cls) {
+    const td = document.createElement('td');
+    if (cls) td.className = cls;
+    td.textContent = text == null || text === '' ? '—' : text;
+    tr.appendChild(td);
+    return td;
+  }
+  function s4Link(tr, text, url, cls) {
+    const td = document.createElement('td');
+    if (cls) td.className = cls;
+    const a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = text;
+    td.appendChild(a);
+    tr.appendChild(td);
+    return td;
+  }
+
+  dash.draw('sum-rows', (tb) => {
+    const s = dash.data('spec_summary'), c = dash.data('cn_dummy');
+    tb.replaceChildren();
+    if (s.status !== 'ok' || c.status !== 'ok') return;
+    const byId = new Map(c.data.map((r) => [r.id, r]));
+    s.data.forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = r.spec;
+      s4Cell(tr, r.spec);
+      s4Cell(tr, String(r.n), 'n');
+      s4Cell(tr, r.median != null ? S4.fmt(r.median) : '3건 미만', 'n');
+      s4Cell(tr, r.min != null ? S4.fmt(r.min) : null, 'n');
+      s4Cell(tr, r.max != null ? S4.fmt(r.max) : null, 'n');
+      s4Cell(tr, String(r.uploaders), 'n');
+      const top = r.top_id ? byId.get(r.top_id) : null;
+      if (top) s4Link(tr, `${top.video} (${top.date}, ${top.uploader})`, top.url);
+      else s4Cell(tr, '수치 있는 기록 없음');
+      tb.appendChild(tr);
+    });
+  });
+
+  dash.draw('boss-rows', (tb) => {
+    const d = dash.data('boss_1v1');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    d.data.slice().sort((a, b) => b.boss_dps_m - a.boss_dps_m).forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = r.id;
+      s4Cell(tr, r.id);
+      s4Link(tr, r.video, r.url);
+      s4Cell(tr, r.spec);
+      s4Cell(tr, r.spec_sheet);
+      s4Cell(tr, S4.fmt(+r.boss_dps_m), 'n');
+      s4Cell(tr, S4.fmt(+r.mob_dps_m), 'n');
+      s4Cell(tr, r.host_boss_dps_m != null ? S4.fmt(+r.host_boss_dps_m) : null, 'n');
+      tb.appendChild(tr);
+    });
+  });
+
+  dash.draw('gl-rows', (tb) => {
+    const d = dash.data('global_parse');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    d.data.forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = r.id;
+      s4Cell(tr, r.id);
+      s4Cell(tr, r.spec);
+      s4Cell(tr, S4.fmt(+r.dps_m), 'n');
+      s4Cell(tr, String(r.gear), 'n');
+      s4Cell(tr, r.date);
+      s4Cell(tr, r.uploader);
+      s4Link(tr, r.title, r.url, 't');
+      s4Cell(tr, r.note);
+      tb.appendChild(tr);
+    });
+  });
+
+  dash.draw('cn-rows', (tb) => {
+    const d = dash.data('cn_dummy'), s = dash.data('spec_summary');
+    tb.replaceChildren();
+    if (d.status !== 'ok' || s.status !== 'ok') return;
+    const rank = new Map(s.data.map((r, i) => [r.spec, i]));
+    d.data.slice().sort((a, b) => (rank.get(a.spec) - rank.get(b.spec)) || ((a.status === '포함') === (b.status === '포함') ? (b.dps_m ?? -1) - (a.dps_m ?? -1) : a.status === '포함' ? -1 : 1)).forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = r.id;
+      if (r.status !== '포함') tr.className = 'is-out';
+      s4Cell(tr, r.id);
+      s4Cell(tr, r.spec);
+      s4Cell(tr, r.spec_cn);
+      s4Cell(tr, r.dps_m != null ? S4.fmt(+r.dps_m) : null, 'n');
+      const st = s4Cell(tr, '');
+      st.textContent = '';
+      const pill = document.createElement('span');
+      pill.className = 's4-pill' + (r.status === '포함' ? ' is-in' : '');
+      pill.textContent = r.status;
+      st.appendChild(pill);
+      s4Cell(tr, r.date);
+      s4Cell(tr, r.uploader);
+      s4Link(tr, r.title, r.url, 't');
+      s4Cell(tr, r.note);
+      tb.appendChild(tr);
+    });
+  });
+</script>
+
+<script>dash.__start();</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,292 @@
+{
+ "rows": [
+  {
+   "id": "b-01",
+   "spec": "월광",
+   "spec_sheet": "Moon¹",
+   "video": "Nº1",
+   "boss_dps_m": 6.5,
+   "mob_dps_m": 6.05,
+   "host_boss_dps_m": 11.0,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-02",
+   "spec": "월광",
+   "spec_sheet": "Moon¹(Second attempt)",
+   "video": "Nº2",
+   "boss_dps_m": 6.5,
+   "mob_dps_m": 8.1,
+   "host_boss_dps_m": 10.5,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-03",
+   "spec": "무상",
+   "spec_sheet": "Formless¹",
+   "video": "Nº3",
+   "boss_dps_m": 11.3,
+   "mob_dps_m": 12.6,
+   "host_boss_dps_m": 11.0,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-04",
+   "spec": "얼빔",
+   "spec_sheet": "Frostbeam",
+   "video": "Nº10",
+   "boss_dps_m": 10.6,
+   "mob_dps_m": 12.7,
+   "host_boss_dps_m": 11.2,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-05",
+   "spec": "매활",
+   "spec_sheet": "Falcon",
+   "video": "Nº11",
+   "boss_dps_m": 8.0,
+   "mob_dps_m": 13.0,
+   "host_boss_dps_m": 11.1,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-06",
+   "spec": "월광",
+   "spec_sheet": "Moon²",
+   "video": "Nº12",
+   "boss_dps_m": 11.3,
+   "mob_dps_m": 10.8,
+   "host_boss_dps_m": 11.4,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-07",
+   "spec": "늑활",
+   "spec_sheet": "Wildpack(Doro)",
+   "video": "Nº18",
+   "boss_dps_m": 9.4,
+   "mob_dps_m": 8.7,
+   "host_boss_dps_m": 11.1,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-08",
+   "spec": "늑활",
+   "spec_sheet": "Wildpack(Elodie)",
+   "video": "Nº19",
+   "boss_dps_m": 10.3,
+   "mob_dps_m": 10.6,
+   "host_boss_dps_m": 11.2,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-09",
+   "spec": "난무",
+   "spec_sheet": "Skyward³(Homem)",
+   "video": "Nº20",
+   "boss_dps_m": 10.0,
+   "mob_dps_m": 12.5,
+   "host_boss_dps_m": 11.0,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-10",
+   "spec": "무상",
+   "spec_sheet": "Formless²",
+   "video": "Nº4",
+   "boss_dps_m": 10.1,
+   "mob_dps_m": 15.9,
+   "host_boss_dps_m": 10.7,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-11",
+   "spec": "얼창",
+   "spec_sheet": "Icicle¹",
+   "video": "Nº5",
+   "boss_dps_m": 8.13,
+   "mob_dps_m": 11.7,
+   "host_boss_dps_m": 11.0,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-12",
+   "spec": "적홍",
+   "spec_sheet": "Crismon¹",
+   "video": "Nº6",
+   "boss_dps_m": 10.4,
+   "mob_dps_m": 14.6,
+   "host_boss_dps_m": 11.3,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-13",
+   "spec": "적홍",
+   "spec_sheet": "Crismon³",
+   "video": "Nº13",
+   "boss_dps_m": 10.9,
+   "mob_dps_m": 19.0,
+   "host_boss_dps_m": 11.3,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-14",
+   "spec": "난무",
+   "spec_sheet": "Skyward",
+   "video": "Nº14",
+   "boss_dps_m": 9.6,
+   "mob_dps_m": 13.5,
+   "host_boss_dps_m": 11.4,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-15",
+   "spec": "질풍",
+   "spec_sheet": "Vanguard¹",
+   "video": "Nº15",
+   "boss_dps_m": 11.0,
+   "mob_dps_m": 13.5,
+   "host_boss_dps_m": 11.7,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-16",
+   "spec": "음파",
+   "spec_sheet": "Disso²(Skadi)",
+   "video": "Nº21",
+   "boss_dps_m": 8.0,
+   "mob_dps_m": 13.0,
+   "host_boss_dps_m": 11.0,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-17",
+   "spec": "얼빔",
+   "spec_sheet": "Frostbeam²(Vinifera)",
+   "video": "Nº22",
+   "boss_dps_m": 12.6,
+   "mob_dps_m": 15.0,
+   "host_boss_dps_m": 11.5,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-18",
+   "spec": "얼창",
+   "spec_sheet": "Icicle²",
+   "video": "Nº23",
+   "boss_dps_m": 11.9,
+   "mob_dps_m": 14.6,
+   "host_boss_dps_m": 11.4,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-19",
+   "spec": "적홍",
+   "spec_sheet": "Crismon¹(Second attempt)",
+   "video": "Nº7",
+   "boss_dps_m": 10.0,
+   "mob_dps_m": 18.1,
+   "host_boss_dps_m": 10.3,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-20",
+   "spec": "음파",
+   "spec_sheet": "Disso¹",
+   "video": "Nº8",
+   "boss_dps_m": 9.9,
+   "mob_dps_m": 13.6,
+   "host_boss_dps_m": 11.1,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-21",
+   "spec": "적홍",
+   "spec_sheet": "Crismon²",
+   "video": "Nº9",
+   "boss_dps_m": 8.2,
+   "mob_dps_m": 14.1,
+   "host_boss_dps_m": 10.6,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-22",
+   "spec": "난무",
+   "spec_sheet": "Skyward²",
+   "video": "Nº16",
+   "boss_dps_m": 11.2,
+   "mob_dps_m": 21.5,
+   "host_boss_dps_m": 10.9,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-23",
+   "spec": "무상",
+   "spec_sheet": "Formless³",
+   "video": "Nº17",
+   "boss_dps_m": 10.0,
+   "mob_dps_m": 15.0,
+   "host_boss_dps_m": 11.6,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-24",
+   "spec": "무상",
+   "spec_sheet": "Formless³(Second attempt)",
+   "video": "Nº17",
+   "boss_dps_m": 10.2,
+   "mob_dps_m": 15.5,
+   "host_boss_dps_m": 11.6,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-25",
+   "spec": "난무",
+   "spec_sheet": "Skyward*4",
+   "video": "Nº24",
+   "boss_dps_m": 9.9,
+   "mob_dps_m": 19.5,
+   "host_boss_dps_m": 11.5,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-26",
+   "spec": "질풍",
+   "spec_sheet": "Vanguard²",
+   "video": "Nº25",
+   "boss_dps_m": 9.9,
+   "mob_dps_m": 11.6,
+   "host_boss_dps_m": 10.2,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "id": "b-27",
+   "spec": "발도",
+   "spec_sheet": "Iaido",
+   "video": "Nº26",
+   "boss_dps_m": 7.7,
+   "mob_dps_m": 11.0,
+   "host_boss_dps_m": 10.5,
+   "url": "https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  }
+ ],
+ "meta": [
+  {
+   "label": "출처 시트",
+   "value": "디스코드 「1vs1 Stream DPS」 구글 시트, Dados normalizados 탭: https://docs.google.com/spreadsheets/d/1tkj9BPCl8RQpmBFrzc_MWqgYmOuRUm_GmBUaAsd8JQ0/edit?gid=680657346"
+  },
+  {
+   "label": "시트를 알린 글",
+   "value": "디시 블루프로토콜 마이너 갤러리 39246번 「s4 직업별 dps」(2026-09-12): https://gall.dcinside.com/mgallery/board/view/?id=bpt&no=39246"
+  },
+  {
+   "label": "측정 방식",
+   "value": "같은 호스트(월광)와 도전자가 같은 보스를 1:1로 친 기록. 호스트 보스 DPS 10.2~12.0M로 조건 비교용. 능력 점수 약 75~80k"
+  },
+  {
+   "label": "서버 판단",
+   "value": "시트에 서버·시즌 표기 없음. 9/12 게시 시점에 시즌4 서버는 중섭뿐이라 중섭 S4로 추정"
+  }
+ ]
+}
