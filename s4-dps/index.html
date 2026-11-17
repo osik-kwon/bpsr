@@ -115,6 +115,9 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
   .s4-pick { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-md); }
   .s4-pickrow { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
   .s4-sw { display: inline-block; width: 12px; height: 12px; border-radius: 50%; }
+  .s4-shape { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; box-sizing: border-box; }
+  .s4-shape.is-late { background: var(--color-fg-muted); }
+  .s4-shape.is-sep { border: 2px solid var(--color-fg-muted); }
   .s4-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
   .s4-tablewrap { overflow-x: auto; min-width: 0; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
   .s4-tablewrap.is-tall { max-height: 560px; overflow-y: auto; }
@@ -138,8 +141,9 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
   <header class="s4-head" id="top">
     <h1 class="s4-title">블루 프로토콜: 스타 레조넌스 시즌4 계열별 DPS</h1>
     <p class="s4-lede" data-read lang="ko">
-      중섭 시즌4 허수아비 기록 <b data-draw="n-inc" data-source="cn_counts" data-field="n" data-where="status=포함">—</b>건을 계열별 중앙값으로 보면 1위는 <b data-draw="lead-spec" data-source="spec_summary" data-field="spec" data-row="0">—</b>(<span data-draw="lead-med" data-source="spec_summary" data-field="median" data-row="0">—</span>M)입니다.
-      매활은 <b data-draw="falc-med" data-source="spec_summary" data-field="median" data-where="spec=매활">—</b>M(<span data-draw="falc-n" data-source="spec_summary" data-field="n" data-where="spec=매활">—</span>건), 얼창은 <b data-draw="ice-med" data-source="spec_summary" data-field="median" data-where="spec=얼창">—</b>M(<span data-draw="ice-n" data-source="spec_summary" data-field="n" data-where="spec=얼창">—</span>건)로 매활이 <span data-draw="cmp-word">—</span>.
+      중섭 시즌4 허수아비 기록 <b data-draw="n-inc" data-source="cn_counts" data-field="n" data-where="status=포함">—</b>건 중 10~11월 기록(<span data-draw="late-n" data-source="period_summary" data-field="n" data-where="period=10~11월">—</span>건, 중앙값 <b data-draw="late-med" data-source="period_summary" data-field="median" data-where="period=10~11월">—</b>M)이 9월 기록(<span data-draw="sep-n" data-source="period_summary" data-field="n" data-where="period=9월">—</span>건, <b data-draw="sep-med" data-source="period_summary" data-field="median" data-where="period=9월">—</b>M)보다 <span data-draw="period-word">—</span>.
+      장비가 오른 뒤의 기록이 많은 계열일수록 전체 순위가 높게 나오므로 계열은 같은 기간끼리 비교해야 합니다.
+      10~11월만 보면 매활 <b data-draw="late-falc" data-source="spec_summary">—</b>, 얼창 <b data-draw="late-ice" data-source="spec_summary">—</b>이고, 9월만 보면 매활 <b data-draw="sep-falc" data-source="spec_summary">—</b>, 얼창 <b data-draw="sep-ice" data-source="spec_summary">—</b>입니다.
       실제 보스를 친 1:1 기록은 매활 <span data-draw="boss-falc" data-source="boss_1v1" data-field="boss_dps_m">—</span>, 얼창 <span data-draw="boss-ice" data-source="boss_1v1" data-field="boss_dps_m">—</span>뿐이라 보스 기준 우열은 판정할 수 없습니다.
     </p>
     <p class="s4-muted s4-small">모든 숫자는 영상·시트 원문에서 옮긴 값입니다. 점에 마우스를 올리거나 누르면 원본 영상 링크가 나오고, 맨 아래 표에 기록 전체와 제외 사유가 있습니다. 수집일 2026-11-16~17.</p>
@@ -171,7 +175,11 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
 
   <section class="s4-sec" id="cn-chart">
     <h2>중섭 시즌4 허수아비 DPS, 기록 하나가 점 하나</h2>
-    <p class="s4-muted s4-small">세로 막대는 계열 중앙값(3건 이상일 때만). 계열은 중앙값 높은 순, 3건 미만은 최고 기록 순으로 아래에 둡니다.</p>
+    <p class="s4-muted s4-small">세로 막대는 고른 기간의 계열 중앙값(3건 이상일 때만). 계열은 그 기간 중앙값 높은 순, 3건 미만은 최고 기록 순으로 아래에 둡니다. 9월은 9/3~9/30, 10~11월은 10/1~11/16 게시 기록입니다.</p>
+    <div class="s4-pick" id="cn-period">
+      <label class="s4-pickrow" for="s4-period"><span class="s4-muted s4-small">기간</span><select class="dash-select" id="s4-period" aria-label="비교할 기간"><option value="전체" selected>전체</option><option value="9월">9월</option><option value="10~11월">10~11월</option></select></label>
+      <span class="s4-legend"><span><i class="s4-shape is-late"></i>10~11월 기록</span><span><i class="s4-shape is-sep"></i>9월 기록</span></span>
+    </div>
     <div class="s4-pick" id="cn-pick">
       <label class="s4-pickrow" for="pick-a"><i class="s4-sw" data-draw="sw-a"></i><span class="s4-muted s4-small">비교 1</span><select class="dash-select" id="pick-a" data-draw="pick-a" data-source="spec_summary" aria-label="비교할 첫 번째 계열"></select></label>
       <label class="s4-pickrow" for="pick-b"><i class="s4-sw" data-draw="sw-b"></i><span class="s4-muted s4-small">비교 2</span><select class="dash-select" id="pick-b" data-draw="pick-b" data-source="spec_summary" aria-label="비교할 두 번째 계열"></select></label>
@@ -182,14 +190,15 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
   </section>
 
   <section class="s4-sec" id="summary">
-    <h2>계열별 요약</h2>
+    <h2>계열별 요약 (<span data-draw="period-label">—</span>)</h2>
+    <p class="s4-muted s4-small">위 그래프의 기간 선택을 따릅니다.</p>
     <div class="s4-tablewrap">
-      <table class="s4-table" data-source="spec_summary" data-row-key="spec">
-        <thead><tr><th data-field="spec">계열</th><th class="n" data-field="n">건수</th><th class="n" data-field="median">중앙값(M)</th><th class="n" data-field="min">최저(M)</th><th class="n" data-field="max">최고(M)</th><th class="n" data-field="uploaders">업로더 수</th><th>최고 기록 영상</th></tr></thead>
+      <table class="s4-table" data-source="spec_summary" data-row-key="period,spec">
+        <thead><tr><th data-field="period">기간</th><th data-field="spec">계열</th><th class="n" data-field="n">건수</th><th class="n" data-field="median">중앙값(M)</th><th class="n" data-field="min">최저(M)</th><th class="n" data-field="max">최고(M)</th><th class="n" data-field="uploaders">업로더 수</th><th>최고 기록 영상</th></tr></thead>
         <tbody data-draw="sum-rows"></tbody>
       </table>
     </div>
-    <p class="s4-muted s4-small">업로더 수가 건수보다 적으면 한 사람이 여러 번 올린 기록입니다. 예를 들어 매활 상위 기록 여러 건은 같은 업로더의 380 장비 기록입니다.</p>
+    <p class="s4-muted s4-small">업로더 수가 건수보다 적으면 한 사람이 여러 번 올린 기록입니다. 예를 들어 매활 10월 기록 4건은 같은 업로더의 380 장비 기록입니다.</p>
   </section>
 
   <section class="s4-sec" id="boss-chart">
@@ -253,26 +262,47 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
   dash.calc('spec_summary', {
     inputs: ['cn_dummy'],
     title: '계열별 요약 (중섭 허수아비)',
-    description: '판정이 포함인 기록만 계열별로 건수·중앙값(3건 이상)·최저·최고·업로더 수를 계산',
+    description: '판정이 포함인 기록만 기간(전체·9월·10~11월)과 계열별로 건수·중앙값(3건 이상)·최저·최고·업로더 수를 계산',
     fn: (records) => {
+      const periods = [['전체', () => true], ['9월', (d) => d < '2026-10-01'], ['10~11월', (d) => d >= '2026-10-01']];
       const ok = records.filter((r) => r.status === '포함' && r.dps_m != null);
       const specs = [...new Set(records.map((r) => r.spec))];
-      const out = specs.map((spec) => {
-        const list = ok.filter((r) => r.spec === spec).sort((a, b) => b.dps_m - a.dps_m);
-        const vals = list.map((r) => +r.dps_m);
-        return {
-          spec,
-          n: vals.length,
-          median: vals.length >= 3 ? Math.round(d3.median(vals) * 100) / 100 : null,
-          min: vals.length ? d3.min(vals) : null,
-          max: vals.length ? d3.max(vals) : null,
-          uploaders: new Set(list.map((r) => r.uploader)).size,
-          top_id: list.length ? list[0].id : null,
-        };
+      const out = [];
+      periods.forEach(([period, inPeriod]) => {
+        const rows = specs.map((spec) => {
+          const list = ok.filter((r) => r.spec === spec && inPeriod(r.date)).sort((a, b) => b.dps_m - a.dps_m);
+          const vals = list.map((r) => +r.dps_m);
+          return {
+            period,
+            spec,
+            n: vals.length,
+            median: vals.length >= 3 ? Math.round(d3.median(vals) * 100) / 100 : null,
+            min: vals.length ? d3.min(vals) : null,
+            max: vals.length ? d3.max(vals) : null,
+            uploaders: new Set(list.map((r) => r.uploader)).size,
+            top_id: list.length ? list[0].id : null,
+            values: vals.join(' / '),
+          };
+        });
+        rows.sort((a, b) => {
+          if ((a.median != null) !== (b.median != null)) return a.median != null ? -1 : 1;
+          return (b.median ?? b.max ?? -1) - (a.median ?? a.max ?? -1);
+        });
+        out.push(...rows);
       });
-      return out.sort((a, b) => {
-        if ((a.median != null) !== (b.median != null)) return a.median != null ? -1 : 1;
-        return (b.median ?? b.max ?? -1) - (a.median ?? a.max ?? -1);
+      return out;
+    },
+  });
+
+  dash.calc('period_summary', {
+    inputs: ['cn_dummy'],
+    title: '기간별 전체 중앙값 (중섭 허수아비)',
+    description: '판정이 포함인 기록 전체를 9월(9/3~9/30)과 10~11월(10/1~)로 나눈 건수와 중앙값',
+    fn: (records) => {
+      const ok = records.filter((r) => r.status === '포함' && r.dps_m != null);
+      return [['9월', (d) => d < '2026-10-01'], ['10~11월', (d) => d >= '2026-10-01']].map(([period, inPeriod]) => {
+        const vals = ok.filter((r) => inPeriod(r.date)).map((r) => +r.dps_m);
+        return { period, n: vals.length, median: vals.length ? Math.round(d3.median(vals) * 100) / 100 : null };
       });
     },
   });
@@ -289,6 +319,8 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
   window.S4 = {
     fmt: d3.format('.2f'),
     sel: ['매활', '얼창'],
+    period: '전체',
+    inPeriod(date) { return S4.period === '전체' || (S4.period === '9월' ? date < '2026-10-01' : date >= '2026-10-01'); },
     colorFor(spec) {
       const i = S4.sel.indexOf(spec);
       if (i === 0) return dash.colors[0];
@@ -363,18 +395,39 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
   dash.draw('n-out', (el) => S4.word(el, 'cn_counts', (rows) => rows.find((r) => r.status === '제외')?.n));
   dash.draw('n-boss', (el) => S4.word(el, 'boss_1v1', (rows) => rows.length));
   dash.draw('n-gl', (el) => S4.word(el, 'global_parse', (rows) => rows.length));
-  dash.draw('lead-spec', (el) => S4.word(el, 'spec_summary', (rows) => rows[0]?.spec));
-  dash.draw('lead-med', (el) => S4.word(el, 'spec_summary', (rows) => rows[0]?.median != null ? S4.fmt(rows[0].median) : null));
-  const med = (spec) => (rows) => { const r = rows.find((x) => x.spec === spec); return r && r.median != null ? S4.fmt(r.median) : null; };
-  const cnt = (spec) => (rows) => rows.find((x) => x.spec === spec)?.n;
-  dash.draw('falc-med', (el) => S4.word(el, 'spec_summary', med('매활')));
-  dash.draw('ice-med', (el) => S4.word(el, 'spec_summary', med('얼창')));
-  dash.draw('falc-n', (el) => S4.word(el, 'spec_summary', cnt('매활')));
-  dash.draw('ice-n', (el) => S4.word(el, 'spec_summary', cnt('얼창')));
-  dash.draw('cmp-word', (el) => S4.word(el, 'spec_summary', (rows) => {
-    const a = rows.find((x) => x.spec === '매활')?.median, b = rows.find((x) => x.spec === '얼창')?.median;
+  const pget = (period, key) => (rows) => rows.find((r) => r.period === period)?.[key];
+  dash.draw('late-n', (el) => S4.word(el, 'period_summary', pget('10~11월', 'n')));
+  dash.draw('sep-n', (el) => S4.word(el, 'period_summary', pget('9월', 'n')));
+  dash.draw('late-med', (el) => S4.word(el, 'period_summary', (rows) => { const v = pget('10~11월', 'median')(rows); return v == null ? null : S4.fmt(v); }));
+  dash.draw('sep-med', (el) => S4.word(el, 'period_summary', (rows) => { const v = pget('9월', 'median')(rows); return v == null ? null : S4.fmt(v); }));
+  dash.draw('period-word', (el) => S4.word(el, 'period_summary', (rows) => {
+    const a = pget('10~11월', 'median')(rows), b = pget('9월', 'median')(rows);
     if (a == null || b == null) return null;
     return a > b ? '높습니다' : a < b ? '낮습니다' : '같습니다';
+  }));
+  // 3건 이상이면 중앙값, 미만이면 기록값을 그대로 보여 준다
+  const specIn = (period, spec) => (el) => {
+    const d = dash.data('spec_summary');
+    const r = d.status === 'ok' ? d.data.find((x) => x.period === period && x.spec === spec) : null;
+    if (r && r.median != null) {
+      const num = document.createElement('span');
+      num.dataset.source = 'spec_summary';
+      num.dataset.field = 'median';
+      num.dataset.where = `period=${encodeURIComponent(period)}&spec=${encodeURIComponent(spec)}`;
+      num.textContent = S4.fmt(r.median);
+      el.replaceChildren(num, `M(${r.n}건 중앙값)`);
+      return;
+    }
+    el.textContent = !r ? '—' : r.n ? `${r.values.split(' / ').map((v) => S4.fmt(+v)).join('·')}M(${r.n}건)` : '기록 없음';
+  };
+  dash.draw('late-falc', specIn('10~11월', '매활'));
+  dash.draw('late-ice', specIn('10~11월', '얼창'));
+  dash.draw('sep-falc', specIn('9월', '매활'));
+  dash.draw('sep-ice', specIn('9월', '얼창'));
+  dash.draw('period-label', (el) => { el.textContent = S4.period; });
+  document.querySelectorAll('#s4-period').forEach((sel) => sel.addEventListener('change', () => {
+    S4.period = sel.value;
+    ['cn-strip', 'sum-rows', 'period-label'].forEach((n) => dash.draw(n));
   }));
   const bossVals = (spec) => (rows) => {
     const l = rows.filter((r) => r.spec === spec).map((r) => S4.fmt(r.boss_dps_m) + 'M');
@@ -388,7 +441,7 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
   [['pick-a', 0], ['pick-b', 1]].forEach(([name, idx]) => {
     dash.draw(name, (sel) => {
       const d = dash.data('spec_summary');
-      const specs = d.status === 'ok' ? d.data.filter((r) => r.n > 0).map((r) => r.spec) : [];
+      const specs = d.status === 'ok' ? d.data.filter((r) => r.period === '전체' && r.n > 0).map((r) => r.spec) : [];
       sel.replaceChildren(...specs.map((s) => new Option(s, s)));
       sel.value = S4.sel[idx];
       sel.onchange = () => { S4.sel[idx] = sel.value; S4.redrawPicked(); };
@@ -400,6 +453,7 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
   function s4Strip(el, opts) {
     const { order, valueKey, rightLabel, tipLines, band } = opts;
     const focus = S4.sel;
+    const hollow = opts.hollow || (() => false);
     const rows = opts.rows.slice().sort((a, b) => focus.includes(a.spec) - focus.includes(b.spec));
     el.replaceChildren();
     const W = el.clientWidth || 600;
@@ -440,10 +494,10 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
       .attr('cx', (r) => x(r[valueKey]))
       .attr('cy', (r, i) => y(r.spec) + jitter(r, i))
       .attr('r', (r) => (focus.includes(r.spec) ? 5.5 : 4.5))
-      .style('fill', (r) => S4.colorFor(r.spec))
-      .style('fill-opacity', (r) => (focus.includes(r.spec) ? 0.95 : 0.5))
-      .style('stroke', 'var(--color-bg)')
-      .style('stroke-width', 1)
+      .style('fill', (r) => (hollow(r) ? 'var(--color-bg)' : S4.colorFor(r.spec)))
+      .style('fill-opacity', (r) => (hollow(r) || focus.includes(r.spec) ? 0.95 : 0.5))
+      .style('stroke', (r) => (hollow(r) ? S4.colorFor(r.spec) : 'var(--color-bg)'))
+      .style('stroke-width', (r) => (hollow(r) ? 2 : 1))
       .on('pointerenter pointermove', (ev, r) => tip.show(ev, tipLines(r), r.url))
       .on('pointerleave', () => tip.hide())
       .on('click', (ev, r) => { ev.stopPropagation(); tip.pin(ev, tipLines(r), r.url); });
@@ -456,12 +510,12 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
       if (s !== 'loading') el.textContent = s === 'error' ? '불러오지 못했습니다' : '—';
       return;
     }
-    const sum = dash.data('spec_summary').data.filter((r) => r.n > 0);
-    const rows = dash.data('cn_dummy').data.filter((r) => r.status === '포함' && r.dps_m != null).map((r) => ({ ...r, dps_m: +r.dps_m }));
+    const sum = dash.data('spec_summary').data.filter((r) => r.period === S4.period && r.n > 0);
+    const rows = dash.data('cn_dummy').data.filter((r) => r.status === '포함' && r.dps_m != null && S4.inPeriod(r.date)).map((r) => ({ ...r, dps_m: +r.dps_m, early: r.date < '2026-10-01' }));
     const order = sum.map((r) => r.spec);
     const bySpec = new Map(sum.map((r) => [r.spec, r]));
     s4Strip(el, {
-      rows, order, valueKey: 'dps_m', focus: ['매활', '얼창'], medians: sum,
+      rows, order, valueKey: 'dps_m', medians: sum, hollow: (r) => r.early,
       rightLabel: (spec) => { const s = bySpec.get(spec); return s.median != null ? `중앙 ${S4.fmt(s.median)}M · ${s.n}건` : `${s.n}건(중앙값 없음)`; },
       tipLines: (r) => [['', `${r.spec} ${S4.fmt(r.dps_m)}M`], ['날짜', r.date], ['업로더', r.uploader], ['제목', r.title], ...(r.note ? [['메모', r.note]] : []), ['번호', r.id]],
     });
@@ -508,9 +562,10 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
     tb.replaceChildren();
     if (s.status !== 'ok' || c.status !== 'ok') return;
     const byId = new Map(c.data.map((r) => [r.id, r]));
-    s.data.forEach((r) => {
+    s.data.filter((r) => r.period === S4.period).forEach((r) => {
       const tr = document.createElement('tr');
-      tr.dataset.key = r.spec;
+      tr.dataset.key = `${encodeURIComponent(r.period)},${encodeURIComponent(r.spec)}`;
+      s4Cell(tr, r.period);
       s4Cell(tr, r.spec);
       s4Cell(tr, String(r.n), 'n');
       s4Cell(tr, r.median != null ? S4.fmt(r.median) : '3건 미만', 'n');
@@ -565,7 +620,7 @@ window.__S4DATA = {"cn_dummy": {"rows": [{"id": "cn-001", "spec": "매활", "spe
     const d = dash.data('cn_dummy'), s = dash.data('spec_summary');
     tb.replaceChildren();
     if (d.status !== 'ok' || s.status !== 'ok') return;
-    const rank = new Map(s.data.map((r, i) => [r.spec, i]));
+    const rank = new Map(s.data.filter((r) => r.period === '전체').map((r, i) => [r.spec, i]));
     d.data.slice().sort((a, b) => (rank.get(a.spec) - rank.get(b.spec)) || ((a.status === '포함') === (b.status === '포함') ? (b.dps_m ?? -1) - (a.dps_m ?? -1) : a.status === '포함' ? -1 : 1)).forEach((r) => {
       const tr = document.createElement('tr');
       tr.dataset.key = r.id;
