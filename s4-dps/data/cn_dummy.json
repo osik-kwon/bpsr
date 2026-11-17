@@ -96,11 +96,11 @@
    "spec_cn": "鹰弓",
    "date": "2026-09-28",
    "dps_m": 3.75,
-   "gear": null,
-   "gear_band": "표기 없음",
+   "gear": 370,
+   "gear_band": "370~380",
    "weapon": "레이드 무기",
-   "gear_src": "제목",
-   "gear_quote": "红武",
+   "gear_src": "영상 화면",
+   "gear_quote": "3:28 장비 창 「武器 装等: 370」",
    "status": "포함",
    "note": "",
    "title": "红武鹰弓无波打桩375W断手轴记录",
@@ -1766,7 +1766,7 @@
   },
   {
    "label": "장비",
-   "value": "gear·weapon은 영상 제목에서 뽑고, 제목에 없으면 영상 설명란·업로더 댓글(bilibili view·reply API, 2026-11-17, 3초 간격)에서 찾음. gear_src=출처, gear_quote=원문 구절. gear=제목의 장비 레벨(160~380), weapon=天武 천무기·红武 레이드 무기·海武 해무기·水武 수무기·河武 하무기. 제목에 없으면 null·표기 없음"
+   "value": "gear·weapon은 영상 제목에서 뽑고, 제목에 없으면 영상 설명란·업로더 댓글(bilibili view·reply API, 2026-11-17, 3초 간격)에서 찾음. 영상 화면(장비 창)에서 읽은 것은 gear_src=영상 화면. gear_src=출처, gear_quote=원문 구절. gear=제목의 장비 레벨(160~380), weapon=天武 천무기·红武 레이드 무기·海武 해무기·水武 수무기·河武 하무기. 제목에 없으면 null·표기 없음"
   }
  ]
 }
