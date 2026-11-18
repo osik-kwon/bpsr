@@ -5,6 +5,7 @@
 - 사이트: https://osik-kwon.github.io/bpsr/
 - `s4-dps/` 시즌4 계열별 DPS(기록별 출처, 원자료 `s4-dps/data/*.json`)
 - `raid-s3/` S3 레이드(기계 잔해) 하드·악몽 공략 노트
+- `gongjirani/` 길드 공지봇 '공지라니' 소식 추천 기준 검토(원본은 비공개 저장소 gongjirani에서 생성)
 - 악보는 별도 폴더로 옮길 예정
 
 공략 사진과 영상의 저작권은 각 출처에 있습니다.
