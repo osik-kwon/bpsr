@@ -1,0 +1,431 @@
+{
+ "id": "raid4-boss1",
+ "title": "시즌4 레이드 1넴 · 라프시스 (하드)",
+ "notes": "시즌4 레이드 「푸른 하늘 너머, 낮과 밤의 끝」 혈전. 기믹은 공략 영상 자막, 판정 크기는 한섭 클라 스킬 데이터(본체 모델 배율 1.8 적용), 기믹 순서(빛의 창 → 줄 환영 → 룬 회전판)와 간격은 플레이 영상의 경고 문구 시각. 고리 크기·회전 속도·줄 환영 고리의 크기와 속도는 추정. 잘린 원 장판의 둘레 레이저, 빛의 창 디버프, 보스 모델·전투장·이펙트는 아직 없다",
+ "noCurtain": true,
+ "arena": {
+  "radius": 30,
+  "src": "estimate(전체 폭발 반경과 고리 3개가 들어가는 크기)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   0,
+   -10
+  ],
+  "src": "레이드 시나리오와 같은 값"
+ },
+ "boss": {
+  "pos": [
+   0,
+   -22
+  ],
+  "height": 7,
+  "scale": 1.8,
+  "src": "table(몬스터 103400 拉普西斯(raid), 모델 배율 1.8) + guide(탱커가 보스를 가장자리로 빼서 바깥을 보게 한다)"
+ },
+ "partySpots": [
+  [
+   0,
+   -27
+  ],
+  [
+   3,
+   -17
+  ],
+  [
+   -3,
+   -17
+  ],
+  [
+   9,
+   -12
+  ],
+  [
+   -9,
+   -12
+  ],
+  [
+   6,
+   -6
+  ],
+  [
+   -6,
+   -6
+  ]
+ ],
+ "partyRoles": [
+  "탱",
+  "근딜",
+  "근딜",
+  "원딜",
+  "원딜",
+  "힐",
+  "힐"
+ ],
+ "tankBot": 0,
+ "partySrc": "20인 레이드지만 표식은 7명만 둔다. 파티원은 고정 자리이고 줄 환영 때만 중앙으로 끌려온다",
+ "timingSrc": "video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각): 빛의 창 0:32·2:18, 줄 환영 1:08·3:06, 룬 회전판 1:42·3:36. 그 사이 평타·장판의 시각은 추정",
+ "events": [
+  {
+   "t": 6,
+   "type": "sectors",
+   "name": "큰 가위 내려치기(보스 앞 부채꼴)",
+   "r": 30,
+   "half": 60,
+   "dirs": [
+    90
+   ],
+   "cast": 2.5,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395163 부채꼴 반경 30m·120°, 타격 2.48초 + estimate(시점)"
+  },
+  {
+   "t": 16,
+   "type": "puddle",
+   "name": "순간이동 추격(내 자리 원)",
+   "r": 4.3,
+   "cast": 1.9,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395162 원 반경 4.3m, 타격 1.85초 + estimate(시점·대상)"
+  },
+  {
+   "t": 24,
+   "type": "spread",
+   "name": "잘린 원 장판(파티에서 떨어져 놓기)",
+   "r": 8,
+   "cast": 4,
+   "color": "yellow",
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 삼각형이 잘린 원 장판 2명, 떨어지면 둘레 레이저 + estimate(반경, 레이저는 생략)"
+  },
+  {
+   "t": 32,
+   "type": "spread",
+   "name": "빛의 창 장판(파티에서 떨어진 곳에 놓기)",
+   "r": 8,
+   "cast": 4,
+   "color": "yellow",
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 4명에게 장판 → 빛의 창 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(반경·예고 시간)"
+  },
+  {
+   "t": 36,
+   "type": "aoe",
+   "kind": "show",
+   "name": "빛의 창(체력이 다하면 폭발 — 전체 피해, 힐로 버팀)",
+   "spots": [
+    [
+     11,
+     -4,
+     2
+    ],
+    [
+     -11,
+     -4,
+     2
+    ],
+    [
+     15,
+     6,
+     2
+    ],
+    [
+     -15,
+     6,
+     2
+    ]
+   ],
+   "cast": 20,
+   "color": "yellow",
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 창은 무시하고 보스를 치는 편이 낫다 + estimate(자리·지속 20초)"
+  },
+  {
+   "t": 46,
+   "type": "scarHit",
+   "name": "가위 베기(탱커만 받기, 회피 불가)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": -22
+     },
+     "b": {
+      "x": 0,
+      "z": 21.2
+     },
+     "w": 5.3
+    }
+   ],
+   "cast": 3.4,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "noDodge": true,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395119 직사각형 43.2m×5.3m, 타격 3.37초, 회피 불가 + guide(Layla 공략 영상 is3KAFsDPzc 자막) 탱커 외에는 피한다"
+  },
+  {
+   "t": 56,
+   "type": "sectors",
+   "name": "큰 가위 내려치기(보스 앞 부채꼴)",
+   "r": 30,
+   "half": 60,
+   "dirs": [
+    90
+   ],
+   "cast": 2.5,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395163 부채꼴 반경 30m·120°, 타격 2.48초 + estimate(시점)"
+  },
+  {
+   "t": 66,
+   "type": "cage",
+   "name": "중앙 끌어당김 → 줄 환영",
+   "bossTo": [
+    0,
+    0
+   ],
+   "appear": 2.5,
+   "window": 0.8,
+   "r0": 11,
+   "rMin": 2,
+   "dur": 10,
+   "n": 8,
+   "rot": 22.5,
+   "breach": {
+    "idx": 0,
+    "at": 5
+   },
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 전원 중앙으로, 점프·대시 봉인, 줄로 이어진 환영 팔각형이 좁혀 옴, 줄이 생기는 순간 대시로 통과하거나 환영을 잡아 틈을 냄 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(고리 크기·속도, 틈이 생기는 시점 5초)"
+  },
+  {
+   "t": 82,
+   "type": "aoe",
+   "kind": "show",
+   "name": "전체 폭발(회피 불가, 힐·피해 감소)",
+   "spots": [
+    [
+     0,
+     0,
+     30
+    ]
+   ],
+   "cast": 2.3,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395170 원 반경 51.6m, 타격 2.30초, 회피 불가"
+  },
+  {
+   "t": 86,
+   "type": "bossWalk",
+   "move": {
+    "to": "home",
+    "mode": "blink",
+    "dur": 0.4
+   },
+   "src": "estimate(탱커가 보스를 다시 가장자리로 끌고 감)"
+  },
+  {
+   "t": 102,
+   "type": "dial",
+   "name": "룬 회전판",
+   "cast": 40,
+   "tol": 10,
+   "rings": [
+    [
+     6,
+     11,
+     14,
+     40
+    ],
+    [
+     11,
+     16,
+     22,
+     160
+    ],
+    [
+     16,
+     21,
+     34,
+     290
+    ]
+   ],
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 고리 3개, 같은 룬 3개를 한 줄로 맞추면 실드 파괴, 고리 위 인원 홀수=시계·짝수=반시계, 안쪽이 가장 느림 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) 해결까지 32~54초 + estimate(고리 크기·회전 속도·허용 오차 10도, 다른 파티원은 고리 밖에 있다고 침)"
+  },
+  {
+   "t": 138,
+   "type": "spread",
+   "name": "빛의 창 장판(파티에서 떨어진 곳에 놓기)",
+   "r": 8,
+   "cast": 4,
+   "color": "yellow",
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 4명에게 장판 → 빛의 창 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(반경·예고 시간)"
+  },
+  {
+   "t": 142,
+   "type": "aoe",
+   "kind": "show",
+   "name": "빛의 창(체력이 다하면 폭발 — 전체 피해, 힐로 버팀)",
+   "spots": [
+    [
+     11,
+     -4,
+     2
+    ],
+    [
+     -11,
+     -4,
+     2
+    ],
+    [
+     15,
+     6,
+     2
+    ],
+    [
+     -15,
+     6,
+     2
+    ]
+   ],
+   "cast": 20,
+   "color": "yellow",
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 창은 무시하고 보스를 치는 편이 낫다 + estimate(자리·지속 20초)"
+  },
+  {
+   "t": 152,
+   "type": "scarHit",
+   "name": "가위 베기(탱커만 받기, 회피 불가)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": -22
+     },
+     "b": {
+      "x": 0,
+      "z": 21.2
+     },
+     "w": 5.3
+    }
+   ],
+   "cast": 3.4,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "noDodge": true,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395119 직사각형 43.2m×5.3m, 타격 3.37초, 회피 불가 + guide(Layla 공략 영상 is3KAFsDPzc 자막) 탱커 외에는 피한다"
+  },
+  {
+   "t": 162,
+   "type": "sectors",
+   "name": "큰 가위 내려치기(보스 앞 부채꼴)",
+   "r": 30,
+   "half": 60,
+   "dirs": [
+    90
+   ],
+   "cast": 2.5,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395163 부채꼴 반경 30m·120°, 타격 2.48초 + estimate(시점)"
+  },
+  {
+   "t": 172,
+   "type": "puddle",
+   "name": "순간이동 추격(내 자리 원)",
+   "r": 4.3,
+   "cast": 1.9,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395162 원 반경 4.3m, 타격 1.85초 + estimate(시점·대상)"
+  },
+  {
+   "t": 186,
+   "type": "cage",
+   "name": "중앙 끌어당김 → 줄 환영",
+   "bossTo": [
+    0,
+    0
+   ],
+   "appear": 2.5,
+   "window": 0.8,
+   "r0": 11,
+   "rMin": 2,
+   "dur": 10,
+   "n": 8,
+   "rot": 22.5,
+   "breach": {
+    "idx": 3,
+    "at": 5
+   },
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 전원 중앙으로, 점프·대시 봉인, 줄로 이어진 환영 팔각형이 좁혀 옴, 줄이 생기는 순간 대시로 통과하거나 환영을 잡아 틈을 냄 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(고리 크기·속도, 틈이 생기는 시점 5초)"
+  },
+  {
+   "t": 202,
+   "type": "aoe",
+   "kind": "show",
+   "name": "전체 폭발(회피 불가, 힐·피해 감소)",
+   "spots": [
+    [
+     0,
+     0,
+     30
+    ]
+   ],
+   "cast": 2.3,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395170 원 반경 51.6m, 타격 2.30초, 회피 불가"
+  },
+  {
+   "t": 206,
+   "type": "bossWalk",
+   "move": {
+    "to": "home",
+    "mode": "blink",
+    "dur": 0.4
+   },
+   "src": "estimate(탱커가 보스를 다시 가장자리로 끌고 감)"
+  },
+  {
+   "t": 216,
+   "type": "dial",
+   "name": "룬 회전판",
+   "cast": 40,
+   "tol": 10,
+   "rings": [
+    [
+     6,
+     11,
+     14,
+     300
+    ],
+    [
+     11,
+     16,
+     22,
+     70
+    ],
+    [
+     16,
+     21,
+     34,
+     190
+    ]
+   ],
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 고리 3개, 같은 룬 3개를 한 줄로 맞추면 실드 파괴, 고리 위 인원 홀수=시계·짝수=반시계, 안쪽이 가장 느림 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) 해결까지 32~54초 + estimate(고리 크기·회전 속도·허용 오차 10도, 다른 파티원은 고리 밖에 있다고 침)"
+  }
+ ],
+ "duration": 262
+}

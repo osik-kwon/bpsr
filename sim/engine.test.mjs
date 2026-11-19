@@ -247,3 +247,27 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
     console.log(chase && (moved > 0 || d.boss.chase === false) && [t.boss.x, t.boss.z].every(Number.isFinite) ? 'PASS' : 'FAIL', `보스 이동(${f}, 탱커)`, far.toFixed(1), moved);
   }
 }
+
+// 시즌4 레이드 1넴: 줄 환영(대시 통과·틈으로 탈출)과 룬 회전판
+{
+  const d4 = JSON.parse(fs.readFileSync(new URL('./data/raid4-boss1.json', import.meta.url)));
+  let s4 = new Sim(JSON.parse(JSON.stringify(d4)));
+  while (!s4.done && s4.t < 270) s4.step(0.05, { mx: 0, mz: 0 });
+  const bad = s4.log.filter(r => !r.ok).map(r => r.name);
+  assert.ok(bad.includes('중앙 끌어당김 → 줄 환영') && bad.includes('룬 회전판'), '가만히 있으면 줄 환영과 회전판에서 실패해야 한다');
+  s4 = new Sim(JSON.parse(JSON.stringify(d4)));
+  const go = (x, z) => { const dx = x - s4.player.x, dz = z - s4.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
+  const after = (pick, h) => { const a = s4.dial.rings.map((g, i) => g.ang + (i === pick ? 1 : -1) * g.speed * h); let m = 0; for (let i = 0; i < 3; i++) for (let j = i + 1; j < 3; j++) { let v = Math.abs(a[i] - a[j]) % 360; if (v > 180) v = 360 - v; m = Math.max(m, v); } return m; };
+  while (!s4.done && s4.t < 270) {
+    const t = s4.t; let inp = go(0, 8);
+    if ((t >= 16 && t < 18.2) || (t >= 172 && t < 174.2)) inp = go(8, 8);
+    if (s4.cage) { const cg = s4.cage;
+      if (cg.breach.idx === 0) inp = t < cg.t0 ? go(0, 9) : { mx: 0, mz: 1, dash: true };
+      else { const a = cg.rot + (cg.breach.idx + 0.5) * Math.PI * 2 / cg.n; inp = t < cg.breach.at + 0.1 ? go(0, 0) : { mx: Math.cos(a), mz: Math.sin(a) }; } }
+    if (s4.dial) { let best = -1, bv = Infinity; for (const pick of [-1, 0, 1, 2]) { const v = Math.min(after(pick, 0.6), after(pick, 1.5)); if (v < bv - 0.5) { bv = v; best = pick; } }
+      inp = go(0, best < 0 ? 24 : (s4.dial.rings[best].rIn + s4.dial.rings[best].rOut) / 2); }
+    s4.step(0.05, inp);
+  }
+  console.log('raid4-boss1 모범', s4.score(), s4.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  assert.equal(s4.score().ok, s4.score().total);
+}

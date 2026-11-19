@@ -52,6 +52,7 @@ export class Sim {
     this.lockTimes = d.player.lockTimes ?? [0.6, 0.9, 1.3];
     // 파티원 7명은 보스 뒤쪽 근처에 모여 있는 고정 표식
     this.roomStart = 0; this._botInit = true; this.bots = this.partySpots(this.room);
+    this.cage = null; this.dial = null;
     this.pending = d.events.map(e => ({ ...e })).sort((a, b) => a.t - b.t);
     this.combat?.reset();
   }
@@ -231,6 +232,16 @@ export class Sim {
     } else if (e.type === 'rects') {
       // 직사각형 여러 장(십자 범위 등): [x, z, 가로, 세로]
       this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots: e.rects.map(([x, z, w, h]) => ({ shape: 'rect', x, z, w, h })), hitAt: e.t + e.cast, color: e.color ?? 'red' });
+    } else if (e.type === 'cage') {
+      // 줄 환영: 전원을 중심으로 끌어당긴 뒤, 줄로 이어진 환영 n개의 고리가 좁혀 온다.
+      // 줄이 생기는 순간(window초)에 대시로 통과하거나, 파티가 환영 하나를 잡아 생긴 틈(breach)으로 나간다
+      const c = { ...this.boss };
+      this.player.x = c.x; this.player.z = c.z; this.player.dashCd = e.appear; this._botInit = true; this.bots = this.bots.map(() => ({ ...c }));
+      this.cage = { name: e.name, c, start: e.t, t0: e.t + e.appear, window: e.window ?? 0.8, r0: e.r0, rMin: e.rMin ?? 2, dur: e.dur, n: e.n ?? 8, rot: (e.rot ?? 0) * Math.PI / 180,
+        breach: e.breach ? { idx: e.breach.idx, at: e.t + e.appear + e.breach.at } : null, inside: true };
+    } else if (e.type === 'dial') {
+      // 룬 회전판: 고리 3개가 돌고, 고리 위 인원이 홀수면 시계·짝수면 반시계. 세 고리의 지정 룬을 한 줄(tol도 이내)로 맞추면 성공
+      this.dial = { name: e.name, start: e.t, hitAt: e.t + e.cast, tol: e.tol ?? 10, rings: e.rings.map(([rIn, rOut, speed, ang, bots]) => ({ rIn, rOut, speed, ang, bots: bots ?? 0 })) };
     } else if (e.type === 'curse') {
       // 저주 옷장: 내 옷장에서 상호작용해 저주를 받아 오고, 터질 때 전투장 가장자리(edge 이상)·옷장에서 away 이상 떨어져 있어야 한다. 터진 자리에 독 장판이 남는다
       this.curse = { name: e.name, at: { x: e.pos[0], z: e.pos[1] }, hitAt: e.t + e.charge, start: e.t, taken: false, edge: e.edge, away: e.away, poison: e.poison, others: e.others ?? [] };
@@ -364,6 +375,26 @@ export class Sim {
       else if (this.t >= pr.hitAt) { this.result(pr.name, false, pr.failMsg ?? '시간 안에 처리하지 못함'); pr.done = true; }
     }
     this.presses = this.presses.filter(x => !x.done);
+    // 줄 환영 고리
+    if (this.cage) { const cg = this.cage, R = this.cageR(), dd = dist(p, cg.c);
+      if (this.t < cg.t0 && dd > cg.r0 - 1.5) { const k = (cg.r0 - 1.5) / dd; p.x = cg.c.x + (p.x - cg.c.x) * k; p.z = cg.c.z + (p.z - cg.c.z) * k; }   // 줄이 생기기 전에는 끌려와 묶여 있다
+      if (this.t >= cg.t0) {
+        const out = dd > R;
+        if (out && cg.inside) {
+          const ang = Math.atan2(p.z - cg.c.z, p.x - cg.c.x), open = cg.breach && this.t >= cg.breach.at && this.cageGap(ang);
+          const early = p.iframe > 0 && this.t <= cg.t0 + cg.window;
+          this.result(cg.name, open || early, open ? '환영을 잡아 생긴 틈으로 빠져나옴' : early ? '줄이 생기는 순간 대시로 통과' : p.iframe > 0 ? '대시가 늦어 줄에 닿음 — 즉사' : '줄에 닿음 — 즉사');
+          this.cage = null; this._botInit = true; this.bots = this.partySpots(this.room);
+        } else if (R <= cg.rMin) { this.result(cg.name, false, '고리 안에 갇힘 — 즉사'); this.cage = null; this._botInit = true; this.bots = this.partySpots(this.room); }
+      }
+    }
+    // 룬 회전판
+    if (this.dial) { const dl = this.dial, r = Math.hypot(p.x, p.z);
+      for (const g of dl.rings) { const n = g.bots + (r >= g.rIn && r < g.rOut ? 1 : 0); g.dir = n % 2 ? 1 : -1; g.ang = ((g.ang + g.dir * g.speed * dt) % 360 + 360) % 360; }
+      const sp = this.dialSpread();
+      if (sp <= dl.tol) { this.result(dl.name, true, `${(this.t - dl.start).toFixed(0)}초 만에 룬 3개를 한 줄로 맞춤 — 보스 실드 파괴`); this.dial = null; }
+      else if (this.t >= dl.hitAt) { this.result(dl.name, false, '시간 안에 룬을 맞추지 못함 — 실드가 남아 강한 전체 피해'); this.dial = null; }
+    }
     // 틱택토 탑
     const tt = this.ttt, rd = tt?.round;
     if (rd) {
@@ -666,6 +697,19 @@ export class Sim {
       tt.grid.forEach((v, c) => { if (v) out.push({ shape: 'circle', ...this.tttCell(c), r: 2, name: v === 2 ? '금색 탑' : '파란 탑', kind: 'show', color: v === 2 ? 'yellow' : 'blue', start: 0, hitAt: 9999 }); });
       if (rd) { for (const c of rd.cells) { if (tt.grid[c] === 1) out.push({ shape: 'circle', ...this.tttCell(c), r: rd.r, name: `${rd.name} 충전 폭발`, kind: 'avoid', color: 'red', start: rd.start, hitAt: rd.hitAt });
         if (rd.stolen == null && this.t < rd.until) out.push({ shape: 'circle', ...this.tttSpot(c), r: 1.5, name: `${rd.name} (탑 하나 골라 대각 자리에서 ${rd.hold}초 정지)`, kind: 'show', color: 'green', start: rd.start, hitAt: rd.until }); } } }
+    if (this.cage) { const cg = this.cage, R = this.cageR(), live = this.t >= cg.t0, step = TAU / cg.n, dead = cg.breach && this.t >= cg.breach.at ? cg.breach.idx : -1;
+      const P = k => ({ x: cg.c.x + Math.cos(cg.rot + k * step) * R, z: cg.c.z + Math.sin(cg.rot + k * step) * R });
+      if (!live) out.push({ shape: 'circle', ...cg.c, r: cg.r0, name: `${cg.name} (곧 줄이 생김 — 생기는 순간 대시)`, kind: 'show', color: 'yellow', start: cg.start, hitAt: cg.t0 });
+      else for (let k = 0; k < cg.n; k++) {
+        if (k !== dead) out.push({ shape: 'circle', ...P(k), r: 1, name: k === 0 ? cg.name : '', kind: 'avoid', color: 'red', start: cg.t0, hitAt: cg.t0 + cg.dur, live: true, quietLabel: k !== 0 });
+        if (k !== dead && (k + 1) % cg.n !== dead) out.push({ shape: 'line', a: P(k), b: P(k + 1), w: 0.6, name: '', kind: 'avoid', color: 'red', start: cg.t0, hitAt: cg.t0 + cg.dur, live: true, quietLabel: true });
+      } }
+    if (this.dial) { const dl = this.dial, T = { kind: 'show', start: dl.start, hitAt: dl.hitAt };
+      // 고리 경계선과 룬(고리마다 하나). 맨 앞 항목의 이름이 시전 바에 뜬다
+      out.push({ shape: 'ring', x: 0, z: 0, rIn: dl.rings[0].rIn - 0.15, rOut: dl.rings[0].rIn + 0.15, name: `${dl.name} (고리에 올라서면 도는 방향이 바뀜 — 룬 3개를 한 줄로)`, color: 'white', ...T });
+      dl.rings.forEach((g, i) => { const m = (g.rIn + g.rOut) / 2, a = g.ang * Math.PI / 180;
+        out.push({ shape: 'ring', x: 0, z: 0, rIn: g.rOut - 0.15, rOut: g.rOut + 0.15, name: '', color: 'white', ...T });
+        out.push({ shape: 'circle', x: Math.cos(a) * m, z: Math.sin(a) * m, r: 2, name: ['안쪽 룬', '가운데 룬', '바깥 룬'][i], color: g.dir > 0 ? 'green' : 'yellow', ...T }); }); }
     if (this.carry) { const ca = this.carry; out.push({ shape: 'circle', ...(ca.have ? ca.drop : ca.pick), r: 3.5, name: `${ca.name} (${ca.have ? (ca.dropMsg ?? '여기에 E로 놓기') : (ca.pickMsg ?? '여기서 E로 들기')})`, kind: 'show', color: ca.have ? 'green' : 'blue', start: ca.start, hitAt: ca.hitAt }); }
     for (const r of this.runners) out.push({ shape: 'circle', ...this.runnerPos(r), r: r.r, name: r.name, kind: 'show', color: 'yellow', start: r.t0, hitAt: r.t0 + r.dur });
     if (this.trees) for (const tr of this.trees.pos) out.push({ shape: 'circle', x: tr.x, z: tr.z, r: this.trees.r, name: '치유의 나무', kind: 'show', color: tr.readyAt <= this.t ? 'green' : 'gray', start: 0, hitAt: 9999 });
@@ -685,6 +729,11 @@ export class Sim {
     if (this.spin) { const sp = this.spin; out.push({ ...this.spinShape(this.t), name: sp.name, kind: 'avoid', color: 'blue', start: sp.t0, hitAt: this.t < sp.t0 + sp.warn ? sp.t0 + sp.warn : sp.end, live: this.t >= sp.t0 + sp.warn }); }
     return out;
   }
+  cageR() { const cg = this.cage; return Math.max(cg.rMin, cg.r0 - (cg.r0 - cg.rMin) * Math.max(0, this.t - cg.t0) / cg.dur); }
+  // 환영 k와 k+1 사이, k-1과 k 사이 줄이 끊긴 틈인지(각도 기준)
+  cageGap(ang) { const cg = this.cage, step = TAU / cg.n; let a = ((ang - cg.rot) % TAU + TAU) % TAU; const seg = Math.floor(a / step); return seg === cg.breach.idx || seg === (cg.breach.idx + cg.n - 1) % cg.n; }
+  // 세 룬 각도가 한 줄에서 벗어난 정도(도): 가장 벌어진 두 룬의 각도 차
+  dialSpread() { const a = this.dial.rings.map(g => g.ang); let m = 0; for (let i = 0; i < a.length; i++) for (let j = i + 1; j < a.length; j++) { let d = Math.abs(a[i] - a[j]) % 360; if (d > 180) d = 360 - d; m = Math.max(m, d); } return m; }
   upcoming() { return this.pending.filter(e => e.name).map(e => ({ t: e.t, name: e.name })); }
   score() { const n = this.log.length; return { ok: this.log.filter(r => r.ok).length, total: n }; }
 }
