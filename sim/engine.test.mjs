@@ -295,10 +295,10 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   let dashed = -9;
   while (!s.done && s.t < d.duration + 5) {
     const t = s.t; let inp = go(...B);
-    if ([9, 31, 140, 208].some(a => within(t, a, a + 3))) inp = go(13, -23);         // 내 자리 원에서 걸어 나온다
-    if ([78, 150].some(a => within(t, a + 2.5, a + 4.5))) inp = go(8.3, -19.8);      // 고정된 직사각형에서 옆으로
-    if (within(t, 106, 109)) inp = go(14, -21.5);                                    // 부채꼴 갈래 사이
-    for (const a of [68, 118, 180]) if (within(t, a + 4.8, a + 5.3)) { if (t - dashed > 2) { inp = { ...fwd(), dash: true }; dashed = t; } else inp = { mx: 0, mz: 0 }; }   // 패링: 완성 직전에 형상 앞(보스 쪽)으로 대시
+    if ([9, 31, 140, 208, 289, 311, 420].some(a => within(t, a, a + 3))) inp = go(13, -23);         // 내 자리 원에서 걸어 나온다
+    if ([78, 150, 358, 430].some(a => within(t, a + 2.5, a + 4.5))) inp = go(8.3, -19.8);      // 고정된 직사각형에서 옆으로
+    if (within(t, 106, 109) || within(t, 386, 389)) inp = go(14, -21.5);                                    // 부채꼴 갈래 사이
+    for (const a of [68, 118, 180, 348, 398]) if (within(t, a + 4.8, a + 5.3)) { if (t - dashed > 2) { inp = { ...fwd(), dash: true }; dashed = t; } else inp = { mx: 0, mz: 0 }; }   // 패링: 완성 직전에 형상 앞(보스 쪽)으로 대시
     if (within(t, 171.75, 172.2)) { if (t - dashed > 2) { inp = { mx: -1, mz: 0, dash: true }; dashed = t; } else inp = { mx: 0, mz: 0 }; }   // 전체 장판은 대시 무적으로
     if (s.flare) inp = { ...go(0, 18), jump: s.flare.up && t >= s.flare.apex };
     s.step(0.05, inp);
