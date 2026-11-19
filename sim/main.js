@@ -46,6 +46,8 @@ if (!GRID && data.arena.model) loadGlb('./assets/' + data.arena.model).then(env 
   scene.add(env.scene); disc.visible = false;
 });
 // 회전판 고리(시즌4 레이드 1넴): 고리마다 모델 하나, 룬 회전판 기믹 동안 돈다
+// 암전(다크폴): 화면 가운데만 남기고 어둡게 덮는다
+const darkEl = Object.assign(document.createElement('div'), { style: 'position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity .6s;background:radial-gradient(circle at 50% 55%,rgba(0,0,0,0) 0,rgba(0,0,0,.6) 18%,rgba(0,0,0,.88) 50%)' }); renderer.domElement.after(darkEl);
 const ringObjs = [];
 (data.arena.rings ?? []).forEach((f, i) => loadGlb('./assets/' + f).then(g => { if (!g) return; g.scene.position.y = 0.04; scene.add(g.scene); ringObjs[i] = g.scene; }));
 // 격자 전투장(2·3넴): 바닥 타일 프리팹을 칸마다 놓고, 금 간 칸은 붉게 물들이고 무너진 칸은 숨긴다
@@ -97,7 +99,7 @@ function actor(color, model, tint) {
     if (!m) return;
     g.remove(s); g.add(m.scene);
     m.scene.scale.setScalar(data.boss.scale ?? 1);
-    m.scene.traverse(o => { if (o.isSkinnedMesh) { o.frustumCulled = false; if (tint) { o.material = o.material.clone(); o.material.color.set(tint); o.material.emissive.set(tint); o.material.emissiveIntensity = 0.35; } } });
+    m.scene.traverse(o => { if (o.isMesh && data.boss.hideMats?.some(n => o.material?.name?.endsWith(n))) o.visible = false; if (o.isSkinnedMesh) { o.frustumCulled = false; if (tint) { o.material = o.material.clone(); o.material.color.set(tint); o.material.emissive.set(tint); o.material.emissiveIntensity = 0.35; } } });
     g.mixer = new THREE.AnimationMixer(m.scene); g.clips = Object.fromEntries(m.animations.map(c => [c.name, c]));
   });
   return g;
@@ -299,13 +301,14 @@ function drawFx() {
 }
 
 // 입력: 키보드·마우스, 터치 기기는 아래 터치 조작을 함께 쓴다
-const keys = new Set(); let yaw = GRID ? -Math.PI / 2 : data.boss.pos && data.player.start ? Math.atan2(data.player.start[1] - data.boss.pos[1], data.player.start[0] - data.boss.pos[0]) : roomAngle(1) + Math.PI, pitch = 0.5, zoom = 16, paused = true, dashQueued = false, interactQueued = false, speedMul = 1, atkHeld = false, skillQueued = null;
+const keys = new Set(); let yaw = GRID ? -Math.PI / 2 : data.boss.pos && data.player.start ? Math.atan2(data.player.start[1] - data.boss.pos[1], data.player.start[0] - data.boss.pos[0]) : roomAngle(1) + Math.PI, pitch = 0.5, zoom = 16, paused = true, dashQueued = false, interactQueued = false, jumpQueued = false, speedMul = 1, atkHeld = false, skillQueued = null;
 // 인게임 PC 기본 키(클라 입력 설정): 특수 공격 1, 마스터리 스킬 2~5, 궁극 스킬 R, 배틀 이매진 Z·X
 const SKILL_KEYS = { Digit1: 'sp', Digit2: 's1', Digit3: 's2', Digit4: 's3', Digit5: 's4', KeyR: 'ult', KeyZ: 'im1', KeyX: 'im2' };
 addEventListener('keydown', e => {
   keys.add(e.code);
   if (e.code === 'ShiftLeft') { dashQueued = true; e.preventDefault(); }
   if (e.code === 'KeyE' || e.code === 'KeyF') interactQueued = true;
+  if (e.code === 'Space') { jumpQueued = true; e.preventDefault(); }
   if (e.code === 'Backspace') restart();
   if (e.code === 'KeyP' && !sim.done) paused = !paused;
   if (SKILL_KEYS[e.code] && !e.repeat) skillQueued = SKILL_KEYS[e.code];
@@ -373,8 +376,8 @@ function input() {
   if (stick.id !== null && Math.hypot(stick.x, stick.y) > 0.2) { f = -stick.y; r = stick.x; }
   // 카메라가 보는 방향 기준 이동
   const fx_ = -Math.cos(yaw), fz = -Math.sin(yaw);
-  const dash = dashQueued, interact = interactQueued, skill = skillQueued; dashQueued = interactQueued = false; skillQueued = null;
-  return { mx: fx_ * f - fz * r, mz: fz * f + fx_ * r, dash, interact, atk: atkHeld, skill };
+  const dash = dashQueued, interact = interactQueued, jump = jumpQueued, skill = skillQueued; dashQueued = interactQueued = jumpQueued = false; skillQueued = null;
+  return { mx: fx_ * f - fz * r, mz: fz * f + fx_ * r, dash, interact, jump, atk: atkHeld, skill };
 }
 
 // 스킬바: 슬롯마다 아이콘·키·충전 수·쿨타임. 터치에서는 누르는 순간 시전하고 평타는 누르고 있는 동안 이어진다
@@ -439,9 +442,9 @@ function tick(now) {
   // 프레임이 느려도 실제 시간과 맞도록 1/60초 단위로 나눠 진행
   let dt = Math.min(0.25, (now - last) / 1000) * speedMul; last = now;
   const adt = paused || sim.done ? 0 : dt;   // 동작 재생용 경과 시간
-  if (!paused && !sim.done && dt > 0) { const inp = input(); for (; dt > 0 && !sim.done; dt -= 1 / 60, inp.dash = inp.interact = false, inp.skill = null) sim.step(Math.min(dt, 1 / 60), inp); }
+  if (!paused && !sim.done && dt > 0) { const inp = input(); for (; dt > 0 && !sim.done; dt -= 1 / 60, inp.dash = inp.interact = inp.jump = false, inp.skill = null) sim.step(Math.min(dt, 1 / 60), inp); }
   const p = sim.player;
-  animPlayer(player, p, adt); drainCombat(); drawShots();
+  animPlayer(player, p, adt); player.position.y = p.y ?? 0; darkEl.style.opacity = sim.dark ? 1 : 0; drainCombat(); drawShots();
   player.ring.material.color.set(p.iframe > 0 ? 0xffffff : sim.combat.recast ? 0xffd24a : sim.combat.act ? 0xd29922 : 0x3fb950);   // 발밑 고리: 흰색 회피 무적, 금색 라이트 리캐스트, 주황 스킬 동작 중
   if (sim.dial) sim.dial.rings.forEach((g, i) => { if (ringObjs[i]) ringObjs[i].rotation.y = -(g.ang - g.ang0) * Math.PI / 180 + (g.rot0 ?? 0); });
   boss.position.set(sim.boss.x, sim.bossY ?? data.boss.y ?? 0, sim.boss.z); boss.scale.setScalar(sim.bossScale ?? 1); if (GRID) { boss.rotation.y = Math.atan2(Math.cos(sim.bossDir), Math.sin(sim.bossDir)); drawTiles(); } else if (data.noCurtain) { boss.rotation.y = Math.atan2(Math.cos(sim.bossFace), Math.sin(sim.bossFace)); boss.position.y += sim.bossAir * (data.boss.jumpH ?? 4); } else face(boss, p); bossAnim(boss); if (sim.clone) bossAnim(clone);
@@ -449,7 +452,7 @@ function tick(now) {
   sim.bots.forEach((b, i) => movePerson(bots[i], b, adt, sim.boss));
   drawFx(); scheduleFx(); realFx.update(sim.t); pcFx.update(sim.t);
   camera.position.set(p.x + Math.cos(yaw) * Math.cos(pitch) * zoom, 1.5 + Math.sin(pitch) * zoom, p.z + Math.sin(yaw) * Math.cos(pitch) * zoom);
-  camera.lookAt(p.x, 1.5, p.z);
+  camera.position.y += p.y ?? 0; camera.lookAt(p.x, 1.5 + (p.y ?? 0), p.z);
   const fc = window.__sim.freeCam; if (fc) { camera.position.set(fc[0], fc[1], fc[2]); camera.lookAt(fc[3], fc[4], fc[5]); }   // 검증용 고정 시점
   renderer.render(scene, camera); hud();
 }

@@ -279,3 +279,53 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   console.log('raid4-boss1 모범', s4.score(), s4.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
   assert.equal(s4.score().ok, s4.score().total);
 }
+
+// 시즌4 레이드 2넴: 패링(형상 앞쪽으로 대시)·스카이플레어(빈 빛줄기에서 떠올라 최고점 점프)
+{
+  const d = JSON.parse(fs.readFileSync(new URL('./data/raid4-boss2.json', import.meta.url)));
+  let s = new Sim(JSON.parse(JSON.stringify(d)));
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, { mx: 0, mz: 0 });
+  const bad = s.log.filter(r => !r.ok).map(r => r.name);
+  assert.ok(bad.some(n => n.startsWith('환영 빛의 형상')) && bad.includes('스카이플레어') && bad.some(n => n.startsWith('심판의 고리')), '가만히 있으면 패링·스카이플레어·심판의 고리에서 실패해야 한다');
+  s = new Sim(JSON.parse(JSON.stringify(d)));
+  const go = (x, z) => { const dx = x - s.player.x, dz = z - s.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
+  const within = (t, a, b) => t >= a && t < b;
+  // 기본 자리는 보스 옆구리(심판의 고리와 순회 원 궤도 사이)
+  const B = [13, -16], fwd = () => { const dx = s.boss.x - s.player.x, dz = s.boss.z - s.player.z, l = Math.hypot(dx, dz); return { mx: dx / l, mz: dz / l }; };
+  let dashed = -9;
+  while (!s.done && s.t < d.duration + 5) {
+    const t = s.t; let inp = go(...B);
+    if ([9, 31, 140, 208].some(a => within(t, a, a + 3))) inp = go(13, -23);         // 내 자리 원에서 걸어 나온다
+    if ([78, 150].some(a => within(t, a + 2.5, a + 4.5))) inp = go(8.3, -19.8);      // 고정된 직사각형에서 옆으로
+    if (within(t, 106, 109)) inp = go(14, -21.5);                                    // 부채꼴 갈래 사이
+    for (const a of [68, 118, 180]) if (within(t, a + 4.8, a + 5.3)) { if (t - dashed > 2) { inp = { ...fwd(), dash: true }; dashed = t; } else inp = { mx: 0, mz: 0 }; }   // 패링: 완성 직전에 형상 앞(보스 쪽)으로 대시
+    if (within(t, 171.75, 172.2)) { if (t - dashed > 2) { inp = { mx: -1, mz: 0, dash: true }; dashed = t; } else inp = { mx: 0, mz: 0 }; }   // 전체 장판은 대시 무적으로
+    if (s.flare) inp = { ...go(0, 18), jump: s.flare.up && t >= s.flare.apex };
+    s.step(0.05, inp);
+  }
+  console.log('raid4-boss2 모범', s.score(), s.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  assert.equal(s.score().ok, s.score().total);
+}
+
+// 시즌4 레이드 3넴: 천체 충돌 대피·다크폴 빛 구슬 옮기기·손 공격(점프/땅)
+{
+  const d = JSON.parse(fs.readFileSync(new URL('./data/raid4-boss3.json', import.meta.url)));
+  let s = new Sim(JSON.parse(JSON.stringify(d)));
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, { mx: 0, mz: 0 });
+  const bad = s.log.filter(r => !r.ok).map(r => r.name);
+  assert.ok(bad.some(n => n.startsWith('천체 충돌')) && bad.includes('다크폴: 빛 구슬') && bad.some(n => n.startsWith('오른손 내려찍기')), '가만히 있으면 천체 충돌·다크폴·오른손 내려찍기에서 실패해야 한다');
+  s = new Sim(JSON.parse(JSON.stringify(d)));
+  const go = (x, z) => { const dx = x - s.player.x, dz = z - s.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
+  const within = (t, a, b) => t >= a && t < b;
+  while (!s.done && s.t < d.duration + 5) {
+    const t = s.t; let inp = go(4, 6);
+    if (within(t, 85, 108) || within(t, 195, 214)) inp = go(-4, 6);                  // 오른쪽 반 공격은 왼쪽에서
+    if (within(t, 66, 76)) inp = go(12, 22);                                         // 천체 충돌: 만나는 곳 반대편
+    if (within(t, 278, 288)) inp = go(-12, 22);
+    if (s.lorb) { const o = s.lorb; inp = Math.hypot(o.x - s.player.x, o.z - s.player.z) > 3.5 ? go(o.x, o.z) : { mx: -o.x, mz: -o.z }; }   // 구슬에 들어간 뒤 구슬이 중앙으로 가는 방향으로 걷는다
+    if ([250, 266].some(a => within(t, a + 3.2, a + 3.3))) inp = { ...inp, jump: true };
+    s.step(0.05, inp);
+  }
+  console.log('raid4-boss3 모범', s.score(), s.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  assert.equal(s.score().ok, s.score().total);
+}

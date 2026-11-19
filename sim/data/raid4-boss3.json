@@ -1,0 +1,887 @@
+{
+ "id": "raid4-boss3",
+ "title": "시즌4 레이드 3넴 · 거대 라프시스 (하드)",
+ "notes": "시즌4 레이드 연전. 본체는 전투장 밖의 거대체라 때릴 수 없고 중앙의 구체를 친다. 기믹은 공략 영상 자막, 순서와 시각은 플레이 영상의 경고 문구, 판정 크기는 클라 스킬 데이터지만 본체 배율(60) 때문에 값이 확실하지 않아 자리와 크기 대부분이 추정이다. 어둠 침식 스택은 세지 않고 맞을 때마다 실패로 적는다. 5단 점프는 Space 한 번에 길게 뜨는 것으로 줄였다. 신조 처치와 블랙홀을 탱커가 지우는 과정은 보여 주기만 한다",
+ "noCurtain": true,
+ "arena": {
+  "radius": 36,
+  "model": "arena_raid4.glb",
+  "rings": [
+   "raid4_ring1.glb",
+   "raid4_ring2.glb",
+   "raid4_ring3.glb"
+  ],
+  "src": "measured(1넴과 같은 씬 scenes/dng_raid_004 — 클라에 시즌4 레이드 씬은 이것 하나뿐) + estimate(전투장 반경 36m)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "src": "레이드 시나리오와 같은 값",
+  "start": [
+   0,
+   9
+  ],
+  "jump": {
+   "dur": 1.8,
+   "h": 7
+  },
+  "jumpSrc": "guide(신조를 잡으면 5단 점프) + estimate(체공 1.8초)"
+ },
+ "boss": {
+  "pos": [
+   0,
+   -112
+  ],
+  "y": -60,
+  "height": 60,
+  "scale": 60,
+  "hideMats": [
+   "hair_bosslampsis03_1"
+  ],
+  "hideSrc": "머리카락 안쪽 겹(재질 색이 검정)이 검은 띠로 그려져 숨겼다",
+  "src": "table(몬스터 103600 거대 라프시스, 모델 배율 60; 파츠 ch_wpnpc_m_equip_bosslampsis03·head_bosslampsis03·hair_bosslampsis03) + estimate(자리·높이: 전투장 밖에서 상반신이 보이게 놓음)",
+  "model": "boss_lampsis3.glb",
+  "chase": false,
+  "anims": {
+   "idle": "as_wpnpc_m_base_bosslampsis03_fidle",
+   "atk1": "as_wpnpc_m_base_bosslampsis03_attack01",
+   "atk2": "as_wpnpc_m_base_bosslampsis03_attack02",
+   "cast1": "as_wpnpc_m_base_bosslampsis03_cast01",
+   "cast2": "as_wpnpc_m_base_bosslampsis03_cast02",
+   "cast3": "as_wpnpc_m_base_bosslampsis03_cast03_start",
+   "cast4": "as_wpnpc_m_base_bosslampsis03_cast04_start",
+   "cast5": "as_wpnpc_m_base_bosslampsis03_cast05_start",
+   "cast6": "as_wpnpc_m_base_bosslampsis03_cast06_start",
+   "down": "as_wpnpc_m_base_bosslampsis03_cast07_down_start",
+   "swap": "as_wpnpc_m_base_bosslampsis03_cast07_swap_start"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 추정(cast07_down 내려찍기·cast07_swap 휩쓸기만 이름이 뜻과 맞는다)"
+ },
+ "partySpots": [
+  [
+   5,
+   -4
+  ],
+  [
+   -5,
+   -4
+  ],
+  [
+   7,
+   3
+  ],
+  [
+   -7,
+   3
+  ],
+  [
+   4,
+   8
+  ],
+  [
+   -4,
+   8
+  ],
+  [
+   0,
+   -7
+  ]
+ ],
+ "partyRoles": [
+  "탱",
+  "탱",
+  "근딜",
+  "근딜",
+  "원딜",
+  "힐",
+  "힐"
+ ],
+ "partySrc": "표식은 7명만 둔다. 파티원은 중앙 구체 둘레에 고정으로 서 있다",
+ "timingSrc": "video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면) 블랙홀 0:20, 천체 0:35, 검 0:54·3:00·3:56, 천체 충돌 1:10·4:45, 다크폴 1:52, 신조 3:42, 손 공격 4:15. 그 사이 반쪽 공격·천체 장판의 시각은 추정",
+ "events": [
+  {
+   "t": 0,
+   "type": "aoe",
+   "kind": "show",
+   "name": "갇힌 라프시스(중앙 구체 — 이것을 공격)",
+   "spots": [
+    [
+     0,
+     0,
+     3
+    ]
+   ],
+   "cast": 6,
+   "color": "pink",
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 중앙의 보라색 구체를 친다",
+   "fxList": [
+    {
+     "name": "lampsis03_boss02_loop",
+     "at": [
+      0,
+      0
+     ],
+     "dur": 300
+    }
+   ]
+  },
+  {
+   "t": 6,
+   "type": "sectors",
+   "name": "반쪽 공격(왼쪽 반 — 반대쪽으로)",
+   "center": [
+    0,
+    -50
+   ],
+   "r": 90,
+   "half": 45,
+   "dirs": [
+    135
+   ],
+   "cast": 3,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360001·02 부채꼴 90°(본체 기준 좌·우 45°), 타격 1.73초 + estimate(본체가 전투장 밖 -z에 있다고 보고 반쪽을 덮게 놓음, 예고 3초)",
+   "fx": "half",
+   "anim": "atk1"
+  },
+  {
+   "t": 16,
+   "type": "scarHit",
+   "name": "블랙홀 4개(탱커가 하나씩 밟아 없애기 — 다른 역할은 밟지 않기)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 17,
+     "z": 17,
+     "r": 13
+    },
+    {
+     "shape": "circle",
+     "x": -17,
+     "z": 17,
+     "r": 13
+    },
+    {
+     "shape": "circle",
+     "x": 17,
+     "z": -17,
+     "r": 13
+    },
+    {
+     "shape": "circle",
+     "x": -17,
+     "z": -17,
+     "r": 13
+    }
+   ],
+   "cast": 5,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360004 블랙홀 소환 · 10360096 가상체 원 반경 15m + guide(Layla 공략 영상 BNH-orQQXZU 자막) 밟으면 치명 피해와 침식 4스택, 밟아야만 없어진다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(자리, 반경은 중앙이 비도록 13m로 줄임)",
+   "fx": "hole",
+   "anim": "cast1"
+  },
+  {
+   "t": 21.1,
+   "type": "hazards",
+   "name": "블랙홀(탱커가 차례로 지움)",
+   "notFor": "tank",
+   "spots": [
+    [
+     17,
+     17,
+     13,
+     8
+    ],
+    [
+     -17,
+     17,
+     13,
+     16
+    ],
+    [
+     17,
+     -17,
+     13,
+     24
+    ],
+    [
+     -17,
+     -17,
+     13,
+     32
+    ]
+   ],
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 탱커가 하나를 밟고 침식이 빠지면 다음 것을 밟는다 + estimate(8초마다 하나씩 사라짐)"
+  },
+  {
+   "t": 34,
+   "type": "shapes",
+   "name": "천체 고리 장판(빛·어둠 둘 다 피하기 — 중앙이 안전)",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": -20,
+     "z": 0,
+     "rIn": 5,
+     "rOut": 15
+    },
+    {
+     "shape": "ring",
+     "x": 20,
+     "z": 0,
+     "rIn": 5,
+     "rOut": 15
+    }
+   ],
+   "cast": 4,
+   "color": "pink",
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 고리 장판은 천체 반대쪽에 깔리고 중앙은 안전 + estimate(크기·자리)",
+   "fx": "ringL",
+   "anim": "cast2",
+   "fxList": [
+    {
+     "name": "lampsis03_lightball_fx",
+     "at": [
+      24,
+      0
+     ],
+     "dur": 10
+    },
+    {
+     "name": "lampsis03_darkball_fx",
+     "at": [
+      -24,
+      0
+     ],
+     "dur": 10
+    }
+   ]
+  },
+  {
+   "t": 44,
+   "type": "scarHit",
+   "name": "빛 천체 부채꼴(맞으면 침식 정화 — 들어가기)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 24,
+     "z": 0,
+     "r": 35,
+     "dir": 2.356194490192345,
+     "half": 0.7853981633974483
+    }
+   ],
+   "cast": 4,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "in",
+    "dps": "in"
+   },
+   "okMsg": "빛 부채꼴에 맞아 어둠 침식 정화",
+   "failMsg": "빛 부채꼴을 놓침 — 침식이 남음",
+   "color": "yellow",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360099 빛 구슬 부채꼴 반경 35m·90°, 타격 2.0초 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 빛의 부채꼴은 침식을 지워 주니 맞는다 + estimate(방향·예고 4초)",
+   "fx": "coneL",
+   "anim": "cast2"
+  },
+  {
+   "t": 44,
+   "type": "shapes",
+   "name": "어둠 천체 부채꼴(피하기)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": -24,
+     "z": 0,
+     "r": 35,
+     "dir": -0.7853981633974483,
+     "half": 0.7853981633974483
+    }
+   ],
+   "cast": 4,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360098 어둠 구슬 부채꼴 반경 35m·90°, 타격 2.0초 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 어둠의 부채꼴은 침식을 주니 피한다",
+   "fx": "coneD"
+  },
+  {
+   "t": 52,
+   "type": "scarHit",
+   "name": "심판의 검 2자루(탱커가 바깥으로 돌림 — 다른 역할은 검에서 떨어져 중앙에)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 22,
+     "z": 0,
+     "r": 30,
+     "dir": 0,
+     "half": 1.3089969389957472
+    },
+    {
+     "shape": "sector",
+     "x": -22,
+     "z": 0,
+     "r": 30,
+     "dir": 3.141592653589793,
+     "half": 1.3089969389957472
+    }
+   ],
+   "cast": 6,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360095 부채꼴 가상체 반경 60m·150° + guide(Layla 공략 영상 BNH-orQQXZU 자막) 좌우에 검이 생겨 가장 가까운 사람에게 큰 부채꼴을 겨눈다, 탱커와 즉사 면역 외에는 죽는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(검 자리, 탱커가 이미 바깥으로 돌려놓은 모양·예고 6초)",
+   "fx": "sword",
+   "anim": "cast3"
+  },
+  {
+   "t": 66,
+   "type": "intercept",
+   "name": "빛 천체",
+   "from": [
+    24,
+    0
+   ],
+   "to": [
+    -10,
+    -14
+   ],
+   "dur": 8,
+   "r": 4,
+   "want": {},
+   "src": "estimate(천체가 움직이는 길)"
+  },
+  {
+   "t": 66,
+   "type": "intercept",
+   "name": "어둠 천체",
+   "from": [
+    -24,
+    0
+   ],
+   "to": [
+    -10,
+    -14
+   ],
+   "dur": 6,
+   "r": 4,
+   "want": {},
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 빠른 쪽(대개 어둠)을 보고 만날 자리를 짐작한다"
+  },
+  {
+   "t": 66.1,
+   "type": "far",
+   "name": "천체 충돌(두 천체가 만나는 곳에서 멀리 — 대시 봉인)",
+   "at": [
+    -10,
+    -14
+   ],
+   "safeDist": 32,
+   "cast": 8,
+   "dashLock": 8.2,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360097 빛 구슬 대폭발 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 전장 대부분이 터지고 감속으로 대시가 막힌다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(폭발 반경 32m·만나는 자리)",
+   "fx": "crash",
+   "anim": "cast4"
+  },
+  {
+   "t": 92,
+   "type": "sectors",
+   "name": "반쪽 공격(오른쪽 반 — 반대쪽으로)",
+   "center": [
+    0,
+    -50
+   ],
+   "r": 90,
+   "half": 45,
+   "dirs": [
+    45
+   ],
+   "cast": 3,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360001·02 부채꼴 90°(본체 기준 좌·우 45°), 타격 1.73초 + estimate(본체가 전투장 밖 -z에 있다고 보고 반쪽을 덮게 놓음, 예고 3초)",
+   "fx": "half",
+   "anim": "atk2"
+  },
+  {
+   "t": 108,
+   "type": "lightorb",
+   "name": "다크폴: 빛 구슬",
+   "from": [
+    15,
+    15
+   ],
+   "r": 4,
+   "speed": 6,
+   "goal": 3,
+   "cast": 30,
+   "maxOut": 8,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360012 암전 중 빛 구슬 이동 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 전장이 어두워지고 빛 구슬 4개가 생긴다, 구슬 안에서 중앙을 보고 걸으면 구슬이 그 방향으로 움직인다, 어둠 속에서는 침식이 쌓인다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면) 1:52~2:22 + estimate(구슬은 안에 있는 사람이 걷는 속도로 같이 움직인다고 침·밖에 8초 넘게 있으면 실패, 구슬 하나만 맡는다)",
+   "anim": "cast5",
+   "fxList": [
+    {
+     "name": "lampsis03_cost05_light_boom",
+     "at": [
+      0,
+      0
+     ],
+     "t": 28
+    }
+   ]
+  },
+  {
+   "t": 142,
+   "type": "sectors",
+   "name": "반쪽 공격(왼쪽 반 — 반대쪽으로)",
+   "center": [
+    0,
+    -50
+   ],
+   "r": 90,
+   "half": 45,
+   "dirs": [
+    135
+   ],
+   "cast": 3,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360001·02 부채꼴 90°(본체 기준 좌·우 45°), 타격 1.73초 + estimate(본체가 전투장 밖 -z에 있다고 보고 반쪽을 덮게 놓음, 예고 3초)",
+   "fx": "half",
+   "anim": "atk1"
+  },
+  {
+   "t": 152,
+   "type": "scarHit",
+   "name": "블랙홀 4개(탱커가 하나씩 밟아 없애기 — 다른 역할은 밟지 않기)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 17,
+     "z": 17,
+     "r": 13
+    },
+    {
+     "shape": "circle",
+     "x": -17,
+     "z": 17,
+     "r": 13
+    },
+    {
+     "shape": "circle",
+     "x": 17,
+     "z": -17,
+     "r": 13
+    },
+    {
+     "shape": "circle",
+     "x": -17,
+     "z": -17,
+     "r": 13
+    }
+   ],
+   "cast": 5,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360004 블랙홀 소환 · 10360096 가상체 원 반경 15m + guide(Layla 공략 영상 BNH-orQQXZU 자막) 밟으면 치명 피해와 침식 4스택, 밟아야만 없어진다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(자리, 반경은 중앙이 비도록 13m로 줄임)",
+   "fx": "hole",
+   "anim": "cast1"
+  },
+  {
+   "t": 157.1,
+   "type": "hazards",
+   "name": "블랙홀(탱커가 차례로 지움)",
+   "notFor": "tank",
+   "spots": [
+    [
+     17,
+     17,
+     13,
+     8
+    ],
+    [
+     -17,
+     17,
+     13,
+     16
+    ],
+    [
+     17,
+     -17,
+     13,
+     24
+    ],
+    [
+     -17,
+     -17,
+     13,
+     32
+    ]
+   ],
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 탱커가 하나를 밟고 침식이 빠지면 다음 것을 밟는다 + estimate(8초마다 하나씩 사라짐)"
+  },
+  {
+   "t": 170,
+   "type": "scarHit",
+   "name": "빛 천체 부채꼴(맞으면 침식 정화 — 들어가기)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 24,
+     "z": 0,
+     "r": 35,
+     "dir": 2.356194490192345,
+     "half": 0.7853981633974483
+    }
+   ],
+   "cast": 4,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "in",
+    "dps": "in"
+   },
+   "okMsg": "빛 부채꼴에 맞아 어둠 침식 정화",
+   "failMsg": "빛 부채꼴을 놓침 — 침식이 남음",
+   "color": "yellow",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360099 빛 구슬 부채꼴 반경 35m·90°, 타격 2.0초 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 빛의 부채꼴은 침식을 지워 주니 맞는다 + estimate(방향·예고 4초)",
+   "fx": "coneL",
+   "anim": "cast2"
+  },
+  {
+   "t": 170,
+   "type": "shapes",
+   "name": "어둠 천체 부채꼴(피하기)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": -24,
+     "z": 0,
+     "r": 35,
+     "dir": -0.7853981633974483,
+     "half": 0.7853981633974483
+    }
+   ],
+   "cast": 4,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360098 어둠 구슬 부채꼴 반경 35m·90°, 타격 2.0초 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 어둠의 부채꼴은 침식을 주니 피한다",
+   "fx": "coneD"
+  },
+  {
+   "t": 178,
+   "type": "scarHit",
+   "name": "심판의 검 2자루(탱커가 바깥으로 돌림 — 다른 역할은 검에서 떨어져 중앙에)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 22,
+     "z": 0,
+     "r": 30,
+     "dir": 0,
+     "half": 1.3089969389957472
+    },
+    {
+     "shape": "sector",
+     "x": -22,
+     "z": 0,
+     "r": 30,
+     "dir": 3.141592653589793,
+     "half": 1.3089969389957472
+    }
+   ],
+   "cast": 6,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360095 부채꼴 가상체 반경 60m·150° + guide(Layla 공략 영상 BNH-orQQXZU 자막) 좌우에 검이 생겨 가장 가까운 사람에게 큰 부채꼴을 겨눈다, 탱커와 즉사 면역 외에는 죽는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(검 자리, 탱커가 이미 바깥으로 돌려놓은 모양·예고 6초)",
+   "fx": "sword",
+   "anim": "cast3"
+  },
+  {
+   "t": 190,
+   "type": "shapes",
+   "name": "천체 고리 장판(빛·어둠 둘 다 피하기 — 중앙이 안전)",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": -20,
+     "z": 0,
+     "rIn": 5,
+     "rOut": 15
+    },
+    {
+     "shape": "ring",
+     "x": 20,
+     "z": 0,
+     "rIn": 5,
+     "rOut": 15
+    }
+   ],
+   "cast": 4,
+   "color": "pink",
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 고리 장판은 천체 반대쪽에 깔리고 중앙은 안전 + estimate(크기·자리)",
+   "fx": "ringL",
+   "anim": "cast2",
+   "fxList": [
+    {
+     "name": "lampsis03_lightball_fx",
+     "at": [
+      24,
+      0
+     ],
+     "dur": 10
+    },
+    {
+     "name": "lampsis03_darkball_fx",
+     "at": [
+      -24,
+      0
+     ],
+     "dur": 10
+    }
+   ]
+  },
+  {
+   "t": 200,
+   "type": "sectors",
+   "name": "반쪽 공격(오른쪽 반 — 반대쪽으로)",
+   "center": [
+    0,
+    -50
+   ],
+   "r": 90,
+   "half": 45,
+   "dirs": [
+    45
+   ],
+   "cast": 3,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360001·02 부채꼴 90°(본체 기준 좌·우 45°), 타격 1.73초 + estimate(본체가 전투장 밖 -z에 있다고 보고 반쪽을 덮게 놓음, 예고 3초)",
+   "fx": "half",
+   "anim": "atk2"
+  },
+  {
+   "t": 214,
+   "type": "orbit",
+   "name": "신조(가장자리를 시계 방향으로 돈다 — 군중 제어로 묶어 처치하면 5단 점프 해금)",
+   "R": 32,
+   "r": 3,
+   "n": 1,
+   "vel": 20,
+   "ang": 0,
+   "dur": 16,
+   "show": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360014 올빼미 야수 소환 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 가장자리를 시계 방향으로 나는 새를 묶어 잡는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면) 3:42 + estimate(속도, 처치는 판정하지 않음)",
+   "anim": "cast6"
+  },
+  {
+   "t": 232,
+   "type": "scarHit",
+   "name": "심판의 검 2자루(탱커가 바깥으로 돌림 — 다른 역할은 검에서 떨어져 중앙에)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 22,
+     "z": 0,
+     "r": 30,
+     "dir": 0,
+     "half": 1.3089969389957472
+    },
+    {
+     "shape": "sector",
+     "x": -22,
+     "z": 0,
+     "r": 30,
+     "dir": 3.141592653589793,
+     "half": 1.3089969389957472
+    }
+   ],
+   "cast": 6,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360095 부채꼴 가상체 반경 60m·150° + guide(Layla 공략 영상 BNH-orQQXZU 자막) 좌우에 검이 생겨 가장 가까운 사람에게 큰 부채꼴을 겨눈다, 탱커와 즉사 면역 외에는 죽는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(검 자리, 탱커가 이미 바깥으로 돌려놓은 모양·예고 6초)",
+   "fx": "sword",
+   "anim": "cast3"
+  },
+  {
+   "t": 250,
+   "type": "air",
+   "name": "오른손 내려찍기(중앙에 팔이 나와 바닥을 찍음 — 점프로 넘기: Space)",
+   "want": "air",
+   "spots": [
+    [
+     0,
+     0,
+     36
+    ]
+   ],
+   "cast": 4,
+   "color": "pink",
+   "okMsg": "5단 점프로 넘김",
+   "failMsg": "땅에 있다가 맞음 — 침식 3스택",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360089·90 손 공격 가상체 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 오른손은 바닥 내려찍기라 5단 점프로 넘는다(클라 이름은 좌우가 반대라 어느 쪽이 맞는지 미확인) + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면) 4:15 + estimate(예고 4초, 점프는 한 번 길게 뜨는 것으로 줄임)",
+   "fx": "handR",
+   "anim": "down"
+  },
+  {
+   "t": 258,
+   "type": "air",
+   "name": "왼손 휩쓸기(공중을 쓸어 감 — 점프하지 말고 땅에)",
+   "want": "ground",
+   "spots": [
+    [
+     0,
+     0,
+     36
+    ]
+   ],
+   "cast": 4,
+   "color": "blue",
+   "okMsg": "땅에 붙어 피함",
+   "failMsg": "공중에서 맞음 — 침식 3스택",
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 왼손은 공중 휩쓸기라 땅에 있어야 한다 + estimate(예고 4초)",
+   "fx": "handL",
+   "anim": "swap"
+  },
+  {
+   "t": 266,
+   "type": "air",
+   "name": "오른손 내려찍기(중앙에 팔이 나와 바닥을 찍음 — 점프로 넘기: Space)",
+   "want": "air",
+   "spots": [
+    [
+     0,
+     0,
+     36
+    ]
+   ],
+   "cast": 4,
+   "color": "pink",
+   "okMsg": "5단 점프로 넘김",
+   "failMsg": "땅에 있다가 맞음 — 침식 3스택",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360089·90 손 공격 가상체 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 오른손은 바닥 내려찍기라 5단 점프로 넘는다(클라 이름은 좌우가 반대라 어느 쪽이 맞는지 미확인) + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면) 4:15 + estimate(예고 4초, 점프는 한 번 길게 뜨는 것으로 줄임)",
+   "fx": "handR",
+   "anim": "down"
+  },
+  {
+   "t": 278,
+   "type": "intercept",
+   "name": "빛 천체",
+   "from": [
+    24,
+    0
+   ],
+   "to": [
+    12,
+    -12
+   ],
+   "dur": 8,
+   "r": 4,
+   "want": {},
+   "src": "estimate(천체가 움직이는 길)"
+  },
+  {
+   "t": 278,
+   "type": "intercept",
+   "name": "어둠 천체",
+   "from": [
+    -24,
+    0
+   ],
+   "to": [
+    12,
+    -12
+   ],
+   "dur": 6,
+   "r": 4,
+   "want": {},
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 빠른 쪽(대개 어둠)을 보고 만날 자리를 짐작한다"
+  },
+  {
+   "t": 278.1,
+   "type": "far",
+   "name": "천체 충돌(두 천체가 만나는 곳에서 멀리 — 대시 봉인)",
+   "at": [
+    12,
+    -12
+   ],
+   "safeDist": 32,
+   "cast": 8,
+   "dashLock": 8.2,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360097 빛 구슬 대폭발 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 전장 대부분이 터지고 감속으로 대시가 막힌다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(폭발 반경 32m·만나는 자리)",
+   "fx": "crash",
+   "anim": "cast4"
+  }
+ ],
+ "duration": 292,
+ "fxBase": "./assets/fx-lampsis3/",
+ "fx": {
+  "half": {
+   "hit": "lampsis03_aoe01_hit_l"
+  },
+  "hole": {
+   "cast": "lampsis03_heidong_start",
+   "hit": "lampsis03_heidong_hit"
+  },
+  "ringL": {
+   "cast": "lampsis03_cost06_loop",
+   "hit": "lampsis03_aoe_dark"
+  },
+  "coneL": {
+   "cast": "lampsis03_cost06_field_light",
+   "hit": "lampsis03_aoe_light"
+  },
+  "coneD": {
+   "cast": "lampsis03_cost06_field_dark",
+   "hit": "lampsis03_aoe_dark"
+  },
+  "sword": {
+   "cast": "lampsis03_cost02_start",
+   "hit": "lampsis03_attack03_02"
+  },
+  "crash": {
+   "cast": "lampsis03_cost03_start",
+   "hit": "lampsis03_darklightball_boom"
+  },
+  "handR": {
+   "cast": "bosslampsis03_hand_black_hole_handr",
+   "hit": "bosslampsis03_hand_black_hole_handr_boom"
+  },
+  "handL": {
+   "cast": "bosslampsis03_hand_black_hole_handl",
+   "hit": "bosslampsis03_hand_black_hole_handlboom"
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss/lapuxisi의 p_fx_lampsis03_*·p_fx_bosslampsis03_* 45종). 기믹과의 대응은 이펙트 이름(heidong 블랙홀·lightball/darkball 천체·hand_black_hole 손 차원문)으로 고른 추정이라 인게임과 다를 수 있다"
+}

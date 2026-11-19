@@ -1,0 +1,1031 @@
+{
+ "id": "raid4-boss2",
+ "title": "시즌4 레이드 2넴 · 라프시스・극주 (하드)",
+ "notes": "시즌4 레이드 결전. 기믹은 공략 영상 자막, 판정 크기는 한섭 클라 스킬 데이터, 국면 순서(쫄 구간 → 심판 국면 → 스카이플레어)와 큰 시각은 플레이 영상. 심판 국면 안의 패턴 순서·간격, 순회 원의 속도, 패링 형상이 보는 방향, 빛줄기 자리는 추정. 죄의 징벌 스택은 세지 않고 맞을 때마다 실패로 적는다. 패링은 대시 무적으로 대신한다. 영상에서는 스카이플레어 뒤 쫄 구간과 심판 국면이 한 번 더 돈다",
+ "noCurtain": true,
+ "arena": {
+  "radius": 36,
+  "model": "arena_raid4.glb",
+  "rings": [
+   "raid4_ring1.glb",
+   "raid4_ring2.glb",
+   "raid4_ring3.glb"
+  ],
+  "src": "measured(1넴과 같은 씬 scenes/dng_raid_004 — 클라에 시즌4 레이드 씬은 이것 하나뿐) + estimate(전투장 반경 36m)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "src": "레이드 시나리오와 같은 값",
+  "start": [
+   0,
+   14
+  ]
+ },
+ "boss": {
+  "pos": [
+   0,
+   -21.5
+  ],
+  "height": 5.6,
+  "scale": 3.0,
+  "src": "table(몬스터 103500 라프시스・극주, 모델 배율 3.0; 파츠 ch_wpnpc_m_equip_bosslampsis02·head_bosslampsis02·hair_bosslampsis02) + guide(탱커가 보스를 중앙에서 빼낸다)",
+  "model": "boss_lampsis2.glb",
+  "reach": 5,
+  "speed": 3,
+  "turn": 180,
+  "anims": {
+   "idle": "as_wpnpc_m_base_bosslampsis02_fidle",
+   "walk": "as_wpnpc_m_base_bosslampsis02_run",
+   "basic": "as_wpnpc_m_base_bosslampsis02_attack01",
+   "cast": "as_wpnpc_m_base_bosslampsis02_cast_start",
+   "judge": "as_wpnpc_m_base_bosslampsis02_judge_start",
+   "rise": "as_wpnpc_m_base_bosslampsis02_heaven_start",
+   "flare": "as_wpnpc_m_base_bosslampsis02_sphere_spawn",
+   "weak": "as_wpnpc_m_base_bosslampsis02_weakness_loop"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 이름으로 고른 추정"
+ },
+ "partySpots": [
+  [
+   0,
+   -25.5
+  ],
+  [
+   5,
+   -17.5
+  ],
+  [
+   -5,
+   -17.5
+  ],
+  [
+   17,
+   -12
+  ],
+  [
+   -17,
+   -12
+  ],
+  [
+   8,
+   17
+  ],
+  [
+   -8,
+   17
+  ]
+ ],
+ "partyRoles": [
+  "탱",
+  "근딜",
+  "근딜",
+  "원딜",
+  "원딜",
+  "힐",
+  "힐"
+ ],
+ "tankBot": 0,
+ "partySrc": "20인 레이드지만 표식은 7명만 둔다. 파티원은 심판의 고리(중앙 15m)와 순회 원 궤도 사이에 고정으로 서 있다",
+ "timingSrc": "video(Layla 플레이 영상 FyNqlJRUO2w 화면, 5초 간격 판독) 쫄 구간 0:04~0:54, 심판 국면 0:55~3:40, 스카이플레어 3:45~4:30. 그 안의 시각은 추정",
+ "events": [
+  {
+   "t": 0,
+   "type": "bossMove",
+   "to": [
+    0,
+    0
+   ],
+   "bossScale": 0.001,
+   "src": "estimate(쫄 구간 동안 보스는 없다)"
+  },
+  {
+   "t": 1,
+   "type": "aoe",
+   "kind": "show",
+   "name": "쫄 구간: 빛의 형상 3마리(타이머 안에 왼쪽부터 차례로 처치)",
+   "spots": [
+    [
+     -15,
+     -16,
+     2.5
+    ],
+    [
+     0,
+     -22,
+     2.5
+    ],
+    [
+     15,
+     -16,
+     2.5
+    ]
+   ],
+   "cast": 48,
+   "color": "yellow",
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 빛의 형상 3마리를 타이머 안에 처치, 못 잡으면 전멸 + video(Layla 플레이 영상 FyNqlJRUO2w 화면, 5초 간격 판독) 쫄 구간 약 50초 + estimate(자리)"
+  },
+  {
+   "t": 9,
+   "type": "puddle",
+   "name": "지목 원(내 자리에서 걸어 나오기)",
+   "r": 3,
+   "cast": 2.5,
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 쫄 구간 중 플레이어를 노리는 원 + estimate(반경·시각)",
+   "fx": "mine"
+  },
+  {
+   "t": 18,
+   "type": "pull",
+   "to": [
+    0,
+    0
+   ],
+   "dashLock": 1.0,
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 가끔 중앙으로 끌려간다"
+  },
+  {
+   "t": 18.1,
+   "type": "far",
+   "name": "중앙 충전 폭발(끌려간 뒤 중앙에서 벗어나기)",
+   "at": [
+    0,
+    0
+   ],
+   "safeDist": 14,
+   "cast": 5,
+   "reset": true,
+   "color": "red",
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 중앙으로 끌려가고 장판이 충전돼 터진다 + estimate(반경 14m·충전 5초)",
+   "fx": "charge"
+  },
+  {
+   "t": 31,
+   "type": "puddle",
+   "name": "지목 원(내 자리에서 걸어 나오기)",
+   "r": 3,
+   "cast": 2.5,
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 쫄 구간 중 플레이어를 노리는 원 + estimate(반경·시각)",
+   "fx": "mine"
+  },
+  {
+   "t": 38,
+   "type": "pull",
+   "to": [
+    0,
+    0
+   ],
+   "dashLock": 1.0,
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 가끔 중앙으로 끌려간다"
+  },
+  {
+   "t": 38.1,
+   "type": "far",
+   "name": "중앙 충전 폭발(끌려간 뒤 중앙에서 벗어나기)",
+   "at": [
+    0,
+    0
+   ],
+   "safeDist": 14,
+   "cast": 5,
+   "reset": true,
+   "color": "red",
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 중앙으로 끌려가고 장판이 충전돼 터진다 + estimate(반경 14m·충전 5초)",
+   "fx": "charge"
+  },
+  {
+   "t": 50,
+   "type": "bossMove",
+   "to": [
+    0,
+    0
+   ],
+   "bossScale": 1,
+   "src": "video(Layla 플레이 영상 FyNqlJRUO2w 화면, 5초 간격 판독) 0:54 섬광과 함께 보스 등장"
+  },
+  {
+   "t": 50.1,
+   "type": "freeze",
+   "dur": 2.5,
+   "text": "보스 등장 — 전원 기절 후 공중으로 띄움",
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 등장하며 전원 기절 후 띄움"
+  },
+  {
+   "t": 50.2,
+   "type": "aoe",
+   "kind": "show",
+   "name": "승천(회피 불가, 힐로 버팀)",
+   "spots": [
+    [
+     0,
+     0,
+     16.7
+    ]
+   ],
+   "cast": 2.5,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350024 원 반경 16.7m, 회피 불가",
+   "fx": "rise",
+   "anim": "rise"
+  },
+  {
+   "t": 54,
+   "type": "aoe",
+   "name": "심판의 고리(보스 발밑 — 즉시 벗어나기, 장판이 계속 남음)",
+   "spots": [
+    [
+     0,
+     0,
+     15
+    ]
+   ],
+   "cast": 5,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350021 심판 영역 원 반경 15m ×6회 + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 보스 발밑 큰 붉은 장판이 노란 영구 장판으로 남는다 + video(Layla 플레이 영상 FyNqlJRUO2w 화면, 5초 간격 판독) 1:05 + estimate(예고 5초)",
+   "fx": "judge",
+   "anim": "judge",
+   "move": {
+    "to": "home",
+    "mode": "walk",
+    "dur": 6,
+    "at": 1
+   }
+  },
+  {
+   "t": 58,
+   "type": "orbit",
+   "name": "외곽 순회 원 3개(가장자리에 가지 않기)",
+   "R": 32,
+   "r": 3.5,
+   "n": 3,
+   "vel": 14,
+   "ang": 30,
+   "warn": 3,
+   "dur": 156,
+   "okMsg": "순회 원에 닿지 않음",
+   "failMsg": "순회 원에 닿음 — 죄의 징벌 스택",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350022 외곽 순회 광선 소환 + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 점선 원 3개가 가장자리를 돈다, 닿으면 징벌 스택 + estimate(궤도 32m·반경 3.5m·속도)"
+  },
+  {
+   "t": 59.1,
+   "type": "hazards",
+   "name": "심판의 고리(영구 장판)",
+   "spots": [
+    [
+     0,
+     0,
+     15
+    ]
+   ],
+   "dur": 160.4,
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 레이드가 끝날 때까지 남는다 + estimate(스카이플레어 때 사라지는 것은 영상의 창궁 국면 바닥에 장판이 보이지 않아서 넣은 추정)",
+   "fxList": [
+    {
+     "name": "lampsis02_judge_area_fazhen",
+     "at": [
+      0,
+      0
+     ],
+     "dur": 160
+    }
+   ]
+  },
+  {
+   "t": 63,
+   "type": "scarHit",
+   "name": "평타 3연(보스 앞, 탱커만)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": -21.5
+     },
+     "b": {
+      "x": 0,
+      "z": -9.5
+     },
+     "w": 14
+    }
+   ],
+   "cast": 2.3,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350001 직사각형 12m×14m·16m·8m, 타격 0.8·1.4·2.3초",
+   "fx": "basic",
+   "anim": "basic"
+  },
+  {
+   "t": 68,
+   "type": "parry",
+   "name": "환영 빛의 형상(완성되는 순간 형상 앞쪽으로 대시 — 패링)",
+   "r": 5,
+   "cast": 5,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350005 환영 소환(하드) 원 반경 5m, 타격 5.0초 + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 장판이 완성되는 순간 형상 앞쪽으로 회피하면 패링, 놓치면 광역 넉백 + estimate(형상은 보스를 본다고 침)",
+   "fx": "form"
+  },
+  {
+   "t": 78,
+   "type": "lasers",
+   "name": "빛의 탄막(유도 직사각형 — 파티 반대쪽으로 돌리고 벗어나기)",
+   "follow": 2.5,
+   "fire": 1.65,
+   "width": 2.7,
+   "len": 24,
+   "bots": [
+    4,
+    5
+   ],
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350008·09 직사각형 24m×2.7m, 타격 1.65초 + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 플레이어를 따라오는 긴 직사각형 + estimate(따라오는 시간·방향)"
+  },
+  {
+   "t": 88,
+   "type": "aoe",
+   "name": "지뢰(작은 붉은 원 무리)",
+   "spots": [
+    [
+     22.5,
+     -8.0,
+     2
+    ],
+    [
+     20.25,
+     -4.102885682970026,
+     2
+    ],
+    [
+     15.75,
+     -4.102885682970026,
+     2
+    ],
+    [
+     13.5,
+     -7.999999999999999,
+     2
+    ],
+    [
+     15.749999999999998,
+     -11.897114317029972,
+     2
+    ],
+    [
+     20.25,
+     -11.897114317029974,
+     2
+    ]
+   ],
+   "cast": 1.5,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350034 원 반경 2m ×6회, 타격 1.07초 + estimate(자리)",
+   "fx": "mine"
+  },
+  {
+   "t": 89.5,
+   "type": "hazards",
+   "name": "지뢰(밟지 않기)",
+   "spots": [
+    [
+     22.5,
+     -8.0,
+     2
+    ],
+    [
+     20.25,
+     -4.102885682970026,
+     2
+    ],
+    [
+     15.75,
+     -4.102885682970026,
+     2
+    ],
+    [
+     13.5,
+     -7.999999999999999,
+     2
+    ],
+    [
+     15.749999999999998,
+     -11.897114317029972,
+     2
+    ],
+    [
+     20.25,
+     -11.897114317029974,
+     2
+    ]
+   ],
+   "dur": 12,
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 한동안 남아 닿으면 피해 + estimate(12초)"
+  },
+  {
+   "t": 96,
+   "type": "aoe",
+   "name": "사형(탱버 — 탱커는 본대 밖으로, 다음 탱커가 교대)",
+   "spots": [
+    [
+     0,
+     -25.5,
+     5
+    ]
+   ],
+   "cast": 5,
+   "tank": "carry",
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350028 사형 타격 5.07초 · 10350027 가상체 원 반경 5m + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 맞은 탱커는 연속으로 못 받는다",
+   "fx": "buster",
+   "anim": "basic"
+  },
+  {
+   "t": 106,
+   "type": "shapes",
+   "name": "부채꼴 6갈래 + 보스 둘레 원",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": -21.5,
+     "r": 9.3
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": -21.5,
+     "r": 27.5,
+     "dir": 1.5707963267948966,
+     "half": 0.2617993877991494
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": -21.5,
+     "r": 27.5,
+     "dir": 2.6179938779914944,
+     "half": 0.2617993877991494
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": -21.5,
+     "r": 27.5,
+     "dir": 3.6651914291880923,
+     "half": 0.2617993877991494
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": -21.5,
+     "r": 27.5,
+     "dir": 4.71238898038469,
+     "half": 0.2617993877991494
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": -21.5,
+     "r": 27.5,
+     "dir": 5.759586531581287,
+     "half": 0.2617993877991494
+    },
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": -21.5,
+     "r": 27.5,
+     "dir": 6.806784082777885,
+     "half": 0.2617993877991494
+    }
+   ],
+   "cast": 2.4,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350031 부채꼴 반경 27.5m·30°, 타격 2.35초 · 10350032 원 반경 9.3m + estimate(갈래 수 6)",
+   "fx": "pizza",
+   "anim": "cast"
+  },
+  {
+   "t": 118,
+   "type": "parry",
+   "name": "환영 빛의 형상(완성되는 순간 형상 앞쪽으로 대시 — 패링)",
+   "r": 5,
+   "cast": 5,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350005 환영 소환(하드) 원 반경 5m, 타격 5.0초 + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 장판이 완성되는 순간 형상 앞쪽으로 회피하면 패링, 놓치면 광역 넉백 + estimate(형상은 보스를 본다고 침)",
+   "fx": "form"
+  },
+  {
+   "t": 130,
+   "type": "shapes",
+   "name": "소용돌이 직선 레이저 5갈래",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 4.898587196589413e-16,
+      "z": -13.5
+     },
+     "b": {
+      "x": 2.6329906181668092e-15,
+      "z": 21.5
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": -7.608452130361228,
+      "z": -19.02786404500042
+     },
+     "b": {
+      "x": -40.8954302006916,
+      "z": -8.212269241877257
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": -4.702282018339786,
+      "z": -27.97213595499958
+     },
+     "b": {
+      "x": -25.27476584857635,
+      "z": -56.287730758122734
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 4.702282018339783,
+      "z": -27.97213595499958
+     },
+     "b": {
+      "x": 25.274765848576337,
+      "z": -56.28773075812275
+     },
+     "w": 3
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 7.608452130361229,
+      "z": -19.027864045000424
+     },
+     "b": {
+      "x": 40.89543020069161,
+      "z": -8.212269241877271
+     },
+     "w": 3
+    }
+   ],
+   "cast": 2.0,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350020 직사각형 35m×3m, 전방 25.5m 중심 ×5회, 타격 2.0초 + estimate(5갈래로 벌어진다고 침)",
+   "fx": "vortex",
+   "anim": "cast"
+  },
+  {
+   "t": 140,
+   "type": "puddle",
+   "name": "빛 운석(내 자리 원 — 회피 불가, 걸어서 나오기)",
+   "r": 4.8,
+   "cast": 2.7,
+   "noDodge": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350019 원 반경 4.8m, 타격 2.7초, 회피 불가",
+   "fx": "meteor"
+  },
+  {
+   "t": 150,
+   "type": "lasers",
+   "name": "빛의 탄막(유도 직사각형 — 파티 반대쪽으로 돌리고 벗어나기)",
+   "follow": 2.5,
+   "fire": 1.65,
+   "width": 2.7,
+   "len": 24,
+   "bots": [
+    4,
+    5
+   ],
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350008·09 직사각형 24m×2.7m, 타격 1.65초 + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 플레이어를 따라오는 긴 직사각형 + estimate(따라오는 시간·방향)"
+  },
+  {
+   "t": 160,
+   "type": "aoe",
+   "name": "지뢰(작은 붉은 원 무리)",
+   "spots": [
+    [
+     22.5,
+     -8.0,
+     2
+    ],
+    [
+     20.25,
+     -4.102885682970026,
+     2
+    ],
+    [
+     15.75,
+     -4.102885682970026,
+     2
+    ],
+    [
+     13.5,
+     -7.999999999999999,
+     2
+    ],
+    [
+     15.749999999999998,
+     -11.897114317029972,
+     2
+    ],
+    [
+     20.25,
+     -11.897114317029974,
+     2
+    ]
+   ],
+   "cast": 1.5,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350034 원 반경 2m ×6회, 타격 1.07초 + estimate(자리)",
+   "fx": "mine"
+  },
+  {
+   "t": 161.5,
+   "type": "hazards",
+   "name": "지뢰(밟지 않기)",
+   "spots": [
+    [
+     22.5,
+     -8.0,
+     2
+    ],
+    [
+     20.25,
+     -4.102885682970026,
+     2
+    ],
+    [
+     15.75,
+     -4.102885682970026,
+     2
+    ],
+    [
+     13.5,
+     -7.999999999999999,
+     2
+    ],
+    [
+     15.749999999999998,
+     -11.897114317029972,
+     2
+    ],
+    [
+     20.25,
+     -11.897114317029974,
+     2
+    ]
+   ],
+   "dur": 12,
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 한동안 남아 닿으면 피해 + estimate(12초)"
+  },
+  {
+   "t": 170,
+   "type": "aoe",
+   "name": "전체 장판(보스에서 28m 밖으로 나가거나 대시 무적으로 회피)",
+   "spots": [
+    [
+     0,
+     -21.5,
+     28
+    ]
+   ],
+   "cast": 2.0,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350002 원 반경 28m, 타격 0.92초, 회피 가능 + estimate(예고 2초)",
+   "fx": "wide",
+   "anim": "cast"
+  },
+  {
+   "t": 180,
+   "type": "parry",
+   "name": "환영 빛의 형상(완성되는 순간 형상 앞쪽으로 대시 — 패링)",
+   "r": 5,
+   "cast": 5,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350005 환영 소환(하드) 원 반경 5m, 타격 5.0초 + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 장판이 완성되는 순간 형상 앞쪽으로 회피하면 패링, 놓치면 광역 넉백 + estimate(형상은 보스를 본다고 침)",
+   "fx": "form"
+  },
+  {
+   "t": 192,
+   "type": "aoe",
+   "name": "사형(탱버 — 탱커는 본대 밖으로, 다음 탱커가 교대)",
+   "spots": [
+    [
+     0,
+     -25.5,
+     5
+    ]
+   ],
+   "cast": 5,
+   "tank": "carry",
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350028 사형 타격 5.07초 · 10350027 가상체 원 반경 5m + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 맞은 탱커는 연속으로 못 받는다",
+   "fx": "buster",
+   "anim": "basic"
+  },
+  {
+   "t": 202,
+   "type": "scarHit",
+   "name": "평타 3연(보스 앞, 탱커만)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": -21.5
+     },
+     "b": {
+      "x": 0,
+      "z": -9.5
+     },
+     "w": 14
+    }
+   ],
+   "cast": 2.3,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350001 직사각형 12m×14m·16m·8m, 타격 0.8·1.4·2.3초",
+   "fx": "basic",
+   "anim": "basic"
+  },
+  {
+   "t": 208,
+   "type": "puddle",
+   "name": "빛 운석(내 자리 원 — 회피 불가, 걸어서 나오기)",
+   "r": 4.8,
+   "cast": 2.7,
+   "noDodge": true,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350019 원 반경 4.8m, 타격 2.7초, 회피 불가",
+   "fx": "meteor"
+  },
+  {
+   "t": 219.5,
+   "type": "bossWalk",
+   "move": {
+    "to": [
+     0,
+     0
+    ],
+    "mode": "blink",
+    "dur": 0.4
+   },
+   "src": "guide(Layla 공략 영상 GQpZBoG5pDg 자막) 스카이플레어 카운트다운이 끝나면 보스가 중앙으로 순간이동"
+  },
+  {
+   "t": 221,
+   "type": "flare",
+   "name": "스카이플레어",
+   "beams": [
+    [
+     0.0,
+     18.0
+    ],
+    [
+     -17.1,
+     5.6
+    ],
+    [
+     -10.6,
+     -14.6
+    ],
+    [
+     10.6,
+     -14.6
+    ],
+    [
+     17.1,
+     5.6
+    ]
+   ],
+   "mine": 0,
+   "cast": 26,
+   "rise": 2.0,
+   "window": 0.8,
+   "h": 12,
+   "r": 3,
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350011 천장 플레어 · 10350014 천광 타격 + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 구슬 5개, 5명이 빛줄기에 서면 천광 타격으로 떠오르고 최고점에서 점프해 구슬을 먹는다 + video(Layla 플레이 영상 FyNqlJRUO2w 화면, 5초 간격 판독) 3:45 시작·4:20 공중 + estimate(빛줄기 자리·떠오르는 시간 2초·점프 허용 0.8초)",
+   "anim": "flare",
+   "fxList": [
+    {
+     "name": "lampsis02_heaven_area",
+     "at": [
+      0,
+      0
+     ],
+     "dur": 40
+    },
+    {
+     "name": "lampsis02_skystrike_mark",
+     "at": [
+      0.0,
+      18.0
+     ],
+     "dur": 26
+    },
+    {
+     "name": "lampsis02_skystrike_mark",
+     "at": [
+      -17.1,
+      5.6
+     ],
+     "dur": 26
+    },
+    {
+     "name": "lampsis02_skystrike_mark",
+     "at": [
+      -10.6,
+      -14.6
+     ],
+     "dur": 26
+    },
+    {
+     "name": "lampsis02_skystrike_mark",
+     "at": [
+      10.6,
+      -14.6
+     ],
+     "dur": 26
+    },
+    {
+     "name": "lampsis02_skystrike_mark",
+     "at": [
+      17.1,
+      5.6
+     ],
+     "dur": 26
+    },
+    {
+     "name": "lampsis02_skystrike_attack",
+     "at": [
+      -17.1,
+      5.6
+     ],
+     "t": 14
+    },
+    {
+     "name": "lampsis02_skystrike_attack",
+     "at": [
+      -10.6,
+      -14.6
+     ],
+     "t": 17
+    },
+    {
+     "name": "lampsis02_skystrike_attack",
+     "at": [
+      10.6,
+      -14.6
+     ],
+     "t": 20
+    },
+    {
+     "name": "lampsis02_skystrike_attack",
+     "at": [
+      17.1,
+      5.6
+     ],
+     "t": 23
+    },
+    {
+     "name": "lampsis02_skystrike_attack",
+     "at": [
+      0,
+      18
+     ],
+     "t": 26
+    },
+    {
+     "name": "lampsis02_heaven_sphere_absorb",
+     "at": [
+      0,
+      18
+     ],
+     "t": 28
+    }
+   ]
+  },
+  {
+   "t": 262,
+   "type": "aoe",
+   "kind": "show",
+   "name": "창궁 각성(남은 구슬 낙하 — 전체 피해, 힐·피해 감소)",
+   "spots": [
+    [
+     0,
+     0,
+     36
+    ]
+   ],
+   "cast": 4,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350015 창궁 각성 원 반경 50m, 회피 불가 + video(Layla 플레이 영상 FyNqlJRUO2w 화면, 5초 간격 판독) 4:30 전투장 전체 붉은 장판",
+   "fx": "awaken",
+   "anim": "cast"
+  },
+  {
+   "t": 268,
+   "type": "aoe",
+   "kind": "show",
+   "name": "보스 쇠약 — 딜 타임",
+   "spots": [
+    [
+     0,
+     0,
+     4
+    ]
+   ],
+   "cast": 10,
+   "color": "blue",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10350026 쇠약 + guide(Layla 공략 영상 GQpZBoG5pDg 자막) 구슬을 전부 먹으면 보스가 쇠약해진다",
+   "anim": "weak"
+  }
+ ],
+ "duration": 280,
+ "fxBase": "./assets/fx-lampsis2/",
+ "fx": {
+  "charge": {
+   "cast": "lampsis02_rushstrike_charge_ground",
+   "castLoop": true,
+   "hit": "lampsis02_cycle_attack"
+  },
+  "rise": {
+   "cast": "lampsis02_judge_start",
+   "hit": "lampsis02_judge_shengyang"
+  },
+  "judge": {
+   "cast": "lampsis02_judge_area",
+   "castLoop": true,
+   "hit": "lampsis02_judge_end_hit"
+  },
+  "basic": {
+   "at": "boss",
+   "hit": "lampsis02_attack_01"
+  },
+  "form": {
+   "cast": "lampsis02_weapon_star_01",
+   "hit": "lampsis02_sweep"
+  },
+  "lasers": {
+   "cast": "lampsis02_rectangle_loop",
+   "castLoop": true,
+   "hit": "lampsis02_rectangle_attack"
+  },
+  "mine": {
+   "hit": "lampsis02_skystrike_attack_hit"
+  },
+  "buster": {
+   "cast": "lampsis02_skystrike_limit",
+   "castLoop": true,
+   "hit": "lampsis02_skystrike_limit_end"
+  },
+  "pizza": {
+   "at": "boss",
+   "cast": "lampsis02_pisa_attack_01",
+   "hit": "lampsis02_pisa_attack"
+  },
+  "vortex": {
+   "at": "boss",
+   "cast": "lampsis02_vortex_loop",
+   "castLoop": true,
+   "hit": "lampsis02_vortex_impact"
+  },
+  "meteor": {
+   "cast": "lampsis02_skystrike_mark",
+   "hit": "lampsis02_skystrike_attack"
+  },
+  "wide": {
+   "at": "boss",
+   "cast": "lampsis02_cast_start_01",
+   "hit": "lampsis02_cycle_attack"
+  },
+  "awaken": {
+   "cast": "lampsis02_heaven_sphere_bigger",
+   "hit": "lampsis02_heaven_sphere_explode"
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss/lapuxisi의 p_fx_lampsis02_* 54종). 기믹과의 대응은 이펙트 이름(judge 심판·heaven 창궁·skystrike 천광 타격·pisa 부채꼴·rectangle 직사각형·vortex 소용돌이)으로 고른 추정이라 인게임과 다를 수 있다"
+}
