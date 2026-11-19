@@ -103,7 +103,9 @@
    ],
    "cast": 2.5,
    "rel": true,
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395163 부채꼴 반경 30m·120°, 타격 2.48초 + estimate(시점)"
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395163 부채꼴 반경 30m·120°, 타격 2.48초 + estimate(시점)",
+   "fx": "cone",
+   "anim": "sectors"
   },
   {
    "t": 16,
@@ -111,7 +113,9 @@
    "name": "순간이동 추격(내 자리 원)",
    "r": 4.3,
    "cast": 1.9,
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395162 원 반경 4.3m, 타격 1.85초 + estimate(시점·대상)"
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395162 원 반경 4.3m, 타격 1.85초 + estimate(시점·대상)",
+   "fx": "chase",
+   "anim": "puddle"
   },
   {
    "t": 24,
@@ -120,7 +124,9 @@
    "r": 8,
    "cast": 4,
    "color": "yellow",
-   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 삼각형이 잘린 원 장판 2명, 떨어지면 둘레 레이저 + estimate(반경, 레이저는 생략)"
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 삼각형이 잘린 원 장판 2명, 떨어지면 둘레 레이저 + estimate(반경, 레이저는 생략)",
+   "fx": "mark",
+   "anim": "spread"
   },
   {
    "t": 32,
@@ -129,7 +135,9 @@
    "r": 8,
    "cast": 4,
    "color": "yellow",
-   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 4명에게 장판 → 빛의 창 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(반경·예고 시간)"
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 4명에게 장판 → 빛의 창 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(반경·예고 시간)",
+   "fx": "mark",
+   "anim": "spread"
   },
   {
    "t": 36,
@@ -160,7 +168,9 @@
    ],
    "cast": 20,
    "color": "yellow",
-   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 창은 무시하고 보스를 치는 편이 낫다 + estimate(자리·지속 20초)"
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 창은 무시하고 보스를 치는 편이 낫다 + estimate(자리·지속 20초)",
+   "fx": "spear",
+   "anim": "aoe"
   },
   {
    "t": 46,
@@ -191,7 +201,9 @@
    "failMsg": null,
    "noDodge": true,
    "rel": true,
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395119 직사각형 43.2m×5.3m, 타격 3.37초, 회피 불가 + guide(Layla 공략 영상 is3KAFsDPzc 자막) 탱커 외에는 피한다"
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395119 직사각형 43.2m×5.3m, 타격 3.37초, 회피 불가 + guide(Layla 공략 영상 is3KAFsDPzc 자막) 탱커 외에는 피한다",
+   "fx": "blade",
+   "anim": "scarHit"
   },
   {
    "t": 56,
@@ -204,7 +216,9 @@
    ],
    "cast": 2.5,
    "rel": true,
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395163 부채꼴 반경 30m·120°, 타격 2.48초 + estimate(시점)"
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395163 부채꼴 반경 30m·120°, 타격 2.48초 + estimate(시점)",
+   "fx": "cone",
+   "anim": "sectors"
   },
   {
    "t": 66,
@@ -225,7 +239,26 @@
     "idx": 0,
     "at": 5
    },
-   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 전원 중앙으로, 점프·대시 봉인, 줄로 이어진 환영 팔각형이 좁혀 옴, 줄이 생기는 순간 대시로 통과하거나 환영을 잡아 틈을 냄 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(고리 크기·속도, 틈이 생기는 시점 5초)"
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 전원 중앙으로, 점프·대시 봉인, 줄로 이어진 환영 팔각형이 좁혀 옴, 줄이 생기는 순간 대시로 통과하거나 환영을 잡아 틈을 냄 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(고리 크기·속도, 틈이 생기는 시점 5초)",
+   "fxList": [
+    {
+     "name": "lampsis_chuansong_ground",
+     "at": [
+      0,
+      0
+     ],
+     "t": 0
+    },
+    {
+     "name": "lampsis_guangquanshousuo",
+     "at": [
+      0,
+      0
+     ],
+     "t": 2.5,
+     "dur": 11
+    }
+   ]
   },
   {
    "t": 82,
@@ -241,7 +274,9 @@
    ],
    "cast": 2.3,
    "color": "pink",
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395170 원 반경 51.6m, 타격 2.30초, 회피 불가"
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395170 원 반경 51.6m, 타격 2.30초, 회피 불가",
+   "fx": "burst",
+   "anim": "aoe"
   },
   {
    "t": 86,
@@ -279,7 +314,18 @@
      290
     ]
    ],
-   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 고리 3개, 같은 룬 3개를 한 줄로 맞추면 실드 파괴, 고리 위 인원 홀수=시계·짝수=반시계, 안쪽이 가장 느림 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) 해결까지 32~54초 + measured(고리 반경은 모델 실측) + estimate(회전 속도·허용 오차 10도, 다른 파티원은 고리 밖에 있다고 침)"
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 고리 3개, 같은 룬 3개를 한 줄로 맞추면 실드 파괴, 고리 위 인원 홀수=시계·짝수=반시계, 안쪽이 가장 느림 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) 해결까지 32~54초 + measured(고리 반경은 모델 실측) + estimate(회전 속도·허용 오차 10도, 다른 파티원은 고리 밖에 있다고 침)",
+   "fxList": [
+    {
+     "name": "lampsis_bigrune",
+     "at": [
+      0,
+      0
+     ],
+     "t": 0,
+     "dur": 6
+    }
+   ]
   },
   {
    "t": 138,
@@ -288,7 +334,9 @@
    "r": 8,
    "cast": 4,
    "color": "yellow",
-   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 4명에게 장판 → 빛의 창 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(반경·예고 시간)"
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 4명에게 장판 → 빛의 창 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(반경·예고 시간)",
+   "fx": "mark",
+   "anim": "spread"
   },
   {
    "t": 142,
@@ -319,7 +367,9 @@
    ],
    "cast": 20,
    "color": "yellow",
-   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 창은 무시하고 보스를 치는 편이 낫다 + estimate(자리·지속 20초)"
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 창은 무시하고 보스를 치는 편이 낫다 + estimate(자리·지속 20초)",
+   "fx": "spear",
+   "anim": "aoe"
   },
   {
    "t": 152,
@@ -350,7 +400,9 @@
    "failMsg": null,
    "noDodge": true,
    "rel": true,
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395119 직사각형 43.2m×5.3m, 타격 3.37초, 회피 불가 + guide(Layla 공략 영상 is3KAFsDPzc 자막) 탱커 외에는 피한다"
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395119 직사각형 43.2m×5.3m, 타격 3.37초, 회피 불가 + guide(Layla 공략 영상 is3KAFsDPzc 자막) 탱커 외에는 피한다",
+   "fx": "blade",
+   "anim": "scarHit"
   },
   {
    "t": 162,
@@ -363,7 +415,9 @@
    ],
    "cast": 2.5,
    "rel": true,
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395163 부채꼴 반경 30m·120°, 타격 2.48초 + estimate(시점)"
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395163 부채꼴 반경 30m·120°, 타격 2.48초 + estimate(시점)",
+   "fx": "cone",
+   "anim": "sectors"
   },
   {
    "t": 172,
@@ -371,7 +425,9 @@
    "name": "순간이동 추격(내 자리 원)",
    "r": 4.3,
    "cast": 1.9,
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395162 원 반경 4.3m, 타격 1.85초 + estimate(시점·대상)"
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395162 원 반경 4.3m, 타격 1.85초 + estimate(시점·대상)",
+   "fx": "chase",
+   "anim": "puddle"
   },
   {
    "t": 186,
@@ -392,7 +448,26 @@
     "idx": 3,
     "at": 5
    },
-   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 전원 중앙으로, 점프·대시 봉인, 줄로 이어진 환영 팔각형이 좁혀 옴, 줄이 생기는 순간 대시로 통과하거나 환영을 잡아 틈을 냄 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(고리 크기·속도, 틈이 생기는 시점 5초)"
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 전원 중앙으로, 점프·대시 봉인, 줄로 이어진 환영 팔각형이 좁혀 옴, 줄이 생기는 순간 대시로 통과하거나 환영을 잡아 틈을 냄 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) + estimate(고리 크기·속도, 틈이 생기는 시점 5초)",
+   "fxList": [
+    {
+     "name": "lampsis_chuansong_ground",
+     "at": [
+      0,
+      0
+     ],
+     "t": 0
+    },
+    {
+     "name": "lampsis_guangquanshousuo",
+     "at": [
+      0,
+      0
+     ],
+     "t": 2.5,
+     "dur": 11
+    }
+   ]
   },
   {
    "t": 202,
@@ -408,7 +483,9 @@
    ],
    "cast": 2.3,
    "color": "pink",
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395170 원 반경 51.6m, 타격 2.30초, 회피 불가"
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 3395170 원 반경 51.6m, 타격 2.30초, 회피 불가",
+   "fx": "burst",
+   "anim": "aoe"
   },
   {
    "t": 206,
@@ -446,8 +523,50 @@
      190
     ]
    ],
-   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 고리 3개, 같은 룬 3개를 한 줄로 맞추면 실드 파괴, 고리 위 인원 홀수=시계·짝수=반시계, 안쪽이 가장 느림 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) 해결까지 32~54초 + measured(고리 반경은 모델 실측) + estimate(회전 속도·허용 오차 10도, 다른 파티원은 고리 밖에 있다고 침)"
+   "src": "guide(Layla 공략 영상 is3KAFsDPzc 자막) 고리 3개, 같은 룬 3개를 한 줄로 맞추면 실드 파괴, 고리 위 인원 홀수=시계·짝수=반시계, 안쪽이 가장 느림 + video(Layla 플레이 영상 fb6jywz-2tk 경고 문구 시각) 해결까지 32~54초 + measured(고리 반경은 모델 실측) + estimate(회전 속도·허용 오차 10도, 다른 파티원은 고리 밖에 있다고 침)",
+   "fxList": [
+    {
+     "name": "lampsis_bigrune",
+     "at": [
+      0,
+      0
+     ],
+     "t": 0,
+     "dur": 6
+    }
+   ]
   }
  ],
- "duration": 262
+ "duration": 262,
+ "fxBase": "./assets/fx-lampsis1/",
+ "fx": {
+  "cone": {
+   "at": "boss",
+   "cast": "lampsis_shanxinglahui01_yujing",
+   "hit": "lampsis_shanxinglahui_hit"
+  },
+  "blade": {
+   "at": "boss",
+   "cast": "lampsis_xuli",
+   "hit": "lampsis_bladerise_whole"
+  },
+  "chase": {
+   "cast": "lampsis_chuansong_ground",
+   "hit": "lampsis_chuansong_xiaoshi"
+  },
+  "mark": {
+   "hit": "lampsis_guangmao01"
+  },
+  "spear": {
+   "cast": "lampsis_guangmao02_loop",
+   "castLoop": true,
+   "hit": "lampsis_guangmao02_end"
+  },
+  "burst": {
+   "at": "boss",
+   "cast": "lampsis_xuli",
+   "hit": "lampsis_baozhaaoe_01"
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss/lapuxisi의 p_fx_lampsis_*). 기믹과의 대응은 이펙트 이름(扇形拉回·光矛·光圈收缩·爆炸aoe·传送·rune)으로 고른 추정이라 인게임과 다를 수 있다"
 }
