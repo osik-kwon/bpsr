@@ -45,6 +45,9 @@ if (!GRID && data.arena.model) loadGlb('./assets/' + data.arena.model).then(env 
   if (data.arena.clipY != null) { renderer.localClippingEnabled = true; const pl = [new THREE.Plane(new THREE.Vector3(0, -1, 0), data.arena.clipY)]; env.scene.traverse(o => { if (o.isMesh) o.material.clippingPlanes = pl; }); }
   scene.add(env.scene); disc.visible = false;
 });
+// 회전판 고리(시즌4 레이드 1넴): 고리마다 모델 하나, 룬 회전판 기믹 동안 돈다
+const ringObjs = [];
+(data.arena.rings ?? []).forEach((f, i) => loadGlb('./assets/' + f).then(g => { if (!g) return; g.scene.position.y = 0.04; scene.add(g.scene); ringObjs[i] = g.scene; }));
 // 격자 전투장(2·3넴): 바닥 타일 프리팹을 칸마다 놓고, 금 간 칸은 붉게 물들이고 무너진 칸은 숨긴다
 const tileObjs = [];
 if (GRID) {
@@ -440,6 +443,7 @@ function tick(now) {
   const p = sim.player;
   animPlayer(player, p, adt); drainCombat(); drawShots();
   player.ring.material.color.set(p.iframe > 0 ? 0xffffff : sim.combat.recast ? 0xffd24a : sim.combat.act ? 0xd29922 : 0x3fb950);   // 발밑 고리: 흰색 회피 무적, 금색 라이트 리캐스트, 주황 스킬 동작 중
+  if (sim.dial) sim.dial.rings.forEach((g, i) => { if (ringObjs[i]) ringObjs[i].rotation.y = -(g.ang - g.ang0) * Math.PI / 180 + (g.rot0 ?? 0); });
   boss.position.set(sim.boss.x, sim.bossY ?? data.boss.y ?? 0, sim.boss.z); boss.scale.setScalar(sim.bossScale ?? 1); if (GRID) { boss.rotation.y = Math.atan2(Math.cos(sim.bossDir), Math.sin(sim.bossDir)); drawTiles(); } else if (data.noCurtain) { boss.rotation.y = Math.atan2(Math.cos(sim.bossFace), Math.sin(sim.bossFace)); boss.position.y += sim.bossAir * (data.boss.jumpH ?? 4); } else face(boss, p); bossAnim(boss); if (sim.clone) bossAnim(clone);
   clone.visible = !!sim.clone; if (sim.clone) { clone.position.set(sim.clone.x, 0, sim.clone.z); face(clone, p); }
   sim.bots.forEach((b, i) => movePerson(bots[i], b, adt, sim.boss));

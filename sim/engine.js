@@ -241,7 +241,7 @@ export class Sim {
         breach: e.breach ? { idx: e.breach.idx, at: e.t + e.appear + e.breach.at } : null, inside: true };
     } else if (e.type === 'dial') {
       // 룬 회전판: 고리 3개가 돌고, 고리 위 인원이 홀수면 시계·짝수면 반시계. 세 고리의 지정 룬을 한 줄(tol도 이내)로 맞추면 성공
-      this.dial = { name: e.name, start: e.t, hitAt: e.t + e.cast, tol: e.tol ?? 10, rings: e.rings.map(([rIn, rOut, speed, ang, bots]) => ({ rIn, rOut, speed, ang, bots: bots ?? 0 })) };
+      this.dial = { name: e.name, start: e.t, hitAt: e.t + e.cast, tol: e.tol ?? 10, rings: e.rings.map(([rIn, rOut, speed, ang, bots]) => ({ rIn, rOut, speed, ang, ang0: ang, bots: bots ?? 0 })) };
     } else if (e.type === 'curse') {
       // 저주 옷장: 내 옷장에서 상호작용해 저주를 받아 오고, 터질 때 전투장 가장자리(edge 이상)·옷장에서 away 이상 떨어져 있어야 한다. 터진 자리에 독 장판이 남는다
       this.curse = { name: e.name, at: { x: e.pos[0], z: e.pos[1] }, hitAt: e.t + e.charge, start: e.t, taken: false, edge: e.edge, away: e.away, poison: e.poison, others: e.others ?? [] };

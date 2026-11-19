@@ -257,15 +257,23 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   assert.ok(bad.includes('중앙 끌어당김 → 줄 환영') && bad.includes('룬 회전판'), '가만히 있으면 줄 환영과 회전판에서 실패해야 한다');
   s4 = new Sim(JSON.parse(JSON.stringify(d4)));
   const go = (x, z) => { const dx = x - s4.player.x, dz = z - s4.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
-  const after = (pick, h) => { const a = s4.dial.rings.map((g, i) => g.ang + (i === pick ? 1 : -1) * g.speed * h); let m = 0; for (let i = 0; i < 3; i++) for (let j = i + 1; j < 3; j++) { let v = Math.abs(a[i] - a[j]) % 360; if (v > 180) v = 360 - v; m = Math.max(m, v); } return m; };
+  // 회전판 풀이: 4개 자리(고리 밖·안쪽·가운데·바깥 고리)를 1.5초 단위로 4수 앞까지 내다보고 가장 잘 모이는 첫 수를 고른다
+  const spots = dl => [12.5, ...dl.rings.map(g => (g.rIn + g.rOut) / 2)];
+  const sprd = a => { let m = 0; for (let i = 0; i < 3; i++) for (let j = i + 1; j < 3; j++) { let v = Math.abs(a[i] - a[j]) % 360; if (v > 180) v = 360 - v; m = Math.max(m, v); } return m; };
+  const look = (dl, ang, r, depth) => { let best = [Infinity, 0];
+    spots(dl).forEach((tr, k) => { const a = ang.slice(); let rr = r, m = Infinity;
+      for (let i = 0; i < 30; i++) { rr += Math.max(-0.3, Math.min(0.3, tr - rr)); dl.rings.forEach((g, j) => { a[j] += (rr >= g.rIn && rr < g.rOut ? 1 : -1) * g.speed * 0.05; }); m = Math.min(m, sprd(a)); }
+      const v = m <= dl.tol ? -1 : depth > 1 ? Math.min(m, look(dl, a, rr, depth - 1)[0]) : m;
+      if (v < best[0]) best = [v, tr]; });
+    return best; };
+  let dialGoal = 12.5, dialAt = -1;
   while (!s4.done && s4.t < 270) {
-    const t = s4.t; let inp = go(0, 8);
-    if ((t >= 16 && t < 18.2) || (t >= 172 && t < 174.2)) inp = go(8, 8);
+    const t = s4.t; let inp = go(0, 12.5);
+    if ((t >= 16 && t < 18.2) || (t >= 172 && t < 174.2)) inp = go(8, 12.5);
     if (s4.cage) { const cg = s4.cage;
-      if (cg.breach.idx === 0) inp = t < cg.t0 ? go(0, 9) : { mx: 0, mz: 1, dash: true };
+      if (cg.breach.idx === 0) inp = t < cg.t0 ? go(0, 11) : { mx: 0, mz: 1, dash: true };
       else { const a = cg.rot + (cg.breach.idx + 0.5) * Math.PI * 2 / cg.n; inp = t < cg.breach.at + 0.1 ? go(0, 0) : { mx: Math.cos(a), mz: Math.sin(a) }; } }
-    if (s4.dial) { let best = -1, bv = Infinity; for (const pick of [-1, 0, 1, 2]) { const v = Math.min(after(pick, 0.6), after(pick, 1.5)); if (v < bv - 0.5) { bv = v; best = pick; } }
-      inp = go(0, best < 0 ? 24 : (s4.dial.rings[best].rIn + s4.dial.rings[best].rOut) / 2); }
+    if (s4.dial) { if (t >= dialAt) { dialGoal = look(s4.dial, s4.dial.rings.map(g => g.ang), Math.hypot(s4.player.x, s4.player.z), 4)[1]; dialAt = t + 1.5; } inp = go(0, dialGoal); }
     s4.step(0.05, inp);
   }
   console.log('raid4-boss1 모범', s4.score(), s4.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
