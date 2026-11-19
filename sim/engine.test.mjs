@@ -286,7 +286,7 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   let s = new Sim(JSON.parse(JSON.stringify(d)));
   while (!s.done && s.t < d.duration + 5) s.step(0.05, { mx: 0, mz: 0 });
   const bad = s.log.filter(r => !r.ok).map(r => r.name);
-  assert.ok(bad.some(n => n.startsWith('환영 빛의 형상')) && bad.includes('스카이플레어') && bad.some(n => n.startsWith('심판의 고리')), '가만히 있으면 패링·스카이플레어·심판의 고리에서 실패해야 한다');
+  assert.ok(bad.some(n => n.startsWith('환영 빛의 형상')) && bad.includes('스카이플레어') && bad.includes('궁극의 죄'), '가만히 있으면 패링·스카이플레어에서 실패하고 죄의 징벌이 5스택까지 쌓여야 한다');
   s = new Sim(JSON.parse(JSON.stringify(d)));
   const go = (x, z) => { const dx = x - s.player.x, dz = z - s.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
   const within = (t, a, b) => t >= a && t < b;
@@ -295,10 +295,13 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   let dashed = -9;
   while (!s.done && s.t < d.duration + 5) {
     const t = s.t; let inp = go(...B);
+    if (t < 16.5 || within(t, 276, 296.5)) inp = go(-8, -12);                        // 쫄 구간 첫 형상 곁
     if ([9, 31, 140, 208, 289, 311, 420].some(a => within(t, a, a + 3))) inp = go(13, -23);         // 내 자리 원에서 걸어 나온다
     if ([78, 150, 358, 430].some(a => within(t, a + 2.5, a + 4.5))) inp = go(8.3, -19.8);      // 고정된 직사각형에서 옆으로
     if (within(t, 106, 109) || within(t, 386, 389)) inp = go(14, -21.5);                                    // 부채꼴 갈래 사이
-    for (const a of [68, 118, 180, 348, 398]) if (within(t, a + 4.8, a + 5.3)) { if (t - dashed > 2) { inp = { ...fwd(), dash: true }; dashed = t; } else inp = { mx: 0, mz: 0 }; }   // 패링: 완성 직전에 형상 앞(보스 쪽)으로 대시
+    if ([9, 31, 289, 311].some(a => within(t, a, a + 3)) && (t < 16.5 || within(t, 276, 296.5))) inp = go(-8, -4);
+    if (within(t, 123.3, 126.1) || within(t, 403.3, 406.1)) inp = { mx: 0, mz: 0 };   // 첫 패링 자리에서 둘째 형상을 기다린다
+    for (const a of [68, 118, 121.3, 180, 348, 398, 401.3]) if (within(t, a + 4.8, a + 5.3)) { if (t - dashed > 2) { inp = { ...fwd(), dash: true }; dashed = t; } else inp = { mx: 0, mz: 0 }; }   // 패링: 완성 직전에 형상 앞(보스 쪽)으로 대시
     if (within(t, 171.75, 172.2)) { if (t - dashed > 2) { inp = { mx: -1, mz: 0, dash: true }; dashed = t; } else inp = { mx: 0, mz: 0 }; }   // 전체 장판은 대시 무적으로
     if (s.flare) inp = { ...go(0, 18), jump: s.flare.up && t >= s.flare.apex };
     s.step(0.05, inp);

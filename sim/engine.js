@@ -52,11 +52,18 @@ export class Sim {
     this.lockTimes = d.player.lockTimes ?? [0.6, 0.9, 1.3];
     // 파티원 7명은 보스 뒤쪽 근처에 모여 있는 고정 표식
     this.roomStart = 0; this._botInit = true; this.bots = this.partySpots(this.room);
-    this.cage = null; this.dial = null; this.orbiters = []; this.flare = null; this.lorb = null; this.darkUntil = 0; this.player.y = 0; this.player.air = 0;
+    this.cage = null; this.dial = null; this.orbiters = []; this.aimers = []; this.stackN = 0; this.stackAt = 0; this.jumpOk = false; this.flare = null; this.lorb = null; this.darkUntil = 0; this.player.y = 0; this.player.air = 0;
     this.pending = d.events.map(e => ({ ...e })).sort((a, b) => a.t - b.t);
     this.combat?.reset();
   }
-  result(name, ok, msg) { this.log.push({ t: +this.t.toFixed(1), name, ok, msg }); }
+  // data.stack이 있으면 실패마다 디버프 스택이 쌓인다(ttl초 뒤 소멸, cleanse로 시작하는 기믹을 성공하면 정화, form 이상이면 패링 형상 추가, max면 즉사 처리)
+  result(name, ok, msg) { const S = this.data.stack;
+    if (S) { if (this.stackN > 0 && this.t - this.stackAt > S.ttl) this.stackN = 0;
+      if (ok && S.cleanse && name.startsWith(S.cleanse) && this.stackN) { msg += ` (${S.name} ${this.stackN} → 0)`; this.stackN = 0; }
+      else if (!ok && !(S.skip ?? []).some(k => name.startsWith(k))) { this.stackN = Math.min(S.max, this.stackN + (S.add ?? 1)); this.stackAt = this.t; msg += ` (${S.name} ${this.stackN}/${S.max})`;
+        if (this.stackN >= S.max) { this.log.push({ t: +this.t.toFixed(1), name, ok, msg }); this.stackN = 0; name = S.maxName; msg = S.maxMsg; }
+        else if (S.form && this.stackN >= S.form) { this.pending.push({ t: this.t + 2, type: 'parry', name: `${S.name} ${S.form}스택 이상 — 주변에 빛의 형상(패링)`, r: 5, cast: 5, fx: 'form' }); this.pending.sort((a, b) => a.t - b.t); } } }
+    this.log.push({ t: +this.t.toFixed(1), name, ok, msg }); }
   // 판정 예고 등록: kind avoid=안에 있으면 실패, soak=하나 안에 있어야 성공, far=거리 safeDist 이상이어야 성공
   add(o) { this.tele.push({ start: this.t, type: this.curType, noDodge: this.curNoDodge, ...o }); }
 
@@ -252,11 +259,19 @@ export class Sim {
       this.add({ name: e.name, kind: 'far', shape: 'circle', x: e.at[0], z: e.at[1], r: e.safeDist, hitAt: e.t + e.cast, color: e.color ?? 'red', reset: !!e.reset });
     } else if (e.type === 'orbit') {
       // 전투장 중심을 도는 원 n개(반경 R의 궤도, 각속도 vel도/초). show면 판정 없이 보여 주기만 한다
-      this.orbiters.push({ name: e.name, R: e.R, r: e.r, n: e.n ?? 1, vel: e.vel, ang: e.ang ?? 0, t0: e.t + (e.warn ?? 0), start: e.t, until: e.t + (e.warn ?? 0) + e.dur, hits: 0, show: !!e.show, okMsg: e.okMsg, failMsg: e.failMsg });
+      this.orbiters.push({ name: e.name, R: e.R, r: e.r, n: e.n ?? 1, vel: e.vel, ang: e.ang ?? 0, t0: e.t + (e.warn ?? 0), start: e.t, until: e.t + (e.warn ?? 0) + e.dur, hits: 0, show: !!e.show, unlockJump: !!e.unlockJump, okMsg: e.okMsg, failMsg: e.failMsg });
     } else if (e.type === 'parry') {
       // 패링: 내 자리에 생긴 형상의 예고가 완성되는 순간, 범위 안에서 형상 앞쪽으로 대시 무적 상태여야 한다
-      const F = e.at ? { x: e.at[0], z: e.at[1] } : { x: this.player.x, z: this.player.z }, face = Math.atan2(this.boss.z - F.z, this.boss.x - F.x);
-      this.add({ name: e.name, kind: 'parry', shape: 'circle', ...F, r: e.r, face, hitAt: e.t + e.cast, color: 'red' });
+      // ahead: 내 자리에서 보스 쪽으로 그만큼 앞에 생긴다. form: 예고 모양(circle 원, rect 직사각형, cut 앞이 잘린 원) — 판정은 같다
+      const P0 = e.at ? { x: e.at[0], z: e.at[1] } : { x: this.player.x, z: this.player.z }, face = Math.atan2(this.boss.z - P0.z, this.boss.x - P0.x), F = { x: P0.x + Math.cos(face) * (e.ahead ?? 0), z: P0.z + Math.sin(face) * (e.ahead ?? 0) };
+      const sh = e.form === 'rect' ? { shape: 'line', a: { x: F.x - Math.cos(face) * 2, z: F.z - Math.sin(face) * 2 }, b: { x: F.x + Math.cos(face) * 9, z: F.z + Math.sin(face) * 9 }, w: 4 } : e.form === 'cut' ? { shape: 'sector', dir: face + Math.PI, half: Math.PI * 5 / 6 } : { shape: 'circle' };
+      this.add({ name: e.name, kind: 'parry', ...sh, ...F, r: e.r, face, hitAt: e.t + e.cast, color: 'red' });
+    } else if (e.type === 'aimed') {
+      // 조준 부채꼴: origins마다 가장 가까운 사람을 따라 겨누다가 lock초 전에 고정된다. 탱커 직업은 맞아야 한다
+      if (e.botsTo) for (const [i, [x, z]] of Object.entries(e.botsTo)) this.bots[i] = { x, z };
+      for (const [x, z] of e.origins) this.aimers.push({ name: e.name, x, z, r: e.r, half: e.half * Math.PI / 180, lockAt: e.t + e.cast - (e.lock ?? 1.5), hitAt: e.t + e.cast, start: e.t, type: e.fx ?? 'aimed', okMsg: e.okMsg, failMsg: e.failMsg });
+    } else if (e.type === 'botsHome') {
+      this._botInit = true; this.bots = this.partySpots(this.room);
     } else if (e.type === 'flare') {
       // 스카이플레어: 빛줄기 가운데 빈 자리(mine)에 서 있으면 cast초 뒤 떠오르고, rise초 뒤 최고점에서 점프해 구슬을 먹는다
       const beams = e.beams.map(([x, z]) => ({ x, z })); let k = 0;
@@ -344,7 +359,8 @@ export class Sim {
     else if (s.kind === 'take') { const ok = inside(s, p); this.result(s.name, ok, ok ? '탱버를 받아냄' : '탱버 자리를 비움(탱커가 보스 앞에서 받아야 함)'); }
     else if (s.kind === 'far') { const d = dist(p, s); const ok = d >= s.r; this.result(s.name, ok, ok ? `거리 ${d.toFixed(0)}m` : `너무 가까움 ${d.toFixed(0)}m (${s.r}m 이상)`); if (s.reset) { this._botInit = true; this.bots = this.partySpots(this.room); } }
     else if (s.kind === 'parry') { const front = (p.x - s.x) * Math.cos(s.face) + (p.z - s.z) * Math.sin(s.face) > 0, inn = dist(s, p) <= s.r + 4, ok = p.iframe > 0 && inn && front;
-      this.result(s.name, ok, ok ? '형상 앞쪽으로 회피해 패링' : p.iframe > 0 ? (inn ? '형상 뒤쪽으로 회피 — 패링 실패, 광역 넉백' : '형상에서 너무 멀리 회피 — 패링 실패, 광역 넉백') : '패링하지 않음 — 광역 넉백과 징벌 스택'); }
+      this.result(s.name, ok, ok ? '형상 앞쪽으로 회피해 패링' : p.iframe > 0 ? (inn ? '형상 뒤쪽으로 회피 — 패링 실패, 광역 넉백' : '형상에서 너무 멀리 회피 — 패링 실패, 광역 넉백') : '패링하지 않음 — 광역 넉백과 징벌 스택');
+      if (!ok) { const dx = p.x - s.x, dz = p.z - s.z, l = Math.hypot(dx, dz); p.x += (l > 0.1 ? dx / l : -Math.cos(s.face)) * 10; p.z += (l > 0.1 ? dz / l : -Math.sin(s.face)) * 10; this.clamp(p); } }
     else if (s.kind === 'air') { const up = p.y > 1, ok = up === (s.want === 'air'); this.result(s.name, ok, ok ? (s.okMsg ?? (up ? '점프로 넘김' : '땅에 붙어 피함')) : (s.failMsg ?? (up ? '공중에서 맞음' : '점프하지 않아 맞음'))); }
     else if (s.kind === 'in') { const ok = inside(s, p); this.result(s.name, ok, ok ? '쉐어 참여, 팀원 생존' : '쉐어 밖, 인원이 모자라 팀원 사망'); if (s.reset) this.bots = this.partySpots(this.room); }
     else if (s.kind === 'alone') { const dmin = Math.min(...this.bots.map(b => dist(b, p))); const ok = dmin >= s.r; this.result(s.name, ok, ok ? `가장 가까운 팀원 ${dmin.toFixed(0)}m` : `팀원과 너무 가까움 ${dmin.toFixed(0)}m (${s.r}m 이상)`); if (s.reset) this.bots = this.partySpots(this.room); }
@@ -406,15 +422,21 @@ export class Sim {
     this.presses = this.presses.filter(x => !x.done);
     // 점프와 낙하
     const jump = !!(input.jump || input.interact), J = d.player.jump, lifted = this.flare?.up;
-    if (J && jump && !lifted && p.air <= 0 && p.y === 0) p.air = J.dur;
+    if (J && jump && (!J.locked || this.jumpOk) && !lifted && p.air <= 0 && p.y === 0) p.air = J.dur;
     if (p.air > 0) { p.air = Math.max(0, p.air - dt); p.y = p.air > 0 ? J.h * Math.sin(Math.PI * (1 - p.air / J.dur)) : 0; }
     else if (!lifted && p.y > 0) p.y = Math.max(0, p.y - 25 * dt);
     // 궤도를 도는 원
     for (const o of this.orbiters) {
       if (this.t >= o.t0 && !o.show) { const hit = this.orbitPos(o).some(c => dist(c, p) <= o.r) && !(p.iframe > 0); if (hit && !o.in) o.hits++; o.in = hit; }
+      if (this.t >= o.until && o.unlockJump) { this.jumpOk = true; this.result(o.name, true, '파티가 신조를 처치 — 5단 점프 해금(Space)'); }
       if (this.t >= o.until) { if (!o.show) this.result(o.name, o.hits === 0, o.hits ? (o.failMsg ?? `${o.hits}번 닿음`) : (o.okMsg ?? '한 번도 닿지 않음')); o.done = true; }
     }
     this.orbiters = this.orbiters.filter(o => !o.done);
+    // 조준 부채꼴: 고정되는 순간 판정 예고로 바뀐다
+    for (const a of this.aimers) if (this.t >= a.lockAt) { a.done = true;
+      const base = { start: a.start, type: a.type, noDodge: false, name: a.name, shape: 'sector', x: a.x, z: a.z, r: a.r, dir: this.aimDir(a), half: a.half, hitAt: a.hitAt, color: 'red' };
+      this.tele.push(this.role === 'tank' ? { ...base, kind: 'scar', scar: [], want: 'in', okMsg: '검을 바깥으로 돌려 받아냄', failMsg: '탱커가 검을 받지 않음' } : { ...base, kind: 'avoid' }); }
+    this.aimers = this.aimers.filter(a => !a.done);
     // 스카이플레어
     if (this.flare) { const f = this.flare, end = (ok, msg) => { this.result(f.name, ok, msg); this.flare = null; this._botInit = true; this.bots = this.partySpots(this.room); };
       if (!f.up && this.t >= f.strike) { if (dist(f.beams[f.mine], p) <= f.r) f.up = true; else end(false, '빛줄기 밖에 있어 떠오르지 못함 — 구슬이 떨어져 낙인'); }
@@ -768,6 +790,8 @@ export class Sim {
         out.push({ shape: 'ring', x: 0, z: 0, rIn: g.rOut - 0.15, rOut: g.rOut + 0.15, name: '', color: 'white', ...T });
         out.push({ shape: 'circle', x: Math.cos(a) * m, z: Math.sin(a) * m, r: 2, name: ['안쪽 룬', '가운데 룬', '바깥 룬'][i], color: g.dir > 0 ? 'green' : 'yellow', ...T }); }); }
     for (const s of this.tele) if (s.kind === 'parry') out.push({ shape: 'line', a: { x: s.x, z: s.z }, b: { x: s.x + Math.cos(s.face) * s.r, z: s.z + Math.sin(s.face) * s.r }, w: 0.6, name: '형상 앞쪽', kind: 'show', color: 'green', start: s.start, hitAt: s.hitAt });
+    for (const a of this.aimers) out.push({ shape: 'sector', x: a.x, z: a.z, r: a.r, dir: this.aimDir(a), half: a.half, name: a.name, kind: 'show', color: 'red', start: a.start, hitAt: a.lockAt });
+    if (this.stackN > 0 && this.t - this.stackAt <= this.data.stack.ttl) out.push({ shape: 'circle', x: this.player.x, z: this.player.z, r: 1.2, name: `${this.data.stack.name} ${this.stackN}/${this.data.stack.max}`, kind: 'show', color: 'pink', start: this.stackAt, hitAt: this.t + 999 });
     for (const o of this.orbiters) this.orbitPos(o).forEach((c, k) => out.push({ shape: 'circle', ...c, r: o.r, name: k ? '' : o.name, kind: o.show ? 'show' : 'avoid', color: o.show ? 'yellow' : 'red', start: o.start, hitAt: this.t < o.t0 ? o.t0 : o.until, live: this.t >= o.t0, quietLabel: k > 0 }));
     if (this.flare) { const f = this.flare; f.beams.forEach((c, k) => out.push({ shape: 'circle', ...c, r: f.r, name: k !== f.mine ? '' : f.up ? `${f.name} (최고점에서 점프: Space)` : `${f.name} (빈 빛줄기에 서기)`, kind: 'show', color: k === f.mine ? 'green' : 'yellow', start: f.start, hitAt: f.up ? f.apex : f.strike, quietLabel: k !== f.mine })); }
     if (this.lorb) { const o = this.lorb; out.push({ shape: 'circle', x: o.x, z: o.z, r: o.r, name: `${o.name} (구슬 안에서 중앙으로 걷기)`, kind: 'show', color: 'yellow', start: o.start, hitAt: o.hitAt });
@@ -792,6 +816,7 @@ export class Sim {
     return out;
   }
   orbitPos(o) { const a0 = (o.ang + o.vel * Math.max(0, this.t - o.t0)) * Math.PI / 180; return Array.from({ length: o.n }, (_, k) => ({ x: Math.cos(a0 + k * TAU / o.n) * o.R, z: Math.sin(a0 + k * TAU / o.n) * o.R })); }
+  aimDir(a) { const n = [this.player, ...this.bots].reduce((m, q) => dist(q, a) < dist(m, a) ? q : m); return Math.atan2(n.z - a.z, n.x - a.x); }
   get dark() { return this.t < this.darkUntil; }
   cageR() { const cg = this.cage; return Math.max(cg.rMin, cg.r0 - (cg.r0 - cg.rMin) * Math.max(0, this.t - cg.t0) / cg.dur); }
   // 환영 k와 k+1 사이, k-1과 k 사이 줄이 끊긴 틈인지(각도 기준)

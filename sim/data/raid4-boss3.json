@@ -1,7 +1,7 @@
 {
  "id": "raid4-boss3",
  "title": "시즌4 레이드 3넴 · 거대 라프시스 (하드)",
- "notes": "시즌4 레이드 연전. 본체는 전투장 밖의 거대체라 때릴 수 없고 중앙의 구체를 친다. 기믹은 공략 영상 자막, 순서와 시각은 플레이 영상의 경고 문구, 판정 크기는 클라 스킬 데이터지만 본체 배율(60) 때문에 값이 확실하지 않아 자리와 크기 대부분이 추정이다. 어둠 침식 스택은 세지 않고 맞을 때마다 실패로 적는다. 5단 점프는 Space 한 번에 길게 뜨는 것으로 줄였다. 신조 처치와 블랙홀을 탱커가 지우는 과정은 보여 주기만 한다",
+ "notes": "시즌4 레이드 연전. 본체는 전투장 밖의 거대체라 때릴 수 없고 중앙의 구체를 친다. 기믹은 공략 영상 자막, 순서와 시각은 플레이 영상의 경고 문구, 판정 크기는 클라 스킬 데이터지만 본체 배율(60) 때문에 값이 확실하지 않아 자리와 크기 대부분이 추정이다. 어둠 침식은 실패 1번을 3스택으로 센다(15초 뒤 소멸, 빛 부채꼴로 정화, 10스택 즉사). 5단 점프는 신조가 잡힌 뒤에만 되고 Space 한 번에 길게 뜨는 것으로 줄였다. 신조 처치, 블랙홀을 탱커가 지우는 과정, 다크폴의 나머지 구슬 3개는 파티가 한다고 치고 보여 주기만 한다",
  "noCurtain": true,
  "arena": {
   "radius": 36,
@@ -25,9 +25,10 @@
   ],
   "jump": {
    "dur": 1.8,
-   "h": 7
+   "h": 7,
+   "locked": true
   },
-  "jumpSrc": "guide(신조를 잡으면 5단 점프) + estimate(체공 1.8초)"
+  "jumpSrc": "guide(신조를 잡으면 5단 점프가 풀린다) + estimate(체공 1.8초, 신조는 파티가 16초 만에 잡는다고 침)"
  },
  "boss": {
   "pos": [
@@ -54,6 +55,7 @@
    "cast4": "as_wpnpc_m_base_bosslampsis03_cast04_start",
    "cast5": "as_wpnpc_m_base_bosslampsis03_cast05_start",
    "cast6": "as_wpnpc_m_base_bosslampsis03_cast06_start",
+   "atk3": "as_wpnpc_m_base_bosslampsis03_attack03",
    "down": "as_wpnpc_m_base_bosslampsis03_cast07_down_start",
    "swap": "as_wpnpc_m_base_bosslampsis03_cast07_swap_start"
   },
@@ -100,6 +102,16 @@
  ],
  "partySrc": "표식은 7명만 둔다. 파티원은 중앙 구체 둘레에 고정으로 서 있다",
  "timingSrc": "video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면) 블랙홀 0:20, 천체 0:35, 검 0:54·3:00·3:56, 천체 충돌 1:10·4:45, 다크폴 1:52, 신조 3:42, 손 공격 4:15. 그 사이 반쪽 공격·천체 장판의 시각은 추정",
+ "stack": {
+  "name": "어둠 침식",
+  "max": 10,
+  "add": 3,
+  "ttl": 15,
+  "cleanse": "빛 천체 부채꼴",
+  "maxName": "어둠 침식 10스택",
+  "maxMsg": "어둠 침식 10스택 — 즉사",
+  "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 15초 지속, 10스택 즉사, 빛의 부채꼴에 맞으면 정화, 손 공격은 하드에서 3스택 + estimate(실패 1번 = 3스택으로 통일)"
+ },
  "events": [
   {
    "t": 0,
@@ -223,6 +235,42 @@
    "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 탱커가 하나를 밟고 침식이 빠지면 다음 것을 밟는다 + estimate(8초마다 하나씩 사라짐)"
   },
   {
+   "t": 27,
+   "type": "aoe",
+   "name": "본체 평타(손이 전투장 안을 내려침)",
+   "spots": [
+    [
+     0,
+     -15,
+     10
+    ]
+   ],
+   "cast": 2.7,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360003 평타 장판 타격 2.73초 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 평타는 손이 전투장 안으로 들어와 친다(차원문 없음) + estimate(자리·반경 10m)",
+   "fx": "slam",
+   "anim": "atk3"
+  },
+  {
+   "t": 30,
+   "type": "hazards",
+   "name": "천체(가까이 가면 지속 피해)",
+   "spots": [
+    [
+     24,
+     0,
+     6
+    ],
+    [
+     -24,
+     0,
+     6
+    ]
+   ],
+   "dur": 36,
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 천체는 전투장 위에 떠서 계속 광역 피해를 준다, 필요 없으면 다가가지 않는다 + estimate(반경 6m)"
+  },
+  {
    "t": 34,
    "type": "shapes",
    "name": "천체 고리 장판(빛·어둠 둘 다 피하기 — 중앙이 안전)",
@@ -315,39 +363,40 @@
   },
   {
    "t": 52,
-   "type": "scarHit",
-   "name": "심판의 검 2자루(탱커가 바깥으로 돌림 — 다른 역할은 검에서 떨어져 중앙에)",
-   "spots": [
-    {
-     "shape": "sector",
-     "x": 22,
-     "z": 0,
-     "r": 30,
-     "dir": 0,
-     "half": 1.3089969389957472
-    },
-    {
-     "shape": "sector",
-     "x": -22,
-     "z": 0,
-     "r": 30,
-     "dir": 3.141592653589793,
-     "half": 1.3089969389957472
-    }
+   "type": "aimed",
+   "name": "심판의 검 2자루(가장 가까운 사람을 겨눔 — 탱커가 바깥에서 받고, 다른 역할은 검에 다가가지 않기)",
+   "origins": [
+    [
+     22,
+     0
+    ],
+    [
+     -22,
+     0
+    ]
    ],
+   "r": 30,
+   "half": 75,
    "cast": 6,
-   "scar": [],
-   "want": {
-    "tank": "in",
-    "heal": "out",
-    "dps": "out"
+   "lock": 1.5,
+   "botsTo": {
+    "0": [
+     31,
+     0
+    ],
+    "1": [
+     -31,
+     0
+    ]
    },
-   "okMsg": null,
-   "failMsg": null,
-   "color": "red",
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360095 부채꼴 가상체 반경 60m·150° + guide(Layla 공략 영상 BNH-orQQXZU 자막) 좌우에 검이 생겨 가장 가까운 사람에게 큰 부채꼴을 겨눈다, 탱커와 즉사 면역 외에는 죽는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(검 자리, 탱커가 이미 바깥으로 돌려놓은 모양·예고 6초)",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360095 부채꼴 가상체 반경 60m·150° + guide(Layla 공략 영상 BNH-orQQXZU 자막) 좌우에 검이 생겨 가장 가까운 사람에게 큰 부채꼴을 겨눈다, 탱커와 즉사 면역 외에는 죽는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(검 자리·예고 6초·1.5초 전에 방향 고정, 탱커 파티원이 검 바깥쪽에 선다)",
    "fx": "sword",
    "anim": "cast3"
+  },
+  {
+   "t": 59,
+   "type": "botsHome",
+   "src": "estimate(탱커가 자리로 돌아옴)"
   },
   {
    "t": 66,
@@ -442,6 +491,74 @@
      "t": 28
     }
    ]
+  },
+  {
+   "t": 108,
+   "type": "intercept",
+   "name": "빛 구슬(파티원)",
+   "from": [
+    -15,
+    15
+   ],
+   "to": [
+    0,
+    0
+   ],
+   "dur": 14,
+   "r": 4,
+   "want": {},
+   "src": "estimate(나머지 구슬 3개는 파티원이 옮긴다)"
+  },
+  {
+   "t": 108,
+   "type": "intercept",
+   "name": "빛 구슬(파티원)",
+   "from": [
+    15,
+    -15
+   ],
+   "to": [
+    0,
+    0
+   ],
+   "dur": 17,
+   "r": 4,
+   "want": {},
+   "src": "estimate(나머지 구슬 3개는 파티원이 옮긴다)"
+  },
+  {
+   "t": 108,
+   "type": "intercept",
+   "name": "빛 구슬(파티원)",
+   "from": [
+    -15,
+    -15
+   ],
+   "to": [
+    0,
+    0
+   ],
+   "dur": 20,
+   "r": 4,
+   "want": {},
+   "src": "estimate(나머지 구슬 3개는 파티원이 옮긴다)"
+  },
+  {
+   "t": 126,
+   "type": "aoe",
+   "name": "본체 평타(손이 전투장 안을 내려침)",
+   "spots": [
+    [
+     0,
+     -15,
+     10
+    ]
+   ],
+   "cast": 2.7,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360003 평타 장판 타격 2.73초 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 평타는 손이 전투장 안으로 들어와 친다(차원문 없음) + estimate(자리·반경 10m)",
+   "fx": "slam",
+   "anim": "atk3"
   },
   {
    "t": 142,
@@ -539,6 +656,25 @@
    "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 탱커가 하나를 밟고 침식이 빠지면 다음 것을 밟는다 + estimate(8초마다 하나씩 사라짐)"
   },
   {
+   "t": 162,
+   "type": "hazards",
+   "name": "천체(가까이 가면 지속 피해)",
+   "spots": [
+    [
+     24,
+     0,
+     6
+    ],
+    [
+     -24,
+     0,
+     6
+    ]
+   ],
+   "dur": 116,
+   "src": "guide(Layla 공략 영상 BNH-orQQXZU 자막) 천체는 전투장 위에 떠서 계속 광역 피해를 준다, 필요 없으면 다가가지 않는다 + estimate(반경 6m)"
+  },
+  {
    "t": 170,
    "type": "scarHit",
    "name": "빛 천체 부채꼴(맞으면 침식 정화 — 들어가기)",
@@ -587,39 +723,40 @@
   },
   {
    "t": 178,
-   "type": "scarHit",
-   "name": "심판의 검 2자루(탱커가 바깥으로 돌림 — 다른 역할은 검에서 떨어져 중앙에)",
-   "spots": [
-    {
-     "shape": "sector",
-     "x": 22,
-     "z": 0,
-     "r": 30,
-     "dir": 0,
-     "half": 1.3089969389957472
-    },
-    {
-     "shape": "sector",
-     "x": -22,
-     "z": 0,
-     "r": 30,
-     "dir": 3.141592653589793,
-     "half": 1.3089969389957472
-    }
+   "type": "aimed",
+   "name": "심판의 검 2자루(가장 가까운 사람을 겨눔 — 탱커가 바깥에서 받고, 다른 역할은 검에 다가가지 않기)",
+   "origins": [
+    [
+     22,
+     0
+    ],
+    [
+     -22,
+     0
+    ]
    ],
+   "r": 30,
+   "half": 75,
    "cast": 6,
-   "scar": [],
-   "want": {
-    "tank": "in",
-    "heal": "out",
-    "dps": "out"
+   "lock": 1.5,
+   "botsTo": {
+    "0": [
+     31,
+     0
+    ],
+    "1": [
+     -31,
+     0
+    ]
    },
-   "okMsg": null,
-   "failMsg": null,
-   "color": "red",
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360095 부채꼴 가상체 반경 60m·150° + guide(Layla 공략 영상 BNH-orQQXZU 자막) 좌우에 검이 생겨 가장 가까운 사람에게 큰 부채꼴을 겨눈다, 탱커와 즉사 면역 외에는 죽는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(검 자리, 탱커가 이미 바깥으로 돌려놓은 모양·예고 6초)",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360095 부채꼴 가상체 반경 60m·150° + guide(Layla 공략 영상 BNH-orQQXZU 자막) 좌우에 검이 생겨 가장 가까운 사람에게 큰 부채꼴을 겨눈다, 탱커와 즉사 면역 외에는 죽는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(검 자리·예고 6초·1.5초 전에 방향 고정, 탱커 파티원이 검 바깥쪽에 선다)",
    "fx": "sword",
    "anim": "cast3"
+  },
+  {
+   "t": 185,
+   "type": "botsHome",
+   "src": "estimate(탱커가 자리로 돌아옴)"
   },
   {
    "t": 190,
@@ -684,6 +821,23 @@
    "anim": "atk2"
   },
   {
+   "t": 208,
+   "type": "aoe",
+   "name": "본체 평타(손이 전투장 안을 내려침)",
+   "spots": [
+    [
+     0,
+     -15,
+     10
+    ]
+   ],
+   "cast": 2.7,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360003 평타 장판 타격 2.73초 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 평타는 손이 전투장 안으로 들어와 친다(차원문 없음) + estimate(자리·반경 10m)",
+   "fx": "slam",
+   "anim": "atk3"
+  },
+  {
    "t": 214,
    "type": "orbit",
    "name": "신조(가장자리를 시계 방향으로 돈다 — 군중 제어로 묶어 처치하면 5단 점프 해금)",
@@ -694,44 +848,46 @@
    "ang": 0,
    "dur": 16,
    "show": true,
+   "unlockJump": true,
    "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360014 올빼미 야수 소환 + guide(Layla 공략 영상 BNH-orQQXZU 자막) 가장자리를 시계 방향으로 나는 새를 묶어 잡는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면) 3:42 + estimate(속도, 처치는 판정하지 않음)",
    "anim": "cast6"
   },
   {
    "t": 232,
-   "type": "scarHit",
-   "name": "심판의 검 2자루(탱커가 바깥으로 돌림 — 다른 역할은 검에서 떨어져 중앙에)",
-   "spots": [
-    {
-     "shape": "sector",
-     "x": 22,
-     "z": 0,
-     "r": 30,
-     "dir": 0,
-     "half": 1.3089969389957472
-    },
-    {
-     "shape": "sector",
-     "x": -22,
-     "z": 0,
-     "r": 30,
-     "dir": 3.141592653589793,
-     "half": 1.3089969389957472
-    }
+   "type": "aimed",
+   "name": "심판의 검 2자루(가장 가까운 사람을 겨눔 — 탱커가 바깥에서 받고, 다른 역할은 검에 다가가지 않기)",
+   "origins": [
+    [
+     22,
+     0
+    ],
+    [
+     -22,
+     0
+    ]
    ],
+   "r": 30,
+   "half": 75,
    "cast": 6,
-   "scar": [],
-   "want": {
-    "tank": "in",
-    "heal": "out",
-    "dps": "out"
+   "lock": 1.5,
+   "botsTo": {
+    "0": [
+     31,
+     0
+    ],
+    "1": [
+     -31,
+     0
+    ]
    },
-   "okMsg": null,
-   "failMsg": null,
-   "color": "red",
-   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360095 부채꼴 가상체 반경 60m·150° + guide(Layla 공략 영상 BNH-orQQXZU 자막) 좌우에 검이 생겨 가장 가까운 사람에게 큰 부채꼴을 겨눈다, 탱커와 즉사 면역 외에는 죽는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(검 자리, 탱커가 이미 바깥으로 돌려놓은 모양·예고 6초)",
+   "src": "table(한섭 클라 1.0.46215 스킬 판정, data/raid-s4-skills.md) 10360095 부채꼴 가상체 반경 60m·150° + guide(Layla 공략 영상 BNH-orQQXZU 자막) 좌우에 검이 생겨 가장 가까운 사람에게 큰 부채꼴을 겨눈다, 탱커와 즉사 면역 외에는 죽는다 + video(Layla 플레이 영상 GYoYNFt28i8 경고 문구·화면)  + estimate(검 자리·예고 6초·1.5초 전에 방향 고정, 탱커 파티원이 검 바깥쪽에 선다)",
    "fx": "sword",
    "anim": "cast3"
+  },
+  {
+   "t": 239,
+   "type": "botsHome",
+   "src": "estimate(탱커가 자리로 돌아옴)"
   },
   {
    "t": 250,
@@ -869,6 +1025,9 @@
   "sword": {
    "cast": "lampsis03_cost02_start",
    "hit": "lampsis03_attack03_02"
+  },
+  "slam": {
+   "hit": "lampsis03_attack03_01"
   },
   "crash": {
    "cast": "lampsis03_cost03_start",
