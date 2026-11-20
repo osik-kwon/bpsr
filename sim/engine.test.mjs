@@ -370,3 +370,18 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   console.log('courtyard-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
   assert.equal(s.score().ok, s.score().total);
 }
+
+// 시즌4 마스터 던전 먼 하늘의 신단: 270° 내려치기·끌어당김 뒤 부채꼴·연속 봉쇄 구멍
+{
+  const d = JSON.parse(fs.readFileSync(new URL('./data/skyaltar-master.json', import.meta.url)));
+  let s = new Sim(JSON.parse(JSON.stringify(d)));
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, { mx: 0, mz: 0 });
+  const bad = s.log.filter(r => !r.ok).map(r => r.name);
+  assert.ok(bad.some(n => n.startsWith('연속 봉쇄')) && bad.some(n => n.startsWith('끌어당긴 뒤')), '가만히 있으면 연속 봉쇄와 끌어당긴 뒤 내려치기에서 실패해야 한다');
+  s = new Sim(JSON.parse(JSON.stringify(d)));
+  const go = (x, z) => { const dx = x - s.player.x, dz = z - s.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
+  const path = [[0, [0, 10]], [14.05, [0, 16]], [16, [0, 14]], [36.05, [6, 2]], [38.5, [0, 10]], [52, [0, 3]], [66.1, [7, 5]], [72.6, [-7, 5]], [88.05, [-14, 2]], [93.05, [-14, 10]], [96, [0, 10]], [118.05, [0, 17]], [120.5, [0, 10]], [134.05, [0, 16]], [140.05, [0, 10]]];
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, go(...path.filter(q => q[0] <= s.t).pop()[1]));
+  console.log('skyaltar-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => r.t + ' ' + r.name + ': ' + r.msg));
+  assert.equal(s.score().ok, s.score().total);
+}
