@@ -1,0 +1,609 @@
+{
+ "id": "courtyard-master",
+ "title": "시즌4 마스터 던전 · 황폐한 정원 — 윌다",
+ "notes": "시즌4 마스터 던전 「황폐한 정원」(던전 6615, 글섭 Barren Courtyard) 막보스. 판정 크기는 한섭 클라 스킬 데이터, 기믹 대처는 공략 영상 두 편. 패턴 순서와 시각, 웅덩이·보이드 스카·구슬의 자리는 추정이다. 색 맞추기는 배열 하나로 고정했고(실제는 무작위), 슈퍼 아머는 대시 무적으로, 2단 점프와 활공은 Space 한 번으로 대신했다. 둘째 흐루가의 그림자(중력장 고리와 겹치는 구간)와 길목 구간은 없다",
+ "noCurtain": true,
+ "arena": {
+  "radius": 22,
+  "model": "arena_wirda.glb",
+  "clipY": 10,
+  "src": "measured(씬 scenes/dng_main_1701_wirda, 보스 배치 (-25.05, 129.06, 39.86)) + estimate(반경 22m)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   0,
+   10
+  ],
+  "jump": {
+   "dur": 1.6,
+   "h": 5
+  },
+  "src": "레이드 시나리오와 같은 값 + estimate(점프 체공 1.6초)"
+ },
+ "boss": {
+  "pos": [
+   0,
+   0
+  ],
+  "height": 2.9,
+  "scale": 1.6,
+  "model": "boss_wirda.glb",
+  "chase": false,
+  "src": "table(몬스터 4701 薇尔达, 모델 배율 1.6; 파츠 ch_wpnpc_f_equip_wirda·head_wirda·hair_wirda)",
+  "anims": {
+   "idle": "as_mon_wirda_fidle",
+   "walk": "as_mon_wirda_run",
+   "shot": "as_mon_wirda_act_shortbeam00",
+   "blow": "as_mon_wirda_act_rblowft01",
+   "around": "as_mon_wirda_act_shotaround",
+   "spawn": "as_mon_wirda_act_spawnareaaround",
+   "beam": "as_mon_wirda_act_doublebeamft_start",
+   "phase": "as_mon_wirda_act_phasechange"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 이름으로 고른 추정"
+ },
+ "partySpots": [
+  [
+   0,
+   -5
+  ],
+  [
+   5,
+   8
+  ],
+  [
+   -5,
+   8
+  ],
+  [
+   -3,
+   5
+  ]
+ ],
+ "partyRoles": {
+  "dps": [
+   "탱",
+   "힐",
+   "근딜",
+   "원딜"
+  ],
+  "heal": [
+   "탱",
+   "근딜",
+   "원딜",
+   "원딜"
+  ],
+  "tank": [
+   "힐",
+   "근딜",
+   "원딜",
+   "원딜"
+  ]
+ },
+ "tankBot": 0,
+ "partySrc": "5인 파티. 파티원은 고정 자리 표식",
+ "events": [
+  {
+   "t": 6,
+   "type": "stack",
+   "name": "쉐어 지목(파티와 한 원에)",
+   "at": [
+    0,
+    8
+   ],
+   "r": 5,
+   "cast": 4,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470108 分摊 · 470109 원 반경 5m + estimate(자리·예고)",
+   "fx": "share",
+   "anim": "shot"
+  },
+  {
+   "t": 14,
+   "type": "aoe",
+   "name": "치명타(탱버 — 탱커 혼자)",
+   "spots": [
+    [
+     0,
+     -6,
+     3.5
+    ]
+   ],
+   "cast": 4,
+   "tank": "carry",
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470106 致死 · 470107 원 반경 3m + estimate(예고)",
+   "fx": "hit",
+   "anim": "blow"
+  },
+  {
+   "t": 22,
+   "type": "aoe",
+   "name": "전체 장판(대시 무적으로 회피)",
+   "spots": [
+    [
+     0,
+     0,
+     20
+    ]
+   ],
+   "cast": 2,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470104 压团血 원 반경 20m, 타격 1.1초, 회피 가능 + estimate(예고 2초)",
+   "fx": "burst",
+   "anim": "around"
+  },
+  {
+   "t": 30,
+   "type": "safe",
+   "name": "보이드 스카 소환 — 내 표식 흑·백·백(첫째 고정). 짝: 왼쪽 웅덩이 = 백·흑·흑(첫째 고정), 오른쪽 = 흑·백·흑(둘째 고정). 맞는 짝의 보라 웅덩이로",
+   "spots": [
+    [
+     -10,
+     6
+    ]
+   ],
+   "r": 3.5,
+   "cast": 18,
+   "color": "pink",
+   "label": "왼쪽 짝",
+   "okMsg": "왼쪽 짝과 바꿔 둘 다 한 색 3개 — 통과",
+   "failMsg": "색을 맞추지 못함 — 5초 빙결과 무질서 디버프(공격·치유 -20%, 받는 피해 +20%)",
+   "src": "guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 머리 위 흑·백 표식 3개를 한 색으로 맞춘다, 붉은 고리가 있는 표식은 못 바꾼다, 짝과 보라 웅덩이에 같이 서면 고정이 아닌 자리의 색이 서로 바뀐다 + video(Layla 플레이 영상 nvU2svaRv40, 마스터 5, 5초 간격 판독) 3:00~3:10 + estimate(표식 배열·웅덩이 자리·18초)",
+   "fx": "scar",
+   "anim": "spawn"
+  },
+  {
+   "t": 30,
+   "type": "aoe",
+   "kind": "show",
+   "name": "오른쪽 웅덩이(짝이 아님)",
+   "spots": [
+    [
+     10,
+     6,
+     3.5
+    ]
+   ],
+   "cast": 18,
+   "color": "pink",
+   "src": "estimate(틀린 짝의 웅덩이)"
+  },
+  {
+   "t": 50,
+   "type": "safe",
+   "name": "보이드 스카 찢김(중력장이 내 자리에 깔림 — 가장자리에 두기)",
+   "ring": [
+    16,
+    22
+   ],
+   "cast": 5,
+   "color": "pink",
+   "label": "가장자리",
+   "okMsg": "중력장을 가장자리에 둠",
+   "failMsg": "중력장을 전투 자리 한가운데에 깔음",
+   "src": "guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 통과하면 타이머가 붙고 끝나면 내 자리에 끌어당기는 중력장이 깔린다, 가장자리에 둔다 + estimate(가장자리 16m 밖·5초)",
+   "fx": "scar"
+  },
+  {
+   "t": 56.5,
+   "type": "hazards",
+   "name": "중력장(닿으면 환영의 그늘 — 주는 피해 -10%씩)",
+   "spots": [
+    [
+     0,
+     19,
+     4
+    ],
+    [
+     -16,
+     10,
+     4
+    ],
+    [
+     16,
+     10,
+     4
+    ]
+   ],
+   "dur": 40,
+   "src": "guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 중력 웅덩이에 맞으면 환영의 그늘 디버프(최대 10중첩) + estimate(자리·반경·40초)"
+  },
+  {
+   "t": 62,
+   "type": "spread",
+   "name": "분산 지목(파티에서 떨어지기)",
+   "r": 5,
+   "cast": 3,
+   "color": "yellow",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470122 分散 원 반경 2m + estimate(떨어질 거리 5m)",
+   "fx": "hit"
+  },
+  {
+   "t": 70,
+   "type": "sweep",
+   "name": "보이드 스카 레이저(돌아가는 광선 — 도는 방향으로 같이 돌거나 대시로 넘기)",
+   "from": 90,
+   "vel": 30,
+   "dur": 8,
+   "warn": 4,
+   "len": 40,
+   "width": 2,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470110 虚痕激光 직사각형 40m×2m, 4.1초 뒤 시작 + estimate(회전 속도·8초)",
+   "anim": "beam"
+  },
+  {
+   "t": 86,
+   "type": "aoe",
+   "name": "연환 1타(보스 둘레 원 — 멀리)",
+   "spots": [
+    [
+     0,
+     0,
+     12
+    ]
+   ],
+   "cast": 3,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470111 连环远近圈 · 470112 근거리 원 반경 12m",
+   "fx": "burst",
+   "anim": "around"
+  },
+  {
+   "t": 89.5,
+   "type": "shapes",
+   "name": "연환 2타(바깥 고리 — 보스 곁으로)",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 0,
+     "z": 0,
+     "rIn": 12,
+     "rOut": 36
+    }
+   ],
+   "cast": 2.5,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470113 원거리 고리 안 12m ~ 밖 36m + estimate(1타와의 간격)",
+   "fx": "burst"
+  },
+  {
+   "t": 96,
+   "type": "aoe",
+   "name": "치명타(탱버 — 탱커 혼자)",
+   "spots": [
+    [
+     0,
+     -6,
+     3.5
+    ]
+   ],
+   "cast": 4,
+   "tank": "carry",
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470106 致死 · 470107 원 반경 3m + estimate(예고)",
+   "fx": "hit",
+   "anim": "blow"
+  },
+  {
+   "t": 104.0,
+   "type": "aoe",
+   "kind": "show",
+   "name": "흐루가의 그림자 1/5(강한 전체 피해 — 힐·피해 감소로 버팀)",
+   "spots": [
+    [
+     0,
+     0,
+     20
+    ]
+   ],
+   "cast": 3.5,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470119 P2 단계 스킬 원 반경 20m, 3.5초 뒤부터 4.5초 간격 5회 + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 모든 난이도에서 매우 아프다",
+   "fx": "burst",
+   "anim": "phase"
+  },
+  {
+   "t": 108.5,
+   "type": "aoe",
+   "kind": "show",
+   "name": "흐루가의 그림자 2/5(강한 전체 피해 — 힐·피해 감소로 버팀)",
+   "spots": [
+    [
+     0,
+     0,
+     20
+    ]
+   ],
+   "cast": 4.4,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470119 P2 단계 스킬 원 반경 20m, 3.5초 뒤부터 4.5초 간격 5회 + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 모든 난이도에서 매우 아프다",
+   "fx": "burst",
+   "anim": "phase"
+  },
+  {
+   "t": 113.0,
+   "type": "aoe",
+   "kind": "show",
+   "name": "흐루가의 그림자 3/5(강한 전체 피해 — 힐·피해 감소로 버팀)",
+   "spots": [
+    [
+     0,
+     0,
+     20
+    ]
+   ],
+   "cast": 4.4,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470119 P2 단계 스킬 원 반경 20m, 3.5초 뒤부터 4.5초 간격 5회 + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 모든 난이도에서 매우 아프다",
+   "fx": "burst",
+   "anim": "phase"
+  },
+  {
+   "t": 117.5,
+   "type": "aoe",
+   "kind": "show",
+   "name": "흐루가의 그림자 4/5(강한 전체 피해 — 힐·피해 감소로 버팀)",
+   "spots": [
+    [
+     0,
+     0,
+     20
+    ]
+   ],
+   "cast": 4.4,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470119 P2 단계 스킬 원 반경 20m, 3.5초 뒤부터 4.5초 간격 5회 + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 모든 난이도에서 매우 아프다",
+   "fx": "burst",
+   "anim": "phase"
+  },
+  {
+   "t": 122.0,
+   "type": "aoe",
+   "kind": "show",
+   "name": "흐루가의 그림자 5/5(강한 전체 피해 — 힐·피해 감소로 버팀)",
+   "spots": [
+    [
+     0,
+     0,
+     20
+    ]
+   ],
+   "cast": 4.4,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470119 P2 단계 스킬 원 반경 20m, 3.5초 뒤부터 4.5초 간격 5회 + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 모든 난이도에서 매우 아프다",
+   "fx": "burst",
+   "anim": "phase"
+  },
+  {
+   "t": 126,
+   "type": "freeze",
+   "dur": 2,
+   "text": "빙결 — 풀리면 구슬로",
+   "src": "guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 다섯째 장판 뒤 얼었다 풀리면 구슬로 달려간다"
+  },
+  {
+   "t": 128,
+   "type": "carry",
+   "name": "성원 구슬",
+   "pick": [
+    12,
+    8
+   ],
+   "drop": [
+    -8,
+    -12
+   ],
+   "cast": 14,
+   "pickMsg": "구슬을 E로 집기",
+   "dropMsg": "보라 웅덩이 위로 끌고 가 E",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470121 성원 에너지 구슬 + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 구슬을 집어 웅덩이 위로 끌고 간다, 힐러가 먼저 하고 딜러가 나머지를 돕는다 + video(Layla 플레이 영상 nvU2svaRv40, 마스터 5, 5초 간격 판독) 4:35 + estimate(자리·14초)",
+   "fx": "scar"
+  },
+  {
+   "t": 128,
+   "type": "aoe",
+   "kind": "show",
+   "name": "오멘 분신(보스에게 걸어감 — 기절시켜 막기)",
+   "spots": [
+    [
+     18,
+     -6,
+     2
+    ],
+    [
+     -18,
+     6,
+     2
+    ]
+   ],
+   "cast": 14,
+   "color": "yellow",
+   "src": "guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 오멘 분신이 보스에게 닿지 않게 기절시킨다(판정 없음)"
+  },
+  {
+   "t": 144,
+   "type": "knock",
+   "name": "결속된 어둠의 영(넉백 폭발 — 벽이 없어 밀리면 추락, 대시 무적이나 보스 곁에서 버티기)",
+   "at": [
+    0,
+    0
+   ],
+   "push": 16,
+   "cast": 4,
+   "src": "guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 흐루가의 그림자 뒤 벽이 사라지고, 카운트다운이 끝나면 넉백으로 전투장 밖에 떨어진다(슈퍼 아머 필요) + estimate(16m, 슈퍼 아머는 대시 무적으로 대신)",
+   "fx": "burst",
+   "anim": "around"
+  },
+  {
+   "t": 149,
+   "type": "aoe",
+   "kind": "show",
+   "name": "그림자 동반: 줄이 이어지는 순서 1→2→3→4를 기억",
+   "spots": [
+    [
+     12,
+     12,
+     2
+    ],
+    [
+     -12,
+     12,
+     2
+    ],
+    [
+     -12,
+     -12,
+     2
+    ],
+    [
+     12,
+     -12,
+     2
+    ]
+   ],
+   "cast": 6,
+   "color": "pink",
+   "src": "guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 줄이 나타난 순서대로 보이드 스카가 터진다 + estimate(자리)"
+  },
+  {
+   "t": 150,
+   "type": "stack",
+   "name": "파란 원(줄이 시작되는 곳에 모이기)",
+   "at": [
+    6,
+    6
+   ],
+   "r": 4.5,
+   "cast": 4.5,
+   "src": "guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 파란 원은 줄 시작 쪽으로 가져와 파티가 같이 밟는다, 붉은 원은 혼자 + estimate(자리)",
+   "fx": "share"
+  },
+  {
+   "t": 156,
+   "type": "shapes",
+   "name": "보이드 스카 1번(속이 찬 표식 — 멀리)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 12,
+     "z": 12,
+     "r": 12
+    }
+   ],
+   "cast": 3.5,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470112 근거리 원 반경 12m + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 속이 찬 원 표식은 곁이 위험",
+   "fx": "scar"
+  },
+  {
+   "t": 160.5,
+   "type": "shapes",
+   "name": "보이드 스카 2번(빈 표식 — 곁으로)",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": -12,
+     "z": 12,
+     "rIn": 12,
+     "rOut": 36
+    }
+   ],
+   "cast": 3.5,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470113 원거리 고리 안 12m ~ 밖 36m + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 빈 원 표식은 곁이 안전",
+   "fx": "scar"
+  },
+  {
+   "t": 165,
+   "type": "shapes",
+   "name": "보이드 스카 3번(속이 찬 표식 — 멀리)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": -12,
+     "z": -12,
+     "r": 12
+    }
+   ],
+   "cast": 3.5,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470112 근거리 원 반경 12m + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 속이 찬 원 표식은 곁이 위험",
+   "fx": "scar"
+  },
+  {
+   "t": 170,
+   "type": "air",
+   "name": "파동(퍼졌다 모이는 고리 — 2단 점프 뒤 활공으로 넘기: Space)",
+   "want": "air",
+   "spots": [
+    [
+     -12,
+     -12,
+     30
+    ]
+   ],
+   "cast": 3,
+   "color": "blue",
+   "okMsg": "점프·활공으로 넘김",
+   "failMsg": "파동에 닿아 쓰러짐",
+   "src": "guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 셋째 보이드 스카 뒤 퍼졌다 모이는 파동이 나온다, 2단 점프와 활공으로 넘는다 + estimate(예고 3초, 점프는 Space 한 번으로 줄임)",
+   "fx": "burst"
+  },
+  {
+   "t": 174.5,
+   "type": "shapes",
+   "name": "보이드 스카 4번(빈 표식 — 곁으로)",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 12,
+     "z": -12,
+     "rIn": 12,
+     "rOut": 36
+    }
+   ],
+   "cast": 3.5,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470113 원거리 고리 안 12m ~ 밖 36m + guide(Layla 공략 영상 VWd4H4Pac38·sct5YXrsz0Y 자막) 빈 원 표식은 곁이 안전",
+   "fx": "scar"
+  },
+  {
+   "t": 184,
+   "type": "aoe",
+   "name": "전체 장판(대시 무적으로 회피)",
+   "spots": [
+    [
+     0,
+     0,
+     20
+    ]
+   ],
+   "cast": 2,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 4701 스킬 대역 4701xx; 본체 스킬 값 × 모델 배율 1.6) 470104 压团血 원 반경 20m, 타격 1.1초, 회피 가능 + estimate(예고 2초)",
+   "fx": "burst",
+   "anim": "around"
+  }
+ ],
+ "duration": 192,
+ "fxBase": "./assets/fx-wirda/",
+ "fx": {
+  "share": {
+   "hit": "wirda_soul_aoe"
+  },
+  "hit": {
+   "hit": "wirda_soul_attack"
+  },
+  "burst": {
+   "hit": "wirda_soul_aoe"
+  },
+  "scar": {
+   "cast": "wirda_xuhen_black",
+   "castLoop": true,
+   "hit": "wirda_xuhen_black_born"
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss/wirda 57종). 기믹과의 대응은 이름(xuhen 보이드 스카·soul·heihua)으로 고른 추정"
+}

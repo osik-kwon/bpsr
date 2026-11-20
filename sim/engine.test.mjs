@@ -348,3 +348,25 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   console.log('mirror-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
   assert.equal(s.score().ok, s.score().total);
 }
+
+// 시즌4 마스터 던전 황폐한 정원: 색 맞추기 웅덩이·구슬 운반·넉백·보이드 스카 순서·파동 점프
+{
+  const d = JSON.parse(fs.readFileSync(new URL('./data/courtyard-master.json', import.meta.url)));
+  let s = new Sim(JSON.parse(JSON.stringify(d)));
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, { mx: 0, mz: 0 });
+  const bad = s.log.filter(r => !r.ok).map(r => r.name);
+  assert.ok(bad.some(n => n.startsWith('보이드 스카 소환')) && bad.includes('성원 구슬') && bad.some(n => n.startsWith('파동')), '가만히 있으면 색 맞추기·구슬·파동에서 실패해야 한다');
+  s = new Sim(JSON.parse(JSON.stringify(d)));
+  const go = (x, z) => { const dx = x - s.player.x, dz = z - s.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
+  const path = [[0, [0, 8]], [24.5, [-10, 6]], [48.1, [0, 19]], [55.05, [0, 10]], [58, [0, 14]], [65.1, [4, 13]], [89.1, [2, 8]], [100, [12, 8]], [129.5, [-8, -12]], [136, [0, 3]], [148.1, [6, 6]], [154.6, [-4, 4]], [173.5, [5, -5]]];
+  const once = new Set(), hit = (k, a, b) => s.t >= a && s.t < b && !once.has(k) && once.add(k);
+  while (!s.done && s.t < d.duration + 5) {
+    let inp = go(...path.filter(q => q[0] <= s.t).pop()[1]);
+    if (hit('d1', 23.75, 24) || hit('d2', 185.75, 186)) inp = { mx: 1, mz: 0, dash: true };   // 전체 장판은 대시 무적
+    if (hit('pick', 129, 129.4) || hit('drop', 135.5, 135.9)) inp = { ...inp, interact: true };
+    if (hit('jump', 172.2, 172.5)) inp = { ...inp, jump: true };
+    s.step(0.05, inp);
+  }
+  console.log('courtyard-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  assert.equal(s.score().ok, s.score().total);
+}
