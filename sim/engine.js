@@ -84,6 +84,9 @@ export class Sim {
     return { A, B, M, cores: [at(A, B, 1 / 3), at(A, B, 2 / 3), at(B, M, 0.5), at(M, A, 0.5)] };
   }
   spawn(e) {
+    // forRole·notRole: 내 역할에 따라 이벤트를 넣거나 뺀다. botsTo: 파티원 자리 옮기기({번호: [x, z]})
+    if ((e.forRole && e.forRole !== this.role) || (e.notRole && e.notRole === this.role)) return;
+    if (e.botsTo && e.type !== 'aimed') for (const [i, [x, z]] of Object.entries(e.botsTo)) this.bots[i] = { x, z };
     if (e.byNote) e = { ...e, ...(e.byNote[this.note] ?? {}) };
     if (e.move) this.bq.push({ ...e.move, at: e.t + (e.move.at ?? 0) });
     if (e.back) this.bq.push({ ...e.back, at: e.t + e.back.at });
@@ -165,7 +168,7 @@ export class Sim {
       this.add({ name: e.name, kind: 'avoid', shape: 'multi', spots, hitAt: e.t + e.cast, color: e.color ?? 'red' });
     } else if (e.type === 'marks') {
       // 공대가 바닥에 찍는 징(궤도포를 버릴 자리 번호)
-      this.markers = e.pos.map(([x, z], i) => ({ x, z, label: String(i + 1) }));
+      this.markers = e.pos.map(([x, z], i) => ({ x, z, label: e.labels?.[i] ?? String(i + 1) }));
     } else if (e.type === 'orb') {
       // 넉백 구슬: 터질 때 범위 안에 있으면 push만큼 날아간다. 걷는 중이면 걷는 방향, 서 있으면 구슬 반대쪽
       this.orbs.push({ name: e.name, x: e.at[0], z: e.at[1], r: e.r, push: e.push, hitAt: e.t + e.cast, start: e.t });
