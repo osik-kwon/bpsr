@@ -270,6 +270,9 @@ export class Sim {
       // 조준 부채꼴: origins마다 가장 가까운 사람을 따라 겨누다가 lock초 전에 고정된다. 탱커 직업은 맞아야 한다
       if (e.botsTo) for (const [i, [x, z]] of Object.entries(e.botsTo)) this.bots[i] = { x, z };
       for (const [x, z] of e.origins) this.aimers.push({ name: e.name, x, z, r: e.r, half: e.half * Math.PI / 180, lockAt: e.t + e.cast - (e.lock ?? 1.5), hitAt: e.t + e.cast, start: e.t, type: e.fx ?? 'aimed', okMsg: e.okMsg, failMsg: e.failMsg });
+    } else if (e.type === 'knock') {
+      // 넉백: 터질 때 at에서 바깥으로 push만큼 밀린다(대시 무적이면 안 밀림). 밀린 자리가 전투장 밖이면 추락
+      this.add({ name: e.name, kind: 'knock', shape: 'circle', x: e.at[0], z: e.at[1], r: e.r ?? 3, push: e.push, hitAt: e.t + e.cast, color: 'blue' });
     } else if (e.type === 'botsHome') {
       this._botInit = true; this.bots = this.partySpots(this.room);
     } else if (e.type === 'flare') {
@@ -361,6 +364,9 @@ export class Sim {
     else if (s.kind === 'parry') { const front = (p.x - s.x) * Math.cos(s.face) + (p.z - s.z) * Math.sin(s.face) > 0, inn = dist(s, p) <= s.r + 4, ok = p.iframe > 0 && inn && front;
       this.result(s.name, ok, ok ? '형상 앞쪽으로 회피해 패링' : p.iframe > 0 ? (inn ? '형상 뒤쪽으로 회피 — 패링 실패, 광역 넉백' : '형상에서 너무 멀리 회피 — 패링 실패, 광역 넉백') : '패링하지 않음 — 광역 넉백과 징벌 스택');
       if (!ok) { const dx = p.x - s.x, dz = p.z - s.z, l = Math.hypot(dx, dz); p.x += (l > 0.1 ? dx / l : -Math.cos(s.face)) * 10; p.z += (l > 0.1 ? dz / l : -Math.sin(s.face)) * 10; this.clamp(p); } }
+    else if (s.kind === 'knock') { if (safe) this.result(s.name, true, '대시 무적으로 넉백을 무시');
+      else { const dx = p.x - s.x, dz = p.z - s.z, l = Math.hypot(dx, dz) || 1, nx = p.x + dx / l * s.push, nz = p.z + dz / l * s.push, out = Math.hypot(nx, nz) > this.data.arena.radius;
+        p.x = nx; p.z = nz; this.clamp(p); this.result(s.name, !out, out ? '넉백으로 전투장 밖에 떨어짐' : `넉백 ${s.push}m — 전투장 안에 착지`); } }
     else if (s.kind === 'air') { const up = p.y > 1, ok = up === (s.want === 'air'); this.result(s.name, ok, ok ? (s.okMsg ?? (up ? '점프로 넘김' : '땅에 붙어 피함')) : (s.failMsg ?? (up ? '공중에서 맞음' : '점프하지 않아 맞음'))); }
     else if (s.kind === 'in') { const ok = inside(s, p); this.result(s.name, ok, ok ? '쉐어 참여, 팀원 생존' : '쉐어 밖, 인원이 모자라 팀원 사망'); if (s.reset) this.bots = this.partySpots(this.room); }
     else if (s.kind === 'alone') { const dmin = Math.min(...this.bots.map(b => dist(b, p))); const ok = dmin >= s.r; this.result(s.name, ok, ok ? `가장 가까운 팀원 ${dmin.toFixed(0)}m` : `팀원과 너무 가까움 ${dmin.toFixed(0)}m (${s.r}m 이상)`); if (s.reset) this.bots = this.partySpots(this.room); }

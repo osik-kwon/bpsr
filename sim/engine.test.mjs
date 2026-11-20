@@ -332,3 +332,19 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   console.log('raid4-boss3 모범', s.score(), s.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
   assert.equal(s.score().ok, s.score().total);
 }
+
+// 시즌4 마스터 던전 거울 속의 심판: 넉백·회오리 놓기·얼음 창·거울 도넛
+{
+  const d = JSON.parse(fs.readFileSync(new URL('./data/mirror-master.json', import.meta.url)));
+  let s = new Sim(JSON.parse(JSON.stringify(d)));
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, { mx: 0, mz: 0 });
+  const bad = s.log.filter(r => !r.ok).map(r => r.name);
+  assert.ok(bad.some(n => n.startsWith('회오리 놓기')) && bad.some(n => n.startsWith('분신의 얼음 창')) && bad.some(n => n.startsWith('거울 직선')), '가만히 있으면 회오리·얼음 창·거울 직선에서 실패해야 한다');
+  s = new Sim(JSON.parse(JSON.stringify(d)));
+  const go = (x, z) => { const dx = x - s.player.x, dz = z - s.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
+  // [시작 시각, 자리] — 그 시각부터 다음 항목 전까지 그 자리로 간다
+  const path = [[0, [-6, 8]], [15.7, [6, 8]], [18, [0, 16]], [25.1, [0, 17.5]], [31.1, [0, 3]], [37.6, [0, -11]], [42.1, [0, -17.2]], [48.1, [8, -14]], [64, [6, 4]], [69.05, [3, 7]], [71, [6, 2]], [79.1, [6, 6]], [88.05, [0, 3]], [97.6, [-10, 0]], [102.1, [0, 13]], [112.1, [8, 14]], [124, [8, 8]], [140, [4.5, 2.5]], [145.05, [2, 4.5]]];
+  while (!s.done && s.t < d.duration + 5) { const at = path.filter(q => q[0] <= s.t).pop()[1]; s.step(0.05, go(...at)); }
+  console.log('mirror-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => `${r.t} ${r.name}: ${r.msg}`));
+  assert.equal(s.score().ok, s.score().total);
+}
