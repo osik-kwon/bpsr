@@ -400,3 +400,36 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   console.log('moonveil-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => r.t + ' ' + r.name + ': ' + r.msg));
   assert.equal(s.score().ok, s.score().total);
 }
+
+// 시즌4 마스터 던전 미망・검은 안개 요새: 반멸사역 절반·인멸 구슬 순서·관통 직선·종언
+{
+  const d = JSON.parse(fs.readFileSync(new URL('./data/darkmist-master.json', import.meta.url)));
+  let s = new Sim(JSON.parse(JSON.stringify(d)));
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, { mx: 0, mz: 0 });
+  const bad = s.log.filter(r => !r.ok).map(r => r.name);
+  assert.ok(bad.some(n => n.startsWith('반멸사역')) && bad.some(n => n.startsWith('허식 관통')) && bad.some(n => n.startsWith('허식의 종언')), '가만히 있으면 반멸사역·허식 관통·허식의 종언에서 실패해야 한다');
+  s = new Sim(JSON.parse(JSON.stringify(d)));
+  const go = (x, z) => { const dx = x - s.player.x, dz = z - s.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
+  const path = [[0, [0, 12]], [22.05, [0, 19]], [60, [8, 14]], [81.1, [2, 18]], [113.1, [12, 14]], [140.1, [16, 21]]];
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, go(...path.filter(q => q[0] <= s.t).pop()[1]));
+  console.log('darkmist-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => r.t + ' ' + r.name + ': ' + r.msg));
+  assert.equal(s.score().ok, s.score().total);
+}
+
+// 시즌4 마스터 던전 미망・거룡의 발톱: 뇌운 사분면·척력 꼬리치기·낙뢰 3연·뇌구 막기
+{
+  const d = JSON.parse(fs.readFileSync(new URL('./data/dragonclaw-master.json', import.meta.url)));
+  let s = new Sim(JSON.parse(JSON.stringify(d)));
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, { mx: 0, mz: 0 });
+  const bad = s.log.filter(r => !r.ok).map(r => r.name);
+  assert.ok(bad.some(n => n.startsWith('뇌운')) && bad.some(n => n.startsWith('전체 낙뢰')) && bad.some(n => n.startsWith('반쪽 강하')), '가만히 있으면 뇌운·전체 낙뢰·반쪽 강하에서 실패해야 한다');
+  s = new Sim(JSON.parse(JSON.stringify(d)));
+  const go = (x, z) => { const dx = x - s.player.x, dz = z - s.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
+  // 뇌운 시작 시각 c, 낙뢰 시작 시각 b 기준으로 한 바퀴
+  const round = (c, b) => [[c, [3, 14]], [c + 3.05, [-3, 14]], [c + 5, [0, 21]], [b + 0.05, [8, 21]], [b + 2.05, [0, 21]], [b + 4.05, [8, 21]], [b + 6, [0, 20]]];
+  const path = [[0, [3, 14]], ...round(12, 38), [22.05, [0, 14]], [25, [0, 21]], [55, [0, 24.5]], [70.05, [9, 22]], ...round(110, 128)];
+  path.sort((p, q) => p[0] - q[0]);
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, go(...path.filter(q => q[0] <= s.t).pop()[1]));
+  console.log('dragonclaw-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => r.t + ' ' + r.name + ': ' + r.msg));
+  assert.equal(s.score().ok, s.score().total);
+}

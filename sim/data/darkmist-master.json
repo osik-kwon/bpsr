@@ -1,0 +1,442 @@
+{
+ "id": "darkmist-master",
+ "title": "시즌4 마스터 던전 · 미망・검은 안개 요새 — 덴벨",
+ "notes": "시즌4 마스터 던전 「미망・검은 안개 요새」(던전 1344, 글섭 Illusion Shroud - Dark Mist Fortress) 막보스. 덴벨로 시작해 허식 덴벨로 변신한다. 판정 크기는 한섭 클라 스킬 데이터다. 설명이 있는 공략을 찾지 못해 기믹의 뜻은 스킬 이름과 플레이 영상 화면으로 짐작했고, 패턴 순서·시각·자리는 전부 추정이다. 변신 뒤에도 덴벨 모델을 키워서 쓴다",
+ "noCurtain": true,
+ "arena": {
+  "radius": 28,
+  "model": "arena_denvel.glb",
+  "clipY": 10,
+  "src": "measured(씬 scenes/dng_main_1301_underandera, 보스 배치 (551.42, 36.95, -131.15)) + estimate(반경 28m)"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   0,
+   12
+  ],
+  "src": "레이드 시나리오와 같은 값"
+ },
+ "boss": {
+  "pos": [
+   0,
+   0
+  ],
+  "height": 3.6,
+  "scale": 2.0,
+  "model": "boss_denvel.glb",
+  "chase": false,
+  "src": "table(몬스터 1708 丹佛 모델 배율 2.0; 파츠 ch_wpnpc_m_equip_bossdenvel·head·hair + 무기 ch_wp_denvel_01)",
+  "anims": {
+   "idle": "as_wpnpc_m_base_bossdenvel_fidle",
+   "walk": "as_wpnpc_m_base_bossdenvel_frun",
+   "combo": "as_wpnpc_m_base_bossdenvel_atk_attack01",
+   "cast": "as_wpnpc_m_base_bossdenvel_casting1",
+   "castxu": "as_wpnpc_m_base_bossdenvel_castxu_start",
+   "chop": "as_wpnpc_m_base_bossdenvel_chop_start",
+   "chopnew": "as_wpnpc_m_base_bossdenvel_chopnew_start1",
+   "jump": "as_wpnpc_m_base_bossdenvel_jump",
+   "struggle": "as_wpnpc_m_base_bossdenvel_struggle",
+   "shield": "as_wpnpc_m_base_bossdenvel_shield",
+   "levitation": "as_wpnpc_m_base_bossdenvel_levitation_start"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 동작 이름으로 맞춘 추정"
+ },
+ "partySpots": [
+  [
+   0,
+   -6
+  ],
+  [
+   6,
+   10
+  ],
+  [
+   -6,
+   10
+  ],
+  [
+   3,
+   8
+  ]
+ ],
+ "partyRoles": {
+  "dps": [
+   "탱",
+   "힐",
+   "근딜",
+   "원딜"
+  ],
+  "heal": [
+   "탱",
+   "근딜",
+   "원딜",
+   "원딜"
+  ],
+  "tank": [
+   "힐",
+   "근딜",
+   "원딜",
+   "원딜"
+  ]
+ },
+ "tankBot": 0,
+ "partySrc": "5인 파티. 파티원은 고정 자리 표식",
+ "events": [
+  {
+   "t": 6,
+   "type": "scarHit",
+   "name": "4연타(보스 앞 — 탱커만)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 8,
+     "dir": 1.5707963267948966,
+     "half": 1.5707963267948966
+    }
+   ],
+   "cast": 1.5,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170101 一挥二转三砍四砸 부채꼴 반경 6~8m·180°",
+   "anim": "combo"
+  },
+  {
+   "t": 14,
+   "type": "rects",
+   "name": "허식의 포효(보스 앞 넓은 정사각 — 뒤로)",
+   "rects": [
+    [
+     0,
+     -20.0,
+     40,
+     40
+    ]
+   ],
+   "cast": 2.5,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170107 虚蚀の咆哮 직사각형 40m×40m · 원 30m + estimate(예고 2.5초) + estimate(보스가 탱커 쪽 -z를 본다고 고정)",
+   "fx": "roar",
+   "anim": "cast"
+  },
+  {
+   "t": 22,
+   "type": "puddle",
+   "name": "추격(내 자리 원)",
+   "r": 4,
+   "cast": 2,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170103 追击 · 170150 잔류 + estimate(반경 4m)",
+   "fx": "hit",
+   "anim": "jump"
+  },
+  {
+   "t": 30,
+   "type": "rects",
+   "name": "허식 겁인단!(보스 앞 절반을 베는 큰 참격 — 뒤로)",
+   "rects": [
+    [
+     0,
+     -25.0,
+     50,
+     50
+    ]
+   ],
+   "cast": 3.6,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170109 虚蚀劫刃断 직사각형 50m×50m, 타격 3.6초 + estimate(보스가 탱커 쪽 -z를 본다고 고정)",
+   "fx": "chop",
+   "anim": "chop"
+  },
+  {
+   "t": 40,
+   "type": "aoe",
+   "name": "몸부림(보스 둘레 원 — 밖으로)",
+   "spots": [
+    [
+     0,
+     0,
+     14.7
+    ]
+   ],
+   "cast": 2.5,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170105 挣扎 원 12m(1.23초) → 14.7m(2.48초)",
+   "fx": "burst",
+   "anim": "struggle"
+  },
+  {
+   "t": 48,
+   "type": "shapes",
+   "name": "오의! 허식 겁인(보스 앞 18m 지점 큰 원)",
+   "spots": [
+    {
+     "shape": "circle",
+     "x": 0,
+     "z": 18,
+     "r": 16
+    }
+   ],
+   "cast": 2.2,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170112 奥义！虚蚀劫刄 원 16m, 전방 18m 중심, 타격 1.82초",
+   "fx": "burst",
+   "anim": "chopnew"
+  },
+  {
+   "t": 56,
+   "type": "spread",
+   "name": "허식 확산(파티에서 떨어지기)",
+   "r": 6,
+   "cast": 3,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170102·170111 虚蚀扩散 + estimate(반경 6m)",
+   "fx": "hit"
+  },
+  {
+   "t": 64,
+   "type": "rects",
+   "name": "반멸사역(전투장 절반이 죽음의 땅으로 — 반대쪽 절반으로)",
+   "rects": [
+    [
+     -10,
+     0,
+     20,
+     40
+    ]
+   ],
+   "cast": 9.3,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170210 虚蚀半灭死域 · 170253 바닥 직사각형 20m×40m, 타격 9.3초 뒤 지속 + video(Layla 플레이 영상 STJQ0GsFaio Illusion Shroud - Dark Mist Fortress 마스터 5, 5초 간격 판독) 3:04~3:09 전투장 절반 붉은 바닥 + estimate(어느 절반인지)",
+   "fx": "floor",
+   "anim": "castxu"
+  },
+  {
+   "t": 73.4,
+   "type": "hazards",
+   "name": "죽음의 땅(왼쪽 절반)",
+   "spots": [
+    [
+     -12,
+     -14,
+     8
+    ],
+    [
+     -12,
+     0,
+     8
+    ],
+    [
+     -12,
+     14,
+     8
+    ]
+   ],
+   "dur": 20,
+   "src": "estimate(절반 바닥을 원 셋으로 근사, 20초)"
+  },
+  {
+   "t": 78,
+   "type": "aoe",
+   "name": "허식 인멸 3초 구슬",
+   "spots": [
+    [
+     8,
+     -9,
+     7
+    ]
+   ],
+   "cast": 3,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170261~65 虚蚀湮灭 3·6·9·12초 지연 원 반경 10m + video(Layla 플레이 영상 STJQ0GsFaio Illusion Shroud - Dark Mist Fortress 마스터 5, 5초 간격 판독) 3:14~3:39 어두운 전투장의 보라 구슬 + estimate(자리, 남은 절반에 들어가게 반경 7m로 줄임)",
+   "fx": "orb"
+  },
+  {
+   "t": 78,
+   "type": "aoe",
+   "name": "허식 인멸 6초 구슬",
+   "spots": [
+    [
+     8,
+     9,
+     7
+    ]
+   ],
+   "cast": 6,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170261~65 虚蚀湮灭 3·6·9·12초 지연 원 반경 10m + video(Layla 플레이 영상 STJQ0GsFaio Illusion Shroud - Dark Mist Fortress 마스터 5, 5초 간격 판독) 3:14~3:39 어두운 전투장의 보라 구슬 + estimate(자리, 남은 절반에 들어가게 반경 7m로 줄임)",
+   "fx": "orb"
+  },
+  {
+   "t": 78,
+   "type": "aoe",
+   "name": "허식 인멸 9초 구슬",
+   "spots": [
+    [
+     14,
+     0,
+     7
+    ]
+   ],
+   "cast": 9,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170261~65 虚蚀湮灭 3·6·9·12초 지연 원 반경 10m + video(Layla 플레이 영상 STJQ0GsFaio Illusion Shroud - Dark Mist Fortress 마스터 5, 5초 간격 판독) 3:14~3:39 어두운 전투장의 보라 구슬 + estimate(자리, 남은 절반에 들어가게 반경 7m로 줄임)",
+   "fx": "orb"
+  },
+  {
+   "t": 96,
+   "type": "freeze",
+   "dur": 3,
+   "text": "덴벨 폭주 — 허식 덴벨로 변신",
+   "bossScale": 1.5,
+   "fxList": [
+    {
+     "name": "berserkdenvel_transformation",
+     "at": "boss"
+    }
+   ],
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 1709 狂暴丹佛 모델 배율 3.0 + video(Layla 플레이 영상 STJQ0GsFaio Illusion Shroud - Dark Mist Fortress 마스터 5, 5초 간격 판독) 4:30~4:45 변신 연출"
+  },
+  {
+   "t": 102,
+   "type": "scarHit",
+   "name": "광폭 4연타(보스 앞 — 탱커만)",
+   "spots": [
+    {
+     "shape": "sector",
+     "x": 0,
+     "z": 0,
+     "r": 8,
+     "dir": 1.5707963267948966,
+     "half": 1.5707963267948966
+    }
+   ],
+   "cast": 1.5,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170201 狂暴四连 부채꼴 반경 8m·180°",
+   "anim": "combo"
+  },
+  {
+   "t": 110,
+   "type": "lasers",
+   "name": "허식 관통(나를 겨누는 굵은 직선 — 고정되면 옆으로)",
+   "follow": 3,
+   "fire": 3,
+   "width": 10,
+   "len": 40,
+   "bots": [
+    1
+   ],
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170207 碎裂贯穿 · 170255 직사각형 40m×10m, 타격 6.0초 + estimate(3초 따라오다 고정)"
+  },
+  {
+   "t": 122,
+   "type": "far",
+   "name": "허식 감쇠(보스에서 멀수록 약함 — 16m 밖으로)",
+   "at": [
+    0,
+    0
+   ],
+   "safeDist": 16,
+   "cast": 4,
+   "color": "pink",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170212 虚蚀衰减 · 170259 원 40m 거리 감쇠 + estimate(안전 거리 16m·예고 4초)",
+   "fx": "burst",
+   "anim": "cast"
+  },
+  {
+   "t": 130,
+   "type": "aoe",
+   "name": "허식 장벽 폭발(보스 둘레 원)",
+   "spots": [
+    [
+     0,
+     0,
+     9.5
+    ]
+   ],
+   "cast": 4.1,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170206 虚蚀屏障 · 170254 원 9.5m, 4.1초 뒤부터",
+   "fx": "burst",
+   "anim": "shield"
+  },
+  {
+   "t": 138,
+   "type": "aoe",
+   "name": "허식 연참(보스 둘레 원 — 여러 번)",
+   "spots": [
+    [
+     0,
+     0,
+     12
+    ]
+   ],
+   "cast": 2,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170205 虚蚀连斩 원 12m 여러 번(1.37~3.12초)",
+   "fx": "chop",
+   "anim": "combo"
+  },
+  {
+   "t": 146,
+   "type": "aoe",
+   "name": "허식의 종언(큰 원 — 가장자리로 나가거나 대시 무적)",
+   "spots": [
+    [
+     0,
+     0,
+     25
+    ]
+   ],
+   "cast": 4.2,
+   "color": "red",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 1708 덴벨·1709 허식 덴벨, 스킬 1701xx·1702xx; 본체 값 × 모델 배율 2.0·3.0) 170208 虚蚀の终焉 원 25m, 타격 4.22초",
+   "fx": "burst",
+   "anim": "levitation"
+  }
+ ],
+ "duration": 154,
+ "fxBase": "./assets/fx-denvel/",
+ "fx": {
+  "roar": {
+   "at": "boss",
+   "hit": "denvel_chgstate_qilang_02"
+  },
+  "chop": {
+   "at": "boss",
+   "hit": "denvel_chop_cut"
+  },
+  "burst": {
+   "hit": "berserkdenvel_aoe02"
+  },
+  "hit": {
+   "hit": "denvel_atk_hit"
+  },
+  "floor": {
+   "cast": "berserkdenvel_floor_xvshi",
+   "castLoop": true,
+   "hit": "berserkdenvel_floor_xvshi_end"
+  },
+  "orb": {
+   "cast": "berserkdenvel_invade_jiyiqiu",
+   "castLoop": true,
+   "hit": "berserkdenvel_elude_boom"
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss/denvel 118종). 기믹과의 대응은 이름으로 고른 추정"
+}
