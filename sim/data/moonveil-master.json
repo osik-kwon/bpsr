@@ -1,0 +1,514 @@
+{
+ "id": "moonveil-master",
+ "title": "시즌4 마스터 던전 · 미망・빛이 흐르는 들판 — 환상 재해 나뽀",
+ "notes": "시즌4 마스터 던전 「미망・빛이 흐르는 들판」(던전 1723, 글섭 Illusion Shroud - Moonveil Wilds, 영상 제목 Labubu) 막보스. 판정 크기는 한섭 클라 스킬 데이터다. 설명이 있는 공략을 찾지 못해 기믹의 뜻은 스킬 이름과 플레이 영상 화면으로 짐작했고, 패턴 순서·시각·자리는 전부 추정이다. 전투장 씬을 찾지 못해 배경 모델이 없다. 숨바꼭질과 보호막은 보여 주기만 한다",
+ "noCurtain": true,
+ "arena": {
+  "radius": 24,
+  "src": "estimate(열린 들판, 반경 24m). 보스 배치 (-54.59, 86.03, -578.31)이 어느 씬인지 미확인"
+ },
+ "player": {
+  "speed": 6.0,
+  "dashDist": 8,
+  "dashCd": 3,
+  "dashIframe": 0.4,
+  "start": [
+   0,
+   12
+  ],
+  "src": "레이드 시나리오와 같은 값"
+ },
+ "boss": {
+  "pos": [
+   0,
+   0
+  ],
+  "height": 7,
+  "scale": 7,
+  "model": "boss_fnappo.glb",
+  "chase": false,
+  "src": "table(몬스터 33420 幻祸娜宝, 프리팹 ch_mon_battlenappo_01, 모델 배율 7)",
+  "anims": {
+   "idle": "as_mon_battlenappo_fidle",
+   "walk": "as_mon_battlenappo_run",
+   "fist": "as_mon_battlenappo_atk_quickfist",
+   "breath": "as_mon_battlenappo_atk_breath",
+   "jump": "as_mon_battlenappo_atk_jumpatk",
+   "spear": "as_mon_battlenappo_atk_spearatk_start",
+   "katana": "as_mon_battlenappo_atk_katanaatk_start",
+   "katanaskill": "as_mon_battlenappo_atk_katanaskill_start",
+   "guitar": "as_mon_battlenappo_atk_guitaratk_start",
+   "hide": "as_mon_battlenappo_atk_hide_start",
+   "bomb": "as_mon_battlenappo_atk_bomb_start",
+   "bow": "as_mon_battlenappo_atk_bowatk"
+  },
+  "animSrc": "클립은 클라 실측, 기믹과의 대응은 동작 이름(katana·guitar·spear·bow·bomb·hide)으로 맞춤"
+ },
+ "partySpots": [
+  [
+   0,
+   -8
+  ],
+  [
+   6,
+   10
+  ],
+  [
+   -6,
+   10
+  ],
+  [
+   -3,
+   8
+  ]
+ ],
+ "partyRoles": {
+  "dps": [
+   "탱",
+   "힐",
+   "근딜",
+   "원딜"
+  ],
+  "heal": [
+   "탱",
+   "근딜",
+   "원딜",
+   "원딜"
+  ],
+  "tank": [
+   "힐",
+   "근딜",
+   "원딜",
+   "원딜"
+  ]
+ },
+ "tankBot": 0,
+ "partySrc": "5인 파티. 파티원은 고정 자리 표식",
+ "events": [
+  {
+   "t": 6,
+   "type": "scarHit",
+   "name": "연속 주먹(보스 앞 — 탱커만)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 0,
+      "z": 0
+     },
+     "b": {
+      "x": 0,
+      "z": 9
+     },
+     "w": 4
+    }
+   ],
+   "cast": 1.5,
+   "scar": [],
+   "want": {
+    "tank": "in",
+    "heal": "out",
+    "dps": "out"
+   },
+   "okMsg": null,
+   "failMsg": null,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340103 普攻-连拳 직사각형 7m×4m",
+   "anim": "fist"
+  },
+  {
+   "t": 12,
+   "type": "sectors",
+   "name": "환술 분무(보스 앞 부채꼴 — 5번 이어짐)",
+   "r": 20,
+   "half": 35,
+   "dirs": [
+    90
+   ],
+   "cast": 2,
+   "rel": true,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340104 幻术喷雾 부채꼴 반경 20m·70°, 1.32초부터 5회",
+   "fx": "breath",
+   "anim": "breath"
+  },
+  {
+   "t": 20,
+   "type": "puddle",
+   "name": "나뽀 덮치기(내 자리 원)",
+   "r": 5,
+   "cast": 2.2,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340105 娜宝飞扑 원 반경 5m, 타격 2.18초 + estimate(대상)",
+   "fx": "jump",
+   "anim": "jump"
+  },
+  {
+   "t": 28,
+   "type": "aoe",
+   "name": "깃창 내려찍기(보스 둘레 큰 원 — 20m 밖으로 나가거나 대시 무적)",
+   "spots": [
+    [
+     0,
+     0,
+     20
+    ]
+   ],
+   "cast": 2.2,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340106 旗枪下砸 원 8m(0.8초) → 원 20m(1.0초) + estimate(예고 2.2초)",
+   "fx": "spear",
+   "anim": "spear"
+  },
+  {
+   "t": 36,
+   "type": "shapes",
+   "name": "이아이 베기(직선 여러 줄 — 사이로)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": -15,
+      "z": -8
+     },
+     "b": {
+      "x": 15,
+      "z": -8
+     },
+     "w": 5
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": -15,
+      "z": 0
+     },
+     "b": {
+      "x": 15,
+      "z": 0
+     },
+     "w": 5
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": -15,
+      "z": 8
+     },
+     "b": {
+      "x": 15,
+      "z": 8
+     },
+     "w": 5
+    }
+   ],
+   "cast": 2.5,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340120 S4 居合斩 · 3340185 직사각형 30m×5m, 타격 0.4초 + video(Layla 플레이 영상 X9buQymUlk8 Illusion Shroud - Moonveil Wilds 마스터 5, 5초 간격 판독) 붉은 직사각형 예고(2:50·3:20) + estimate(줄 수·자리·예고 2.5초)",
+   "fx": "iai",
+   "anim": "katana"
+  },
+  {
+   "t": 46,
+   "type": "aoe",
+   "name": "기타 연탄 1타(보스 발밑 원)",
+   "spots": [
+    [
+     0,
+     0,
+     4
+    ]
+   ],
+   "cast": 2,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340107·3340122 吉他连弹 · 3340180 안쪽 원 4m",
+   "fx": "guitar",
+   "anim": "guitar"
+  },
+  {
+   "t": 46.2,
+   "type": "shapes",
+   "name": "기타 연탄 2타(가운데 고리)",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 0,
+     "z": 0,
+     "rIn": 4,
+     "rOut": 9
+    }
+   ],
+   "cast": 3,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340181 가운데 고리 4m ~ 9m + estimate(1초 간격)",
+   "fx": "guitar"
+  },
+  {
+   "t": 46.4,
+   "type": "shapes",
+   "name": "기타 연탄 3타(바깥 고리)",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 0,
+     "z": 0,
+     "rIn": 9,
+     "rOut": 20
+    }
+   ],
+   "cast": 4,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340182 바깥 고리 9m ~ 20m + estimate(1초 간격)",
+   "fx": "guitar"
+  },
+  {
+   "t": 58,
+   "type": "orbit",
+   "name": "월인(보스 둘레를 도는 초승달 칼날 — 닿지 않기)",
+   "R": 11,
+   "r": 2,
+   "n": 4,
+   "vel": 35,
+   "ang": 0,
+   "warn": 2,
+   "dur": 14,
+   "okMsg": "월인에 닿지 않음",
+   "failMsg": "월인에 베임",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340157·3340158 月刃召唤 · 3340195 남는 월인 원 반경 2m, 1.5초마다 피해 + video(Layla 플레이 영상 X9buQymUlk8 Illusion Shroud - Moonveil Wilds 마스터 5, 5초 간격 판독) 3:40~3:55 칼날이 도는 장면 + estimate(궤도 11m·속도·14초)",
+   "anim": "katanaskill"
+  },
+  {
+   "t": 76,
+   "type": "spread",
+   "name": "용기의 풍환(내 둘레 고리가 터짐 — 파티에서 떨어지기)",
+   "r": 8,
+   "cast": 4,
+   "color": "green",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340121 S4 勇气风环 · 3340184 풍환 폭발 원 반경 8m + video(Layla 플레이 영상 X9buQymUlk8 Illusion Shroud - Moonveil Wilds 마스터 5, 5초 간격 판독) 4:00~4:10 초록 고리 + estimate(대상·예고 4초)",
+   "fx": "wind"
+  },
+  {
+   "t": 86,
+   "type": "aoe",
+   "kind": "show",
+   "name": "숨바꼭질·환술 분신(진짜 나뽀를 찾아 공격 — 판정 없음)",
+   "spots": [
+    [
+     12,
+     8,
+     2.5
+    ],
+    [
+     -12,
+     8,
+     2.5
+    ],
+    [
+     0,
+     -14,
+     2.5
+    ]
+   ],
+   "cast": 10,
+   "color": "yellow",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340130 捉迷藏 · 3340131 幻术分身 원 반경 30m + estimate(분신 자리, 찾기는 판정하지 않음)",
+   "anim": "hide"
+  },
+  {
+   "t": 100,
+   "type": "puddle",
+   "name": "나뽀 폭탄술(내 자리 원)",
+   "r": 7,
+   "cast": 2.6,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340110 娜宝炸弹术 원 반경 7m, 타격 2.57초 + estimate(대상)",
+   "fx": "bomb",
+   "anim": "bomb"
+  },
+  {
+   "t": 108,
+   "type": "aoe",
+   "kind": "show",
+   "name": "머리 감싸고 웅크리기(보호막 — 깨면 그로기)",
+   "spots": [
+    [
+     0,
+     0,
+     6
+    ]
+   ],
+   "cast": 6,
+   "color": "blue",
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340108 抱头蹲防 + video(Layla 플레이 영상 X9buQymUlk8 Illusion Shroud - Moonveil Wilds 마스터 5, 5초 간격 판독) 4:40 보라색 반구 + estimate(판정 없음)"
+  },
+  {
+   "t": 118,
+   "type": "shapes",
+   "name": "분신의 화살(분신 셋에서 직선)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": 1.102182119232618e-15,
+      "z": 18.0
+     },
+     "b": {
+      "x": -6.123233995736766e-16,
+      "z": -10.0
+     },
+     "w": 5.6
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": -15.588457268119894,
+      "z": -9.000000000000002
+     },
+     "b": {
+      "x": 8.660254037844386,
+      "z": 5.000000000000001
+     },
+     "w": 5.6
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": 15.58845726811989,
+      "z": -9.000000000000007
+     },
+     "b": {
+      "x": -8.660254037844384,
+      "z": 5.000000000000004
+     },
+     "w": 5.6
+    }
+   ],
+   "cast": 2.5,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340123 S4 分身弓箭 · 3340160 화살 직사각형 28m×5.6m, 타격 1.72초 + estimate(분신 자리)",
+   "fx": "iai",
+   "anim": "bow"
+  },
+  {
+   "t": 128,
+   "type": "aoe",
+   "name": "도약 장판(보스 둘레 큰 원)",
+   "spots": [
+    [
+     0,
+     0,
+     20
+    ]
+   ],
+   "cast": 2.2,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340163 跳跃AOE 원 반경 20m, 타격 1.42초 + estimate(예고)",
+   "fx": "spear",
+   "anim": "jump"
+  },
+  {
+   "t": 136,
+   "type": "shapes",
+   "name": "이아이 베기(직선 여러 줄 — 사이로)",
+   "spots": [
+    {
+     "shape": "line",
+     "a": {
+      "x": -15,
+      "z": -4
+     },
+     "b": {
+      "x": 15,
+      "z": -4
+     },
+     "w": 5
+    },
+    {
+     "shape": "line",
+     "a": {
+      "x": -15,
+      "z": 4
+     },
+     "b": {
+      "x": 15,
+      "z": 4
+     },
+     "w": 5
+    }
+   ],
+   "cast": 2.5,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340120 S4 居合斩 · 3340185 직사각형 30m×5m, 타격 0.4초 + video(Layla 플레이 영상 X9buQymUlk8 Illusion Shroud - Moonveil Wilds 마스터 5, 5초 간격 판독) 붉은 직사각형 예고(2:50·3:20) + estimate(줄 수·자리·예고 2.5초)",
+   "fx": "iai",
+   "anim": "katana"
+  },
+  {
+   "t": 144,
+   "type": "aoe",
+   "name": "기타 연탄 1타(보스 발밑 원)",
+   "spots": [
+    [
+     0,
+     0,
+     4
+    ]
+   ],
+   "cast": 2,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340107·3340122 吉他连弹 · 3340180 안쪽 원 4m",
+   "fx": "guitar",
+   "anim": "guitar"
+  },
+  {
+   "t": 144.2,
+   "type": "shapes",
+   "name": "기타 연탄 2타(가운데 고리)",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 0,
+     "z": 0,
+     "rIn": 4,
+     "rOut": 9
+    }
+   ],
+   "cast": 3,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340181 가운데 고리 4m ~ 9m + estimate(1초 간격)",
+   "fx": "guitar"
+  },
+  {
+   "t": 144.4,
+   "type": "shapes",
+   "name": "기타 연탄 3타(바깥 고리)",
+   "spots": [
+    {
+     "shape": "ring",
+     "x": 0,
+     "z": 0,
+     "rIn": 9,
+     "rOut": 20
+    }
+   ],
+   "cast": 4,
+   "src": "table(한섭 클라 1.0.46215, 몬스터 33420 스킬 33401xx; 본체 스킬 값 × 모델 배율 7) 3340182 바깥 고리 9m ~ 20m + estimate(1초 간격)",
+   "fx": "guitar"
+  }
+ ],
+ "duration": 152,
+ "fxBase": "./assets/fx-battlenappo/",
+ "fx": {
+  "iai": {
+   "hit": "mon_battlenappo_katana_knife"
+  },
+  "guitar": {
+   "hit": "mon_battlenappo_guitar_aoe01"
+  },
+  "breath": {
+   "at": "boss",
+   "cast": "mon_battlenappo_breath_cast",
+   "hit": "mon_battlenappo_breath"
+  },
+  "jump": {
+   "hit": "mon_battlenappo_jumpatk_aoe"
+  },
+  "spear": {
+   "hit": "mon_battlenappo_spear_wide"
+  },
+  "wind": {
+   "hit": "nabaoshilian_scene_wind"
+  },
+  "bomb": {
+   "cast": "mon_battlenappo_bomb",
+   "hit": "mon_battlenappo_bomb_aoe"
+  }
+ },
+ "fxSrc": "이펙트는 클라 실측(effect/boss/battlenappo 51종). 기믹과의 대응은 이름으로 고른 추정"
+}

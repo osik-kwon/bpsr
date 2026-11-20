@@ -385,3 +385,18 @@ const idleFails = (name, file, n) => { const t = runMaster(file, { plan: [[0, nu
   console.log('skyaltar-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => r.t + ' ' + r.name + ': ' + r.msg));
   assert.equal(s.score().ok, s.score().total);
 }
+
+// 시즌4 마스터 던전 미망・빛이 흐르는 들판: 기타 연탄 세 고리·월인 궤도·분신 화살
+{
+  const d = JSON.parse(fs.readFileSync(new URL('./data/moonveil-master.json', import.meta.url)));
+  let s = new Sim(JSON.parse(JSON.stringify(d)));
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, { mx: 0, mz: 0 });
+  const bad = s.log.filter(r => !r.ok).map(r => r.name);
+  assert.ok(bad.some(n => n.startsWith('월인')) && bad.some(n => n.startsWith('기타 연탄 3타')) && bad.some(n => n.startsWith('분신의 화살')), '가만히 있으면 월인·기타 연탄 3타·분신의 화살에서 실패해야 한다');
+  s = new Sim(JSON.parse(JSON.stringify(d)));
+  const go = (x, z) => { const dx = x - s.player.x, dz = z - s.player.z; return Math.hypot(dx, dz) < 0.25 ? { mx: 0, mz: 0 } : { mx: dx, mz: dz }; };
+  const path = [[0, [0, 12]], [20.05, [0, 19]], [22.3, [0, 21]], [30.3, [3, 4]], [38.6, [0, 10]], [49.25, [0, 7]], [51, [0, 5]], [74.1, [0, 20]], [80.1, [0, 12]], [100.05, [0, 21]], [103, [8, 12]], [121, [0, 21]], [130.3, [0, 10]], [147.25, [0, 7]]];
+  while (!s.done && s.t < d.duration + 5) s.step(0.05, go(...path.filter(q => q[0] <= s.t).pop()[1]));
+  console.log('moonveil-master 모범', s.score(), s.log.filter(r => !r.ok).map(r => r.t + ' ' + r.name + ': ' + r.msg));
+  assert.equal(s.score().ok, s.score().total);
+}
