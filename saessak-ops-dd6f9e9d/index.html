@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>새싹 운영 진단</title>
+<style>
+:root{
+  --bg:#f6f5f2;--surface:#fcfcfb;--line:#e4e2dc;--grid:#ecebe6;
+  --t1:#0b0b0b;--t2:#52514e;--t3:#7a7975;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s1-soft:#cde2fb;
+  --good:#0ca30c;--warn:#fab219;--serious:#ec835a;--crit:#d03b3b;--good-ink:#006300;--crit-ink:#b02a2a;--warn-ink:#8a5a00;
+  --chip:#efeee9;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121211;--surface:#1a1a19;--line:#2f2f2c;--grid:#262624;
+  --t1:#f0efec;--t2:#c3c2b7;--t3:#8f8e88;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s1-soft:#184f95;
+  --good-ink:#4fd14f;--crit-ink:#f08a8a;--warn-ink:#fab219;--chip:#262624;
+}}
+:root[data-theme="dark"]{
+  --bg:#121211;--surface:#1a1a19;--line:#2f2f2c;--grid:#262624;
+  --t1:#f0efec;--t2:#c3c2b7;--t3:#8f8e88;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s1-soft:#184f95;
+  --good-ink:#4fd14f;--crit-ink:#f08a8a;--warn-ink:#fab219;--chip:#262624;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--t1);font:15px/1.65 -apple-system,"Apple SD Gothic Neo",Pretendard,"Noto Sans KR",sans-serif}
+main{max-width:920px;margin:0 auto;padding:28px 16px 64px}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.02em}
+h2{font-size:19px;margin:44px 0 6px;letter-spacing:-.01em}
+h3{font-size:15px;margin:0 0 6px}
+.sub{color:var(--t2);margin:0 0 20px}
+.lead{color:var(--t2);margin:0 0 14px;max-width:70ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.tile .n{font-size:28px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tile .l{font-size:13px;color:var(--t2)}
+.dec{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.dec .card{margin:0}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;border-radius:999px;padding:2px 10px;margin-bottom:8px;background:var(--chip)}
+.badge.focus{color:var(--s1)}.badge.keep{color:var(--good-ink)}.badge.cut{color:var(--crit-ink)}.badge.auto{color:var(--warn-ink)}
+.dec ul{margin:0;padding-left:18px}.dec li{margin:6px 0}
+.ev{color:var(--t2);font-size:13.5px}
+.chart{width:100%;overflow:visible}
+.chart text{fill:var(--t2);font-size:12px;font-family:inherit}
+.chart .val{fill:var(--t1);font-weight:600}
+.chart .gl{stroke:var(--grid);stroke-width:1}
+.chart .axis{stroke:var(--line)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--t2);margin:2px 0 6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.tip{position:fixed;pointer-events:none;background:var(--surface);color:var(--t1);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;box-shadow:0 4px 18px #0002;opacity:0;transition:opacity .08s;z-index:9;max-width:260px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--t2);font-weight:600;font-size:13px}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.v{font-weight:700;font-size:12.5px;border-radius:999px;padding:1px 9px;background:var(--chip);white-space:nowrap}
+.v.강화,.v.재개{color:var(--s1)}.v.유지{color:var(--good-ink)}.v.통합{color:var(--warn-ink)}
+details{margin-top:8px}summary{cursor:pointer;color:var(--t2);font-size:13.5px}
+.note{font-size:13px;color:var(--t3)}
+.foot{margin-top:48px;font-size:13px;color:var(--t3);border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:720px){.grid4{grid-template-columns:repeat(2,1fr)}.dec{grid-template-columns:1fr}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<main>
+  <h1>새싹 운영 진단</h1>
+  <p class="sub" id="built"></p>
+
+  <div class="grid4" id="tiles"></div>
+
+  <h2>한 줄 요약</h2>
+  <p class="lead">게임 전체가 빠지는 중에도 새싹은 게임 평균보다 잘 버텼습니다. 그런데 10월 말 운영진이 한꺼번에 빠진 뒤 11월에는 <b>게임보다 2~3배 더 줄었습니다</b>. 운영진 수가 줄었으니 <b>사람만 할 수 있는 일(레이드 운영, 소통, 신입 맞이)에 집중</b>하고, 반응 없는 공지는 없애고, 정보 제공은 봇에 맡기는 쪽을 제안합니다.</p>
+
+  <h2>결정할 것</h2>
+  <div class="dec" id="decisions"></div>
+
+  <h2>1. 게임은 빠지고, 길드는 버텼다</h2>
+  <p class="lead">2월을 100으로 놓고 세 지표를 비교했습니다. 새싹 활동 인원은 9월 합병 이후 게임 전체 지표보다 높게 유지됐습니다.</p>
+  <div class="card"><div class="legend" id="lg-trend"></div><svg class="chart" id="c-trend"></svg>
+    <p class="note">11월: Steam은 최근 30일, 디시는 1~20일을 한 달로 환산, 새싹 활동 인원은 1~20일 실제 인원이라 낮게 보입니다.</p>
+    <details><summary>표로 보기</summary><div id="t-trend"></div></details></div>
+
+  <h2>2. 10월 말 이후엔 게임보다 더 빠졌다</h2>
+  <p class="lead">10월 1~20일과 11월 1~20일을 비교한 결과입니다. 게임 전체(Steam·디시)는 약 10% 줄었는데, 길드의 핵심 인원과 채팅량은 20% 넘게 줄었습니다. 게임 이탈만으로는 설명되지 않는 몫이 있습니다.</p>
+  <div class="card"><div class="legend" id="lg-drop"></div><svg class="chart" id="c-drop"></svg></div>
+
+  <h2>3. 빠진 사람들이 대화의 3분의 1 넘게 차지했다</h2>
+  <p class="lead">음성채널 텍스트 채팅에서 누가 말했는지 나눠 봤습니다. 이탈·하차한 운영진 6명이 9~10월 채팅의 35~40%를 차지했습니다. 11월에는 남은 운영진과 길드원이 그 자리를 일부 메웠습니다.</p>
+  <div class="card"><div class="legend" id="lg-share"></div><svg class="chart" id="c-share"></svg></div>
+
+  <h2>4. 운영진 업무: 무엇이 비었나</h2>
+  <p class="lead">운영진 메시지 표본을 업무 유형으로 분류해 한 달 건수로 환산했습니다. 레이드 운영과 질문 답변이 크게 줄었고, 분위기·소통은 오히려 늘었습니다.</p>
+  <div class="card"><div class="legend" id="lg-work"></div><svg class="chart" id="c-work"></svg>
+    <p class="note">음성채널 채팅에서 시기·집단별로 300건씩 뽑아 분류한 추정치입니다. 작은 값은 오차가 큽니다. 11월은 S3 막바지라 레이드 자체가 적었던 영향도 섞여 있습니다.</p></div>
+
+  <h2>5. 공지: 사람 소식엔 반응하고, 게임 실무엔 반응하지 않는다</h2>
+  <p class="lead">지난 공지 27건을 유형별로 나누고 반응 수를 점으로 찍었습니다. 막대는 평균입니다. 점에 마우스를 올리면 공지 요지가 보입니다.</p>
+  <div class="card"><svg class="chart" id="c-notice"></svg></div>
+
+  <h2>6. 판을 깔아 준 행사는 오래간다</h2>
+  <p class="lead">공지 한 번에 채널 하나만 열었는데도 #자랑하기는 4개월째 이어지고 있습니다. 운영진 손이 적게 드는 행사부터 살리는 게 효율적입니다.</p>
+  <div class="card"><h3>#자랑하기 월별 글 수</h3><svg class="chart" id="c-brag"></svg></div>
+  <div class="card"><table id="t-events"></table></div>
+
+  <h2>7. 새로 오는 사람이 멈췄다</h2>
+  <p class="lead">디스코드에 처음 글을 쓴 사람 수입니다. 9월 합병 뒤로 줄어 11월에는 0명입니다. 시즌4가 시작된 지금이 복귀·신규를 받을 시기입니다.</p>
+  <div class="card"><div class="legend" id="lg-new"></div><svg class="chart" id="c-new"></svg></div>
+
+  <div class="foot">
+    <b>데이터 기준</b><br>
+    · 새싹 디스코드 전 채널·스레드·음성채널 텍스트 채팅(2026-01-30 ~ 11-20, 봇 제외). 개인 이름과 대화 원문은 싣지 않았습니다.<br>
+    · 게임 전체: 한국 Steam 앱 월평균 동접(steamcharts, 11월은 최근 30일), 디시 블루프로토콜 갤 월별 글 수(11월은 1~20일을 한 달로 환산).<br>
+    · 업무 분류와 공지 유형 일부는 AI 자동 분류이고, 표본 추정입니다.<br>
+    · 시기가 겹친다는 것(상관)을 보여 주는 자료이지, 원인을 증명하지는 않습니다. 합병·시즌 종료·길드장 교체가 같은 시기에 겹쳤습니다.
+  </div>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+const D = {"built": "2026-11-20", "months": ["2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월"], "trend": {"steam": [100, 98, 114, 79, 69, 72, 75, 64, 48, 44], "dc": [100, 69, 32, 24, 13, 15, 9, 8, 7, 6], "guild": [100, 91, 83, 67, 65, 85, 74, 100, 85, 72], "raw": {"steam": [1059, 1039, 1204, 841, 733, 761, 799, 681, 512, 467], "dc": [3207, 2199, 1038, 767, 430, 493, 300, 251, 217, 195], "guild": [54, 49, 45, 36, 35, 46, 40, 54, 46, 39]}}, "drop": [{"k": "길드 핵심 인원(4일+)", "v": -26, "raw": "34→25명", "g": "guild"}, {"k": "길드 음성 채팅량", "v": -23, "raw": "60,519→46,591건", "g": "guild"}, {"k": "길드 활동 인원", "v": -13, "raw": "45→39명", "g": "guild"}, {"k": "디시 갤 글(게임 전체)", "v": -7, "raw": "10월 대비 같은 일수", "g": "game"}, {"k": "Steam 한섭 동접(게임 전체)", "v": -9, "raw": "512→467", "g": "game"}], "share": [{"m": "9월", "gone": 15755, "staff": 11810, "rest": 12426}, {"m": "10월", "gone": 28168, "staff": 21125, "rest": 32658}, {"m": "11월", "gone": 2193, "staff": 23978, "rest": 20420}], "work": {"tasks": ["레이드·파티 운영", "질문 답변·정보 제공", "신규 가입 응대", "관리·규칙·서버 정리", "행사 기획·진행", "분위기·리액션"], "eras": {"9~10월": {"레이드·파티 운영": 1855, "질문 답변·정보 제공": 873, "신규 가입 응대": 213, "관리·규칙·서버 정리": 49, "행사 기획·진행": 65, "분위기·리액션": 1734}, "9~10월 중 이탈자 몫": {"레이드·파티 운영": 1162, "질문 답변·정보 제공": 774, "신규 가입 응대": 65, "관리·규칙·서버 정리": 0, "행사 기획·진행": 65, "분위기·리액션": 645}, "11월 1~20일": {"레이드·파티 운영": 263, "질문 답변·정보 제공": 487, "신규 가입 응대": 161, "관리·규칙·서버 정리": 10, "행사 기획·진행": 0, "분위기·리액션": 2396}, "11월 1~20일 중 이탈자 몫": {"레이드·파티 운영": 39, "질문 답변·정보 제공": 39, "신규 가입 응대": 49, "관리·규칙·서버 정리": 10, "행사 기획·진행": 0, "분위기·리액션": 379}}}, "notices": [{"d": "2026-03-02", "kind": "길드·사람 소식", "label": "길드 레벨 7 달성", "r": 9}, {"d": "2026-04-05", "kind": "게임 실무·체크리스트", "label": "일요일 상점 체크", "r": 4}, {"d": "2026-04-08", "kind": "게임 실무·체크리스트", "label": "신규 레이드 예약", "r": 0}, {"d": "2026-04-13", "kind": "게임 실무·체크리스트", "label": "정규 레이드 조건 조정", "r": 1}, {"d": "2026-04-21", "kind": "길드·사람 소식", "label": "만렙 길드 등극", "r": 13}, {"d": "2026-05-13", "kind": "행사·캠페인", "label": "긍정 에너지 캠페인 / 길드 앨범 주간", "r": 8}, {"d": "2026-05-13", "kind": "행사·캠페인", "label": "긍정 에너지 캠페인 / 길드 앨범 주간", "r": 4}, {"d": "2026-05-16", "kind": "게임 실무·체크리스트", "label": "토요 정규 레이드", "r": 4}, {"d": "2026-05-20", "kind": "게임 실무·체크리스트", "label": "이번 주 숙제·레이드", "r": 2}, {"d": "2026-05-31", "kind": "게임 실무·체크리스트", "label": "일요일 리셋 체크리스트", "r": 1}, {"d": "2026-06-02", "kind": "길드·사람 소식", "label": "새 운영진 소개", "r": 7}, {"d": "2026-06-11", "kind": "일정 안내", "label": "내일 무도회·소식", "r": 5}, {"d": "2026-06-28", "kind": "길드·사람 소식", "label": "신입 대거 합류, 서로 배려 당부", "r": 25}, {"d": "2026-07-12", "kind": "행사·캠페인", "label": "S2 단체 사진 촬영회", "r": 6}, {"d": "2026-07-14", "kind": "행사·캠페인", "label": "S2 한줄소감 모집", "r": 0}, {"d": "2026-07-17", "kind": "일정 안내", "label": "단체 콘텐츠 규칙 변경", "r": 5}, {"d": "2026-07-20", "kind": "게임 실무·체크리스트", "label": "S3 레이드 진행 방식", "r": 13}, {"d": "2026-07-28", "kind": "행사·캠페인", "label": "#자랑하기 채널 개장", "r": 7}, {"d": "2026-07-31", "kind": "일정 안내", "label": "금요 무도회·주말 길사", "r": 12}, {"d": "2026-08-21", "kind": "일정 안내", "label": "가을 길드 소식·레이드 대비", "r": 14}, {"d": "2026-09-07", "kind": "길드·사람 소식", "label": "길드 합병 안내", "r": 28}, {"d": "2026-09-09", "kind": "길드·사람 소식", "label": "새 운영진 인사·규칙 개정", "r": 16}, {"d": "2026-09-15", "kind": "행사·캠페인", "label": "길드 배너 사진 모집", "r": 11}, {"d": "2026-11-02", "kind": "길드·사람 소식", "label": "새 길드장 인사", "r": 31}, {"d": "2026-11-08", "kind": "게임 실무·체크리스트", "label": "S3 종료 전 헬프", "r": 6}, {"d": "2026-11-12", "kind": "행사·캠페인", "label": "S3 마무리 인사", "r": 19}, {"d": "2026-11-13", "kind": "행사·캠페인", "label": "S3 단체 사진 가이드", "r": 9}], "brag": [{"m": "7월", "posts": 9, "people": 6, "react": 66}, {"m": "8월", "posts": 48, "people": 13, "react": 126}, {"m": "9월", "posts": 68, "people": 19, "react": 167}, {"m": "10월", "posts": 80, "people": 17, "react": 186}, {"m": "11월", "posts": 33, "people": 10, "react": 37}], "events": [{"name": "#자랑하기 개장", "cost": "공지 1건 + 채널 1개", "result": "238건 · 반응 582 · 4개월째 이어짐", "verdict": "강화"}, {"name": "시즌 한줄소감 채널", "cost": "공지 1건 + 채널 1개", "result": "S2 26명(반응 248) · S3 16명(반응 80)", "verdict": "유지"}, {"name": "길드원 배너 조명", "cost": "17일간 매일 1명 소개", "result": "17명 소개 · 반응 102 · 진행자 이탈로 중단", "verdict": "재개"}, {"name": "시즌 단체 사진", "cost": "공지 2건 + 촬영 진행", "result": "시즌마다 진행 · 가이드 공지 반응 9", "verdict": "유지"}, {"name": "#사진과그림 채널", "cost": "상시 채널", "result": "2월 63건 → 10월 2건 · #스크린샷으로 옮겨 감", "verdict": "통합"}], "newbies": [{"m": "2월", "new": 42, "stay": 21}, {"m": "3월", "new": 23, "stay": 7}, {"m": "4월", "new": 21, "stay": 6}, {"m": "5월", "new": 7, "stay": 6}, {"m": "6월", "new": 13, "stay": 11}, {"m": "7월", "new": 10, "stay": 7}, {"m": "8월", "new": 3, "stay": 2}, {"m": "9월", "new": 13, "stay": 10}, {"m": "10월", "new": 3, "stay": 1}, {"m": "11월", "new": 0, "stay": 0}]};
+const $ = s => document.querySelector(s);
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt = n => Number(n).toLocaleString('ko-KR');
+const tip = $('#tip');
+function showTip(e, html){ tip.innerHTML = html; tip.style.opacity = 1; const x = Math.min(e.clientX + 14, innerWidth - 270); tip.style.left = x + 'px'; tip.style.top = (e.clientY + 14) + 'px'; }
+function hideTip(){ tip.style.opacity = 0; }
+function legend(id, items){ $(id).innerHTML = items.map(([c, l]) => `<span><i style="background:var(${c})"></i>${esc(l)}</span>`).join(''); }
+const W = () => Math.min(888, document.querySelector('main').clientWidth - 36);
+
+$('#built').textContent = `운영진 공유용 · 자료 기준 ${D.built} · 디스코드 메시지 약 17만 9천 건 분석`;
+
+/* 숫자 타일 */
+const lastNew = D.newbies.slice(-3).map(x => x.new).join(' → ');
+const W9 = D.work.eras['9~10월'], W11 = D.work.eras['11월 1~20일'];
+$('#tiles').innerHTML = [
+  [`${D.trend.guild.at(-1)}`, '길드 활동 지수 (게임 Steam ' + D.trend.steam.at(-1) + ', 2월=100)'],
+  [`${D.drop[0].v}%`, '11월 길드 핵심 인원 변화 (게임 ' + D.drop[4].v + '%)'],
+  [`${Math.round(D.share[1].gone / (D.share[1].gone + D.share[1].staff + D.share[1].rest) * 100)}%`, '10월 채팅 중 이탈 운영진 몫'],
+  [lastNew, '9·10·11월 새로 온 사람'],
+].map(([n, l]) => `<div class="tile"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+
+/* 결정 카드 */
+const avg = k => { const r = D.notices.filter(n => n.kind === k).map(n => n.r); return (r.reduce((a, b) => a + b, 0) / r.length).toFixed(1); };
+const gone10 = D.work.eras['9~10월 중 이탈자 몫'];
+const DEC = [
+  ['focus', '◎ 집중', '사람만 할 수 있는 일', [
+    `<b>레이드·파티 운영</b>: 9~10월 운영진 채팅에서 레이드 운영이 월 약 ${fmt(W9['레이드·파티 운영'])}건이었고, 그중 ${Math.round(gone10['레이드·파티 운영'] / W9['레이드·파티 운영'] * 100)}%를 이탈자가 맡았습니다. 11월은 약 ${fmt(W11['레이드·파티 운영'])}건입니다. 시즌4 레이드 전에 공대장을 정해야 합니다.`,
+    `<b>소통·소원수리</b>: 남은 운영진의 분위기·소통은 월 ${fmt(W9['분위기·리액션'])} → ${fmt(W11['분위기·리액션'])}건으로 늘었습니다. 길드가 게임보다 잘 버틴 힘이라, 창구를 정해 이어 가면 됩니다.`,
+    `<b>신입 맞이</b>: 새로 온 사람이 ${lastNew}명으로 줄었습니다. 시즌4 시작에 맞춘 신입 이벤트(버디 매칭, 신입 버스의 날)를 제안합니다.`]],
+  ['keep', '✓ 유지·강화', '적은 품으로 오래가는 판 깔기', [
+    `<b>#자랑하기</b>: 공지 1건으로 시작해 4개월째 이어지고 있습니다. 월간 베스트 자랑처럼 가볍게 키우기.`,
+    `<b>시즌 한줄소감·단체 사진</b>: 시즌마다 반복(S2 26명 참여).`,
+    `<b>길드원 배너 조명</b>: 17명을 소개해 반응 102를 받았지만, 진행자가 빠지며 멈췄습니다. 담당 1명만 정하면 재개할 수 있습니다.`]],
+  ['cut', '✕ 없애기', '반응·효과가 없는 일', [
+    `<b>게임 실무·체크리스트 공지</b>: 평균 반응 ${avg('게임 실무·체크리스트')}, 길드·사람 소식은 ${avg('길드·사람 소식')}입니다. 누구나 아는 주간 루틴은 공지하지 않기.`,
+    `<b>정기 일정 알림</b>: 무도회 결원 호출이 10개월 동안 1번뿐이었습니다. 인원이 모자란 날에만 멘션하면 됩니다.`,
+    `<b>#사진과그림</b>: 2월 63건 → 10월 2건입니다. #스크린샷으로 합치기.`]],
+  ['auto', '⚙ 봇에 맡기기', '공지라니가 할 일', [
+    `<b>질문 답변·정보 제공</b>: 운영진 몫이 월 ${fmt(W9['질문 답변·정보 제공'])} → ${fmt(W11['질문 답변·정보 제공'])}건으로 줄었습니다. 레이드 준비, 재화 투자 판단, 리딤 코드, 퀴즈 정답처럼 국내에 없는 정보를 정리해 올립니다.`,
+    `<b>놓친 글 알림</b>: 반응을 못 받은 자랑글·질문·신입 글을 운영진에게 알려 줍니다. 반응은 사람이 합니다.`,
+    `<b>공지 초안</b>: 행사·시즌 마감 공지 초안을 미리 만들어 둡니다. 보내는 건 운영진이 합니다.`]],
+];
+$('#decisions').innerHTML = DEC.map(([c, b, t, li]) => `<div class="card"><span class="badge ${c}">${b}</span><h3>${t}</h3><ul>${li.map(x => `<li>${x}</li>`).join('')}</ul></div>`).join('');
+
+/* 공통: 선 그래프 */
+function lineChart(id, labels, series, opt = {}){
+  const w = W(), h = 260, L = 36, R = 92, Tp = 12, B = 28, svg = $(id);
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.setAttribute('height', h);
+  const all = series.flatMap(s => s.data), max = Math.ceil(Math.max(...all) / 50) * 50;
+  const x = i => L + i * (w - L - R) / (labels.length - 1), y = v => Tp + (h - Tp - B) * (1 - v / max);
+  let g = '';
+  for(let v = 0; v <= max; v += 50) g += `<line class="gl" x1="${L}" x2="${w - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+  labels.forEach((l, i) => g += `<text x="${x(i)}" y="${h - 8}" text-anchor="middle">${l}</text>`);
+  series.forEach(s => {
+    g += `<polyline fill="none" stroke="var(${s.c})" stroke-width="2" stroke-linejoin="round" points="${s.data.map((v, i) => `${x(i)},${y(v)}`).join(' ')}"/>`;
+    s.data.forEach((v, i) => g += `<circle cx="${x(i)}" cy="${y(v)}" r="${i === s.data.length - 1 ? 4.5 : 0}" fill="var(${s.c})" stroke="var(--surface)" stroke-width="2"/>`);
+    g += `<text x="${x(labels.length - 1) + 10}" y="${y(s.data.at(-1)) + 4}" class="val" style="fill:var(${s.c})">${esc(s.short)} ${s.data.at(-1)}</text>`;
+  });
+  g += `<line id="${id.slice(1)}-x" class="axis" y1="${Tp}" y2="${h - B}" x1="-10" x2="-10" stroke-dasharray="3 3"/>`;
+  g += `<rect x="${L}" y="${Tp}" width="${w - L - R}" height="${h - Tp - B}" fill="transparent"/>`;
+  svg.innerHTML = g;
+  svg.lastElementChild.onmousemove = e => {
+    const r = svg.getBoundingClientRect(), px = (e.clientX - r.left) * w / r.width;
+    const i = Math.max(0, Math.min(labels.length - 1, Math.round((px - L) / ((w - L - R) / (labels.length - 1)))));
+    const cl = $(id + '-x'); cl.setAttribute('x1', x(i)); cl.setAttribute('x2', x(i));
+    showTip(e, `<b>${labels[i]}</b><br>` + series.map(s => `<span style="color:var(${s.c})">●</span> ${esc(s.name)} ${s.data[i]}${opt.raw ? ` <span style="color:var(--t3)">(${fmt(opt.raw[s.key][i])})</span>` : ''}`).join('<br>'));
+  };
+  svg.lastElementChild.onmouseleave = () => { hideTip(); const cl = $(id + '-x'); cl.setAttribute('x1', -10); cl.setAttribute('x2', -10); };
+}
+
+/* 공통: 가로 막대 (묶음 가능) */
+function hbar(id, rows, series, opt = {}){
+  const w = W(), lab = Math.min(opt.lab ?? 170, w * .4), rowH = 18 * series.length + 14, Tp = 6, h = Tp + rows.length * rowH + 6, svg = $(id);
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.setAttribute('height', h);
+  const vals = rows.flatMap(r => series.map(s => r[s.k]));
+  const min = Math.min(0, ...vals), max = Math.max(0, ...vals);
+  const x0 = lab + 8, x1 = w - 70, sc = v => x0 + (v - min) / (max - min || 1) * (x1 - x0);
+  let g = `<line class="axis" x1="${sc(0)}" x2="${sc(0)}" y1="${Tp - 2}" y2="${h - 4}"/>`;
+  rows.forEach((r, i) => {
+    const y = Tp + i * rowH;
+    g += `<text x="${lab}" y="${y + rowH / 2 + 2}" text-anchor="end" style="fill:var(--t1)">${esc(r.label)}</text>`;
+    series.forEach((s, j) => {
+      const v = r[s.k], a = sc(Math.min(0, v)), b = sc(Math.max(0, v)), by = y + 5 + j * 18;
+      const c = typeof s.c === 'function' ? s.c(r) : s.c;
+      g += `<rect x="${a}" y="${by}" width="${Math.max(1, b - a)}" height="14" rx="4" fill="var(${c})" data-i="${i}" data-j="${j}"/>`;
+      g += `<text class="val" x="${b + 6}" y="${by + 11}">${opt.fmt ? opt.fmt(v) : fmt(v)}</text>`;
+    });
+  });
+  svg.innerHTML = g;
+  svg.querySelectorAll('rect[data-i]').forEach(el => {
+    el.onmousemove = e => opt.tip && showTip(e, opt.tip(rows[+el.dataset.i], series[+el.dataset.j]));
+    el.onmouseleave = hideTip;
+  });
+}
+
+/* 공통: 세로 막대 (묶음/누적) */
+function vbar(id, cats, series, opt = {}){
+  const w = W(), h = opt.h ?? 230, L = 40, Tp = 16, B = 28, svg = $(id);
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.setAttribute('height', h);
+  const tot = c => opt.stack ? series.reduce((a, s) => a + c[s.k], 0) : Math.max(...series.map(s => c[s.k]));
+  const raw = Math.max(...cats.map(tot)), p10 = 10 ** Math.floor(Math.log10(raw / 4)), step = [1, 2, 2.5, 5, 10].map(k => k * p10).find(k => k * 4 >= raw);
+  const max = step * 4 * 1.08;
+  const band = (w - L - 10) / cats.length, bw = opt.stack ? Math.min(64, band * .55) : Math.min(28, band * .7 / series.length);
+  const y = v => Tp + (h - Tp - B) * (1 - v / max);
+  let g = '';
+  for(let k = 0; k <= 4; k++){ const v = step * k; g += `<line class="gl" x1="${L}" x2="${w - 10}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${fmt(Math.round(v))}</text>`; }
+  cats.forEach((c, i) => {
+    const cx = L + band * i + band / 2;
+    g += `<text x="${cx}" y="${h - 8}" text-anchor="middle">${esc(c.m)}</text>`;
+    if(opt.stack){
+      let acc = 0;
+      series.forEach((s, j) => { const v = c[s.k]; if(!v) return; const top = y(acc + v), bot = y(acc);
+        g += `<rect x="${cx - bw / 2}" y="${top + (acc ? 0 : 0)}" width="${bw}" height="${Math.max(0, bot - top - 2)}" rx="${j === series.length - 1 ? 4 : 0}" fill="var(${s.c})" data-i="${i}"/>`; acc += v; });
+      g += `<text class="val" x="${cx}" y="${y(acc) - 6}" text-anchor="middle">${fmt(acc)}</text>`;
+    } else {
+      series.forEach((s, j) => { const v = c[s.k], bx = cx - bw * series.length / 2 + j * bw + 1;
+        g += `<rect x="${bx}" y="${y(v)}" width="${bw - 2}" height="${Math.max(0, y(0) - y(v))}" rx="4" fill="var(${s.c})" data-i="${i}"/>`;
+        if(opt.labels !== false) g += `<text class="val" x="${bx + bw / 2 - 1}" y="${y(v) - 5}" text-anchor="middle">${fmt(v)}</text>`; });
+    }
+  });
+  svg.innerHTML = g;
+  svg.querySelectorAll('rect[data-i]').forEach(el => { el.onmousemove = e => showTip(e, opt.tip(cats[+el.dataset.i])); el.onmouseleave = hideTip; });
+}
+
+function draw(){
+  /* 1 */
+  legend('#lg-trend', [['--s1', '새싹 활동 인원'], ['--s2', '한국 Steam 동접'], ['--s3', '디시 갤 글 수']]);
+  lineChart('#c-trend', D.months, [
+    {name: '새싹 활동 인원', short: '새싹', c: '--s1', data: D.trend.guild, key: 'guild'},
+    {name: '한국 Steam 동접', short: 'Steam', c: '--s2', data: D.trend.steam, key: 'steam'},
+    {name: '디시 갤 글 수', short: '디시', c: '--s3', data: D.trend.dc, key: 'dc'}], {raw: D.trend.raw});
+  $('#t-trend').innerHTML = `<table><tr><th>월</th><th>새싹 활동 인원</th><th>한국 Steam 동접</th><th>디시 글</th></tr>${D.months.map((m, i) => `<tr><td>${m}</td><td class="num">${D.trend.raw.guild[i]}</td><td class="num">${fmt(D.trend.raw.steam[i])}</td><td class="num">${fmt(D.trend.raw.dc[i])}</td></tr>`).join('')}</table>`;
+  /* 2 */
+  legend('#lg-drop', [['--s1', '새싹 길드'], ['--s2', '게임 전체']]);
+  hbar('#c-drop', D.drop.map(d => ({label: d.k, v: d.v, raw: d.raw, g: d.g})), [{k: 'v', c: r => r.g === 'guild' ? '--s1' : '--s2'}],
+    {fmt: v => v + '%', lab: 180, tip: r => `<b>${esc(r.label)}</b><br>${r.v}% · ${esc(r.raw)}`});
+  /* 3 */
+  legend('#lg-share', [['--s2', '이탈·하차 운영진 6명'], ['--s1', '현 운영진'], ['--s3', '길드원']]);
+  vbar('#c-share', D.share, [{k: 'gone', c: '--s2'}, {k: 'staff', c: '--s1'}, {k: 'rest', c: '--s3'}], {stack: true,
+    tip: c => { const t = c.gone + c.staff + c.rest; return `<b>${c.m} 음성 채팅 ${fmt(t)}건</b><br>이탈 운영진 ${Math.round(c.gone / t * 100)}%<br>현 운영진 ${Math.round(c.staff / t * 100)}%<br>길드원 ${Math.round(c.rest / t * 100)}%`; }});
+  /* 4 */
+  legend('#lg-work', [['--s1', '9~10월 (월 환산)'], ['--s2', '11월 1~20일 (월 환산)']]);
+  hbar('#c-work', D.work.tasks.map(t => ({label: t, a: W9[t], b: W11[t], g: gone10[t]})), [{k: 'a', c: '--s1'}, {k: 'b', c: '--s2'}],
+    {lab: 150, tip: (r, s) => `<b>${esc(r.label)}</b><br>9~10월 월 ${fmt(r.a)}건 (이탈자 몫 ${fmt(r.g)})<br>11월 월 ${fmt(r.b)}건`});
+  /* 5 */
+  const kinds = ['길드·사람 소식', '행사·캠페인', '일정 안내', '게임 실무·체크리스트'];
+  { const w = W(), lab = Math.min(150, w * .38), rowH = 44, h = kinds.length * rowH + 30, svg = $('#c-notice');
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.setAttribute('height', h);
+    const max = Math.max(...D.notices.map(n => n.r)) + 2, x0 = lab + 10, x1 = w - 20, sc = v => x0 + v / max * (x1 - x0);
+    let g = '';
+    for(let v = 0; v <= max; v += 10) g += `<line class="gl" x1="${sc(v)}" x2="${sc(v)}" y1="4" y2="${h - 24}"/><text x="${sc(v)}" y="${h - 8}" text-anchor="middle">${v}</text>`;
+    kinds.forEach((k, i) => {
+      const y = 8 + i * rowH, ns = D.notices.filter(n => n.kind === k), m = ns.reduce((a, n) => a + n.r, 0) / ns.length;
+      g += `<text x="${lab}" y="${y + 20}" text-anchor="end" style="fill:var(--t1)">${k}</text>`;
+      g += `<rect x="${x0}" y="${y + 9}" width="${sc(m) - x0}" height="16" rx="4" fill="var(--s1-soft)"/>`;
+      g += `<text class="val" x="${sc(m) + 6}" y="${y + 6}" >평균 ${m.toFixed(1)}</text>`;
+      ns.forEach((n, j) => g += `<circle cx="${sc(n.r)}" cy="${y + 17}" r="5" fill="var(--s1)" stroke="var(--surface)" stroke-width="2" data-k="${k}" data-j="${j}"/>`);
+    });
+    svg.innerHTML = g;
+    svg.querySelectorAll('circle').forEach(el => { const n = D.notices.filter(x => x.kind === el.dataset.k)[+el.dataset.j];
+      el.onmousemove = e => showTip(e, `<b>${esc(n.label)}</b><br>${n.d} · 반응 ${n.r}`); el.onmouseleave = hideTip; });
+  }
+  /* 6 */
+  vbar('#c-brag', D.brag, [{k: 'posts', c: '--s1'}], {h: 200, tip: c => `<b>${c.m}</b><br>글 ${c.posts} · 올린 사람 ${c.people}명 · 반응 ${c.react}`});
+  $('#t-events').innerHTML = `<tr><th>행사</th><th>들인 품</th><th>결과</th><th>제안</th></tr>` + D.events.map(e => `<tr><td>${esc(e.name)}</td><td>${esc(e.cost)}</td><td>${esc(e.result)}</td><td><span class="v ${e.verdict}">${e.verdict}</span></td></tr>`).join('');
+  /* 7 */
+  legend('#lg-new', [['--s1', '새로 온 사람'], ['--s3', '그중 30일 넘게 남은 사람']]);
+  vbar('#c-new', D.newbies, [{k: 'new', c: '--s1'}, {k: 'stay', c: '--s3'}], {tip: c => `<b>${c.m}</b><br>새로 온 사람 ${c.new}명<br>30일 넘게 남음 ${c.stay}명${c.m === '11월' || c.m === '10월' ? '<br><span style="color:var(--t3)">최근 달은 30일이 덜 지나 잔류가 낮게 보임</span>' : ''}`});
+}
+draw();
+let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(draw, 150); });
+</script>
+</body>
+</html>
