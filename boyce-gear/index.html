@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>보이스 치명속공 검증</title>
+<meta name="description" content="보이스(거울 속의 심판)에서 치명+속공 장갑·귀걸이가 안 나오는 이유를 한섭 S4 클라 데이터로 검증">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root {
+  --bg: #ECEEF2; --surface: #FFFFFF; --ink: #1C2130; --muted: #586074; --line: #CBD1DC;
+  --accent: #B8306F; --ok: #1E7F4F; --no: #B23A3A; --chip: #E1E5ED;
+  --f-display: "Do Hyeon", "IBM Plex Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #131722; --surface: #1B2030; --ink: #E5E8F0; --muted: #9AA2B6; --line: #2D3446;
+    --accent: #EC5C9F; --ok: #4CC38A; --no: #F07070; --chip: #252B3D; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #131722; --surface: #1B2030; --ink: #E5E8F0; --muted: #9AA2B6; --line: #2D3446;
+  --accent: #EC5C9F; --ok: #4CC38A; --no: #F07070; --chip: #252B3D; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15.5px; line-height: 1.7; word-break: keep-all; overflow-wrap: anywhere; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 36px 16px 72px; }
+.home { font-family: var(--f-mono); font-size: 12px; color: var(--muted); text-decoration: none; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; margin-top: 14px; }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(32px, 6vw, 46px); line-height: 1.15; margin: 6px 0 12px; }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: 26px; margin: 44px 0 10px; padding-top: 12px; border-top: 3px solid var(--ink); }
+h3 { font-size: 17px; margin: 24px 0 6px; }
+p { margin: 8px 0; }
+.lede { color: var(--muted); }
+.verdict { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--accent); border-radius: 8px; padding: 16px 18px; margin: 18px 0; }
+.verdict strong { font-size: 17px; }
+.tw { overflow-x: auto; margin: 12px 0; }
+table { border-collapse: collapse; font-size: 14px; background: var(--surface); min-width: 100%; }
+th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+th { background: var(--chip); }
+td.n { font-family: var(--f-mono); font-size: 13px; white-space: nowrap; }
+.ok { color: var(--ok); font-weight: 700; }
+.no { color: var(--no); font-weight: 700; }
+code { font-family: var(--f-mono); font-size: 13px; background: var(--chip); padding: 1px 5px; border-radius: 4px; }
+.flow { display: grid; gap: 8px; margin: 12px 0; }
+.flow div { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; }
+.flow div::before { content: attr(data-step); font-family: var(--f-mono); font-size: 12px; color: var(--accent); margin-right: 8px; }
+ul { padding-left: 20px; margin: 8px 0; }
+li { margin: 4px 0; }
+.note { color: var(--muted); font-size: 13.5px; }
+footer { margin-top: 48px; font-size: 12.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../">← BPSR 노트</a>
+  <div class="eyebrow">한섭 S4 클라 1.0.46215 데이터 검증</div>
+  <h1>보이스에서 치명+속공이 안 나오는 이유</h1>
+  <p class="lede">보이스(거울 속의 심판)를 75번 돌았는데 치명+속공 2옵션 장비가 하나도 안 나왔다면, 운이 나빠서가 아닙니다. 클라 데이터상 보이스가 주는 두 부위에는 그 조합이 기본 옵션으로 붙을 수 없습니다.</p>
+
+  <div class="verdict">
+    <strong>결론</strong>
+    <ul>
+      <li>보이스는 <b>장갑과 귀걸이</b>만 줍니다.</li>
+      <li><b>장갑</b>의 기본 옵션에는 <span class="no">치명이 없습니다.</span> <b>귀걸이</b>의 기본 옵션에는 <span class="no">속공이 없습니다.</span></li>
+      <li>그래서 보이스 장비의 기본 2줄로는 치명+속공이 <b>0%</b>입니다. 75회 0개는 정상입니다.</li>
+      <li>치명+속공 기본 2줄은 갑옷·반지(황폐한 정원), 팔찌 좌우(빛이 흐르는 들판), 목걸이(거룡의 발톱), 탈리스만(검은 안개 요새), 무기에서만 나옵니다.</li>
+    </ul>
+  </div>
+
+  <h2>1. 던전마다 주는 부위</h2>
+  <p>S4 던전 소개 문구(한국어 문자열 표 <code>1850826906</code>)에 부위가 적혀 있습니다. 소개 문구는 던전 정보 표 <code>3050727516</code>의 행 810054~810059에 연결되어 있습니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>문자열 ID</th><th>던전</th><th>문구 속 드랍 부위</th><th>치명+속공 기본 2줄</th></tr></thead>
+    <tbody>
+      <tr><td class="n">576359724</td><td>거울 속의 심판 (보이스)</td><td>장갑과 귀걸이</td><td class="no">둘 다 불가</td></tr>
+      <tr><td class="n">576359725</td><td>미망・거룡의 발톱</td><td>투구와 목걸이</td><td>목걸이만 가능</td></tr>
+      <tr><td class="n">576359726</td><td>황폐한 정원</td><td>갑옷과 반지</td><td class="ok">둘 다 가능</td></tr>
+      <tr><td class="n">576359727</td><td>미망・빛이 흐르는 들판</td><td>팔찌(왼쪽)와 팔찌(오른쪽)</td><td class="ok">둘 다 가능</td></tr>
+      <tr><td class="n">576359728</td><td>미망・검은 안개 요새</td><td>신발과 탈리스만</td><td>탈리스만만 가능</td></tr>
+      <tr><td class="n">576359729</td><td>(먼 하늘의 신단 계열)</td><td>무기</td><td class="ok">가능</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">문구 원문 예: 576359724 「…장갑과 귀걸이 드롭 보상과 함께 전용 외형까지 획득해 보세요!」</p>
+
+  <h2>2. 보이스 보상이 실제로 떨어뜨리는 것</h2>
+  <p>보상 표 <code>174000495</code>(클래스 <code>AwardTable</code>)와 보상 패키지 표 <code>3107949667</code>(<code>AwardPackageTable</code>)를 따라갔습니다.</p>
+  <div class="flow">
+    <div data-step="보상">보상 <code>12010470</code>(320) · <code>12010471</code>(340) · <code>12010472</code>(360). 미리보기 아이템이 「Lv.320 장갑・극」(1990350), 「Lv.320 귀걸이・극」(1990352), 「기원의 별비단・거울 속의 심판」(1070085)이라서 보이스 던전 보상임을 확인할 수 있습니다.</div>
+    <div data-step="100%">이 보상의 두 번째 묶음이 패키지 <code>12010349</code>(340은 12010350, 360은 12010351)이고, 확률 값은 10000(=100%)입니다.</div>
+    <div data-step="패키지">패키지 <code>12010349</code>에는 장비 6종만 들어 있습니다. 「변화의 첫 맹세 브레이슬릿·핑거가드·슬리브」(장갑 3종)와 「변화의 서약 진홍빛·푸른 깃털·별빛 파도 귀걸이」(귀걸이 3종)입니다. 갑옷 계열 3종 중 매활 것은 핑거가드와 푸른 깃털 귀걸이입니다.</div>
+    <div data-step="옵션">이 장비들의 추가 능력치 풀은 1번째 줄 <code>2035003</code>, 2번째 줄 <code>3035003</code>이고, 같은 옵션 중복은 허용되지 않습니다(<code>IsAllowAdvancedAttrSame = 0</code>).</div>
+  </div>
+
+  <h2>3. 옵션 풀의 부위 제한 (핵심 증거)</h2>
+  <p>옵션 풀 표 <code>1456951466</code>(클래스 <code>EquipAttrLibTable</code>)의 풀 <code>2035003</code> 행입니다. <code>AllowPart</code> 필드가 그 옵션이 붙을 수 있는 부위입니다. 2번째 줄 풀 <code>3035003</code>도 수치만 절반이고 부위 제한은 같습니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>행</th><th>옵션</th><th>수치</th><th>붙을 수 있는 부위 (AllowPart)</th><th>장갑</th><th>귀걸이</th></tr></thead>
+    <tbody>
+      <tr><td class="n">4322</td><td>치명</td><td class="n">4500~6000</td><td>투구·갑옷·귀걸이·목걸이·반지·팔찌L·팔찌R·탈리스만</td><td class="no">✕</td><td class="ok">○</td></tr>
+      <tr><td class="n">4324</td><td>속공</td><td class="n">4500~6000</td><td>갑옷·장갑·신발·목걸이·반지·팔찌L·팔찌R·탈리스만</td><td class="ok">○</td><td class="no">✕</td></tr>
+      <tr><td class="n">4326</td><td>행운</td><td class="n">4500~6000</td><td>투구·갑옷·장갑·신발·귀걸이·목걸이·반지·팔찌L</td><td class="ok">○</td><td class="ok">○</td></tr>
+      <tr><td class="n">4328</td><td>숙련</td><td class="n">4500~6000</td><td>투구·장갑·신발·귀걸이·반지·팔찌L·팔찌R·탈리스만</td><td class="ok">○</td><td class="ok">○</td></tr>
+      <tr><td class="n">4330</td><td>만능</td><td class="n">4500~6000</td><td>투구·갑옷·장갑·신발·귀걸이·목걸이·팔찌R·탈리스만</td><td class="ok">○</td><td class="ok">○</td></tr>
+    </tbody>
+  </table></div>
+  <p>장갑은 속공·행운·숙련·만능 4종, 귀걸이는 치명·행운·숙련·만능 4종에서만 고릅니다. 무기는 별도 행(4323·4325…)으로 5종 모두 가능합니다.</p>
+
+  <h2>4. 이름이 정해진 [극] 장비도 같은 결과</h2>
+  <p>장비 표 <code>491123640</code>(클래스 <code>EquipTable</code>)에서 매활(직업 ID 11)이 입는 320 장비를 모두 뽑았습니다. 이름 앞 접두어가 1번째 줄 옵션입니다(치명의=치명, 기력의=속공, 기회의=행운, 지배의=숙련, 무쌍의=만능).</p>
+  <div class="tw"><table>
+    <thead><tr><th>장갑 「첫 맹세 핑거가드」</th><th>옵션</th><th>귀걸이 「서약 푸른 깃털 귀걸이」</th><th>옵션</th></tr></thead>
+    <tbody>
+      <tr><td class="n">2031713 [극]기력의</td><td>속공+행운</td><td class="n">2051713 [극]치명의</td><td>치명+행운</td></tr>
+      <tr><td class="n">2031714 [극]기력의</td><td>속공+숙련</td><td class="n">2051714 [극]치명의</td><td>치명+숙련</td></tr>
+      <tr><td class="n">2031715 [극]기회의</td><td>행운+속공</td><td class="n">2051715 [극]기회의</td><td>행운+치명</td></tr>
+      <tr><td class="n">2031716 [극]기회의</td><td>행운+숙련</td><td class="n">2051716 [극]기회의</td><td>행운+숙련</td></tr>
+      <tr><td class="n">2031717 [극]지배의</td><td>숙련+속공</td><td class="n">2051717 [극]지배의</td><td>숙련+치명</td></tr>
+      <tr><td class="n">2031718 [극]지배의</td><td>숙련+행운</td><td class="n">2051718 [극]지배의</td><td>숙련+행운</td></tr>
+      <tr><td class="n">2031719 [극]무쌍의</td><td>만능+속공</td><td class="n">2051719 [극]무쌍의</td><td>만능+치명</td></tr>
+      <tr><td class="n">2031720 [극]무쌍의</td><td>만능+행운</td><td class="n">2051720 [극]무쌍의</td><td>만능+행운</td></tr>
+      <tr><td class="n">2031721 [극]무쌍의</td><td>만능+숙련</td><td class="n">2051721 [극]무쌍의</td><td>만능+숙련</td></tr>
+      <tr><td class="n">2031722 [극]기력의</td><td>속공+만능</td><td class="n">2051722 [극]치명의</td><td>치명+만능</td></tr>
+      <tr><td class="n">2031723 [극]기회의</td><td>행운+만능</td><td class="n">2051723 [극]기회의</td><td>행운+만능</td></tr>
+      <tr><td class="n">2031724 [극]지배의</td><td>숙련+만능</td><td class="n">2051724 [극]지배의</td><td>숙련+만능</td></tr>
+    </tbody>
+  </table></div>
+  <p>장갑 12종에는 「치명의」 접두어도 치명 옵션도 없습니다. 귀걸이 12종에는 「기력의」 접두어도 속공 옵션도 없습니다. 4종 옵션으로 만들 수 있는 순서쌍(4×3=12)이 정확히 다 들어 있어서, 빠진 조합은 없습니다. 인게임 장비 이름 「[극]지배의 첫 맹세 핑거가드」는 이 표의 2031717·2031718·2031724에 해당합니다.</p>
+
+  <h2>5. 속성 번호와 이름을 맞춘 근거</h2>
+  <ul>
+    <li>한섭 클라 Lua <code>lua/common/enum_define.lua</code>의 <code>FightAttrId</code> 열거형: Cri=11110, Haste=11120, Luck=11130, Mastery=11140, Versatility=11150. 장비 옵션 번호 11112·11122·11132·11142·11152가 각각 치명·속공·행운·숙련·만능입니다.</li>
+    <li>장비 이름 접두어(치명의·기력의·기회의·지배의·무쌍의)와 1번째 줄 옵션 번호가 모든 장비에서 일치합니다.</li>
+    <li>표 필드 이름(<code>AdvancedAttrLibId</code>, <code>AllowPart</code>, <code>IsAllowAdvancedAttrSame</code> 등)은 한섭 apk의 <code>global-metadata.dat</code> 클래스 정의에서 가져왔습니다.</li>
+    <li>장비 표와 옵션 풀 표는 한섭 S4 클라 1.0.46215 스냅샷의 파일과 해시가 같습니다(<code>491123640</code> 20baf22e89cd, <code>1456951466</code> fc13a55dae86).</li>
+  </ul>
+
+  <h2>6. 던전별로 계산하면</h2>
+  <p>가정: 1회에 장비 1개, 두 부위가 반반, 자기 직업 장비만 나옴, 옵션은 붙을 수 있는 것 중에서 고르게 뽑힘(옵션 풀 표에 가중치 필드가 없음). 4종 중 서로 다른 2개를 뽑을 때 치명+속공일 확률은 2/(4×3) = 1/6이고, 무기는 5종이라 1/10입니다.</p>
+  <div class="tw"><table>
+    <thead><tr><th>던전</th><th>1회 확률</th><th>평균 횟수</th><th>75회 동안 0개일 확률</th></tr></thead>
+    <tbody>
+      <tr><td>보이스 (장갑·귀걸이)</td><td class="no">0</td><td>안 나옴</td><td>100%</td></tr>
+      <tr><td>황폐한 정원 (갑옷·반지)</td><td>1/6</td><td>6회</td><td>0.0001%</td></tr>
+      <tr><td>빛이 흐르는 들판 (팔찌 좌·우)</td><td>1/6</td><td>6회</td><td>0.0001%</td></tr>
+      <tr><td>거룡의 발톱 (투구·목걸이)</td><td>1/12</td><td>12회</td><td>0.15%</td></tr>
+      <tr><td>검은 안개 요새 (신발·탈리스만)</td><td>1/12</td><td>12회</td><td>0.15%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">만약 보이스에서도 1/10 확률로 나온다면, 75회 연속 0개일 확률은 0.9⁷⁵ ≈ 0.037%(약 2,700분의 1)입니다. 실제 결과(75회 0개)는 「보이스는 0%」 쪽과 맞습니다.</p>
+
+  <h2>7. 장갑·귀걸이에서 치명+속공을 맞추려면</h2>
+  <p>재련 옵션 풀(<code>RecastingAttrLibId</code> = <code>4035000</code>)은 장갑·귀걸이에도 치명·속공·행운·숙련·만능 5종을 모두 허용합니다. 그래서 다음 조합으로만 맞출 수 있습니다.</p>
+  <ul>
+    <li><b>장갑</b>: 기본 줄에 속공(「기력의」 또는 2번째 줄 속공) + 재련 줄에 치명</li>
+    <li><b>귀걸이</b>: 기본 줄에 치명(「치명의」 또는 2번째 줄 치명) + 재련 줄에 속공</li>
+  </ul>
+
+  <h2>확인하지 못한 것</h2>
+  <ul>
+    <li>드랍 판정은 서버에서 합니다. 위 내용은 클라에 들어 있는 표 기준입니다.</li>
+    <li>보이스 패키지에는 「변화의」(무작위 옵션) 장비가 들어 있는데, 인게임에서는 「[극]지배의…」처럼 이름이 정해진 장비로 받습니다. 무작위로 굴린 결과가 같은 조합의 [극] 장비로 바뀌는 방식은 클라로 확인하지 못했습니다. 어느 쪽이든 부위 제한은 같습니다.</li>
+    <li>던전 1회에 장비가 몇 개 나오는지, 두 부위가 정확히 반반인지는 확인하지 못했습니다.</li>
+    <li>재련에서 이미 붙은 옵션을 빼고 굴리는지는 확인하지 못했습니다.</li>
+  </ul>
+
+  <footer>근거 데이터: 한섭 S4 클라 1.0.46215 (2026-11-21 분석). 표 번호는 클라 파일 이름(해시)입니다.</footer>
+</div>
+</body>
+</html>
